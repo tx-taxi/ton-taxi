@@ -1,0 +1,21 @@
+[
+  {
+    "name": "account",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": " \n95269490\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269463\nMasterchain\nFees collected\n2.709 GRAM\n3 transactions\nJust now\n \n95269462\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269461\nMasterchain\nFees collected\n2.704 GRAM\n3 transactions\nJust now\n \n95269460\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269441\nMasterchain\nFees collected\n1.70 GRAM\n3 transactions\nJust now\n \n95269413\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n \n95269412\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n95269482\nLoading\n95269481\nLoading\n95269480\nLoading\n95269479\nLoading\n95269478\nLoading\n95269477\nLoading\n95269476\nLoading\n95269475\nLoading\n95269474\nLoading\n95269473\nLoading\n95269472\nLoading\n95269471\nLoading\n95269470\nLoading\n95269469\nLoading\n95269468\nLoading\n95269467\nLoading\n95269466\nLoading\n95269465\nLoading\n95269464\nLoading\n \n95269463\nMasterchain\nFees collected\n2.709 GRAM\n3 transactions\nJust now\nAccount\nEQDB6CaXHpu9OI"
+  },
+  {
+    "name": "tx",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": " \n95269514\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269490\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269463\nMasterchain\nFees collected\n2.709 GRAM\n3 transactions\nJust now\n \n95269462\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269461\nMasterchain\nFees collected\n2.704 GRAM\n3 transactions\nJust now\n \n95269460\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269441\nMasterchain\nFees collected\n1.70 GRAM\n3 transactions\nJust now\n \n95269413\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n95269506\nLoading\n95269505\nLoading\n95269504\nLoading\n95269503\nLoading\n95269502\nLoading\n95269501\nLoading\n95269500\nLoading\n95269499\nLoading\n95269498\nLoading\n95269497\nLoading\n95269496\nLoading\n95269495\nLoading\n95269494\nLoading\n95269493\nLoading\n95269492\nLoading\n95269491\nLoading\n \n95269490\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n95269489\nLoading\n95269488\nLoading\n95269487\nLoading\nTransaction\na51d4122b6d"
+  },
+  {
+    "name": "block",
+    "errors": [],
+    "body": "30000010\nLoading\n30000009\nLoading\n30000008\nLoading\n30000007\nLoading\n30000006\nLoading\n30000005\nLoading\n30000004\nLoading\n30000003\nLoading\n30000002\nLoading\n30000001\nLoading\n30000000\nLoading\n29999999\nLoading\n29999998\nLoading\n29999997\nLoading\n29999996\nLoading\n29999995\nLoading\n29999994\nLoading\n29999993\nLoading\n29999992\nLoading\n29999991\nLoading\n29999990\nLoading\n29999989\nLoading\n29999988\nLoading\n29999987\nLoading\n29999986\nLoading\n29999985\nLoading\n29999984\nLoading\n29999983\nLoading\n29999982\nLoading\n29999981\nLoading\nBlock\n30000000\nSequence number\n30000000\nWorkchain\nMasterchain\nShard\n8000000000000000\nTime\nJun 1, 2023, 5:34:36 AM\nTransactions\n3\nRoot hash\nf9c21853b6e238871ee67371064cb56cc47c4c7e8e152bbc83ebfe9ee94ca2eb\nFile hash\n06907b852dc4ab24fae05455993dcb14b889a5c2b688731aead3581503d98da6\nLogical time\n38121387000000 – 38121387000004\nCollected fees\n2.7 GRAM\nPrevious blocks\n(-1,8000000000000000,29999999)\nTransactions\nTransaction\tTime\tStatus\tMessage values\tFee\n55582c436f…f2e1561c\tJun 1, 2023, 5:34:3"
+  }
+]

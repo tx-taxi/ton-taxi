@@ -1,0 +1,32 @@
+[
+  {
+    "n": "ton",
+    "l": "desktop",
+    "errors": [],
+    "body": " \n95270019\nMasterchain\nFees collected\n2.708 GRAM\n3 transactions\nJust now\n \n95270018\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95270017\nMasterchain\nFees collected\n2.71 GRAM\n3 transactions\nJust now\n \n95270016\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95270015\nMasterchain\nFees collected\n2.708 GRAM\n3 transactions\nJust now\n \n95270014\nMasterchain\nFees collected\n2.706 GRAM\n3 transactions\nJust now\n \n95269987\nMasterchain\nFees collected\n2.708 GRAM\n3 transactions\n"
+  },
+  {
+    "n": "ton",
+    "l": "mobile",
+    "errors": [],
+    "body": " \n95270045\nMasterchain\nFees collected\n2.731 GRAM\n3 transactions\nJust now\n \n95270019\nMasterchain\nFees collected\n2.708 GRAM\n3 transactions\nJust now\n \n95270018\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95270017\nMasterchain\nFees collected\n2.71 GRAM\n3 transactions\nJust now\n \n95270016\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95270015\nMasterchain\nFees collected\n2.708 GRAM\n3 transactions\nJust now\n \n95270014\nMasterchain\nFees collected\n2.706 GRAM\n3 transactions\n"
+  },
+  {
+    "n": "eth",
+    "l": "desktop",
+    "errors": [
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+    ],
+    "body": " \n~0.6 gwei\n0.21 - 3.08 gwei\n0.002 ETH\n50 transactions\nIn ~1 minute\n \n26064259\n~0.105 gwei\n0.105 - 0.105 gwei\n0.003 ETH\n94 transactions\n3 minutes ago\n0xC457E6784b579cAC38b5C5e2e49bB04a4669959D\n \n26064241\n~0.0699 gwei\n0.0699 - 0.0699 gwei\n0.002 ETH\n55 transactions\n7 minutes ago\n0x7e2a2FA2a064F693f0a55C5639476d913Ff12D05\n \n26064226\n~0.0789 gwei\n0.0789 - 0.0789 gwei\n0.00 ETH\n0 transactions\n10 minutes ago\n0xE556bF2A4452Dba4B02598c1810900e0DD3C1F58\n \n26064225\n~0.0882 gwei\n0.0882 - 0.0882 gwei\n<0.001 "
+  },
+  {
+    "n": "eth",
+    "l": "mobile",
+    "errors": [
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+    ],
+    "body": " \n~1.31 gwei\n0.53 - 6.35 gwei\n0.002 ETH\n50 transactions\nIn ~1 minute\n \n26064259\n~0.105 gwei\n0.105 - 0.105 gwei\n0.003 ETH\n94 transactions\n3 minutes ago\n0xC457E6784b579cAC38b5C5e2e49bB04a4669959D\n \n26064241\n~0.0699 gwei\n0.0699 - 0.0699 gwei\n0.002 ETH\n55 transactions\n7 minutes ago\n0x7e2a2FA2a064F693f0a55C5639476d913Ff12D05\n \n26064226\n~0.0789 gwei\n0.0789 - 0.0789 gwei\n0.00 ETH\n0 transactions\n10 minutes ago\n0xE556bF2A4452Dba4B02598c1810900e0DD3C1F58\n \n26064225\n~0.0882 gwei\n0.0882 - 0.0882 gwei\n<0.001"
+  }
+]

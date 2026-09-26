@@ -1,0 +1,178 @@
+[
+  {
+    "name": "ton-root",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/",
+    "title": "ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "Automatic Routing\ntx.taxi\nView Hub\nNATIVE EXPLORERS\nExplorer registry unavailable\n3RD-PARTY EXPLORERS\n \n95269148\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n \n95269123\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269122\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269121\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269120\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269119\nMasterchain\nFees collec"
+  },
+  {
+    "name": "ton-root",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/",
+    "title": "ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "Automatic Routing\ntx.taxi\nView Hub\nNATIVE EXPLORERS\nExplorer registry unavailable\n3RD-PARTY EXPLORERS\n \n95269148\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n \n95269123\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269122\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269121\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269120\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269119\nMasterchain\nFees collec"
+  },
+  {
+    "name": "ton-account",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/address/EQDB6CaXHpu9OIhLl2HR1bc4WvLpjoVYyPGIs36C0zKy0hIb",
+    "title": "Account EQDB6CaXHpu9OIhLl2HR1bc4WvLpjoVYyPGIs36C0zKy0hIb - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": " \n95269172\nMasterchain\nFees collected\n1.70 GRAM\n3 transactions\nJust now\n \n95269148\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n \n95269123\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269122\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269121\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269120\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269119\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\n"
+  },
+  {
+    "name": "ton-account",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/address/EQDB6CaXHpu9OIhLl2HR1bc4WvLpjoVYyPGIs36C0zKy0hIb",
+    "title": "Account memorabilia.ton - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": " \n95269172\nMasterchain\nFees collected\n1.70 GRAM\n3 transactions\nJust now\n \n95269148\nMasterchain\nFees collected\n2.702 GRAM\n3 transactions\nJust now\n \n95269123\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269122\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269121\nMasterchain\nFees collected\n2.70 GRAM\n3 transactions\nJust now\n \n95269120\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\nJust now\n \n95269119\nMasterchain\nFees collected\n2.701 GRAM\n3 transactions\n"
+  },
+  {
+    "name": "ton-block",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/block/30000000`",
+    "title": "Block 30000000` - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    ],
+    "body": "Block\n30000000`\nTemporarily unavailable\nRetry\nEnglish\nAUD\nCAD\nCHF\nEUR\nGBP\nJPY\nUSD\nUTC-7 - Mountain Standard Time (MST)\nUTC - Greenwich Mean Time (GMT)\n────\nUTC-12 - Anywhere on Earth (AoE)\nUTC-11 - Samoa Standard Time (SST)\nUTC-10 - Hawaii Standard Time (HST)\nUTC-9 - Alaska Standard Time (AKST)\nUTC-8 - Pacific Standard Time (PST)\nUTC-6 - Central Standard Time (CST)\nUTC-5 - Eastern Standard Time (EST)\nUTC-4 - Atlantic Standard Time (AST)\nUTC-3 - Argentina Time (ART)\nUTC-2 - Fernando de Noronha Ti"
+  },
+  {
+    "name": "ton-block",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/block/30000000`",
+    "title": "Block 30000000` - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED",
+      "Failed to load resource: the server responded with a status of 400 (Bad Request)"
+    ],
+    "body": "Block\n30000000`\nTemporarily unavailable\nRetry\n\nTON blocks, transactions, and accounts\n\nEnglish\nAUD\nCAD\nCHF\nEUR\nGBP\nJPY\nUSD\nUTC-7 - Mountain Standard Time (MST)\nUTC - Greenwich Mean Time (GMT)\n────\nUTC-12 - Anywhere on Earth (AoE)\nUTC-11 - Samoa Standard Time (SST)\nUTC-10 - Hawaii Standard Time (HST)\nUTC-9 - Alaska Standard Time (AKST)\nUTC-8 - Pacific Standard Time (PST)\nUTC-6 - Central Standard Time (CST)\nUTC-5 - Eastern Standard Time (EST)\nUTC-4 - Atlantic Standard Time (AST)\nUTC-3 - Argentina "
+  },
+  {
+    "name": "ton-tx",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/tx/a51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d",
+    "title": "Transaction a51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "Transaction\na51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d\nEnglish\nAUD\nCAD\nCHF\nEUR\nGBP\nJPY\nUSD\nUTC-7 - Mountain Standard Time (MST)\nUTC - Greenwich Mean Time (GMT)\n────\nUTC-12 - Anywhere on Earth (AoE)\nUTC-11 - Samoa Standard Time (SST)\nUTC-10 - Hawaii Standard Time (HST)\nUTC-9 - Alaska Standard Time (AKST)\nUTC-8 - Pacific Standard Time (PST)\nUTC-6 - Central Standard Time (CST)\nUTC-5 - Eastern Standard Time (EST)\nUTC-4 - Atlantic Standard Time (AST)\nUTC-3 - Argentina Time (ART)"
+  },
+  {
+    "name": "ton-tx",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/tx/a51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d",
+    "title": "Transaction a51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "Transaction\na51d4122b6dc9abd2065c8b39368958e442c29a93a39cdb1cbd954e1e8ab202d\n\nTON blocks, transactions, and accounts\n\nEnglish\nAUD\nCAD\nCHF\nEUR\nGBP\nJPY\nUSD\nUTC-7 - Mountain Standard Time (MST)\nUTC - Greenwich Mean Time (GMT)\n────\nUTC-12 - Anywhere on Earth (AoE)\nUTC-11 - Samoa Standard Time (SST)\nUTC-10 - Hawaii Standard Time (HST)\nUTC-9 - Alaska Standard Time (AKST)\nUTC-8 - Pacific Standard Time (PST)\nUTC-6 - Central Standard Time (CST)\nUTC-5 - Eastern Standard Time (EST)\nUTC-4 - Atlantic Standar"
+  },
+  {
+    "name": "ton-docs",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/docs/faq",
+    "title": "REST API - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "tx.taxi / TON documentation\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore TON →\nDocumentation\nTON Guide\nAPI - REST\nAPI - WebSocket\n\nCONVENTIONS\n\nValues and pagination\n\nNETWORK AND BLOCKS\n\nNetwork overview\nMasterchain blocks\nBlock details\nBlock transactions\nMasterchain shard references\nNetwork transactions\nMasterchain transactions\nValidato"
+  },
+  {
+    "name": "ton-docs",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/docs/faq",
+    "title": "TON Guide - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "tx.taxi / TON documentation\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore TON →\nDocumentation\nTON Guide\nAPI - REST\nAPI - WebSocket\n\nTON MAINNET\n\nUnderstand what the explorer shows\n\nExplore TON transactions, messages, wallets, jettons and NFTs.\n\nton.tx.taxi displays public network data. It cannot recover funds, reverse transactions, or acc"
+  },
+  {
+    "name": "ton-about",
+    "label": "desktop",
+    "url": "http://127.0.0.1:4530/about",
+    "title": "About ton.tx.taxi - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "tx.taxi / TON explorer\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore TON →\nAbout ton.tx.taxi\n\nThe TON explorer in the tx.taxi family.\n\nTON documentation\nContact the maintainer\nAbout ton.tx.taxi\n\nExplore TON blocks, messages, transactions, accounts, jettons, and NFTs in the familiar tx.taxi interface.\n\nFollow the whole transaction\n\nTON act"
+  },
+  {
+    "name": "ton-about",
+    "label": "mobile",
+    "url": "http://127.0.0.1:4530/about",
+    "title": "About ton.tx.taxi - ton.tx.taxi - TON Explorer",
+    "errors": [
+      "Failed to load resource: net::ERR_CONNECTION_REFUSED"
+    ],
+    "body": "tx.taxi / TON explorer\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore TON →\nAbout ton.tx.taxi\n\nThe TON explorer in the tx.taxi family.\n\nTON documentation\nContact the maintainer\nAbout ton.tx.taxi\n\nExplore TON blocks, messages, transactions, accounts, jettons, and NFTs in the familiar tx.taxi interface.\n\nFollow the whole transaction\n\nTON act"
+  },
+  {
+    "name": "eth-root",
+    "label": "desktop",
+    "url": "https://eth.tx.taxi/",
+    "title": "eth.tx.taxi - Ethereum Explorer",
+    "errors": [
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+    ],
+    "body": "Automatic Routing\ntx.taxi\nView Hub\nNATIVE EXPLORERS\nBitcoin\nbtc.tx.taxi\nSwitch\nEthereum\neth.tx.taxi\nOpened\nMonero\nxmr.tx.taxi\nSwitch\nLitecoin\nltc.tx.taxi\nSwitch\nBitcoin Cash\nbch.tx.taxi\nSwitch\nDash\ndash.tx.taxi\nSwitch\nDogecoin\ndoge.tx.taxi\nSwitch\n3RD-PARTY EXPLORERS\nmempool.space\nmempool.space\nOpen\nEtherscan\netherscan.io\nOpen\nSolscan\nsolscan.io\nOpen\nmonerospace.org\nmonerospace.org\nOpen\nXMRScan\nxmrscan.org\nOpen\nTokenview Monero\nxmr.tokenview.io\nOpen\nLitecoin Space\nlitecoinspace.org\nOpen\nBlockchai"
+  },
+  {
+    "name": "eth-root",
+    "label": "mobile",
+    "url": "https://eth.tx.taxi/",
+    "title": "eth.tx.taxi - Ethereum Explorer",
+    "errors": [
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+      "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+    ],
+    "body": "Automatic Routing\ntx.taxi\nView Hub\nNATIVE EXPLORERS\nBitcoin\nbtc.tx.taxi\nSwitch\nEthereum\neth.tx.taxi\nOpened\nMonero\nxmr.tx.taxi\nSwitch\nLitecoin\nltc.tx.taxi\nSwitch\nBitcoin Cash\nbch.tx.taxi\nSwitch\nDash\ndash.tx.taxi\nSwitch\nDogecoin\ndoge.tx.taxi\nSwitch\n3RD-PARTY EXPLORERS\nmempool.space\nmempool.space\nOpen\nEtherscan\netherscan.io\nOpen\nSolscan\nsolscan.io\nOpen\nmonerospace.org\nmonerospace.org\nOpen\nXMRScan\nxmrscan.org\nOpen\nTokenview Monero\nxmr.tokenview.io\nOpen\nLitecoin Space\nlitecoinspace.org\nOpen\nBlockchai"
+  },
+  {
+    "name": "eth-docs",
+    "label": "desktop",
+    "url": "https://eth.tx.taxi/docs/faq",
+    "title": "Ethereum Guide - eth.tx.taxi - Ethereum Explorer",
+    "errors": [],
+    "body": "tx.taxi / Ethereum documentation\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore Ethereum →\nDocumentation\nEthereum Guide\nAPI - REST\nAPI - WebSocket\n\nETHEREUM BASICS\n\nHow do Ethereum transactions work?\nWhat is the difference between an account and a contract?\nWhat do blocks, confirmations, and finality mean?\n\nGAS AND FEES\n\nWhat are gas, wei,"
+  },
+  {
+    "name": "eth-docs",
+    "label": "mobile",
+    "url": "https://eth.tx.taxi/docs/faq",
+    "title": "Ethereum Guide - eth.tx.taxi - Ethereum Explorer",
+    "errors": [],
+    "body": "tx.taxi / Ethereum documentation\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore Ethereum →\nDocumentation\nEthereum Guide\nAPI - REST\nAPI - WebSocket\n\nETHEREUM MAINNET\n\nUnderstand what the explorer shows\n\nLearn how Ethereum transactions, gas, accounts, contracts, and pending activity map to the mempool-style interface.\n\neth.tx.taxi displays p"
+  },
+  {
+    "name": "eth-about",
+    "label": "desktop",
+    "url": "https://eth.tx.taxi/about",
+    "title": "About eth.tx.taxi - eth.tx.taxi - Ethereum Explorer",
+    "errors": [],
+    "body": "tx.taxi / Ethereum explorer\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore Ethereum →\nAbout eth.tx.taxi\n\nThe Ethereum explorer in the tx.taxi family.\n\nEthereum documentation\nContact the maintainer\nAbout eth.tx.taxi\n\neth.tx.taxi adapts the familiar Mempool explorer interface for Ethereum. It presents public Ethereum blocks, transactions, ac"
+  },
+  {
+    "name": "eth-about",
+    "label": "mobile",
+    "url": "https://eth.tx.taxi/about",
+    "title": "About eth.tx.taxi - eth.tx.taxi - Ethereum Explorer",
+    "errors": [],
+    "body": "tx.taxi / Ethereum explorer\n\nOne search across chains.\n\nPaste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.\n\nOpen tx.taxi\n↗︎\nExplore Ethereum →\nAbout eth.tx.taxi\n\nThe Ethereum explorer in the tx.taxi family.\n\nEthereum documentation\nContact the maintainer\nAbout eth.tx.taxi\n\neth.tx.taxi adapts the familiar Mempool explorer interface for Ethereum. It presents public Ethereum blocks, transactions, ac"
+  }
+]
