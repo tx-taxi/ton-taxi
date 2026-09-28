@@ -1,6 +1,16 @@
 import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
 import {nativeMempoolFeeColors} from '@app/app.constants';
 import {initialTonPending} from '@app/shared/ton-pending-state';
+import {tonBlockIdentityFromUrl, tonBlockUrl, tonHostnameWorkchain} from '@app/ton/chain-selection';
+
+export function nativeDestination(origin: string, route: string): string {
+ const url = new URL(route.replace(/\/+/g, '/'), origin);
+ const block = tonBlockIdentityFromUrl(url.href);
+ if (!block) return url.href;
+ const destination = new URL(tonBlockUrl(block, undefined, url.pathname));
+ if (block.workchain === tonHostnameWorkchain(new URL(origin).hostname)) return origin + destination.pathname + destination.search;
+ return destination.href;
+}
 export class StateService {
  env={KEEP_BLOCKS_AMOUNT:8,ROOT_NETWORK:'',BASE_MODULE:'mempool',BLOCK_WEIGHT_UNITS:60000000,MEMPOOL_BLOCKS_AMOUNT:8}; network=''; isBrowser=true; blockVSize=15000000; latestBlockHeight=0;
  blocks$=new ReplaySubject<any[]>(1); blocksSubject$=this.blocks$; chainTip$=new ReplaySubject<number>(1);

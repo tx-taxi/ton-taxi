@@ -23,7 +23,7 @@ const header = (workchain, shard) => ({
   tx_quantity: workchain === -1 ? 3 : 25, prev_refs: [],
   value_flow: { fees_collected: { grams: "1000000" } },
 });
-const headers = [header(-1, rootShard), header(0, leftShard), header(0, rightShard)];
+const headers = [header(-1, rootShard), header(0, leftShard), header(0, rightShard), header(0, rootShard)];
 const byId = new Map(headers.map(item => [normalize(item).id, item]));
 let collector, pending, httpHandler, collectorCount = 0, listenIntercepted = 0;
 const transport = new EventEmitter();
@@ -94,10 +94,13 @@ class FixtureWebSocketServer extends EventEmitter {
 
 const imports = {
   "node:http": { createServer(handler) { httpHandler = handler; return transport; } },
-  "node:fs/promises": { async stat() { throw new Error("No static files in this fixture"); }, async readFile() { throw new Error("Static file access is outside this check"); } },
+  "node:fs/promises": { async stat() { throw new Error("No static files in this fixture"); }, async readFile(filename) {
+    assert.equal(path.basename(filename), "index.html");
+    return Buffer.from('<!doctype html><html><head><title>fixture</title></head><body></body></html>');
+  } },
   "node:path": path,
   ws: { WebSocketServer: FixtureWebSocketServer },
-  "./ton-social.cjs": {},
+  "./ton-social.cjs": adapterRequire("./ton-social.cjs"),
   "./ton/provider.cjs": { Provider: FixtureProvider, ProviderError },
   "./ton/collector.cjs": { Collector: FixtureCollector, normalize },
   "./ton/pending.cjs": { PendingCollector: FixturePending },
@@ -105,6 +108,7 @@ const imports = {
   "./ton/credentials.cjs": { tonApiKey: () => "" },
   "./ton/api.cjs": { api },
   "./ton/block-selection.cjs": adapterRequire("./ton/block-selection.cjs"),
+  "./ton/block-route.cjs": adapterRequire("./ton/block-route.cjs"),
 };
 
 runInNewContext(readFileSync(serverFile, "utf8"), {
@@ -116,7 +120,7 @@ runInNewContext(readFileSync(serverFile, "utf8"), {
 async function request(host, url) {
   const response = {
     writeHead(status, headers) { this.status = status; this.headers = headers; },
-    end(body) { this.body = JSON.parse(body); },
+    end(body) { this.body = body == null ? null : this.headers["Content-Type"]?.startsWith("application/json") ? JSON.parse(body) : String(body); },
   };
   await httpHandler({ method: "GET", headers: { host }, url }, response);
   return response;
@@ -159,10 +163,30 @@ async function main() {
     assert.equal(numeric.body.id, id);
     const tuple = await request(host, "/api/ton/resolve?value=" + encodeURIComponent(workchain === 0 ? masterId : baseId));
     assert.equal(tuple.body.id, workchain === 0 ? masterId : baseId);
-    const legacy = await request(host, "/api/ton/block/42");
-    assert.equal(legacy.body._strip.id, masterId);
+    const short = await request(host, "/api/ton/block/42");
+    assert.equal(short.body._strip.id, workchain === 0 ? `(0,${rootShard},42)` : masterId);
     httpCases += 4;
   }
+  for (const [host, tuple, expected] of [
+    ["ton.tx.taxi", `(0,${rootShard},42)`, "/block/42?showDetails=true"],
+    ["ton.tx.taxi", baseId, `/block/42?shard=${leftShard}&showDetails=true`],
+    ["ton.tx.taxi", masterId, "https://masterchain.ton.tx.taxi/block/42?showDetails=true"],
+    ["masterchain.ton.tx.taxi", baseId, `https://ton.tx.taxi/block/42?shard=${leftShard}&showDetails=true`],
+  ]) {
+    const response = await request(host, "/block/" + encodeURIComponent(tuple) + "?workchain=0&showDetails=true");
+    assert.equal(response.status, 308);
+    assert.equal(response.headers.Location, expected);
+    httpCases++;
+  }
+  const localized = await request("ton.tx.taxi", `/en/block/${encodeURIComponent(baseId)}?view=details`);
+  assert.equal(localized.status, 308);
+  assert.equal(localized.headers.Location, `/en/block/42?shard=${leftShard}&view=details`);
+  httpCases++;
+  const splitPage = await request("ton.tx.taxi", `/block/42?shard=${leftShard}`);
+  assert.equal(splitPage.status, 200);
+  assert.ok(splitPage.body.includes(`href="https://ton.tx.taxi/block/42?shard=${leftShard}"`));
+  assert.ok(splitPage.body.includes(`content="https://ton.tx.taxi/og/block/(0%2C${leftShard}%2C42).png?v=4"`));
+  httpCases++;
 
   const base = connect("ton.tx.taxi"), master = connect("masterchain.ton.tx.taxi");
   const override = connect("masterchain.ton.tx.taxi", "?workchain=0&shard=" + rightShard);
@@ -206,7 +230,7 @@ async function main() {
   console.log(JSON.stringify({
     status: "passed", verification: "controlled in-process HTTP/WebSocket handlers; no real network or browser",
     httpCases, simultaneousSockets: 3, collectors: collectorCount,
-    checked: ["host defaults", "query overrides", "numeric search", "tuple and legacy identity", "socket init/select/ping", "selected block and pending broadcasts", "invalid upgrade", "closed socket removal"],
+    checked: ["host defaults", "query overrides", "numeric search", "short routes and tuple redirects", "shard-specific SSR", "socket init/select/ping", "selected block and pending broadcasts", "invalid upgrade", "closed socket removal"],
   }, null, 2));
 }
 

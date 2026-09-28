@@ -5,6 +5,7 @@ const fs = require("node:fs/promises"),
   sharp = require("sharp"),
   parse5 = require("parse5");
 const { tonSite } = require("./ton/block-selection.cjs");
+const { blockRouteIdentity, blockUrl } = require("./ton/block-route.cjs");
 const cache = new Map(),
   pending = new Map();
 let active = 0;
@@ -40,11 +41,11 @@ function amount(value) {
 }
 function identity(pathname) {
   const match = pathname.match(
-    /^\/(tx|block|address|nft|collection|jetton|trace|message)\/([^/]+)\/?$/,
+    /^((?:\/[a-z]{2}(?:-[A-Z]{2})?)?)\/(tx|block|address|nft|collection|jetton|trace|message)\/([^/]+)\/?$/,
   );
   if (!match) return null;
   try {
-    return { kind: match[1], id: decodeURIComponent(match[2]) };
+    return { locale: match[1], kind: match[2], id: decodeURIComponent(match[3]) };
   } catch {
     return null;
   }
@@ -52,8 +53,18 @@ function identity(pathname) {
 async function metadata(pathname, api, provider, collector, host) {
   const site = tonSite(host);
   const origin = site.origin;
+  const route = new URL(pathname, origin);
+  pathname = route.pathname;
   const entity = identity(pathname);
-  const canonical = origin + (pathname === "/" ? "/" : pathname);
+  let canonical = origin + (pathname === "/" ? "/" : pathname);
+  if (entity?.kind === "block") {
+    const block = blockRouteIdentity(entity.id, route.searchParams, site.host);
+    entity.id = block.id;
+    entity.displayId = String(block.seqno);
+    const destination = new URL(blockUrl(block.id));
+    destination.pathname = entity.locale + destination.pathname;
+    canonical = destination.href;
+  }
   let title = `${site.host} - TON Explorer`,
     description =
       site.workchain === -1 ? "Explore TON masterchain blocks, transactions and network activity." : "Explore TON blocks, transactions, accounts, jettons and NFTs.",
@@ -131,11 +142,11 @@ async function metadata(pathname, api, provider, collector, host) {
       trace: "Trace",
       message: "Message",
     }[kind];
-    title = `${label} ${id} - TON - tx.taxi`;
-    description = `View TON ${label.toLowerCase()} ${id}.`;
+    title = `${label} ${entity.displayId || id} - TON - tx.taxi`;
+    description = `View TON ${label.toLowerCase()} ${entity.displayId || id}.`;
     line1 = label;
-    line2 = abbrev(id);
-    summary = short(id, 60);
+    line2 = abbrev(entity.displayId || id);
+    summary = short(entity.displayId || id, 60);
     type = "TON / " + label;
     let timer;
     try {
@@ -204,7 +215,7 @@ async function metadata(pathname, api, provider, collector, host) {
     description: short(description, 300),
     canonical,
     image: entity
-      ? `${origin}/og/${entity.kind}/${encodeURIComponent(entity.id)}.png`
+      ? `${entity.kind === "block" ? new URL(canonical).origin : origin}/og/${entity.kind}/${encodeURIComponent(entity.id)}.png${entity.kind === "block" ? "?v=4" : ""}`
       : `${origin}/og.png?v=1`,
     line1,
     line2,

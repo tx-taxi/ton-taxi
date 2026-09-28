@@ -1,4 +1,5 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
+import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Observable, of, combineLatest } from 'rxjs';
@@ -73,7 +74,7 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
     });
     this.keySubscription = this.stateService.keyNavigation$.subscribe(event => {
       if (this.markIndex !== 0 || event.key !== (this.timeLtr ? 'ArrowRight' : 'ArrowLeft') || !this.latestConfirmedId) return;
-      this.router.navigate([this.relativeUrlPipe.transform('/block/'), this.latestConfirmedId]);
+      navigateTonBlock(this.router, this.latestConfirmedId);
     });
   }
   @Input() minimal: boolean = false;

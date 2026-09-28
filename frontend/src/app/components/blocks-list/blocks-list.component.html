@@ -40,7 +40,8 @@
       <tbody *ngIf="(nativeMode ? (!nativeLoading ? nativeBlocks : null) : (blocks$ | async)) as blocks; else skeleton" [style]="!nativeMode && isLoading ? 'opacity: 0.75' : ''">
         <tr *ngFor="let block of blocks; let i= index; trackBy: trackByBlock">
           <td class="height text-start" [class]="widget ? 'widget' : ''">
-            <a [routerLink]="['/block' | relativeUrl, nativeMode ? tonBlockRoute(block) : block.id]" [state]="nativeMode ? null : { data: { block: block } }">{{ nativeMode ? tonValue(block, 'seqno') : block.height }}</a>
+            <a *ngIf="nativeMode; else legacyBlockLink" [tonBlockLink]="tonBlockRoute(block)">{{ tonValue(block, 'seqno') }}</a>
+            <ng-template #legacyBlockLink><a [routerLink]="['/block' | relativeUrl, block.id]" [state]="{ data: { block: block } }">{{ block.height }}</a></ng-template>
           </td>
           <td  *ngIf="nativeMode || isMempoolModule" class="pool text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}">
             <ng-container *ngIf="nativeMode; else feeRecipient"><span [ngbTooltip]="'Shard ' + tonValue(block, 'shard')">{{ tonValue(block, 'workchain_id') === -1 || tonValue(block, 'workchain_id') === '-1' ? 'Masterchain' : tonValue(block, 'workchain_id') == 0 ? 'Basechain' : tonValue(block, 'workchain_id') }}</span></ng-container>

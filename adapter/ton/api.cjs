@@ -4,6 +4,7 @@ const { canonicalBlock, normalize } = require("./collector.cjs");
 const { blockContext, blockIdentity, readHeader } = require("./block-context.cjs");
 const { LatestNetworkWindow } = require("./latest-network-window.cjs");
 const { blockSelection, tonSite } = require("./block-selection.cjs");
+const { blockRouteIdentity } = require("./block-route.cjs");
 const enc = encodeURIComponent;
 const networkSources = new Map();
 const latestNetworkWindows = new WeakMap();
@@ -346,6 +347,7 @@ async function api(url, provider, collector) {
 
   validateId(id || "");
   if (kind === "block") {
+    id = blockRouteIdentity(id, q, url.hostname).id;
     if (sub === "context") return blockContext(provider, collector, id, q);
     if (sub === "boc")
       return get(
@@ -355,6 +357,8 @@ async function api(url, provider, collector) {
     const block = canonicalBlock(id);
     if (sub === "transactions") return blockTransactions(provider, collector, block);
     if (sub === "shards") {
+      if (blockIdentity(block).workchain !== -1)
+        throw new ProviderError("Shard references require a masterchain block", 400);
       const seq = /^\d+$/.test(id) ? id : id.match(/,(\d+)\)$/)?.[1];
       return get("/v2/blockchain/masterchain/" + seq + "/shards", 86400000);
     }

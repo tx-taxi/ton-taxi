@@ -4,6 +4,7 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { StateService } from '@app/services/state.service';
+import { tonBlockIdentityFromUrl, tonBlockUrl } from '@app/ton/chain-selection';
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +55,9 @@ export class OpenGraphService {
 
   clearOgImage() {
     const entity = this.router.url.split('?')[0].match(/^\/(tx|block|address|jetton|nft|collection|message|trace)\/([^/]+)$/);
-    const image = entity ? `${this.origin}/og/${entity[1]}/${entity[2]}.png?v=4` : this.defaultImageUrl;
+    const block = tonBlockIdentityFromUrl(new URL(this.router.url, this.origin).href);
+    const image = block ? `${new URL(tonBlockUrl(block)).origin}/og/block/${encodeURIComponent(block.id)}.png?v=4`
+      : entity ? `${this.origin}/og/${entity[1]}/${entity[2]}.png?v=4` : this.defaultImageUrl;
     this.metaService.updateTag({ property: 'og:image', content: image });
     this.metaService.updateTag({ name: 'twitter:image', content: image });
     this.metaService.updateTag({ property: 'og:image:type', content: 'image/png' });

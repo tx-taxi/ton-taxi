@@ -15,10 +15,10 @@
         id="bitcoin-block-{{ block.height }}" [ngStyle]="blockStyles[i]"
         [style]="blockTransformation"
         [class.blink-bg]="isSpecial(block.height)">
-        <a draggable="false" [routerLink]="[getHref(i, block) | relativeUrl]" [state]="{ data: { block: block } }"
+        <a draggable="false" [tonBlockLink]="block" [tonBlockState]="{ data: { block: block } }"
           [attr.title]="blockValueDetails(block.extras?.totalFees, block.extras?.medianFee, block.extras?.minFee, block.extras?.maxFee)" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
         <div *ngIf="!minimal" [attr.data-cy]="'bitcoin-block-' + i + '-height'" class="block-height">
-          <a [routerLink]="[getHref(i, block) | relativeUrl]" [state]="{ data: { block: block } }" class="block-height-link">{{ block.height
+          <a [tonBlockLink]="block" [tonBlockState]="{ data: { block: block } }" class="block-height-link">{{ block.height
             }}</a>
         </div>
         @if (!minimal && block?.extras?.orphans?.length > 0) {

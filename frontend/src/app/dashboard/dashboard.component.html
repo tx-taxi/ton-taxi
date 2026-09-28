@@ -55,7 +55,7 @@
       <div class="card graph-card">
         <div class="card-body">
           <div class="mempool-info-data">
-            <div class="item"><h5 class="card-title">{{ native.chainLabel }} block</h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [routerLink]="['/block', native.blockId(dashboard.head)]">{{ dashboard.head.seqno }}</a></p></div>
+            <div class="item"><h5 class="card-title">{{ native.chainLabel }} block</h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [tonBlockLink]="dashboard.head">{{ dashboard.head.seqno }}</a></p></div>
             <div class="item"><h5 class="card-title">Transactions</h5><p class="card-text"><ng-container *ngIf="dashboard.head; else loading">{{ dashboard.head.tx_quantity | number }} <span>TXs</span></ng-container></p></div>
             <div class="item"><h5 class="card-title">Mean block interval</h5><p class="card-text"><ng-container *ngIf="dashboard.intervals?.length; else unavailable">{{ meanInterval | number:'1.0-1' }} <span>s</span></ng-container></p></div>
             <div class="item"><h5 class="card-title">Collected fees</h5><p class="card-text"><app-amount *ngIf="dashboard.head; else loading" [amount]="native.coin(dashboard.head.value_flow?.fees_collected?.grams)" [compactBlock]="true" [noFiat]="true"></app-amount></p></div>
@@ -88,7 +88,7 @@
               </thead>
               <tbody *ngIf="dashboard.blocks?.length; else blocksSkeleton">
                 <tr *ngFor="let block of dashboard.blocks.slice(0, 6); let i = index; trackBy: trackByBlock">
-                  <td class="table-cell-height" ><a [routerLink]="['/block' | relativeUrl, block.id]" [state]="{ data: { block: block } }">{{ block.height }}</a></td>
+                  <td class="table-cell-height" ><a [tonBlockLink]="block" [tonBlockState]="{ data: { block: block } }">{{ block.height }}</a></td>
                   <td class="table-cell-mined"><app-time [time]="block.timestamp" kind="since"></app-time></td>
                   <td class="table-cell-transaction-count">{{ block.tx_count | number }}</td>
                   <td class="table-cell-size">

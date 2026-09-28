@@ -11,7 +11,7 @@ import { publicDetails } from './transaction-view';
 import { nativeContextDepth } from '../shared/native-block-context';
 import { NativeAmount } from '../shared/native-view.types';
 import { TonChainSelectionService } from './ton-chain-selection.service';
-import { tonSelectionForBlockId } from './chain-selection';
+import { tonSelectionForBlockId, tonLocalePrefix } from './chain-selection';
 
 type Page = 'jettons'|'collections'|'dns'|'dns-auctions'|'staking-pool'|'extra-currency'|'config'|'message'|'trace'|'not-found'|'transactions'|'dashboard'|'blocks'|'block'|'tx'|'address'|'nft'|'collection'|'jetton'|'validators';
 interface Feed { items: any[]; loading: boolean; error: string; paging?: any; stale?: boolean; restart?: boolean; request?: Subscription; }
@@ -51,8 +51,7 @@ export class TonPageData implements OnInit, OnDestroy {
     const generation = this.generation;
     const transaction = this.page === 'trace' ? data.transaction : data;
     const target = this.page === 'block' ? this.blockId(data) : transaction?.block;
-    const query = this.route.snapshot.queryParamMap;
-    const contextual = !query.has('workchain') && !query.has('shard') ? tonSelectionForBlockId(target) : null;
+    const contextual = tonSelectionForBlockId(target);
     if (contextual) this.chainSelection.set(contextual.workchain, contextual.shard);
     const depth = nativeContextDepth(typeof window === 'undefined' ? 1440 : window.innerWidth);
     this.contextDepth = depth;
@@ -124,7 +123,7 @@ export class TonPageData implements OnInit, OnDestroy {
     }
     this.seo.setDescription(description.slice(0,300));
     const path=this.page === 'dashboard' ? '/' : this.page === 'transactions' ? '/txs' : this.page === 'dns-auctions' ? '/dns' : this.page === 'not-found' ? window.location.pathname : '/' + this.page + (this.id ? '/' + encodeURIComponent(this.id) : '');
-    this.seo.updateCanonical(path);this.og.clearOgImage();
+    this.seo.updateCanonical(this.page === 'block' ? tonLocalePrefix(window.location.pathname) + path : path);this.og.clearOgImage();
   }
   coin(value: string | number | null | undefined): NativeAmount { return { atomic: value == null ? null : String(value), decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true }; }
   rawConfigUrl(): string { return this.endpoint().replace('/config', '/config/raw'); }

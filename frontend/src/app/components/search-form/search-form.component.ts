@@ -1,4 +1,6 @@
 import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
+import { navigateTonBlock } from '@app/ton/block-navigation';
+import { tonBlockIdentityFromUrl } from '@app/ton/chain-selection';
 import { tonSelectionKey } from '@app/ton/chain-selection';
 import { HttpClient } from '@angular/common/http';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
@@ -392,7 +394,8 @@ export class SearchFormComponent implements OnInit {
       next: result => {
         if (this.searchForm.value.searchText.trim() !== searchText || scope !== tonSelectionKey(this.tonSelection.current)) { this.isSearching=false; return; }
         if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError('No match found.'); return; }
-        this.router.navigate(['/',result.type,result.id]);
+        if (result.type === 'block') navigateTonBlock(this.router, result.id);
+        else this.router.navigate(['/',result.type,result.id]);
         this.isSearching = false;
         this.chainMenu?.close();
         this.searchTriggered.emit();
@@ -415,7 +418,13 @@ export class SearchFormComponent implements OnInit {
     this.searchError = '';
     this.searchTriggered.emit();
     if (target.kind === 'candidate' && target.confirmed && target.directUrl) {
-      if (target.chainId === this.sourceChainId) { this.router.navigateByUrl(new URL(target.directUrl).pathname); this.isSearching=false; return; }
+      if (target.chainId === this.sourceChainId) {
+        const url = new URL(target.directUrl);
+        const block = tonBlockIdentityFromUrl(url.href);
+        if (block) navigateTonBlock(this.router, block);
+        else this.router.navigateByUrl(url.pathname + url.search + url.hash);
+        this.isSearching=false; return;
+      }
       window.location.assign(target.directUrl);
       return;
     }

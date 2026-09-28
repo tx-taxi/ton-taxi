@@ -9,7 +9,8 @@ import {FontAwesomeModule,FaIconLibrary} from '@fortawesome/angular-fontawesome'
 import {faExchangeAlt,faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import {NgbTooltipModule,NgbTooltipConfig,NgbHighlight} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
-import {StateService,CacheService,StorageService,ThemeService,EtaService} from './facade';
+import {StateService,CacheService,StorageService,ThemeService,EtaService,nativeDestination} from './facade';
+import {TonBlockLinkDirective} from '@app/ton/ton-block-link.directive';
 import {readTonPending} from '@app/shared/ton-pending-state';
 import {BlockchainComponent} from '@app/components/blockchain/blockchain.component';
 import {BlockchainBlocksComponent} from '@app/components/blockchain-blocks/blockchain-blocks.component';
@@ -28,7 +29,17 @@ import {TimeService} from '@app/services/time.service';
 import {AccelerationSparklesComponent} from '@app/components/acceleration/sparkles/acceleration-sparkles.component';
 const DESTINATION=new InjectionToken<string>('native-explorer-destination');
 @Directive({selector:'[routerLink]',standalone:false})
-class NativeLink { constructor(@Inject(DESTINATION) private destination:string){}  @Input() routerLink:any; @Input() state:any;@Input() fragment:string;@HostBinding('attr.href') get href(){const p=Array.isArray(this.routerLink)?this.routerLink.join('/'):this.routerLink;return this.destination+String(p).replace(/\(/g,'%28').replace(/\)/g,'%29')+(this.fragment?'#'+this.fragment:'');}}
+class NativeLink {
+ constructor(@Inject(DESTINATION) private destination:string){}
+ @Input() routerLink:any; @Input() state:any; @Input() fragment:string; @Input() queryParams:any;
+ @HostBinding('attr.href') get href(){
+  const path=Array.isArray(this.routerLink)?this.routerLink.join('/'):this.routerLink;
+  const url=new URL(String(path).replace(/\/+/g,'/'),this.destination);
+  for(const [key,value] of Object.entries(this.queryParams||{}))if(value!=null)url.searchParams.set(key,String(value));
+  if(this.fragment)url.hash=this.fragment;
+  return nativeDestination(this.destination,url.pathname+url.search+url.hash);
+ }
+}
 @Component({selector:'native-connection-status',standalone:false,template:nativeConnectionTemplate,styles:[nativeConnectionStyles,':host{position:absolute;right:12px;bottom:0;top:auto;z-index:4;font-size:1.25rem}']})
 class NativeConnectionStatus {constructor(public state:StateService){}}
 @Component({selector:'native-strip-root',standalone:false,styles:['.native-scroll{height:260px;overflow-x:auto;overflow-y:hidden;position:relative;scrollbar-width:none}.native-scroll::-webkit-scrollbar{display:none}'],template:'<div class="native-scroll" [dir]="state.timeLtr.value ? \'rtl\' : \'ltr\'" tabindex="0" aria-label="Recent basechain blocks. Scroll horizontally to explore."><p *ngIf="empty" role="status">No blocks available</p><app-blockchain style="display:block;position:relative"  *ngIf="!empty" [containerWidth]="width" [pageIndex]="0" [scrollableMempool]="true" [minScrollWidth]="2560" (mempoolOffsetChange)="position($event)"></app-blockchain></div><native-connection-status role="status" [attr.aria-label]="statusDescription" [title]="statusDescription"></native-connection-status>'})
@@ -36,7 +47,10 @@ class Root { private offset=0; empty=false; statusDescription='Loading block dat
 @Directive({selector:'img[src]',standalone:false})
 class NativeImage { constructor(private element:ElementRef,@Inject(DESTINATION) private destination:string){const descriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');Object.defineProperty(element.nativeElement,'src',{configurable:true,get(){return descriptor.get.call(this);},set(value:string){if(value.startsWith('/resources/'))value=value.endsWith('/default.svg')?new URL('./default.svg',import.meta.url).href:destination+value;descriptor.set.call(this,value);}});}  @Input() set src(value:string){this.element.nativeElement.src=value.startsWith('/resources/')?this.destination+value:value;} }
 
-@NgModule({imports:[CommonModule,BrowserAnimationsModule,FontAwesomeModule,NgbTooltipModule,NgbHighlight],declarations:[Root,NativeConnectionStatus,NativeLink,NativeImage,BlockchainComponent,BlockchainBlocksComponent,MempoolBlocksComponent,AmountComponent,TimeComponent,MiningPoolComponent,FeeRateComponent,FeeRoundingPipe,RelativeUrlPipe,BytesPipe,CeilPipe,FiatCurrencyPipe,AmountShortenerPipe,AccelerationSparklesComponent],providers:[DatePipe,DecimalPipe,TimeService,FeeRoundingPipe,RelativeUrlPipe,StateService,CacheService,StorageService,ThemeService,EtaService,{provide:Location,useValue:{path:()=>''}},{provide:Router,useFactory:(origin:string)=>({navigate:(parts:any[])=>{const path=parts.join('/');if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(path))location.assign(origin+path);}}),deps:[DESTINATION]}]})
+@NgModule({imports:[CommonModule,BrowserAnimationsModule,FontAwesomeModule,NgbTooltipModule,NgbHighlight,TonBlockLinkDirective],declarations:[Root,NativeConnectionStatus,NativeLink,NativeImage,BlockchainComponent,BlockchainBlocksComponent,MempoolBlocksComponent,AmountComponent,TimeComponent,MiningPoolComponent,FeeRateComponent,FeeRoundingPipe,RelativeUrlPipe,BytesPipe,CeilPipe,FiatCurrencyPipe,AmountShortenerPipe,AccelerationSparklesComponent],providers:[DatePipe,DecimalPipe,TimeService,FeeRoundingPipe,RelativeUrlPipe,StateService,CacheService,StorageService,ThemeService,EtaService,{provide:Location,useValue:{path:()=>''}},{provide:Router,useFactory:(origin:string)=>({
+ navigateByUrl:(route:string)=>{const url=new URL(route,origin);if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(nativeDestination(origin,url.pathname+url.search+url.hash));},
+ navigate:(parts:any[],extras:any={})=>{const url=new URL(parts.join('/').replace(/\/+/g,'/'),origin);for(const [key,value] of Object.entries(extras.queryParams||{}))if(value!=null)url.searchParams.set(key,String(value));if(extras.fragment)url.hash=extras.fragment;if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(nativeDestination(origin,url.pathname+url.search+url.hash));}
+ }),deps:[DESTINATION]}]})
 class StripModule {}
 export async function mount(host:HTMLElement, options:any={}) {
  const destination=options.destination||'https://ton.tx.taxi'; if(!/^https:\/\/[a-z0-9.-]+$/.test(destination) && !(/^http:\/\/(localhost|127\.0\.0\.1):4530$/.test(destination) && ['localhost','127.0.0.1'].includes(location.hostname)))throw new Error('Invalid native destination');

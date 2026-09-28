@@ -1,6 +1,6 @@
-✔ simultaneous host dashboard and block requests retain independent defaults with one collector (2.308519ms)
-✔ numeric searches use host scope while explicit and legacy pasted block identities survive either host (1.877205ms)
-✔ SSR canonical URLs and social metadata use the requested approved host without losing explicit entity identity (2.826127ms)
+✔ simultaneous host dashboard and block requests retain independent defaults with one collector (2.337241ms)
+✔ short block routes pin host and shard while explicit tuples and pasted links retain identity (3.358118ms)
+✔ SSR canonical URLs and social metadata use the requested approved host without losing explicit entity identity (3.792467ms)
 ℹ tests 3
 ℹ suites 0
 ℹ pass 3
@@ -8,4 +8,4 @@
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 10.287707
+ℹ duration_ms 13.090395

@@ -12,6 +12,7 @@ const { PendingInclusions } = require("./ton/pending-inclusions.cjs");
 const { tonApiKey } = require("./ton/credentials.cjs");
 const { api } = require("./ton/api.cjs");
 const { blockSelection, tonSite } = require("./ton/block-selection.cjs");
+const { blockRouteIdentity, blockUrl } = require("./ton/block-route.cjs");
 const provider = new Provider(),
   collector = new Collector(provider, { basechain: true, onUpdate: () => broadcastSelected(selection => snapshot(selection)) }),
   sockets = new Set();
@@ -79,7 +80,7 @@ const server = http.createServer(async (req, res) => {
       )
     ) {
       const route =
-        url.pathname === "/og.png" ? "/" : url.pathname.slice(3, -4);
+        (url.pathname === "/og.png" ? "/" : url.pathname.slice(3, -4)) + url.search;
       const body = await social.image(route, api, provider, collector, root, site.host);
       res.writeHead(200, {
         "Content-Type": "image/png",
@@ -144,6 +145,21 @@ const server = http.createServer(async (req, res) => {
       return json(res, snapshot(blockSelection(url.searchParams, site.workchain)));
     if (url.pathname.startsWith("/api/"))
       return json(res, { error: "Not found" }, 404);
+    const blockPath = /^((?:\/[a-z]{2}(?:-[A-Z]{2})?)?)\/block\/([^/]+)\/?$/.exec(url.pathname);
+    if (blockPath) {
+      const id = decodeURIComponent(blockPath[2]);
+      if (id.startsWith("(")) {
+        const block = blockRouteIdentity(id, url.searchParams, site.host);
+        if ([0, -1].includes(block.workchain)) {
+          const destination = new URL(blockUrl(block.id));
+          destination.pathname = blockPath[1] + destination.pathname;
+          for (const [key, value] of url.searchParams)
+            if (key !== "workchain" && key !== "shard") destination.searchParams.append(key, value);
+          res.writeHead(308, {Location: destination.origin === site.origin ? destination.pathname + destination.search : destination.href});
+          return res.end();
+        }
+      }
+    }
     let filename = path.resolve(root, "." + decodeURIComponent(url.pathname));
     if (!filename.startsWith(root + path.sep) && filename !== root)
       return json(res, { error: "Not found" }, 404);
@@ -165,7 +181,7 @@ const server = http.createServer(async (req, res) => {
       body = Buffer.from(
         await social.inject(
           body.toString(),
-          url.pathname,
+          url.pathname + url.search,
           api,
           provider,
           collector,

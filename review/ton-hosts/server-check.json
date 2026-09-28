@@ -1,14 +1,15 @@
 {
   "status": "passed",
   "verification": "controlled in-process HTTP/WebSocket handlers; no real network or browser",
-  "httpCases": 18,
+  "httpCases": 24,
   "simultaneousSockets": 3,
   "collectors": 1,
   "checked": [
     "host defaults",
     "query overrides",
     "numeric search",
-    "tuple and legacy identity",
+    "short routes and tuple redirects",
+    "shard-specific SSR",
     "socket init/select/ping",
     "selected block and pending broadcasts",
     "invalid upgrade",

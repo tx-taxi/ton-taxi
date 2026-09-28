@@ -20,9 +20,14 @@ function fixture() {
       observedAt: "2026-09-28T04:00:00Z", stale: false}),
   };
   const provider = {context: new AsyncLocalStorage(), request: async route => {
-    const match = /^\((-?\d+),[a-f0-9]{16},(\d+)\)$/.exec(decodeURIComponent(route.split("/").pop()));
+    const [, encodedId, sub] = /^\/v2\/blockchain\/blocks\/([^/]+)(?:\/(transactions|boc))?$/.exec(route) || [];
+    const match = /^\((-?\d+),[a-f0-9]{16},(\d+)\)$/.exec(decodeURIComponent(encodedId));
     assert.ok(match, "only a full block tuple should reach the provider");
-    return {data: header(Number(match[1]), Number(match[2])), at: Date.now(), stale: false, provider: "fixture"};
+    const id = decodeURIComponent(encodedId);
+    const data = sub === "transactions" ? {transactions: [1, 2, 3].map(n => ({hash: `${id}:${n}`}))}
+      : sub === "boc" ? {boc: Buffer.from(id).toString("base64")}
+      : {...header(Number(match[1]), Number(match[2])), shard: id.split(",")[1]};
+    return {data, at: Date.now(), stale: false, provider: "fixture"};
   }};
   return {collector, provider, request: (host, path) => api(new URL(`https://${host}/api/ton/${path}`), provider, collector)};
 }
@@ -42,22 +47,33 @@ test("simultaneous host dashboard and block requests retain independent defaults
   await assert.rejects(request(hosts[1], "blocks?shard=4000000000000000"), /Invalid masterchain shard/);
 });
 
-test("numeric searches use host scope while explicit and legacy pasted block identities survive either host", async () => {
+test("short block routes pin host and shard while explicit tuples and pasted links retain identity", async () => {
   const {request} = fixture();
   assert.equal((await request(hosts[0], "resolve?value=42")).id, `(0,${shard},42)`);
   assert.equal((await request(hosts[1], "resolve?value=42")).id, `(-1,${shard},42)`);
   assert.equal((await request(hosts[1], "resolve?value=42&workchain=0")).id, `(0,${shard},42)`);
   for (const host of hosts) {
-    assert.equal((await request(host, "block/42")).workchain_id, "-1");
+    const expectedWorkchain = host === hosts[0] ? "0" : "-1";
+    assert.equal((await request(host, "block/42")).workchain_id, expectedWorkchain);
+    const expectedId = `(${expectedWorkchain},${shard},42)`;
+    assert.equal((await request(host, "block/42/transactions")).transactions[0].hash, `${expectedId}:1`);
+    assert.equal(Buffer.from((await request(host, "block/42/boc")).boc, "base64").toString(), expectedId);
+    assert.equal((await request(host, "block/42/context?older=0&newer=0")).targetId, expectedId);
     for (const source of hosts) {
       for (const id of ["42", "%34%32"])
-        assert.equal((await request(host, "resolve?value=" + encodeURIComponent(`https://${source}/block/${id}`))).id, `(-1,${shard},42)`);
+        assert.equal((await request(host, "resolve?value=" + encodeURIComponent(`https://${source}/block/${id}`))).id, `(${source === hosts[0] ? 0 : -1},${shard},42)`);
       for (const workchain of [0, -1]) {
         const id = `(${workchain},${shard},42)`;
         assert.equal((await request(host, "resolve?value=" + encodeURIComponent(`https://${source}/block/${encodeURIComponent(id)}`))).id, id);
       }
     }
   }
+  const split = "4000000000000000";
+  assert.equal((await request(hosts[0], "block/42?shard=" + split)).shard, split);
+  assert.equal((await request(hosts[1], `block/(0,${split},42)?workchain=-1`)).shard, split);
+  assert.equal((await request(hosts[1], "resolve?value=" + encodeURIComponent(`https://${hosts[0]}/block/42?shard=${split}`))).id, `(0,${split},42)`);
+  assert.equal((await request(hosts[1], "resolve?value=" + encodeURIComponent(`https://${hosts[0]}/en/block/42?shard=${split}`))).id, `(0,${split},42)`);
+  await assert.rejects(request(hosts[0], "block/42/shards"), /require a masterchain block/);
   await assert.rejects(request(hosts[0], "resolve?value=" + encodeURIComponent("https://masterchain.ton.tx.taxi.example/block/42")), /Unsupported URL/);
 });
 
@@ -71,10 +87,17 @@ test("SSR canonical URLs and social metadata use the requested approved host wit
     assert.match(root.title, new RegExp(host.replaceAll(".", "\\.")));
     const pathname = `/block/(0,${shard},42)`;
     const page = await social.inject(html, pathname, api, provider, collector, host);
-    assert.ok(page.includes(`href="https://${host}${pathname}"`));
+    assert.ok(page.includes('href="https://ton.tx.taxi/block/42"'));
     assert.ok(!page.includes("old.invalid"));
-    assert.ok(page.includes(`content="https://${host}/og/block/`));
+    assert.ok(page.includes('content="https://ton.tx.taxi/og/block/'));
   }
+  const split = "4000000000000000";
+  const splitPage = await social.metadata(`/block/42?shard=${split}`, api, provider, collector, hosts[0]);
+  assert.equal(splitPage.canonical, `https://${hosts[0]}/block/42?shard=${split}`);
+  assert.equal(new URL(splitPage.image).pathname, `/og/block/(0%2C${split}%2C42).png`);
+  const masterPage = await social.metadata("/block/42", api, provider, collector, hosts[1]);
+  assert.equal(masterPage.canonical, `https://${hosts[1]}/block/42`);
+  assert.notEqual(masterPage.image, splitPage.image);
   const untrusted = await social.metadata("/", api, provider, collector, "masterchain.ton.tx.taxi.example");
   assert.equal(untrusted.canonical, "https://ton.tx.taxi/");
 });

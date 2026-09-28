@@ -1,5 +1,6 @@
 "use strict";
 const { ProviderError } = require("./provider.cjs");
+const { blockRouteIdentity } = require("./block-route.cjs");
 function address(value) {
   if (/^-?\d+:[a-fA-F0-9]{64}$/.test(value)) {
     const [wc, hash] = value.split(":");
@@ -41,6 +42,8 @@ function input(value) {
     )
       throw new ProviderError("Unsupported URL", 400);
     const parts = url.pathname.split("/").filter(Boolean);
+    if (["ton.tx.taxi", "masterchain.ton.tx.taxi"].includes(url.hostname.toLowerCase())
+      && parts.length === 3 && /^[a-z]{2}(?:-[A-Z]{2})?$/.test(parts[0])) parts.shift();
     if (parts.length === 1) value = decodeURIComponent(parts[0]);
     else if (
       parts.length === 2 &&
@@ -56,8 +59,8 @@ function input(value) {
     ) {
       value = decodeURIComponent(parts[1]);
       if (["ton.tx.taxi", "masterchain.ton.tx.taxi"].includes(url.hostname.toLowerCase())
-        && parts[0] === "block" && /^\d+$/.test(value))
-        value = `(-1,8000000000000000,${value})`;
+        && parts[0] === "block")
+        value = blockRouteIdentity(value, url.searchParams, url.hostname).id;
     }
     else throw new ProviderError("Unsupported URL", 400);
   }

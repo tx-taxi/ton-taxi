@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { TonBlockLinkDirective } from '@app/ton/ton-block-link.directive';
 import { CommonModule } from '@angular/common';
 import { NgbCollapseModule, NgbTypeaheadModule, NgbNavModule, NgbTooltipModule, NgbPaginationModule, NgbDropdownModule, NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
@@ -264,6 +265,7 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     BitcoinInvoiceComponent,
   ],
   imports: [
+    TonBlockLinkDirective,
     CommonModule,
     RouterModule,
     FormsModule,
@@ -290,6 +292,7 @@ import { GithubLogin } from '@components/github-login.component/github-login.com
     FeeRoundingPipe,
   ],
   exports: [
+    TonBlockLinkDirective,
     MenuComponent,
     RouterModule,
     ReactiveFormsModule,

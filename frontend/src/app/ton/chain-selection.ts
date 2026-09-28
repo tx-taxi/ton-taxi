@@ -3,6 +3,12 @@ export interface TonChainSelection {
   shard?: string;
 }
 
+export interface TonBlockIdentity extends TonChainSelection {
+  shard: string;
+  seqno: string;
+  id: string;
+}
+
 export const TON_ROOT_SHARD = '8000000000000000';
 export const TON_BASECHAIN_ORIGIN = 'https://ton.tx.taxi';
 export const TON_MASTERCHAIN_ORIGIN = 'https://masterchain.ton.tx.taxi';
@@ -50,10 +56,43 @@ export function tonBlockMatchesSelection(block: any, selection: TonChainSelectio
   return !!scope && scope.workchain === selection.workchain && (!selection.shard || scope.shard === selection.shard);
 }
 
-/** Existing bare block routes are masterchain; new destinations carry full tuples. */
-export function tonSelectionForBlockId(id: unknown): TonChainSelection | null {
-  const value = String(id ?? '');
-  if (/^\d+$/.test(value)) return tonChainSelection(-1);
-  const scope = tonBlockScope({ id: value });
-  return scope && (scope.workchain === 0 || scope.workchain === -1) ? tonChainSelection(scope.workchain, scope.shard) : null;
+/** Display routes are short; API requests, caches and strip context retain tuples. */
+export function tonBlockIdentity(block: any, selection?: TonChainSelection): TonBlockIdentity | null {
+  const value = typeof block === 'object' && block !== null ? block.id ?? block.ton?.id : block;
+  const tuple = /^\((-?\d+),([0-9a-f]{16}),(\d+)\)$/i.exec(String(value ?? ''));
+  const scope = tuple ? { workchain: Number(tuple[1]), shard: tuple[2].toLowerCase() }
+    : tonBlockScope(block) || selection;
+  const seqno = String(tuple?.[3] ?? block?.ton?.seqno ?? block?.seqno ?? block?.height ?? value ?? '');
+  if (!scope || ![0, -1].includes(scope.workchain) || !/^\d+$/.test(seqno) || Number(seqno) > 4294967295) return null;
+  const shard = scope.shard || TON_ROOT_SHARD;
+  if (!/^[0-9a-f]{16}$/i.test(shard) || /^0+$/.test(shard) || scope.workchain === -1 && shard !== TON_ROOT_SHARD) return null;
+  const normalizedSeqno = String(Number(seqno));
+  return { workchain: scope.workchain as 0 | -1, shard: shard.toLowerCase(), seqno: normalizedSeqno, id: `(${scope.workchain},${shard.toLowerCase()},${normalizedSeqno})` };
+}
+
+export function tonLocalePrefix(pathname: string): string {
+  const locale = /^\/([a-z]{2}(?:-[A-Z]{2})?)(?:\/|$)/.exec(pathname)?.[1];
+  return locale && locale !== 'tx' ? '/' + locale : '';
+}
+
+export function tonBlockUrl(block: unknown, selection?: TonChainSelection, sourcePath = ''): string | null {
+  const identity = tonBlockIdentity(block, selection);
+  if (!identity) return null;
+  const origin = identity.workchain === -1 ? TON_MASTERCHAIN_ORIGIN : TON_BASECHAIN_ORIGIN;
+  return `${origin}${tonLocalePrefix(sourcePath)}/block/${identity.seqno}${identity.shard === TON_ROOT_SHARD ? '' : '?shard=' + identity.shard}`;
+}
+
+export function tonSelectionForBlockId(id: unknown, selection: TonChainSelection = { workchain: 0, shard: TON_ROOT_SHARD }): TonChainSelection | null {
+  const identity = tonBlockIdentity(id, selection);
+  return identity ? { workchain: identity.workchain, shard: identity.shard } : null;
+}
+
+/** Preserve the full block identity when generating a link from a router result. */
+export function tonBlockIdentityFromUrl(value: string): TonBlockIdentity | null {
+  const url = new URL(value, TON_BASECHAIN_ORIGIN);
+  const block = /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?block\/([^/]+)\/?$/.exec(url.pathname);
+  if (!block) return null;
+  try {
+    return tonBlockIdentity(decodeURIComponent(block[1]), tonChainSelection(url.searchParams.get('workchain') ?? tonHostnameWorkchain(url.hostname), url.searchParams.get('shard') ?? TON_ROOT_SHARD));
+  } catch { return null; }
 }

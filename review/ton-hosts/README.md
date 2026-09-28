@@ -5,9 +5,9 @@
 ## Implemented
 
 - HTTP dashboards, block lists, numeric search and WebSocket upgrades derive their default workchain from the exact hostname. Explicit supported workchain/shard query selections still override defaults. Connected viewers retain independent selections during updates and reconnects.
-- Full block tuples preserve workchain/shard/height on either host. Existing `/block/<number>` entity URLs still mean Masterchain, including when pasted into search. Raw numeric searches use the selected workchain. URL-encoded numeric legacy links retain that identity.
+- Full block tuples preserve workchain/shard/height on either host. The subsequent approved clean-URL change supersedes the old numeric Masterchain-only rule: `/block/<number>` means the current host's workchain and the stable root shard, with `?shard=` for other shards. Raw numeric searches still use the selected feed scope. Tuple page links redirect to their clean equivalent. See [the clean URL review](../ton-clean-urls/README.md).
 - Angular selection initialization, native controls, titles, canonical URLs and social images recognize the Masterchain hostname. Shared social-image caches are partitioned by approved host. Logo navigation remains detail page → current explorer root → hub.
-- Router `site.aliasOrigins` adds the exact Masterchain origin to native input recognition, browser CORS, hub handoff and allowed destinations without adding a second chain. New explicit Masterchain block tuple destinations use the Masterchain host.
+- Router `site.aliasOrigins` adds the exact Masterchain origin to native input recognition, browser CORS, hub handoff and allowed destinations without adding a second chain. Full internal block identities produce clean numeric destinations on their workchain host.
 - The earlier native cube cleanup is included: omit repeated chain/fee qualifiers while preserving native row dimensions; pending count and messages share one line. No fee statistics or pending ETA are fabricated.
 
 ## Source and evidence
@@ -17,9 +17,9 @@ Native isolated clone: `/tmp/ton-strip-consistency`, based on `422ad70cf98bf9155
 Checks already passed:
 
 - Angular compiler `ngc --noEmit`.
-- 13 frontend behavior checks: hostname defaults, explicit identities, selector destinations and actual transition navigation with a controlled DOM.
+- The hostname baseline passed 13 frontend behavior checks; subsequent clean-link checks and final counts are recorded in the clean URL review.
 - 3 backend behavior checks: simultaneous host API scopes, numeric/full tuple/legacy search identity, and server-rendered canonical/social host separation.
-- Actual server handlers checked in process with 18 HTTP cases and three simultaneous WebSocket fixtures: host/query scope, initialization, selection, ping, block/pending broadcasts and one shared collector. Run `node review/ton-hosts/server-check.cjs`; no real transport is used.
+- Actual server handlers checked in process with 24 HTTP cases and three simultaneous WebSocket fixtures: host/query scope, short block routes, tuple redirects, split-shard SSR, initialization, selection, ping, block/pending broadcasts and one shared collector. Run `node review/ton-hosts/server-check.cjs`; no real transport is used.
 - Router compilation and relevant routing/access suites; its exact final count and controlled handoff/transition evidence are recorded in the router's `review/ton-hosts/`.
 - Syntax and whitespace checks.
 

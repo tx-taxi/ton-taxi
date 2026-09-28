@@ -19,8 +19,12 @@
         <span *ngIf="!canGoNext" placement="bottom" class="disable nav-arrow next">
           <fa-icon [icon]="['fas', 'angle-left']" [fixedWidth]="true"></fa-icon>
         </span>
-        <a [routerLink]="['/block/' | relativeUrl, displayBlockHash]" class="block-link">{{ displayBlockHeight }}</a>
-        <a *ngIf="canGoPrevious" class="nav-arrow prev"  [routerLink]="['/block/' | relativeUrl, nativeMode ? nativePreviousBlock : block.previousblockhash]" (click)="nativeMode ? null : navigateToPreviousBlock()" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
+        <a *ngIf="nativeMode; else legacyCurrentBlock" [tonBlockLink]="displayBlockHash" class="block-link">{{ displayBlockHeight }}</a>
+        <ng-template #legacyCurrentBlock><a [routerLink]="['/block/' | relativeUrl, displayBlockHash]" class="block-link">{{ displayBlockHeight }}</a></ng-template>
+        <a *ngIf="nativeMode && canGoPrevious" class="nav-arrow prev" [tonBlockLink]="nativePreviousBlock" ngbTooltip="Previous Block" placement="bottom">
+          <fa-icon [icon]="['fas', 'angle-right']" [fixedWidth]="true"></fa-icon>
+        </a>
+        <a *ngIf="!nativeMode && canGoPrevious" class="nav-arrow prev" [routerLink]="['/block/' | relativeUrl, block.previousblockhash]" (click)="navigateToPreviousBlock()" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
           <fa-icon [icon]="['fas', 'angle-right']" [fixedWidth]="true"></fa-icon>
         </a>
         <span *ngIf="!canGoPrevious" placement="bottom" class="disable nav-arrow prev">

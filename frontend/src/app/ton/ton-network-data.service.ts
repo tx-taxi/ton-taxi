@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription, throwError, timer } from 'rxjs';
 import { TonChainSelectionService } from './ton-chain-selection.service';
-import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery, tonSelectionForBlockId, tonWorkchainDestination } from './chain-selection';
+import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery, tonWorkchainDestination } from './chain-selection';
 import { finalize, retry } from 'rxjs/operators';
 import { OpenGraphService } from '@app/services/opengraph.service';
 import { SeoService } from '@app/services/seo.service';
@@ -27,7 +27,20 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   constructor(cdr: ChangeDetectorRef, http: HttpClient, route: ActivatedRoute, state: StateService, seo: SeoService, og: OpenGraphService, private selection: TonChainSelectionService, private router: Router) { super(cdr, http, route, state, seo, og, selection); }
   private getNative<T>(url: string) { return this.http.get<T>(url).pipe(finalize(() => this.cdr.markForCheck())); }
   private contextResizeListener = () => this.onContextResize();
-  override ngOnInit(): void { window.addEventListener('resize', this.contextResizeListener); document.addEventListener('visibilitychange', this.visibilityListener); this.nativeRouteSub = combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(([params, query]) => { const page = this.route.snapshot.data.tonPage; this.nativeRoute = page === 'block' ? 'block' : page === 'blocks' ? 'blocks' : 'dashboard'; this.page = this.nativeRoute; this.id = params.get('id') || ''; const contextual = this.nativeRoute === 'block' && !query.has('workchain') && !query.has('shard') ? tonSelectionForBlockId(this.id) : null; this.selection.set(contextual?.workchain ?? query.get('workchain'), contextual?.shard ?? query.get('shard')); this.loadNative(); }); }
+  override ngOnInit(): void {
+    window.addEventListener('resize', this.contextResizeListener);
+    document.addEventListener('visibilitychange', this.visibilityListener);
+    this.nativeRouteSub = combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(([params, query]) => {
+      const page = this.route.snapshot.data.tonPage;
+      this.nativeRoute = page === 'block' ? 'block' : page === 'blocks' ? 'blocks' : 'dashboard';
+      this.page = this.nativeRoute;
+      const routeId = params.get('id') || '';
+      const contextual = this.nativeRoute === 'block' ? this.selection.blockIdentity(routeId, query.get('workchain'), query.get('shard')) : null;
+      this.id = contextual?.id || routeId;
+      this.selection.set(contextual?.workchain ?? query.get('workchain'), contextual?.shard ?? query.get('shard'));
+      this.loadNative();
+    });
+  }
   override ngOnDestroy(): void { window.removeEventListener('resize', this.contextResizeListener); document.removeEventListener('visibilitychange', this.visibilityListener); this.nativeRouteSub?.unsubscribe(); super.ngOnDestroy(); }
   get workchain(): 0 | -1 { return this.selection.current.workchain; }
   get chainLabel(): string { return this.workchain === -1 ? 'Masterchain' : 'Basechain'; }

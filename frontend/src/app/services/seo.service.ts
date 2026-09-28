@@ -3,6 +3,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs';
 import { StateService } from '@app/services/state.service';
+import { tonBlockIdentityFromUrl, tonBlockUrl } from '@app/ton/chain-selection';
 
 @Injectable({
   providedIn: 'root'
@@ -31,8 +32,8 @@ export class SeoService {
     } catch (e) {
       // leave as default
     }
-    if (typeof window !== 'undefined' && window.location.hostname === 'masterchain.ton.tx.taxi') {
-      this.baseDomain = this.baseTitle = 'masterchain.ton.tx.taxi';
+    if (typeof window !== 'undefined' && ['ton.tx.taxi', 'masterchain.ton.tx.taxi'].includes(window.location.hostname)) {
+      this.baseDomain = this.baseTitle = window.location.hostname;
     }
 
     this.stateService.networkChanged$.subscribe((network) => this.network = network);
@@ -47,7 +48,7 @@ export class SeoService {
       switchMap(route => route.data),
     ).subscribe((data) => {
       this.clearSoft404();
-      this.updateCanonical(this.router.url.split('?')[0].split('#')[0]);
+      this.updateCanonical(this.router.url);
     });
   }
 
@@ -88,7 +89,9 @@ export class SeoService {
   }
 
   updateCanonical(path) {
-    const canonicalUrl = 'https://' + this.baseDomain + path;
+    const requestedUrl = new URL(path, 'https://' + this.baseDomain);
+    const block = tonBlockIdentityFromUrl(requestedUrl.href);
+    const canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + requestedUrl.pathname;
     this.canonicalLink.setAttribute('href', canonicalUrl);
     this.metaService.updateTag({ property: 'og:url', content: canonicalUrl });
   }

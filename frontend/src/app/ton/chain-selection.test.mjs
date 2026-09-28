@@ -8,19 +8,20 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import * as selection from './chain-selection.ts';
 
 const require = createRequire(import.meta.url);
-function loadService(relativePath, additions = {}) {
+function loadService(relativePath, additions = {}, expose = []) {
   const filename = new URL(relativePath, import.meta.url);
-  const source = ts.transpileModule(readFileSync(filename, 'utf8'), {
+  const source = ts.transpileModule(readFileSync(filename, 'utf8').replaceAll('import.meta.url', JSON.stringify(filename.href)) + expose.map(name => `\nexport { ${name} };`).join(''), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, experimentalDecorators: true, useDefineForClassFields: false },
   }).outputText;
   const module = { exports: {} };
   const imports = {
     '@angular/core': { Injectable: () => target => target, makeStateKey: key => key },
     '@app/ton/chain-selection': selection,
+    './chain-selection': selection,
     '@app/shared/ton-pending-state': { readTonPending: () => null },
     ...additions,
   };
-  new Function('require', 'module', 'exports', source)(name => imports[name] || (name.startsWith('rxjs') ? require(name) : {}), module, module.exports);
+  new Function('require', 'module', 'exports', source)(name => imports[name] || (['@app/ton/block-navigation', './block-navigation'].includes(name) ? loadService('./block-navigation.ts') : name.startsWith('rxjs') ? require(name) : {}), module, module.exports);
   return module.exports;
 }
 
@@ -108,6 +109,134 @@ test('native dashboard initialization cannot reset the masterchain hostname to b
   });
 });
 
+test('short entity routes request a stable full identity and reload when only the shard query changes', () => {
+  withLocation('https://ton.tx.taxi/block/100160666', () => {
+    const previousDocument = globalThis.document;
+    globalThis.document = { addEventListener() {}, removeEventListener() {} };
+    try {
+      const { TonNetworkData } = loadService('./ton-network-data.service.ts', { './ton-page-data': { TonPageData: class {} } });
+      const page = Object.create(TonNetworkData.prototype);
+      const { service } = chainService();
+      service.set(0, 'c000000000000000'); // The live stream must not determine a short entity's identity.
+      const params = new BehaviorSubject(new Map([['id', '100160666']]));
+      const query = new BehaviorSubject(new URLSearchParams());
+      page.selection = service;
+      page.route = { paramMap: params, queryParamMap: query, snapshot: { data: { tonPage: 'block' } } };
+      page.requests = { add() {} };
+      const requested = [];
+      page.getNative = url => { requested.push(url); return new Subject(); };
+      page.loadNative = () => page.loadBlock();
+      page.ngOnInit();
+      assert.equal(requested.at(-1), '/api/ton/block/(0%2C8000000000000000%2C100160666)');
+      query.next(new URLSearchParams('shard=4000000000000000'));
+      assert.equal(requested.at(-1), '/api/ton/block/(0%2C4000000000000000%2C100160666)');
+      query.next(new URLSearchParams('workchain=-1'));
+      assert.equal(requested.at(-1), '/api/ton/block/(-1%2C8000000000000000%2C100160666)');
+      params.next(new Map([['id', '(0,c000000000000000,100160666)']]));
+      assert.equal(requested.at(-1), '/api/ton/block/(0%2Cc000000000000000%2C100160666)');
+      assert.deepEqual(service.current, { workchain: 0, shard: 'c000000000000000' });
+      page.nativeRouteSub.unsubscribe();
+    } finally {
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+    }
+  });
+});
+
+test('native block links expose clean hrefs, retain shard identity, and switch workchain hosts', () => {
+  const decorator = () => target => target, propertyDecorator = () => () => undefined;
+  const { TonBlockLinkDirective } = loadService('./ton-block-link.directive.ts', {
+    '@angular/core': { Directive: decorator, Input: propertyDecorator, HostBinding: propertyDecorator, HostListener: propertyDecorator },
+  });
+  withLocation('https://ton.tx.taxi/', () => {
+    const local = [], external = [];
+    window.location.assign = href => external.push(href);
+    const link = new TonBlockLinkDirective({ navigateByUrl: (path, extras) => local.push({ path, extras }) }, { nativeElement: { target: '', hasAttribute: () => false } });
+    link.tonBlockLink = block(0, rootShard, 100160666);
+    assert.equal(link.href, 'https://ton.tx.taxi/block/100160666');
+    let prevented = 0;
+    const click = { button: 0, preventDefault() { prevented++; } };
+    link.onClick({ ...click, ctrlKey: true });
+    assert.equal(prevented, 0);
+    assert.deepEqual(local, []);
+    link.tonBlockLink = '(0,4000000000000000,100160666)';
+    link.onClick(click);
+    assert.equal(local[0].path, '/block/100160666?shard=4000000000000000');
+    link.tonBlockLink = '(-1,8000000000000000,100160666)';
+    link.onClick(click);
+    assert.deepEqual(external, ['https://masterchain.ton.tx.taxi/block/100160666']);
+    assert.equal(prevented, 2);
+    window.location = new URL('https://ton.tx.taxi/pt-BR/tx/abc');
+    window.location.assign = href => external.push(href);
+    link.onClick(click);
+    assert.equal(link.href, 'https://masterchain.ton.tx.taxi/pt-BR/block/100160666');
+    assert.equal(external.at(-1), 'https://masterchain.ton.tx.taxi/pt-BR/block/100160666');
+    link.tonBlockLink = '(0,8000000000000000,100160666)';
+    link.onClick(click);
+    assert.equal(local.at(-1).path, '/pt-BR/block/100160666');
+  });
+  const { nativeDestination } = loadService('../../../../hub/facade.ts');
+  assert.equal(nativeDestination('https://ton.tx.taxi', '/block/(0,8000000000000000,100160666)'), 'https://ton.tx.taxi/block/100160666');
+  assert.equal(nativeDestination('https://ton.tx.taxi', '/block/(0,4000000000000000,100160666)'), 'https://ton.tx.taxi/block/100160666?shard=4000000000000000');
+  assert.equal(nativeDestination('https://ton.tx.taxi', '/block/(-1,8000000000000000,100160666)'), 'https://masterchain.ton.tx.taxi/block/100160666');
+});
+
+test('the hub module routes actual native directive clicks and router extras to clean explorer URLs', () => {
+  const decorator = options => target => { target.options = options; return target; }, propertyDecorator = () => () => undefined;
+  class Router {}
+  const facade = loadService('../../../../hub/facade.ts');
+  const { TonBlockLinkDirective } = loadService('./ton-block-link.directive.ts', {
+    '@angular/core': { Directive: decorator, Input: propertyDecorator, HostBinding: propertyDecorator, HostListener: propertyDecorator },
+  });
+  const { StripModule, NativeLink } = loadService('../../../../hub/entry.ts', {
+    '@angular/core': { Component: decorator, NgModule: decorator, Directive: decorator, Input: propertyDecorator, HostBinding: propertyDecorator, Inject: propertyDecorator, InjectionToken: class {} },
+    '@angular/router': { Router }, './facade': facade,
+    '@app/ton/ton-block-link.directive': { TonBlockLinkDirective },
+  }, ['StripModule', 'NativeLink']);
+  assert.ok(StripModule.options.imports.includes(TonBlockLinkDirective));
+  withLocation('https://tx.taxi/', () => {
+    const previousLocation = globalThis.location;
+    const destinations = [];
+    globalThis.location = { assign: href => destinations.push(href) };
+    try {
+      const router = StripModule.options.providers.find(provider => provider?.provide === Router).useFactory('https://ton.tx.taxi');
+      const link = new TonBlockLinkDirective(router, { nativeElement: { target: '', hasAttribute: () => false } });
+      link.tonBlockLink = '(0,4000000000000000,100160666)';
+      link.onClick({ button: 0, preventDefault() {} });
+      assert.equal(link.href, 'https://ton.tx.taxi/block/100160666?shard=4000000000000000');
+      assert.equal(destinations.at(-1), link.href);
+      router.navigate(['/block', '100160666'], { queryParams: { shard: 'c000000000000000' } });
+      assert.equal(destinations.at(-1), 'https://ton.tx.taxi/block/100160666?shard=c000000000000000');
+      const compatibilityLink = new NativeLink('https://ton.tx.taxi');
+      compatibilityLink.routerLink = ['/block', '100160666'];
+      compatibilityLink.queryParams = { shard: 'c000000000000000' };
+      assert.equal(compatibilityLink.href, destinations.at(-1));
+    } finally {
+      if (previousLocation === undefined) delete globalThis.location;
+      else globalThis.location = previousLocation;
+    }
+  });
+});
+
+test('confirmed same-chain router candidates retain their TON host and shard when searched', () => {
+  const decorator = () => target => target, propertyDecorator = () => () => undefined;
+  const { SearchFormComponent } = loadService('../components/search-form/search-form.component.ts', {
+    '@angular/core': { Component: decorator, Input: propertyDecorator, Output: propertyDecorator, ViewChild: propertyDecorator, HostListener: propertyDecorator, ChangeDetectionStrategy: { OnPush: 0 } },
+  });
+  withLocation('https://ton.tx.taxi/', () => {
+    const form = Object.create(SearchFormComponent.prototype);
+    const local = [], external = [];
+    window.location.assign = url => external.push(url);
+    form.sourceChainId = 'ton';
+    form.searchTriggered = { emit() {} };
+    form.router = { navigateByUrl: url => local.push(url) };
+    form.searchTarget({ kind: 'candidate', chainId: 'ton', confirmed: true, directUrl: 'https://ton.tx.taxi/block/100160666?shard=c000000000000000' }, '100160666');
+    assert.deepEqual(local, ['/block/100160666?shard=c000000000000000']);
+    form.searchTarget({ kind: 'candidate', chainId: 'ton', confirmed: true, directUrl: 'https://masterchain.ton.tx.taxi/block/100160666' }, '100160666');
+    assert.deepEqual(external, ['https://masterchain.ton.tx.taxi/block/100160666']);
+  });
+});
+
 test('workchain controls navigate through the shared transition to clean hosts and retain the blocks route', () => {
   const { TonNetworkData } = loadService('./ton-network-data.service.ts', {
     './ton-page-data': { TonPageData: class {} }, './chain-selection': selection,
@@ -162,7 +291,7 @@ test('the native transition accepts a sibling TON view and navigates after its s
   assert.equal(window.__txTaxiSwitchTonView('https://masterchain.ton.tx.taxi/block/95544320'), false);
 });
 
-test('masterchain navigation retains the host in page titles, canonical links and entity images', () => {
+test('block metadata uses the short canonical workchain URL and a full-identity image', () => {
   withLocation('https://masterchain.ton.tx.taxi/', () => {
     const previousDocument = globalThis.document;
     const canonical = { href: 'https://masterchain.ton.tx.taxi/', setAttribute(key, value) { this[key] = value; } };
@@ -176,15 +305,46 @@ test('masterchain navigation retains the host in page titles, canonical links an
       const seo = new SeoService({ setTitle() {} }, meta, state, router, {});
       seo.resetTitle();
       seo.updateCanonical(router.url);
-      assert.equal(canonical.href, 'https://masterchain.ton.tx.taxi/block/(0,4000000000000000,100039007)');
+      assert.equal(canonical.href, 'https://ton.tx.taxi/block/100039007?shard=4000000000000000');
       assert.equal(tags.get('og:title'), 'masterchain.ton.tx.taxi - TON Explorer');
       const { OpenGraphService } = loadService('../services/opengraph.service.ts');
       const og = new OpenGraphService({}, meta, state, router, {});
       og.clearOgImage();
-      assert.equal(tags.get('og:image'), 'https://masterchain.ton.tx.taxi/og/block/(0,4000000000000000,100039007).png?v=4');
+      assert.equal(tags.get('og:image'), 'https://ton.tx.taxi/og/block/(0%2C4000000000000000%2C100039007).png?v=4');
+      router.url = '/block/100039007?workchain=0&shard=c000000000000000';
+      seo.updateCanonical(router.url);
+      og.clearOgImage();
+      assert.equal(canonical.href, 'https://ton.tx.taxi/block/100039007?shard=c000000000000000');
+      assert.equal(tags.get('og:image'), 'https://ton.tx.taxi/og/block/(0%2Cc000000000000000%2C100039007).png?v=4');
+      router.url = '/pt-BR/block/100039007?workchain=0&shard=c000000000000000';
+      seo.updateCanonical(router.url);
+      og.clearOgImage();
+      assert.equal(canonical.href, 'https://ton.tx.taxi/pt-BR/block/100039007?shard=c000000000000000');
+      assert.equal(tags.get('og:image'), 'https://ton.tx.taxi/og/block/(0%2Cc000000000000000%2C100039007).png?v=4');
       router.url = '/';
       og.clearOgImage();
       assert.equal(tags.get('og:image'), 'https://masterchain.ton.tx.taxi/og.png?v=1');
+    } finally {
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+    }
+  });
+  withLocation('https://ton.tx.taxi/block/42?workchain=-1', () => {
+    const previousDocument = globalThis.document;
+    const canonical = { href: 'https://masterchain.ton.tx.taxi/block/42', setAttribute(key, value) { this[key] = value; } };
+    globalThis.document = { getElementById: () => canonical };
+    try {
+      const tags = new Map();
+      const { SeoService } = loadService('../services/seo.service.ts');
+      const seo = new SeoService({ setTitle() {} }, { updateTag(tag) { tags.set(tag.property || tag.name, tag.content); } }, { networkChanged$: new Subject() }, { events: new Subject() }, {});
+      seo.updateCanonical('/block/42?workchain=-1');
+      assert.equal(canonical.href, 'https://masterchain.ton.tx.taxi/block/42');
+      seo.updateCanonical('/');
+      seo.resetTitle();
+      assert.equal(canonical.href, 'https://ton.tx.taxi/');
+      assert.equal(tags.get('og:title'), 'ton.tx.taxi - TON Explorer');
+      seo.updateCanonical('/block/43');
+      assert.equal(canonical.href, 'https://ton.tx.taxi/block/43');
     } finally {
       if (previousDocument === undefined) delete globalThis.document;
       else globalThis.document = previousDocument;
@@ -278,18 +438,20 @@ test('an initially empty blocks page recovers on a scoped live update without re
 });
 
 test('numeric search carries the selected workchain and discards a result after that choice changes', () => {
+  withLocation('https://ton.tx.taxi/', () => {
   const decorator = () => target => target;
   const propertyDecorator = () => () => undefined;
   const { SearchFormComponent } = loadService('../components/search-form/search-form.component.ts', {
     '@angular/core': { Component: decorator, Input: propertyDecorator, Output: propertyDecorator, ViewChild: propertyDecorator, HostListener: propertyDecorator, ChangeDetectionStrategy: { OnPush: 0 } },
   });
   const form = Object.create(SearchFormComponent.prototype);
-  const requests = [], navigations = [];
+  const requests = [], navigations = [], external = [];
+  window.location.assign = value => external.push(value);
   form.cdr = { markForCheck() {} };
   form.tonSelection = { current: { workchain: 0, shard: rootShard } };
   form.searchForm = { value: { searchText: '100000000' } };
   form.searchTriggered = { emit() {} };
-  form.router = { navigate(value) { navigations.push(value); } };
+  form.router = { navigateByUrl(value) { navigations.push(value); } };
   form.http = { get(url, options) { const response = new Subject(); requests.push({ url, options, response }); return response; } };
   form.searchSourceChain('100000000');
   assert.deepEqual(requests[0].options.params, { value: '100000000', workchain: '0', shard: rootShard });
@@ -299,7 +461,12 @@ test('numeric search carries the selected workchain and discards a result after 
   form.searchSourceChain('100000000');
   assert.equal(requests[1].options.params.workchain, '-1');
   requests[1].response.next({ type: 'block', id: '(-1,8000000000000000,100000000)' });
-  assert.deepEqual(navigations, [['/', 'block', '(-1,8000000000000000,100000000)']]);
+  assert.deepEqual(external, ['https://masterchain.ton.tx.taxi/block/100000000']);
+  form.tonSelection.current = { workchain: 0, shard: '4000000000000000' };
+  form.searchSourceChain('100000000');
+  requests[2].response.next({ type: 'block', id: '(0,4000000000000000,100000000)' });
+  assert.deepEqual(navigations, ['/block/100000000?shard=4000000000000000']);
+  });
 });
 
 test('a slower dashboard response refreshes history without moving the live head backward', () => {
@@ -325,7 +492,7 @@ test('a slower dashboard response refreshes history without moving the live head
 });
 
 
-test('full tuple and legacy block routes retain their workchain for subsequent numeric search', () => {
+test('full tuple block routes retain their scope while short routes return to the hostname and stable root shard', () => {
   class NavigationEnd { constructor(urlAfterRedirects) { this.urlAfterRedirects = urlAfterRedirects; } }
   const { TonChainSelectionService } = loadService('./ton-chain-selection.service.ts', {
     '@angular/router': { NavigationEnd }, './chain-selection': selection,
@@ -343,7 +510,11 @@ test('full tuple and legacy block routes retain their workchain for subsequent n
   events.next(new NavigationEnd('/block/(0,4000000000000000,100039007)'));
   assert.deepEqual(service.current, {workchain:0, shard:'4000000000000000'});
   events.next(new NavigationEnd('/block/95544320'));
+  assert.deepEqual(service.current, {workchain:0, shard:rootShard});
+  events.next(new NavigationEnd('/block/95544320?workchain=-1'));
   assert.deepEqual(service.current, {workchain:-1, shard:rootShard});
+  events.next(new NavigationEnd('/block/(0,4000000000000000,95544320)?workchain=-1'));
+  assert.deepEqual(service.current, {workchain:0, shard:'4000000000000000'});
   events.next(new NavigationEnd('/'));
   assert.deepEqual(service.current, {workchain:0});
 });

@@ -35,7 +35,7 @@
           <tr><td>Timestamp</td><td><app-timestamp *ngIf="transaction.utime; else unavailable" [unixTime]="+transaction.utime" [customFormat]="'yyyy-MM-dd HH:mm:ss'"></app-timestamp></td></tr>
           <tr><td>Account</td><td><app-truncate *ngIf="tonAddress(transaction.account)" [text]="tonLabel(transaction.account)" [lastChars]="8" [link]="['/address', tonAddress(transaction.account)]"><app-clipboard [text]="tonAddress(transaction.account)"></app-clipboard></app-truncate></td></tr>
           <tr><td>Block</td><td><app-truncate *ngIf="transaction.block; else unavailable" [text]="transaction.block" [lastChars]="12" [link]="['/block', transaction.block]"></app-truncate></td></tr>
-          <tr *ngIf="transaction.master_seqno"><td>Masterchain reference</td><td><a [routerLink]="['/block',transaction.master_seqno]">{{ transaction.master_seqno }}</a></td></tr>
+          <tr *ngIf="transaction.master_seqno"><td>Masterchain reference</td><td><a [tonBlockLink]="'(-1,8000000000000000,' + transaction.master_seqno + ')'">{{ transaction.master_seqno }}</a></td></tr>
             </ng-container>
   } @else {
   @if (tx?.status?.confirmed) {

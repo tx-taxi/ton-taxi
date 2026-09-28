@@ -1,0 +1,36 @@
+Recorded results from completed controlled checks, 2026-09-28.
+
+Working directory: /tmp/ton-strip-consistency/frontend
+Command: node src/app/ton/chain-selection.test.mjs
+Result: exit 0; 17 tests passed, 0 failed.
+
+Passed behaviors:
+- Hostname initializes the feed and restores scope after explicit block/query routes.
+- Native dashboard initialization retains the Masterchain hostname scope.
+- Short entity routes request stable full tuples; shard-only query changes reload.
+- Native block links expose clean hrefs, retain shard identity, and switch hosts.
+- Actual transpiled hub entry routes native directive clicks and router extras.
+- Confirmed TON router candidates retain their host and shard when searched.
+- Workchain controls use the shared transition and retain the blocks route.
+- Native transition navigates to a sibling view after its surface animation.
+- Metadata uses short canonical URLs and full-identity image paths, including locales;
+  a cross-workchain initial SSR canonical does not change the browser host's defaults
+  on subsequent root and block navigation.
+- Workchain changes reset the live high-water mark and reject the previous feed.
+- Default-shard changes clear height aliases; mixed-shard snapshots are rejected.
+- Delayed history responses cannot repopulate a different selection's cache.
+- Empty block pages recover from scoped live updates without replacing paged history.
+- Numeric search carries scope, ignores stale results, and navigates to clean URLs.
+- Slower dashboard responses update history without moving the head backward.
+- Full tuples retain scope; short routes use hostname plus the stable root shard.
+- Live-feed scroll resets keep the selected contextual block centered.
+
+Command: node node_modules/@angular/compiler-cli/bundles/src/bin/ngc.js -p tsconfig.app.json --noEmit
+Result: exit 0 after the final dashboard link and browser-host metadata corrections.
+
+Command: git diff --check
+Result: exit 0.
+
+Scope: in-process fixtures/transpiled classes and Angular compiler checking.
+No production deployment, browser/screenshot verification, full bundle build,
+or rebuilt hub export was performed in this restricted session.
