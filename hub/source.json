@@ -1,9 +1,14 @@
 {
-  "repository": "tx-taxi/eth-taxi",
-  "commit": "9327a28da7fcf95828adf51e3b4b3c45658241c1",
-  "approval": "Approved deployed ETH ancestor; TON adaptation is a local candidate awaiting user review.",
+  "repository": "tx-taxi/ton-taxi",
+  "commit": "5a77aba19",
+  "approval": "TON production release authorized; reviewed basechain integration reuses the approved native component family.",
   "chain": "ton",
-  "worktree": "codex/ton-native-explorer",
+  "worktree": "codex/ton-basechain-integration",
   "reconciliation": "review/ton/reconciliation/README.md",
-  "provenance": "Generated file hashes identify the actual local TON sources, including uncommitted adaptations. No TON production revision exists."
+  "provenance": "The generated provenance.json records the exact export commit and SHA-256 of each native component, template, style, formatter and chain-owned feed.",
+  "ancestor": {
+    "repository": "tx-taxi/eth-taxi",
+    "commit": "9327a28da7fcf95828adf51e3b4b3c45658241c1"
+  },
+  "verification": "review/ton/basechain-rollout/README.md"
 }

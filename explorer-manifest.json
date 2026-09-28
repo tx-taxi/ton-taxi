@@ -12,45 +12,47 @@
     "repository": "tx-taxi/xmr-taxi",
     "commit": "5b8ede9c71ed18907ce38632bdbd7190bbd5b643"
   },
-  "status": "release-candidate",
+  "status": "release-candidate-local-verified",
   "local": {
     "url": "http://127.0.0.1:4530",
     "ports": [
       4530,
-      4531,
-      4532
+      4592
     ],
     "startCommands": [
-      "cd /home/lukee/dev/ton-taxi && TON_API_KEY_FILE=/home/lukee/.config/tx-taxi/ton/tonapi.key TON_STATIC_ROOT=\"$PWD/frontend/dist/mempool/browser\" TON_DATA_DIR=/tmp/tx-taxi-ton-data PORT=4530 node adapter/ton-server.cjs",
-      "cd /home/lukee/dev/ton-router && PORT=4531 HOST=127.0.0.1 TON_NATIVE_ORIGIN=http://127.0.0.1:4530 node dist/index.js",
-      "python3 -m http.server 4532 --bind 127.0.0.1 --directory /home/lukee/dev/ton-taxi/review/ton"
+      "cd /home/lukee/dev/ton-basechain-integration && TON_API_KEY_FILE=/home/lukee/.config/tx-taxi/ton/tonapi.key TON_STATIC_ROOT=\"$PWD/frontend/dist/mempool/browser\" TON_DATA_DIR=/home/lukee/.cache/ton-basechain-review PORT=4530 node adapter/ton-server.cjs",
+      "cd /home/lukee/dev/ton-basechain-router && HOST=127.0.0.1 PORT=4592 node dist/index.js"
     ],
     "stopCommands": [
       "Ctrl-C in the corresponding foreground terminal; preserve unrelated processes."
     ],
     "incrementalCommands": [
-      "cd /home/lukee/dev/ton-taxi && ./review/ton/build-local.sh",
-      "cd /home/lukee/dev/ton-taxi && node hub/build.cjs /home/lukee/dev/ton-router/public/assets/native-strips/ton",
-      "cd /home/lukee/dev/ton-router && npm run build"
+      "cd /home/lukee/dev/ton-basechain-integration/frontend && npm run generate-themes && npm run generate-config && NG_BUILD_MAX_WORKERS=3 node node_modules/@angular/cli/bin/ng.js build --configuration production --localize=false --output-path=dist/ton-stage && rsync -a dist/ton-stage/ dist/mempool/browser/ && npm run sync-assets && node async-native-styles.cjs",
+      "cd /home/lukee/dev/ton-basechain-integration && node hub/build.cjs /home/lukee/.cache/ton-basechain-strip",
+      "cd /home/lukee/dev/ton-basechain-router && npm run build"
     ],
-    "routerUrl": "http://127.0.0.1:4531",
-    "sessions": {
-      "explorer": "77134",
-      "router": "74626",
-      "comparison": "4617"
+    "routerUrl": "http://127.0.0.1:4592",
+    "previousReviewSessions": {
+      "sessions": {
+        "explorer": "77134",
+        "router": "74626",
+        "comparison": "4617"
+      },
+      "pids": {
+        "explorer": 3537003,
+        "router": 3540218,
+        "comparison": 2948226
+      },
+      "comparisonUrl": "http://127.0.0.1:4532/native-home/"
     },
-    "pids": {
-      "explorer": 3537003,
-      "router": 3540218,
-      "comparison": 2948226
-    },
-    "comparisonUrl": "http://127.0.0.1:4532/native-home/"
+    "buildNote": "Build into staging and replace served files only after successful Angular compilation; preserve unrelated review processes.",
+    "hubExportNote": "Copy the verified export into a new content-versioned router directory and update its import; retain immutable earlier exports."
   },
   "capabilities": [
     {
       "slot": "dashboard/strip",
-      "meaning": "Original paired dashboard and native strip components, exact confirmed fees, gap counts and mean masterchain interval from elapsed header timestamps / sequence-number distance",
-      "source": "collector and native WS",
+      "meaning": "Original native dashboard/strip for one selected workchain/shard, default Basechain; exact protocol collected fees, actual transaction count, explicit history gaps and selected-lineage mean interval",
+      "source": "one masterchain stream, verified shard references, shared indexed/lite collector and scoped native WS",
       "units": "GRAM/nanograms, exact integers",
       "cadence": "Stream-triggered consecutive header batches; native WebSocket updates and dashboard HTTP fallback",
       "loading": "native skeleton",
@@ -71,8 +73,8 @@
     },
     {
       "slot": "blocks",
-      "meaning": "Retained BlocksList/Block with cache-first consecutive rows, eight earlier headers per page, exact historical tuples/shards/transactions/BOC",
-      "source": "block/header/shard APIs",
+      "meaning": "Native BlocksList/Block with selected-lineage consecutive rows, full tuple entity identity and cache-first pinned predecessor/successor context",
+      "source": "selected collector cache plus exact historical tuple APIs",
       "units": "workchain/shard/seqno, exact LT/hashes",
       "cadence": "on demand",
       "loading": "native skeleton",
@@ -181,7 +183,7 @@
     },
     {
       "slot": "search/navigation",
-      "meaning": "Source-first proof, explicit automatic/manual routing, native entities, focused dropdown, cached handoff/two-step logos",
+      "meaning": "Source-first native proof and existing routing controls; numeric height follows selected workchain/shard, full tuple destinations, scope-validated cached handoff and existing two-step logos",
       "source": "native resolver plus existing isolated router",
       "units": "validated raw/friendly/hash/tuple/DNS/known URLs",
       "cadence": "on submit; stale response cancellation",
@@ -285,7 +287,12 @@
     "review/ton/pending/README.md",
     "review/ton/detail-speed-layout/README.md",
     "review/ton/transaction-table/README.md",
-    "review/ton/pending-map/README.md"
+    "review/ton/pending-map/README.md",
+    "review/ton/accuracy-audit/basechain/README.md",
+    "review/ton/accuracy-audit/basechain-browser/README.md",
+    "review/ton/accuracy-audit/basechain-hub/README.md",
+    "review/ton/basechain-frontend/component-provenance.json",
+    "review/ton/basechain-rollout/README.md"
   ],
   "unresolved": [
     "Live indexed-unminted compressed NFT fixture not obtained; controlled resolver behavior verified.",
@@ -295,13 +302,13 @@
     "Only English TON content shipped.",
     "Cold UI collection first page measured23.7s and blocks first page17.2s; public provider capacity remains a limitation.",
     "Positive extra-currency transfer and nonempty DNS site/storage resolver variants remain unverified; a real wallet DNS resolution and auction catalog were captured.",
-    "Production rollout and public verification in progress; no production success claimed until recorded."
+    "Basechain rollout has passed local acceptance; final deployment IDs and public post-deploy confirmation remain pending."
   ],
   "productionRequested": true,
-  "workingBranch": "codex/ton-native-explorer",
+  "workingBranch": "codex/ton-basechain-integration",
   "workingTreeDirty": true,
   "notApplicable": [
-    "Projected next-masterchain-block fullness/fee-rate/miner attribution is not supplied by the observed pending source; no invented UTXO metrics. Real pending external-message groups are implemented separately.",
+    "Projected next-selected-block fullness/fee-rate/miner attribution is not supplied by the observed pending source; no invented UTXO metrics. Real pending external-message groups are implemented separately.",
     "Private/off-chain Telegram gifts cannot be recovered from public TON inventory."
   ],
   "comparison": {
@@ -332,5 +339,93 @@
     "localOnly": true
   },
   "lastPendingMapVerifiedAt": "2026-09-28T01:02:43.124029+00:00",
-  "releaseWorktree": "/home/lukee/dev/ton-taxi-release"
+  "releaseWorktree": "/home/lukee/dev/ton-basechain-integration",
+  "basechainRollout": {
+    "status": "local-acceptance-passed-production-confirmation-pending",
+    "sourceCommit": "5a77aba190f8fddddfd2ce9975c5cb8ef0255381",
+    "worktree": "/home/lukee/dev/ton-basechain-integration",
+    "routerWorktree": "/home/lukee/dev/ton-basechain-router",
+    "production": {
+      "status": "pending",
+      "commit": null,
+      "deployment": null,
+      "routerCommit": null,
+      "routerDeployment": null
+    },
+    "selection": {
+      "defaultWorkchain": 0,
+      "explicitMasterchain": -1,
+      "shard": "optional 16-hex identity; root8000000000000000 preferred while active, otherwise stable lexicographic active shard",
+      "history": "one homogeneous lineage; stop at recorded split/merge boundaries",
+      "newBlockLinks": "full (workchain,shard,seqno) tuple",
+      "legacyBareBlockHeight": "masterchain",
+      "numericSearch": "current selection, including query-free contextual block/transaction pages",
+      "handoff": "matching workchain/shard and homogeneous full tuples; cached data initially stale"
+    },
+    "stream": {
+      "source": "one existing Tonhub masterchain stream; verified ShardHashes drive per-shard collectors",
+      "persistence": "TON_DATA_DIR/basechain-<16hex-shard>.json; masterchain observed.json remains separate",
+      "retainedHeadersPerLineage": 128,
+      "historyPerLineage": 2048,
+      "liteConnectionsMaximum": 3,
+      "queuedBatchesMaximum": 16,
+      "indexedSpacingMs": 1100,
+      "batchDeadlineMs": 25000,
+      "blockDeadlineMs": 8000,
+      "blockAttemptsMaximum": 3
+    },
+    "verifiedLocal": {
+      "nativeBrowserSteps": 18,
+      "viewportWidths": [
+        1440,
+        390
+      ],
+      "frontendBehaviorChecks": 8,
+      "exportedSourceHashesMatched": 44,
+      "export": "public/assets/native-strips/ton/d967359b7d302529/",
+      "exportSourceCommit": "74fd83e8572ee5f259e683e3557d9aa6f9370b6c",
+      "warmHandoffMs": {
+        "desktop": 484,
+        "mobile": 468
+      },
+      "wrongScopeHandoffRejected": true,
+      "otherSevenChainFeedFailuresIsolated": true,
+      "integratedStream": {
+        "samples": 16,
+        "durationSeconds": 63.2,
+        "consecutiveAdditions": 162,
+        "maximumHeadAgeSeconds": 10.522,
+        "liteConnections": 3,
+        "errors": 0,
+        "historyGaps": 0
+      },
+      "simultaneousSockets": {
+        "basechainAdvancement": 50,
+        "masterchainAdvancement": 47,
+        "scopeMismatches": 0
+      },
+      "liveMultiShardSelectorCoverage": false,
+      "backendBehaviorChecks": 14,
+      "backendCheckEnvironment": "NODE_PATH=$PWD/adapter/node_modules",
+      "combinedBehaviorChecks": 22
+    },
+    "evidence": [
+      "review/ton/accuracy-audit/basechain/README.md",
+      "review/ton/accuracy-audit/basechain-browser/README.md",
+      "review/ton/accuracy-audit/basechain-hub/README.md",
+      "review/ton/basechain-frontend/component-provenance.json",
+      "review/ton/basechain-rollout/README.md"
+    ],
+    "limits": [
+      "Current live observation has one active basechain shard; real nine-shard historical identities and lineage behavior are tested separately.",
+      "Bounded local observations do not establish continuous provider availability or complete archival history.",
+      "Final native/router production deployment IDs and public acceptance remain pending."
+    ]
+  },
+  "accuracyStage1": {
+    "status": "production-verified",
+    "commit": "3d0ba35186c2fe6682c0408e947b001f02d6943d",
+    "evidence": "review/ton/accuracy-audit/after-production/README.md",
+    "scope": "same-second history, shared latest transaction windows, fee units and protocol-scope tooltips; precedes basechain default"
+  }
 }
