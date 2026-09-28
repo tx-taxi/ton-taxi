@@ -6,7 +6,7 @@ Completed production release: `3d0ba35186c2fe6682c0408e947b001f02d6943d` fixed s
 
 Independent data audit verified five recent/historical masterchain BOCs: exactly three system transactions per tested block. Counts remain unchanged. `fees_collected` is the actual protocol ValueFlow field and can include creation/imported funds. Exact amounts remain available in native tooltips/details. The basechain default is a usability decision, not correction of fabricated transaction counts.
 
-Basechain release (local acceptance complete; deployment record follows in explorer-kit):
+Basechain release (local and production acceptance complete; final deployment records below):
 
 - Default workchain 0 with explicit masterchain and shard selection.
 - Actual shard references decoded from verified masterchain blocks; one shared block stream.
@@ -47,3 +47,9 @@ The actual public browser pass found a separate indexing-delay defect: mastercha
 Both block-transaction API entry points now validate the full indexed list against the verified header before it can be returned or cached. Previously incomplete cached data and incomplete coalesced results are evicted, complete immutable data remains reusable, and genuine zero-transaction blocks remain valid. The existing native loading skeleton stays visible through three bounded 503 retries (1/2/3 seconds); route changes cancel the request and retry timer. No component or stylesheet was added.
 
 Four backend behavior checks cover actual delayed completeness, poisoned cache recovery, true empty blocks and coalesced cache admission. Seven related API/shared-window checks and four actual frontend retry probes passed, as did the full Angular production build. Targeted local desktop/mobile browser checks showed the original masterchain block with three transactions and a basechain block with 23; induced initial503 responses recovered after approximately one second without a false zero heading. The induced cases are explicitly labeled as local failure injection in `review/ton/accuracy-audit/transaction-completeness/`.
+
+## Final public release verification
+
+Native runtime `a051296dae132170861c3aeb72cabcbd59fb6932`, Coolify deployment `yzdi6nhrrgjh44gs3hrpcgch`, and router runtime `50042368ac93ab7242910f0ca1fa9f97cc0b4f83`, deployment `ndklrodqzc0avu1dkhm3mype`, both finished and passed bounded public verification. Actual HTTPS desktop/mobile pages showed exact transaction-list/header agreement and a filled treemap. The originally affected masterchain block's 13 surrounding headers settled in 4.170 seconds from navigation. Its three transaction hashes and the mobile basechain block's six hashes matched the API exactly, with no observed JavaScript errors, overflow or false zero.
+
+Public basechain/masterchain streams and independent BOC/header data checks passed. The actual public hub's warm handoff rendered in 750 ms desktop / 674 ms mobile; exported native sources and all public asset bytes match. Full evidence and local review commands: `/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/README.md`. Documentation-only follow-up commits use `[skip cd]`; runtime commits above remain the deployed source.

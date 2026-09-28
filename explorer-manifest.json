@@ -12,7 +12,7 @@
     "repository": "tx-taxi/xmr-taxi",
     "commit": "5b8ede9c71ed18907ce38632bdbd7190bbd5b643"
   },
-  "status": "release-candidate-local-verified",
+  "status": "production-verified",
   "local": {
     "url": "http://127.0.0.1:4530",
     "ports": [
@@ -292,7 +292,15 @@
     "review/ton/accuracy-audit/basechain-browser/README.md",
     "review/ton/accuracy-audit/basechain-hub/README.md",
     "review/ton/basechain-frontend/component-provenance.json",
-    "review/ton/basechain-rollout/README.md"
+    "review/ton/basechain-rollout/README.md",
+    "review/ton/accuracy-audit/basechain-production/data-audit.md",
+    "review/ton/accuracy-audit/basechain-production/results.json",
+    "review/ton/accuracy-audit/basechain-production/settled-details.json",
+    "review/ton/accuracy-audit/basechain-production/public-export.json",
+    "review/ton/accuracy-audit/basechain-production/hub-production-findings.md",
+    "review/ton/accuracy-audit/basechain-production/correction-deployment.json",
+    "review/ton/accuracy-audit/basechain-production/corrected/results.json",
+    "review/ton/accuracy-audit/basechain-production/browser-review.md"
   ],
   "unresolved": [
     "Live indexed-unminted compressed NFT fixture not obtained; controlled resolver behavior verified.",
@@ -301,8 +309,7 @@
     "Public providers share infrastructure/rate budget; no independent archival/indexing fallback.",
     "Only English TON content shipped.",
     "Cold UI collection first page measured23.7s and blocks first page17.2s; public provider capacity remains a limitation.",
-    "Positive extra-currency transfer and nonempty DNS site/storage resolver variants remain unverified; a real wallet DNS resolution and auction catalog were captured.",
-    "Basechain rollout has passed local acceptance; final deployment IDs and public post-deploy confirmation remain pending."
+    "Positive extra-currency transfer and nonempty DNS site/storage resolver variants remain unverified; a real wallet DNS resolution and auction catalog were captured."
   ],
   "productionRequested": true,
   "workingBranch": "codex/ton-basechain-integration",
@@ -319,7 +326,7 @@
     "visualEvidenceCommit": "371ce4d02",
     "baselineReport": "review/ton/iteration/README.md"
   },
-  "lastVerifiedAt": "2026-09-26T23:01:32.181638+00:00",
+  "lastVerifiedAt": "2026-09-28T05:31:47.084Z",
   "lastPendingVerifiedAt": "2026-09-27T22:21:42.170596+00:00",
   "lastDetailContextVerifiedAt": "2026-09-28T01:04:54.477405+00:00",
   "detailContextReview": {
@@ -341,16 +348,20 @@
   "lastPendingMapVerifiedAt": "2026-09-28T01:02:43.124029+00:00",
   "releaseWorktree": "/home/lukee/dev/ton-basechain-integration",
   "basechainRollout": {
-    "status": "local-acceptance-passed-production-confirmation-pending",
-    "sourceCommit": "5a77aba190f8fddddfd2ce9975c5cb8ef0255381",
+    "status": "production-verified",
+    "sourceCommit": "a051296dae132170861c3aeb72cabcbd59fb6932",
     "worktree": "/home/lukee/dev/ton-basechain-integration",
     "routerWorktree": "/home/lukee/dev/ton-basechain-router",
     "production": {
-      "status": "pending",
-      "commit": null,
-      "deployment": null,
-      "routerCommit": null,
-      "routerDeployment": null
+      "status": "production-verified",
+      "commit": "a051296dae132170861c3aeb72cabcbd59fb6932",
+      "deployment": "yzdi6nhrrgjh44gs3hrpcgch",
+      "nativeDeploymentStatus": "finished",
+      "nativeAcceptance": "verified",
+      "routerCommit": "50042368ac93ab7242910f0ca1fa9f97cc0b4f83",
+      "routerDeployment": "ndklrodqzc0avu1dkhm3mype",
+      "routerDeploymentStatus": "finished",
+      "routerAcceptance": "verified"
     },
     "selection": {
       "defaultWorkchain": 0,
@@ -383,7 +394,7 @@
       "frontendBehaviorChecks": 8,
       "exportedSourceHashesMatched": 44,
       "export": "public/assets/native-strips/ton/d967359b7d302529/",
-      "exportSourceCommit": "74fd83e8572ee5f259e683e3557d9aa6f9370b6c",
+      "exportSourceCommit": "54dddaa4b686638d3d8d16f7f26f6c9c3c91d8d0",
       "warmHandoffMs": {
         "desktop": 484,
         "mobile": 468
@@ -407,25 +418,195 @@
       "liveMultiShardSelectorCoverage": false,
       "backendBehaviorChecks": 14,
       "backendCheckEnvironment": "NODE_PATH=$PWD/adapter/node_modules",
-      "combinedBehaviorChecks": 22
+      "combinedBehaviorChecks": 22,
+      "initialExportSourceCommit": "74fd83e8572ee5f259e683e3557d9aa6f9370b6c"
     },
     "evidence": [
       "review/ton/accuracy-audit/basechain/README.md",
       "review/ton/accuracy-audit/basechain-browser/README.md",
       "review/ton/accuracy-audit/basechain-hub/README.md",
       "review/ton/basechain-frontend/component-provenance.json",
-      "review/ton/basechain-rollout/README.md"
+      "review/ton/basechain-rollout/README.md",
+      "review/ton/accuracy-audit/basechain-production/data-audit.md",
+      "review/ton/accuracy-audit/basechain-production/results.json",
+      "review/ton/accuracy-audit/basechain-production/settled-details.json",
+      "review/ton/accuracy-audit/basechain-production/public-export.json",
+      "review/ton/accuracy-audit/basechain-production/hub-production-findings.md",
+      "review/ton/accuracy-audit/basechain-production/correction-deployment.json",
+      "review/ton/accuracy-audit/basechain-production/corrected/results.json",
+      "review/ton/accuracy-audit/basechain-production/browser-review.md"
     ],
     "limits": [
       "Current live observation has one active basechain shard; real nine-shard historical identities and lineage behavior are tested separately.",
-      "Bounded local observations do not establish continuous provider availability or complete archival history.",
-      "Final native/router production deployment IDs and public acceptance remain pending."
-    ]
+      "Bounded local observations do not establish continuous provider availability or complete archival history."
+    ],
+    "localAcceptanceSourceCommit": "5a77aba190f8fddddfd2ce9975c5cb8ef0255381",
+    "verifiedPublic": {
+      "nativeStatus": "verified",
+      "routerStatus": "verified",
+      "nativeEvidence": "review/ton/accuracy-audit/basechain-production/",
+      "native": {
+        "dashboardFreshSamples": 16,
+        "maximumDashboardHeadAgeSeconds": 8.409,
+        "basechainStreamAdvancement": 82,
+        "masterchainStreamAdvancement": 77,
+        "streamGaps": 0,
+        "independentExactBlockChecks": 3,
+        "independentlyVerifiedTransactionCounts": [
+          0,
+          2,
+          3
+        ],
+        "browserWidths": [
+          1440,
+          390
+        ],
+        "successfulBrowserApiRequests": 25,
+        "javascriptErrors": 0,
+        "viewportOverflow": false,
+        "contextCentering": true,
+        "scopedSearch": true
+      },
+      "export": {
+        "status": "verified",
+        "artifact": "review/ton/accuracy-audit/basechain-production/public-export.json",
+        "files": 5,
+        "allMatchRelease": true
+      },
+      "verifiedAt": "2026-09-28T05:31:47.084Z",
+      "hub": {
+        "status": "verified",
+        "evidence": "review/ton/accuracy-audit/basechain-production/hub-production-findings.md",
+        "viewportWidths": [
+          1440,
+          390
+        ],
+        "warmHandoffMs": {
+          "desktop": 750,
+          "mobile": 674
+        },
+        "liveUpdates": true,
+        "fullTupleLinks": true,
+        "pageErrors": 0,
+        "exportSourceCommit": "54dddaa4b686638d3d8d16f7f26f6c9c3c91d8d0",
+        "nativeExportedSourceHashesMatchCurrentRelease": 44,
+        "publicFilesMatchRelease": 5
+      },
+      "correction": {
+        "status": "verified",
+        "evidence": "review/ton/accuracy-audit/basechain-production/corrected/results.json",
+        "browserReport": "review/ton/accuracy-audit/basechain-production/browser-review.md",
+        "masterchainBlock": "(-1,8000000000000000,95551104)",
+        "masterchainApiTransactions": 3,
+        "masterchainRenderedRows": 3,
+        "basechainBlock": "(0,8000000000000000,100044948)",
+        "basechainApiTransactions": 6,
+        "basechainRenderedRows": 6,
+        "exactRenderedHashesMatch": true,
+        "populatedTreemaps": true,
+        "surroundingMasterchainHeaders": 13,
+        "surroundingContextNavigationMs": 4170,
+        "selectedContextCentered": true,
+        "javascriptErrors": 0,
+        "viewportOverflow": false,
+        "productionInterception": false
+      }
+    },
+    "correction": {
+      "status": "production-verified",
+      "block": "(-1,8000000000000000,95551104)",
+      "observedHeaderTransactions": 3,
+      "initialIndexedTransactions": 0,
+      "issue": "A verified three-transaction masterchain block had been cached as an empty indexed list. The deployed completeness/cache correction and bounded native retry now return and render all three exact transactions without a false zero; the mobile basechain case renders all six. The original finding is preserved in browser-review.md and corrected/results.json.",
+      "frontendRetry": "503 only; three retries after 1, 2 and 3 seconds with route cancellation, retaining native skeleton",
+      "frontendCheck": "Angular noEmit and four actual-method retry/cancellation cases passed; correction production build and deployment completed.",
+      "commit": "a051296dae132170861c3aeb72cabcbd59fb6932",
+      "deployment": "yzdi6nhrrgjh44gs3hrpcgch",
+      "verifiedAt": "2026-09-28T05:31:47.084Z"
+    }
   },
-  "accuracyStage1": {
+  "releaseHistory": [
+    {
+      "name": "initial-production-and-github-metadata",
+      "record": {
+        "url": "https://ton.tx.taxi",
+        "repository": "tx-taxi/ton-taxi",
+        "branch": "main",
+        "commit": "e3d4a598541a2eda3f0470164857a4c87463fc08",
+        "coolifyApplication": "hnovtmaezijzd4lf7lpnczef",
+        "deployment": "qxhfr2kbjetsai5cpek2ek5k",
+        "server": "game-1",
+        "cloudflareProxied": true,
+        "storageMount": "/data/ton",
+        "routerCommit": "627d8f39f5b8ffa64875bbd61436855d91029a5b",
+        "routerDeployment": "s4kmd9uavduxglftlf4rofzc",
+        "statusMonitorId": 65,
+        "statusComponentId": 56,
+        "evidence": "review/ton/release/README.md",
+        "githubEvidence": "review/ton/github/README.md"
+      }
+    },
+    {
+      "name": "accuracy-stage-1",
+      "record": {
+        "status": "production-verified",
+        "commit": "3d0ba35186c2fe6682c0408e947b001f02d6943d",
+        "evidence": "review/ton/accuracy-audit/after-production/README.md",
+        "scope": "same-second history, shared latest transaction windows, fee units and protocol-scope tooltips; precedes basechain default"
+      }
+    },
+    {
+      "name": "initial-basechain-rollout-before-indexed-list-correction",
+      "record": {
+        "url": "https://ton.tx.taxi",
+        "repository": "tx-taxi/ton-taxi",
+        "branch": "main",
+        "commit": "54dddaa4b686638d3d8d16f7f26f6c9c3c91d8d0",
+        "coolifyApplication": "hnovtmaezijzd4lf7lpnczef",
+        "deployment": "11llxt11y5a6tfljn8atrp5t",
+        "server": "game-1",
+        "cloudflareProxied": true,
+        "storageMount": "/data/ton",
+        "routerCommit": "50042368ac93ab7242910f0ca1fa9f97cc0b4f83",
+        "routerDeployment": "ndklrodqzc0avu1dkhm3mype",
+        "statusMonitorId": 65,
+        "statusComponentId": 56,
+        "evidence": "review/ton/accuracy-audit/basechain-production/",
+        "githubEvidence": "review/ton/github-consistency/README.md",
+        "status": "deployed-transaction-indexing-correction-pending",
+        "nativeDeploymentStatus": "finished",
+        "nativeAcceptance": "reopened-transaction-indexing-correction-pending",
+        "routerDeploymentStatus": "finished",
+        "routerAcceptance": "pending-final-public-hub-pass",
+        "export": "public/assets/native-strips/ton/d967359b7d302529/",
+        "exportSourceCommit": "54dddaa4b686638d3d8d16f7f26f6c9c3c91d8d0",
+        "exportBytesVerified": true
+      }
+    }
+  ],
+  "production": {
+    "url": "https://ton.tx.taxi",
+    "repository": "tx-taxi/ton-taxi",
+    "branch": "main",
+    "commit": "a051296dae132170861c3aeb72cabcbd59fb6932",
+    "coolifyApplication": "hnovtmaezijzd4lf7lpnczef",
+    "deployment": "yzdi6nhrrgjh44gs3hrpcgch",
+    "server": "game-1",
+    "cloudflareProxied": true,
+    "storageMount": "/data/ton",
+    "routerCommit": "50042368ac93ab7242910f0ca1fa9f97cc0b4f83",
+    "routerDeployment": "ndklrodqzc0avu1dkhm3mype",
+    "statusMonitorId": 65,
+    "statusComponentId": 56,
+    "evidence": "review/ton/accuracy-audit/basechain-production/",
+    "githubEvidence": "review/ton/github-consistency/README.md",
     "status": "production-verified",
-    "commit": "3d0ba35186c2fe6682c0408e947b001f02d6943d",
-    "evidence": "review/ton/accuracy-audit/after-production/README.md",
-    "scope": "same-second history, shared latest transaction windows, fee units and protocol-scope tooltips; precedes basechain default"
+    "nativeDeploymentStatus": "finished",
+    "nativeAcceptance": "verified",
+    "routerDeploymentStatus": "finished",
+    "routerAcceptance": "verified",
+    "export": "public/assets/native-strips/ton/d967359b7d302529/",
+    "exportSourceCommit": "54dddaa4b686638d3d8d16f7f26f6c9c3c91d8d0",
+    "exportBytesVerified": true
   }
 }
