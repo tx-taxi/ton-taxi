@@ -1,0 +1,365 @@
+{
+  "capturedAtUtc": "2026-09-28T23:41:47.285Z",
+  "capturedAtLocal": "2026-09-28 16:41:47 America/Phoenix (UTC-07:00)",
+  "scope": "Read-only audit of exact screenshot block 95711146; no provider credentials, message bodies, or private metadata retained.",
+  "conclusion": "The three transactions directly in this masterchain block have genuine exact zero fees. The dashboard fee sample covers transactions across workchains confirmed by a masterchain block, so it legitimately contains nonzero Basechain fees.",
+  "block": {
+    "id": "(-1,8000000000000000,95711146)",
+    "transactionCount": "3",
+    "rootHash": "3f3357611b6bd750cf5af9b91ef89fc3e92d679871c34857aba7c6cf8896426e",
+    "fileHash": "215ee5109a7db644d10c2c3d27a5b0e38df43e0053a000a070e40b1ce4a99b1e",
+    "providerMeta": {
+      "observedAt": "2026-09-28T23:40:41.675Z",
+      "stale": false,
+      "provider": "https://tonapi.io"
+    },
+    "valueFlowNanograms": {
+      "fees_collected": "2700431833",
+      "fees_imported": "1000863666",
+      "created": "1700000000",
+      "burned": "431833",
+      "recovered": "2700431833"
+    }
+  },
+  "directTransactions": {
+    "localUrl": "http://127.0.0.1:4530/api/ton/block/%28-1%2C8000000000000000%2C95711146%29/transactions?limit=50",
+    "providerUrl": "https://tonapi.io/v2/blockchain/blocks/%28-1%2C8000000000000000%2C95711146%29/transactions",
+    "providerMeta": {
+      "observedAt": "2026-09-28T23:40:29.091Z",
+      "stale": false,
+      "provider": "https://tonapi.io"
+    },
+    "transactions": [
+      {
+        "hash": "39246860f25cd0504bfbf7bcc7d91e21b9ad286b3317e6fec49bee968d3e7e26",
+        "account": {
+          "address": "-1:3333333333333333333333333333333333333333333333333333333333333333",
+          "name": "Elector Contract"
+        },
+        "type": "TransTickTock",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      },
+      {
+        "hash": "de6312e59b0a26a1c32a990678c967eb26121276fd05ea19762ccbe7dbb53150",
+        "account": {
+          "address": "-1:3333333333333333333333333333333333333333333333333333333333333333",
+          "name": "Elector Contract"
+        },
+        "type": "TransOrd",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      },
+      {
+        "hash": "8cfb2f1d407b7ba80c520e9bc9c2dd533ab93c11238f64ce6c341072eeb0a33e",
+        "account": {
+          "address": "-1:5555555555555555555555555555555555555555555555555555555555555555",
+          "name": "Config Contract"
+        },
+        "type": "TransTickTock",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      }
+    ],
+    "fees": {
+      "count": 3,
+      "totalNanograms": "0",
+      "minNanograms": "0",
+      "maxNanograms": "0",
+      "medianNumeratorNanograms": "0",
+      "medianDenominator": "1",
+      "meanNumeratorNanograms": "0",
+      "meanDenominator": "3"
+    }
+  },
+  "verifiedBoc": {
+    "localUrl": "http://127.0.0.1:4530/api/ton/block/%28-1%2C8000000000000000%2C95711146%29/boc",
+    "bytes": 10201,
+    "rootHash": "3f3357611b6bd750cf5af9b91ef89fc3e92d679871c34857aba7c6cf8896426e",
+    "fileHash": "215ee5109a7db644d10c2c3d27a5b0e38df43e0053a000a070e40b1ce4a99b1e",
+    "stats": {
+      "transactionCount": 3,
+      "complete": true,
+      "total": "0",
+      "min": "0",
+      "max": "0",
+      "median": "0",
+      "medianExact": {
+        "remainder": "0",
+        "denominator": "1"
+      }
+    },
+    "matchesHeader": true
+  },
+  "networkTransactions": {
+    "localUrl": "http://127.0.0.1:4530/api/ton/network-transactions?master_seqno=95711146&limit=50",
+    "providerUrl": "https://tonapi.io/v2/blockchain/masterchain/95711146/transactions?limit=50&offset=0",
+    "providerMeta": {
+      "observedAt": "2026-09-28T23:40:30.185Z",
+      "stale": false,
+      "provider": "https://tonapi.io"
+    },
+    "masterSeqno": "95711146",
+    "paging": {
+      "masterSeqno": "95711146",
+      "limit": 50,
+      "offset": 0,
+      "hasMore": true,
+      "nextOffset": null,
+      "nextBefore": "95711145"
+    },
+    "transactions": [
+      {
+        "hash": "af5540851b1eb17a0b21ca5914fc755d85457134b5f80677171573f1d8cca8fc",
+        "account": {
+          "address": "0:1baf1e166892704fca019bb814d41b10e943152939aac18c8935b8cd7bc2d4a8"
+        },
+        "type": "TransOrd",
+        "totalFeesNanograms": "445216",
+        "gasFeesNanograms": "220534",
+        "block": "(0,8000000000000000,100207687)",
+        "success": true
+      },
+      {
+        "hash": "1770198ba3dfa48dbb6f70deb907de5cebd6bb0d3ad819ddaff8a6e2cf059ba4",
+        "account": {
+          "address": "0:a9afd3a017c87a08bdf4b0dbde96802eed8e676a9d13667e0521e59f37152cce"
+        },
+        "type": "TransOrd",
+        "totalFeesNanograms": "307935",
+        "gasFeesNanograms": "239201",
+        "block": "(0,8000000000000000,100207687)",
+        "success": true
+      },
+      {
+        "hash": "db99e98d332c9a844920735dea6e97e7f696a3487f0a8ecd97e10640861075e2",
+        "account": {
+          "address": "0:419a3a3f2226049df9bd05205426cbf3a86947f09a05fb6e18824dcab6e8e839"
+        },
+        "type": "TransOrd",
+        "totalFeesNanograms": "66069",
+        "gasFeesNanograms": "66068",
+        "block": "(0,8000000000000000,100207687)",
+        "success": true
+      },
+      {
+        "hash": "39246860f25cd0504bfbf7bcc7d91e21b9ad286b3317e6fec49bee968d3e7e26",
+        "account": {
+          "address": "-1:3333333333333333333333333333333333333333333333333333333333333333",
+          "name": "Elector Contract"
+        },
+        "type": "TransTickTock",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      },
+      {
+        "hash": "de6312e59b0a26a1c32a990678c967eb26121276fd05ea19762ccbe7dbb53150",
+        "account": {
+          "address": "-1:3333333333333333333333333333333333333333333333333333333333333333",
+          "name": "Elector Contract"
+        },
+        "type": "TransOrd",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      },
+      {
+        "hash": "8cfb2f1d407b7ba80c520e9bc9c2dd533ab93c11238f64ce6c341072eeb0a33e",
+        "account": {
+          "address": "-1:5555555555555555555555555555555555555555555555555555555555555555",
+          "name": "Config Contract"
+        },
+        "type": "TransTickTock",
+        "totalFeesNanograms": "0",
+        "gasFeesNanograms": "0",
+        "block": "(-1,8000000000000000,95711146)",
+        "success": true
+      }
+    ],
+    "fees": {
+      "count": 6,
+      "totalNanograms": "819220",
+      "minNanograms": "0",
+      "maxNanograms": "445216",
+      "medianNumeratorNanograms": "66069",
+      "medianDenominator": "2",
+      "meanNumeratorNanograms": "819220",
+      "meanDenominator": "6"
+    }
+  },
+  "currentNormalizedSample": {
+    "observedAt": "2026-09-28T23:40:17.615Z",
+    "stale": false,
+    "blocks": [
+      {
+        "id": "(-1,8000000000000000,95711248)",
+        "transactionCount": 3,
+        "fees": {
+          "transactionCount": 3,
+          "complete": true,
+          "total": "0",
+          "min": "0",
+          "max": "0",
+          "median": "0",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        }
+      },
+      {
+        "id": "(-1,8000000000000000,95711247)",
+        "transactionCount": 3,
+        "fees": {
+          "transactionCount": 3,
+          "complete": true,
+          "total": "0",
+          "min": "0",
+          "max": "0",
+          "median": "0",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        }
+      },
+      {
+        "id": "(-1,8000000000000000,95711246)",
+        "transactionCount": 3,
+        "fees": {
+          "transactionCount": 3,
+          "complete": true,
+          "total": "0",
+          "min": "0",
+          "max": "0",
+          "median": "0",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        }
+      }
+    ]
+  },
+  "sources": [
+    {
+      "url": "https://docs.ton.org/foundations/config#param-31-fee-exempt-contracts",
+      "finding": "Parameter 31 marks special masterchain accounts as exempt from gas/storage fees; Config and Elector are always special."
+    },
+    {
+      "url": "https://docs.ton.org/foundations/system",
+      "finding": "Elector handles governance and executes tick/tock transactions."
+    },
+    {
+      "url": "https://github.com/tonkeeper/opentonapi/blob/master/api/openapi.yml#L228-L231",
+      "finding": "getBlockchainMasterchainTransactions covers all shards/workchains between the target and previous masterchain blocks."
+    },
+    {
+      "url": "https://github.com/ton-blockchain/ton/blob/master/validator/impl/collator.cpp",
+      "finding": "Collator::init_value_create assigns the Basechain creation reward and adds value_flow.created to value_flow.fees_collected. Other routines add transaction/import fees, with burn deductions in Masterchain."
+    },
+    {
+      "url": "https://docs.ton.org/foundations/config#param-14-block-reward",
+      "finding": "Parameter 14 controls Masterchain/Basechain block production rewards, distributed by shard depth."
+    }
+  ],
+  "codeReferences": [
+    {
+      "path": "adapter/ton/block-transaction-fees.cjs",
+      "line": 78,
+      "finding": "Reads exact total_fees from each direct transaction in the verified block BOC."
+    },
+    {
+      "path": "adapter/ton/collector.cjs",
+      "line": 11,
+      "finding": "Normalized blocks use matching complete direct-transaction fees; missing stats become null, not zero."
+    },
+    {
+      "path": "adapter/ton/api.cjs",
+      "line": 183,
+      "finding": "Network transactions request the provider masterchain-wide confirmation endpoint."
+    },
+    {
+      "path": "frontend/src/app/ton/ton-network-data.service.ts",
+      "line": 112,
+      "finding": "Dashboard uses network-transactions rather than direct block transactions."
+    },
+    {
+      "path": "frontend/src/app/shared/block-format.ts",
+      "line": 65,
+      "finding": "Current strip title explains units and counts but does not explicitly mention direct-block scope."
+    },
+    {
+      "path": "frontend/src/app/components/fees-box/fees-box.component.ts",
+      "line": 42,
+      "finding": "Dashboard tooltip says confirmed by masterchain, but does not explicitly say across all shards."
+    }
+  ],
+  "recommendation": "Keep exact zero values. Clarify block tooltip as transactions directly in this block, and dashboard tooltip as confirmed transactions across all shards. Do not replace transaction fee sum with value_flow.fees_collected: that distinct economic quantity includes created/imported amounts.",
+  "basechainEmptyBlock": {
+    "capturedAtUtc": "2026-09-28T23:42:49.481Z",
+    "capturedAtLocal": "2026-09-28 16:42:49 America/Phoenix (UTC-07:00)",
+    "id": "(0,8000000000000000,100207828)",
+    "localUrl": "http://127.0.0.1:4530/api/ton/block/%280%2C8000000000000000%2C100207828%29",
+    "providerUrl": "https://tonapi.io/v2/blockchain/blocks/%280%2C8000000000000000%2C100207828%29",
+    "transactionCount": "0",
+    "providerMeta": {
+      "observedAt": "2026-09-28T23:40:37.007Z",
+      "stale": false,
+      "provider": "https://tonapi.io"
+    },
+    "transactions": {
+      "records": [],
+      "providerMeta": {
+        "observedAt": "2026-09-28T23:40:38.154Z",
+        "stale": false,
+        "provider": "https://tonapi.io"
+      }
+    },
+    "valueFlowNanograms": {
+      "imported": "0",
+      "exported": "0",
+      "fees_collected": "1000000000",
+      "fees_imported": "0",
+      "created": "1000000000",
+      "minted": "0",
+      "burned": null,
+      "recovered": "0"
+    },
+    "verifiedBoc": {
+      "bytes": 1174,
+      "rootHash": "854e2f209eb01fb793ebaa2ee55e8d4c3048b122acc212e85783358ab466bb0c",
+      "fileHash": "f38f75ac5a82ace98b606bf5cc64f4db118a1b65760e97239fcfb42be3d7e5e0",
+      "matchesHeader": true,
+      "stats": {
+        "transactionCount": 0,
+        "complete": true,
+        "total": "0",
+        "min": null,
+        "max": null,
+        "median": null,
+        "medianExact": null
+      },
+      "valueFlowNanograms": {
+        "imported": "0",
+        "exported": "0",
+        "fees_collected": "1000000000",
+        "fees_imported": "0",
+        "created": "1000000000",
+        "minted": "0",
+        "burned": null,
+        "recovered": "0"
+      }
+    },
+    "conclusion": "This empty Basechain block has exact zero transaction fees and a 1 GRAM creation reward. value_flow.fees_collected includes that reward. Label Fees & rewards accurately distinguishes it from transaction fees."
+  }
+}

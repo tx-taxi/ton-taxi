@@ -39,7 +39,7 @@ export class FeesBoxComponent implements OnInit, OnDestroy, OnChanges {
   get feeRows(): { amount?: NativeAmount; rate?: number; belowAtomicUnit?: boolean; tooltip: string }[] {
     if (this.confirmedMode) {
       const fees = this.confirmedFees;
-      const sample = `${fees?.count ?? 0} confirmed transactions with reported fees${this.confirmedSource?.masterSeqno ? ` confirmed by masterchain block #${this.confirmedSource.masterSeqno}` : ''}${this.confirmedSource?.partial ? ' (partial sample)' : ''}.`;
+      const sample = `${fees?.count ?? 0} confirmed transactions across the network with reported fees${this.confirmedSource?.masterSeqno ? ` confirmed by masterchain block #${this.confirmedSource.masterSeqno}` : ''}${this.confirmedSource?.partial ? ' (partial sample)' : ''}.`;
       const descriptions = ['Lowest observed transaction fee.', 'Middle observed transaction fee, rounded down to a whole nanogram when necessary.', 'Average observed transaction fee, rounded down to a whole nanogram when necessary.', 'Highest observed transaction fee.'];
       return [fees?.min, fees?.median, fees?.mean, fees?.max].map((atomic, index) => {
         const ratio = index === 1 ? fees?.medianExact : index === 2 ? fees?.meanExact : null;

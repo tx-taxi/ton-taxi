@@ -49,7 +49,7 @@
           <tbody>
             <ng-container *ngIf="nativeMode; else legacyPrimaryRows">
               <ng-container *ngIf="nativeBlock as block; else skeletonRows">
-                <tr><td class="td-width">Block ID</td><td><span class="d-flex align-items-center"><app-truncate [text]="tonBlockId(block)" [lastChars]="12"></app-truncate><app-clipboard [text]="tonBlockId(block)"></app-clipboard></span></td></tr>
+                <tr><td class="td-width">Block ID</td><td><span class="d-flex align-items-center"><span>{{ block.seqno }}</span><app-clipboard [text]="'' + block.seqno"></app-clipboard></span></td></tr>
                 <tr><td>Timestamp</td><td><app-timestamp [customFormat]="'yyyy-MM-dd HH:mm:ss'" [unixTime]="block.gen_utime ?? block.timestamp" [hideTimeSince]="true"></app-timestamp></td></tr>
                 <tr><td>Workchain</td><td>{{ block.workchain_id === -1 || block.workchain_id === '-1' ? 'Masterchain' : block.workchain_id }}</td></tr>
                 <tr><td>Shard</td><td>{{ block.shard ?? '—' }}</td></tr>
@@ -151,7 +151,7 @@
     <ng-container *ngIf="nativeMode; else legacyRestRows">
       <ng-container *ngIf="nativeBlock as block; else loadingRest">
         <tr><td class="td-width">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
-        <tr><td [ngbTooltip]="'Includes block creation and imported fees.'">Collected fees</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
+        <tr><td [ngbTooltip]="'Transaction and imported fees, plus the block creation reward.'">Fees &amp; rewards</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
       </ng-container>
     </ng-container>
     <ng-template #legacyRestRows>

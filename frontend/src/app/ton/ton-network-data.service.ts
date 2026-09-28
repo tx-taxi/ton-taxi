@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, Subscription, throwError, timer } from 'rxjs';
 import { TonChainSelectionService } from './ton-chain-selection.service';
-import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery, tonWorkchainDestination } from './chain-selection';
+import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery } from './chain-selection';
 import { finalize, retry } from 'rxjs/operators';
 import { OpenGraphService } from '@app/services/opengraph.service';
 import { SeoService } from '@app/services/seo.service';
@@ -47,10 +47,6 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   get activeShards(): any[] { return (this.data?.activeShards || []).filter(shard => Number(shard.workchain) === 0); }
   get selectedShard(): string { return this.selection.current.shard || this.data?.shard || ''; }
   get selectionQueryParams(): { workchain: number; shard?: string } { return { ...this.selection.current, ...(this.selectedShard ? { shard: this.selectedShard } : {}) }; }
-  selectWorkchain(value: string): void {
-    const destination = tonWorkchainDestination(value, window.location.href, this.selection.current);
-    if (!(window as any).__txTaxiSwitchTonView?.(destination)) window.location.assign(destination);
-  }
   selectShard(value: string): void {
     const selected = tonChainSelection(this.workchain, value);
     void this.router.navigate([], { relativeTo: this.route, queryParams: { workchain: selected.workchain, shard: selected.shard || null }, queryParamsHandling: 'merge' });

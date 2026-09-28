@@ -62,6 +62,6 @@ export function transactionFeeView(stats: TonBlockTransactionFees | null | undef
   return {
     total: amount(stats.total, 'nanograms'), median, min, max,
     medianBelowAtomicUnit: !!fractional && stats.median === '0',
-    title: `Transaction fees: ${exactBlockAmount(stats.total)} GRAM across ${count} transaction${count === 1 ? '' : 's'}. ${distribution} ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.`,
+    title: `Transaction fees: ${exactBlockAmount(stats.total)} GRAM across ${count} transaction${count === 1 ? '' : 's'} in this block. ${distribution} ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.`,
   };
 }

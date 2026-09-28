@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { StateService } from '@app/services/state.service';
 import { Observable, of } from 'rxjs';
-import { catchError, map, shareReplay, switchMap, timeout } from 'rxjs/operators';
+import { catchError, map, shareReplay, switchMap, tap, timeout } from 'rxjs/operators';
 
 type ExplorerStatus = 'live' | 'unavailable' | 'checking';
 
@@ -11,11 +11,20 @@ interface RouterBrandAsset {
   alt: string;
 }
 
+interface RouterExplorerDestination {
+  id: string;
+  name: string;
+  origin: string;
+  default?: boolean;
+  search: { resolvePath: string; params?: Record<string, string> };
+}
+
 interface RouterExplorerSite {
   origin: string;
   host: string;
   searchPlaceholder?: string;
   switcherLogo?: RouterBrandAsset;
+  destinations?: RouterExplorerDestination[];
 }
 
 interface RouterChainBrand {
@@ -50,6 +59,9 @@ interface RouterHealthResponse {
 
 interface RouterSearchOption {
   chainId: string;
+  destinationId?: string;
+  destinationName?: string;
+  destinationDefault?: boolean;
   name: string;
   symbol: string;
   category: string;
@@ -72,12 +84,17 @@ interface RouterSearchOptionsResponse {
   status: 'redirect' | 'choices' | 'aggregate' | 'not_found';
   candidates: RouterSearchOption[];
   resolvedChainId?: string;
+  resolvedDestinationId?: string;
   redirectUrl?: string;
   elapsedMs: number;
 }
 
 export interface TxTaxiExplorer {
+  id: string;
   chainId: string;
+  destinationId?: string;
+  default?: boolean;
+  destinations?: TxTaxiExplorer[];
   name: string;
   symbol: string;
   origin: string;
@@ -104,6 +121,7 @@ export interface TxTaxiSearchOptions {
   status: 'redirect' | 'choices' | 'aggregate' | 'not_found';
   candidates: TxTaxiSearchCandidate[];
   resolvedChainId?: string;
+  resolvedDestinationId?: string;
   redirectUrl?: string;
   elapsedMs: number;
 }
@@ -116,13 +134,14 @@ export class TxTaxiExplorerRegistryService {
   readonly thirdPartyExplorers$: Observable<TxTaxiThirdPartyExplorer[]>;
 
   private readonly routerOrigin: string;
+  private chains: RouterChain[] = [];
 
   constructor(
     private http: HttpClient,
     private stateService: StateService,
   ) {
     this.routerOrigin = (this.stateService.env.TX_TAXI_ROUTER_URL || 'https://tx.taxi').replace(/\/$/, '');
-    const registry$ = this.http.get<RouterChainsResponse>(`${this.routerOrigin}/api/v1/chains`).pipe(shareReplay(1));
+    const registry$ = this.http.get<RouterChainsResponse>(`${this.routerOrigin}/api/v1/chains`).pipe(tap(response => this.chains = response.chains), shareReplay(1));
     this.thirdPartyExplorers$ = registry$.pipe(
       map(response => response.chains.sort((a,b)=>a.displayOrder-b.displayOrder).flatMap(chain =>
         (chain.explorers || []).filter(explorer => { const url=new URL(explorer.baseUrl); return url.protocol==='https:' && !url.username && !url.password && url.hostname!=='tx.taxi' && !url.hostname.endsWith('.tx.taxi'); }).map(explorer => ({
@@ -141,22 +160,22 @@ export class TxTaxiExplorerRegistryService {
     );
   }
 
-  chainSearchUrl(chainId: string, searchText: string): string {
-    return `${this.routerOrigin}/${encodeURIComponent(chainId)}/${encodeURIComponent(searchText)}`;
+  chainSearchUrl(chainId: string, searchText: string, destinationId?: string): string {
+    return `${this.routerOrigin}/${encodeURIComponent(chainId)}/${encodeURIComponent(searchText)}${destinationId ? `?destination=${encodeURIComponent(destinationId)}` : ''}`;
   }
 
   routerSearchUrl(searchText: string, sourceChainId?: string): string {
     return `${this.routerOrigin}/${encodeURIComponent(searchText)}${sourceChainId ? `?source=${encodeURIComponent(sourceChainId)}` : ''}`;
   }
 
-  searchOptions$(searchText: string, probe = false, sourceChainId?: string): Observable<TxTaxiSearchOptions | undefined> {
+  searchOptions$(searchText: string, probe = false, sourceChainId?: string, selectedChainId?: string, destinationId?: string): Observable<TxTaxiSearchOptions | undefined> {
     const value = searchText.trim();
     if (!value) {
       return of(undefined);
     }
 
     return this.http.get<RouterSearchOptionsResponse>(`${this.routerOrigin}/api/v1/search-options`, {
-      params: { value, ...(probe ? { probe: '1' } : {}), ...(sourceChainId ? { source: sourceChainId } : {}) },
+      params: { value, ...(probe ? { probe: '1' } : {}), ...(sourceChainId ? { source: sourceChainId } : {}), ...(selectedChainId && destinationId ? { chain: selectedChainId, destination: destinationId } : {}) },
     }).pipe(
       timeout(probe ? 6500 : 900),
       map((response) => ({
@@ -164,11 +183,19 @@ export class TxTaxiExplorerRegistryService {
         normalizedInput: response.normalizedInput,
         phase: response.phase,
         status: response.status,
-        candidates: response.candidates.map((candidate) => ({
-          ...candidate,
-          iconUrl: this.absoluteRouterUrl(candidate.iconUrl),
-        })),
+        candidates: response.candidates.map(candidate => {
+          const destination = this.chains.find(chain => chain.id === candidate.chainId)?.site?.destinations?.find(item => {
+            try { return new URL(candidate.directUrl || `https://${candidate.host}`).origin === new URL(item.origin).origin; }
+            catch { return false; }
+          });
+          return {
+            ...candidate,
+            ...(destination ? { destinationId: destination.id, destinationName: destination.name, destinationDefault: Boolean(destination.default), host: new URL(destination.origin).host } : {}),
+            iconUrl: this.absoluteRouterUrl(candidate.iconUrl),
+          };
+        }),
         ...(response.resolvedChainId ? { resolvedChainId: response.resolvedChainId } : {}),
+        ...(response.resolvedDestinationId ? { resolvedDestinationId: response.resolvedDestinationId } : {}),
         ...(response.redirectUrl ? { redirectUrl: response.redirectUrl } : {}),
         elapsedMs: response.elapsedMs,
       })),
@@ -196,7 +223,8 @@ export class TxTaxiExplorerRegistryService {
         const status = this.statusFor(health);
         const latency = health?.latencyMs ? `, ${Math.round(health.latencyMs)} ms` : '';
 
-        return {
+        const explorer: TxTaxiExplorer = {
+          id: chain.id,
           chainId: chain.id,
           name: chain.name,
           symbol: chain.nativeSymbol,
@@ -204,12 +232,23 @@ export class TxTaxiExplorerRegistryService {
           host: site.host,
           accentColor: chain.brand.accentColor,
           searchPlaceholder: site.searchPlaceholder || `Search ${chain.name}`,
-          iconUrl: logo.url,
+          iconUrl: this.absoluteRouterUrl(logo.url),
           iconAlt: logo.alt,
           status,
           statusLabel: status === 'live' ? 'Live' : status === 'unavailable' ? 'Unavailable' : 'Checking',
           statusTitle: status === 'live' ? `Live${latency}` : status === 'unavailable' ? 'Unavailable' : 'Status is being checked',
         };
+        explorer.destinations = (site.destinations || []).map(destination => ({
+          ...explorer,
+          id: `${chain.id}:${destination.id}`,
+          destinationId: destination.id,
+          name: destination.name,
+          origin: destination.origin,
+          host: new URL(destination.origin).host,
+          default: destination.default,
+          searchPlaceholder: `Search ${chain.name} · ${destination.name}`,
+        }));
+        return explorer;
       });
   }
 

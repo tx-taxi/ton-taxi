@@ -21,12 +21,16 @@ import { Network, findOtherNetworks, getRegex, getTargetUrl, needBaseModuleChang
 interface SearchTarget {
   kind: 'explorer' | 'candidate' | 'router';
   chainId?: string;
+  destinationId?: string;
+  destinationDefault?: boolean;
+  origin?: string;
   name: string;
   accentColor: string;
   iconUrl: string;
   iconAlt: string;
   confirmed?: boolean;
   directUrl?: string;
+  candidate?: TxTaxiSearchCandidate;
 }
 
 @Component({
@@ -66,7 +70,14 @@ export class SearchFormComponent implements OnInit {
   searchForm: UntypedFormGroup;
   dropdownHidden = false;
   searchError = '';
+  explorerRegistryLoaded = false;
   private explorers: TxTaxiExplorer[] = [];
+  private additionalExplorerIds = new Set<string>();
+  private selectionChanges$ = new BehaviorSubject<number>(0);
+  private manualDestinationId: string | undefined;
+  private hasManualSelection = false;
+  private selectedExplorerTarget: SearchTarget | undefined;
+  private registryInitialized = false;
   private manualChainId: string | undefined = this.sourceChainId;
   private manualOverrideSearchText: string | undefined;
   private manualOverrideTarget: SearchTarget | undefined;
@@ -74,12 +85,13 @@ export class SearchFormComponent implements OnInit {
   private suppressMenuOnFocus = false;
 
   @HostListener('document:click', ['$event'])
-  onDocumentClick(event) {
-    if (!this.elementRef.nativeElement.contains(event.target)
-      && !this.isSearching && !this.pendingSearchRequests && !this.isTypeaheading$.value) {
+  onDocumentClick(event: MouseEvent) {
+    const host = this.elementRef.nativeElement;
+    const inside = event.composedPath?.().includes(host) || host.contains(event.target);
+    if (!inside && !this.isSearching && !this.pendingSearchRequests && !this.isTypeaheading$.value) {
       this.chainMenu?.close();
     }
-    if (this.elementRef.nativeElement.contains(event.target) && this.isSourceChainSelected()) {
+    if (inside && this.isSourceChainSelected()) {
       this.dropdownHidden = false;
     } else {
       this.dropdownHidden = true;
@@ -94,7 +106,7 @@ export class SearchFormComponent implements OnInit {
   private querySearchOptions(searchText: string, probe = false): Observable<TxTaxiSearchOptions | undefined> {
     return defer(() => {
       this.pendingSearchRequests++;
-      return this.explorerRegistry.searchOptions$(searchText, probe, this.sourceChainId).pipe(
+      return this.explorerRegistry.searchOptions$(searchText, probe, this.sourceChainId, this.hasManualSelection ? this.manualChainId : undefined, this.hasManualSelection ? this.manualDestinationId : undefined).pipe(
         finalize(() => this.pendingSearchRequests--),
       );
     });
@@ -165,8 +177,16 @@ export class SearchFormComponent implements OnInit {
     });
 
     this.explorers$.subscribe((explorers) => {
+      this.explorerRegistryLoaded = true;
       this.explorers = explorers;
+      if (!this.registryInitialized && explorers.length) {
+        this.registryInitialized = true;
+        const source = explorers.find(explorer => explorer.chainId === this.sourceChainId);
+        const destination = source?.destinations?.find(item => this.isOpenedExplorer(item));
+        if (!this.hasManualSelection) this.manualDestinationId = destination?.destinationId;
+      }
       this.updateActiveTarget();
+      this.cdr.markForCheck();
     });
 
     if (this.network === 'liquid' || this.network === 'liquidtestnet') {
@@ -190,24 +210,25 @@ export class SearchFormComponent implements OnInit {
       shareReplay(1),
     );
 
-    searchText$.pipe(
+    const searchContext$ = combineLatest([searchText$.pipe(startWith('')), this.selectionChanges$]);
+    searchContext$.pipe(
       debounceTime(120),
-      switchMap((searchText) => this.querySearchOptions(searchText).pipe(
-        map((options) => ({ searchText, options })),
+      switchMap(([searchText, revision]) => this.querySearchOptions(searchText).pipe(
+        map((options) => ({ searchText, revision, options })),
       )),
-    ).subscribe(({ searchText, options }) => {
-      if (options && this.currentSearchText() === searchText) {
+    ).subscribe(({ searchText, revision, options }) => {
+      if (options && this.currentSearchText() === searchText && revision === this.selectionChanges$.value) {
         this.setSearchOptions(options);
       }
     });
 
-    searchText$.pipe(
+    searchContext$.pipe(
       debounceTime(420),
-      switchMap((searchText) => this.querySearchOptions(searchText, true).pipe(
-        map((options) => ({ searchText, options })),
+      switchMap(([searchText, revision]) => this.querySearchOptions(searchText, true).pipe(
+        map((options) => ({ searchText, revision, options })),
       )),
-    ).subscribe(({ searchText, options }) => {
-      if (options && this.currentSearchText() === searchText) {
+    ).subscribe(({ searchText, revision, options }) => {
+      if (options && this.currentSearchText() === searchText && revision === this.selectionChanges$.value) {
         this.setSearchOptions(options);
       }
     });
@@ -216,60 +237,136 @@ export class SearchFormComponent implements OnInit {
   }
 
   handleKeyDown($event): void {
-    if (this.isSourceChainSelected()) {
-      this.searchResults.handleKeyDown($event);
+    if (this.isSourceChainSelected() && $event.target === this.searchInput?.nativeElement) {
+      this.searchResults?.handleKeyDown($event);
     }
   }
 
   trackExplorer(_index: number, explorer: TxTaxiExplorer): string {
-    return explorer.chainId;
+    return explorer.id;
   }
 
   trackCandidate(_index: number, candidate: TxTaxiSearchCandidate): string {
-    return candidate.chainId;
+    return `${candidate.chainId}:${candidate.destinationId || ''}:${candidate.objectType}`;
   }
 
   isSelectedExplorer(explorer: TxTaxiExplorer): boolean {
-    return explorer.chainId === this.manualChainId
-      && (!this.searchOptions?.candidates.length || this.currentManualTarget()?.kind === 'explorer');
+    const target = this.activeTarget$.value;
+    const destinationId = explorer.destinationId || explorer.destinations?.find(destination => destination.default)?.destinationId;
+    return target.kind !== 'router' && target.chainId === explorer.chainId
+      && target.destinationId === destinationId;
   }
 
   isSelectedCandidate(candidate: TxTaxiSearchCandidate): boolean {
     const target = this.activeTarget$.value;
-    return target.kind === 'candidate' && target.chainId === candidate.chainId;
+    return !this.selectedExplorer() && target.kind !== 'router' && target.chainId === candidate.chainId
+      && target.destinationId === candidate.destinationId;
+  }
+
+  isOpenedExplorer(explorer: TxTaxiExplorer): boolean {
+    return this.isSourceOrigin(explorer.origin);
+  }
+
+  selectedExplorer(): TxTaxiExplorer | undefined {
+    return this.explorers.find(explorer => explorer.chainId === this.activeTarget$.value.chainId);
+  }
+
+  selectedExternalCandidate(): TxTaxiSearchCandidate | undefined {
+    const target = this.activeTarget$.value;
+    return !this.selectedExplorer() && target.candidate
+      ? { ...target.candidate, confirmed: Boolean(target.confirmed), directUrl: target.directUrl }
+      : undefined;
+  }
+
+  isSelectedExternalCandidate(candidate: TxTaxiSearchCandidate): boolean {
+    const selected = this.selectedExternalCandidate();
+    return Boolean(selected && selected.chainId === candidate.chainId && selected.destinationId === candidate.destinationId);
+  }
+
+  otherExplorers(explorers: TxTaxiExplorer[]): TxTaxiExplorer[] {
+    const selected = this.selectedExplorer();
+    return explorers.filter(explorer => explorer.chainId !== selected?.chainId);
+  }
+
+  childDestinations(explorer: TxTaxiExplorer): TxTaxiExplorer[] {
+    return explorer.destinations?.filter(destination => !destination.default) || [];
+  }
+
+  additionalExplorersExpanded(explorer: TxTaxiExplorer): boolean {
+    return this.additionalExplorerIds.has(explorer.chainId);
+  }
+
+  toggleAdditionalExplorers(explorer: TxTaxiExplorer): void {
+    if (this.additionalExplorerIds.has(explorer.chainId)) this.additionalExplorerIds.delete(explorer.chainId);
+    else this.additionalExplorerIds.add(explorer.chainId);
   }
 
   isSourceChainSelected(): boolean {
-    return this.selectedChainId$.value === this.sourceChainId;
+    const target = this.activeTarget$.value;
+    return this.selectedChainId$.value === this.sourceChainId && (!target.origin || this.isSourceOrigin(target.origin));
+  }
+
+  private isSourceOrigin(origin: string): boolean {
+    if (typeof window === 'undefined') return false;
+    const current = ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname)
+      ? this.tonSelection.defaultWorkchain === -1 ? 'https://masterchain.ton.tx.taxi' : 'https://ton.tx.taxi'
+      : window.location.origin;
+    try { return new URL(origin).origin === current; } catch { return false; }
+  }
+
+  private selectionChanged(): void {
+    this.additionalExplorerIds.clear();
+    const menu = this.elementRef.nativeElement?.querySelector?.('.search-chain-menu') as HTMLElement | undefined;
+    const focusInMenu = typeof document !== 'undefined' && menu?.contains(document.activeElement);
+    this.isSearching = false;
+    this.searchError = '';
+    this.setSearchOptions(undefined);
+    this.selectionChanges$.next(this.selectionChanges$.value + 1);
+    setTimeout(() => {
+      if (!menu) return;
+      menu.scrollTop = 0;
+      if (focusInMenu) menu.querySelector<HTMLButtonElement>('.search-chain-selected-group .is-current button, .search-chain-selected-group button.search-chain-candidate')?.focus({ preventScroll: true });
+    });
   }
 
   isAutomaticRoutingSelected(): boolean {
-    return this.manualChainId === undefined && !this.currentManualTarget();
+    return this.manualChainId === undefined && this.activeTarget$.value.kind === 'router';
   }
 
   selectAutomaticRouting(): void {
     this.manualChainId = undefined;
+    this.manualDestinationId = undefined;
+    this.hasManualSelection = false;
+    this.selectedExplorerTarget = undefined;
     this.manualOverrideSearchText = undefined;
     this.manualOverrideTarget = undefined;
-    this.updateActiveTarget();
+    this.selectionChanged();
     this.dropdownHidden = true;
     setTimeout(() => this.dropdownHidden = true);
   }
 
   selectExplorer(explorer: TxTaxiExplorer): void {
-    this.manualChainId = explorer.chainId;
+    const destination = explorer.destinations?.find(item => item.default) || explorer.destinations?.[0] || explorer;
+    this.manualChainId = destination.chainId;
+    this.manualDestinationId = destination.destinationId;
+    this.hasManualSelection = true;
     this.manualOverrideSearchText = this.currentSearchText();
-    this.manualOverrideTarget = this.targetForExplorer(explorer);
-    this.updateActiveTarget();
+    this.manualOverrideTarget = this.targetForExplorer(destination);
+    this.selectedExplorerTarget = this.manualOverrideTarget;
+    this.selectionChanged();
     this.dropdownHidden = true;
     this.searchError = '';
     setTimeout(() => this.dropdownHidden = true);
   }
 
   selectCandidate(candidate: TxTaxiSearchCandidate): void {
+    this.manualChainId = candidate.chainId;
+    this.manualDestinationId = candidate.destinationId;
+    this.hasManualSelection = true;
     this.manualOverrideSearchText = this.currentSearchText();
     this.manualOverrideTarget = this.targetForCandidate(candidate);
-    this.updateActiveTarget();
+    this.selectedExplorerTarget = { ...this.manualOverrideTarget, kind: 'explorer', confirmed: undefined, directUrl: undefined };
+    this.selectionChanged();
     this.dropdownHidden = true;
     this.searchError = '';
     setTimeout(() => this.dropdownHidden = true);
@@ -362,7 +459,9 @@ export class SearchFormComponent implements OnInit {
 
     this.isSearching = true;
     this.searchError = '';
+    const revision = this.selectionChanges$.value;
     this.querySearchOptions(searchText, true).subscribe((options) => {
+      if (revision !== this.selectionChanges$.value) return;
       if (this.currentSearchText() !== searchText) {
         this.isSearching = false;
         return;
@@ -390,8 +489,10 @@ export class SearchFormComponent implements OnInit {
     this.searchError = '';
     const selected = this.tonSelection.current;
     const scope = tonSelectionKey(selected);
+    const revision = this.selectionChanges$.value;
     this.http.get<{type:string;id:string}>('/api/ton/resolve',{params:{value:searchText,workchain:String(selected.workchain),...(selected.shard ? {shard:selected.shard} : {})}}).pipe(finalize(() => this.cdr.markForCheck())).subscribe({
       next: result => {
+        if (revision !== this.selectionChanges$.value) return;
         if (this.searchForm.value.searchText.trim() !== searchText || scope !== tonSelectionKey(this.tonSelection.current)) { this.isSearching=false; return; }
         if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError('No match found.'); return; }
         if (result.type === 'block') navigateTonBlock(this.router, result.id);
@@ -401,7 +502,7 @@ export class SearchFormComponent implements OnInit {
         this.searchTriggered.emit();
       },
       error: error => {
-        if (this.currentSearchText() !== searchText) return;
+        if (revision !== this.selectionChanges$.value || this.currentSearchText() !== searchText) return;
         if (allowAutomaticFallback && [400,404].includes(error.status)) { this.searchAutomatic(searchText); return; }
         this.showSearchError(error.status === 404 ? 'No match found.' : 'Search unavailable. Try again.');
       }
@@ -409,7 +510,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   private searchTarget(target: SearchTarget, searchText: string): void {
-    if (target.kind === 'explorer' && target.chainId === this.sourceChainId) {
+    if (target.kind === 'explorer' && !target.destinationId && target.chainId === this.sourceChainId && (!target.origin || this.isSourceOrigin(target.origin))) {
       this.searchSourceChain(searchText);
       return;
     }
@@ -418,7 +519,7 @@ export class SearchFormComponent implements OnInit {
     this.searchError = '';
     this.searchTriggered.emit();
     if (target.kind === 'candidate' && target.confirmed && target.directUrl) {
-      if (target.chainId === this.sourceChainId) {
+      if (target.chainId === this.sourceChainId && this.isSourceOrigin(target.directUrl)) {
         const url = new URL(target.directUrl);
         const block = tonBlockIdentityFromUrl(url.href);
         if (block) navigateTonBlock(this.router, block);
@@ -430,7 +531,7 @@ export class SearchFormComponent implements OnInit {
     }
 
     if (target.chainId) {
-      window.location.assign(this.explorerRegistry.chainSearchUrl(target.chainId, searchText));
+      window.location.assign(this.explorerRegistry.chainSearchUrl(target.chainId, searchText, target.destinationId));
       return;
     }
 
@@ -457,7 +558,9 @@ export class SearchFormComponent implements OnInit {
   }
 
   private currentManualTarget(searchText = this.currentSearchText()): SearchTarget | undefined {
-    return this.manualOverrideSearchText === searchText ? this.manualOverrideTarget : undefined;
+    return this.manualOverrideSearchText === searchText && this.manualOverrideTarget
+      ? this.manualOverrideTarget
+      : this.hasManualSelection ? this.defaultSearchTarget() : undefined;
   }
 
   private resolvedCandidate(): TxTaxiSearchCandidate | undefined {
@@ -466,7 +569,8 @@ export class SearchFormComponent implements OnInit {
     }
 
     return this.searchOptions.candidates.find(
-      (candidate) => candidate.chainId === this.searchOptions?.resolvedChainId && candidate.confirmed && candidate.confidence === 'strong' && Boolean(candidate.directUrl),
+      (candidate) => candidate.chainId === this.searchOptions?.resolvedChainId
+        && (!this.searchOptions?.resolvedDestinationId || candidate.destinationId === this.searchOptions.resolvedDestinationId) && candidate.confirmed && candidate.confidence === 'strong' && Boolean(candidate.directUrl),
     );
   }
 
@@ -488,11 +592,10 @@ export class SearchFormComponent implements OnInit {
   private updateActiveTarget(): void {
     const manualTarget = this.currentManualTarget();
     const resolvedCandidate = manualTarget ? undefined : this.resolvedCandidate();
-    const hasCandidates = !manualTarget && Boolean(this.searchOptions?.candidates.length);
     const target = manualTarget
       ?? (resolvedCandidate ? this.targetForCandidate(resolvedCandidate) : undefined)
-      ?? (hasCandidates ? this.routerSearchTarget : this.defaultSearchTarget());
-    const selectedChainId = manualTarget ? target.chainId : hasCandidates ? undefined : target.chainId;
+      ?? this.defaultSearchTarget();
+    const selectedChainId = target.chainId;
 
     if (this.selectedChainId$.value !== selectedChainId) {
       this.selectedChainId$.next(selectedChainId);
@@ -502,6 +605,9 @@ export class SearchFormComponent implements OnInit {
     if (
       activeTarget.kind !== target.kind
       || activeTarget.chainId !== target.chainId
+      || activeTarget.destinationId !== target.destinationId
+      || activeTarget.destinationDefault !== target.destinationDefault
+      || activeTarget.name !== target.name
       || activeTarget.accentColor !== target.accentColor
       || activeTarget.directUrl !== target.directUrl
     ) {
@@ -512,7 +618,9 @@ export class SearchFormComponent implements OnInit {
   private defaultSearchTarget(): SearchTarget {
     if (this.manualChainId === undefined) return this.routerSearchTarget;
     const explorer = this.explorers.find((candidate) => candidate.chainId === this.manualChainId);
-    return explorer ? this.targetForExplorer(explorer) : {
+    const destination = explorer?.destinations?.find(item => item.destinationId === this.manualDestinationId)
+      || explorer?.destinations?.find(item => item.default) || explorer;
+    return destination ? this.targetForExplorer(destination) : this.selectedExplorerTarget || {
       kind: 'explorer',
       chainId: this.sourceChainId,
       name: 'TON',
@@ -526,7 +634,12 @@ export class SearchFormComponent implements OnInit {
     return {
       kind: 'explorer',
       chainId: explorer.chainId,
-      name: explorer.name,
+      destinationId: explorer.destinationId,
+      destinationDefault: explorer.default,
+      origin: explorer.origin,
+      name: explorer.destinationId
+        ? `${this.explorers.find(item => item.chainId === explorer.chainId)?.name || explorer.symbol}${explorer.default ? '' : ` · ${explorer.name}`}`
+        : explorer.name,
       accentColor: explorer.accentColor,
       iconUrl: explorer.iconUrl,
       iconAlt: explorer.iconAlt,
@@ -537,12 +650,16 @@ export class SearchFormComponent implements OnInit {
     return {
       kind: 'candidate',
       chainId: candidate.chainId,
-      name: candidate.name,
+      destinationId: candidate.destinationId,
+      destinationDefault: candidate.destinationDefault,
+      origin: candidate.directUrl ? new URL(candidate.directUrl).origin : candidate.host ? `https://${candidate.host}` : undefined,
+      name: candidate.destinationName && !candidate.destinationDefault ? `${candidate.name} · ${candidate.destinationName}` : candidate.name,
       accentColor: candidate.accentColor,
       iconUrl: candidate.iconUrl,
       iconAlt: candidate.iconAlt,
       confirmed: candidate.confirmed,
       directUrl: candidate.directUrl,
+      candidate,
     };
   }
 

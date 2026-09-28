@@ -237,29 +237,6 @@ test('confirmed same-chain router candidates retain their TON host and shard whe
   });
 });
 
-test('workchain controls navigate through the shared transition to clean hosts and retain the blocks route', () => {
-  const { TonNetworkData } = loadService('./ton-network-data.service.ts', {
-    './ton-page-data': { TonPageData: class {} }, './chain-selection': selection,
-  });
-  withLocation('https://ton.tx.taxi/blocks?workchain=0&shard=4000000000000000', () => {
-    const page = Object.create(TonNetworkData.prototype);
-    page.selection = { current: { workchain: 0, shard: '4000000000000000' } };
-    const transitions = [];
-    window.__txTaxiSwitchTonView = destination => { transitions.push(destination); return true; };
-    page.selectWorkchain('-1');
-    assert.deepEqual(transitions, ['https://masterchain.ton.tx.taxi/blocks']);
-  });
-  withLocation('https://masterchain.ton.tx.taxi/en/blocks?workchain=-1&shard=8000000000000000', () => {
-    const page = Object.create(TonNetworkData.prototype);
-    page.selection = { current: { workchain: -1, shard: rootShard } };
-    const destinations = [];
-    window.location.assign = destination => destinations.push(destination);
-    page.selectWorkchain('0');
-    assert.deepEqual(destinations, ['https://ton.tx.taxi/en/blocks']);
-  });
-  assert.equal(selection.tonWorkchainDestination(0, 'https://masterchain.ton.tx.taxi/blocks?workchain=0&shard=4000000000000000', { workchain: 0, shard: '4000000000000000' }), 'https://ton.tx.taxi/blocks?shard=4000000000000000');
-});
-
 test('the native transition accepts a sibling TON view and navigates after its surface animation', async () => {
   const assigned = [], surfaces = [], animations = [];
   const element = () => ({
@@ -452,6 +429,7 @@ test('numeric search carries the selected workchain and discards a result after 
   window.location.assign = value => external.push(value);
   form.cdr = { markForCheck() {} };
   form.tonSelection = { current: { workchain: 0, shard: rootShard } };
+  form.selectionChanges$ = new BehaviorSubject(0);
   form.searchForm = { value: { searchText: '100000000' } };
   form.searchTriggered = { emit() {} };
   form.router = { navigateByUrl(value) { navigations.push(value); } };
