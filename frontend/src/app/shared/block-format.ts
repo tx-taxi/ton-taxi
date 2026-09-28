@@ -32,5 +32,5 @@ export function exactBlockAmount(value: number | string): string {
 }
 
 export function blockValueDetails(total: number | string, median: number, min: number, max: number): string {
-  return `Fees collected: ${exactBlockAmount(total)} ${SYMBOL}.`;
+  return `Fees collected: ${exactBlockAmount(total)} ${SYMBOL}. Includes block creation and imported fees.`;
 }

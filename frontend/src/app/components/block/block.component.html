@@ -147,7 +147,7 @@
     <ng-container *ngIf="nativeMode; else legacyRestRows">
       <ng-container *ngIf="nativeBlock as block; else loadingRest">
         <tr><td class="td-width">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
-        <tr><td>Collected fees</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
+        <tr><td [ngbTooltip]="'Includes block creation and imported fees.'">Collected fees</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
       </ng-container>
     </ng-container>
     <ng-template #legacyRestRows>
