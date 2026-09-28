@@ -2,8 +2,10 @@
 const { ProviderError } = require("./provider.cjs");
 const { canonicalBlock, normalize } = require("./collector.cjs");
 const { blockContext } = require("./block-context.cjs");
+const { LatestNetworkWindow } = require("./latest-network-window.cjs");
 const enc = encodeURIComponent;
 const networkSources = new Map();
+const latestNetworkWindows = new WeakMap();
 function limitParam(q) {
   return Math.min(100, Math.max(1, Number(q.get("limit")) || 24));
 }
@@ -152,33 +154,42 @@ async function api(url, provider, collector) {
       limit = Math.min(50, limitParam(q));
     if (!Number.isSafeInteger(offset) || offset < 0)
       throw new ProviderError("Invalid pagination", 400);
-    const result = await provider.request(
-      "/v2/blockchain/masterchain/" +
-        height +
-        "/transactions?limit=" +
-        limit +
-        "&offset=" +
-        offset,
-      86400000,
-      networkSources.get(height),
-    );
-    networkSources.set(height, result.provider);
-    while (networkSources.size > 256)
-      networkSources.delete(networkSources.keys().next().value);
-    const data = wrap(result),
-      moreInBlock = data.transactions.length === limit;
-    return {
-      ...data,
-      master_seqno: height,
-      _paging: {
-        masterSeqno: height,
-        limit,
-        offset,
-        hasMore: moreInBlock || Number(height) > 1,
-        nextOffset: moreInBlock ? offset + data.transactions.length : null,
-        nextBefore: moreInBlock ? null : String(Number(height) - 1),
-      },
+    const readWindow = async () => {
+      const result = await provider.request(
+        "/v2/blockchain/masterchain/" +
+          height +
+          "/transactions?limit=" +
+          limit +
+          "&offset=" +
+          offset,
+        86400000,
+        networkSources.get(height),
+      );
+      networkSources.set(height, result.provider);
+      while (networkSources.size > 256)
+        networkSources.delete(networkSources.keys().next().value);
+      const data = wrap(result),
+        moreInBlock = data.transactions.length === limit;
+      return {
+        ...data,
+        master_seqno: height,
+        _paging: {
+          masterSeqno: height,
+          limit,
+          offset,
+          hasMore: moreInBlock || Number(height) > 1,
+          nextOffset: moreInBlock ? offset + data.transactions.length : null,
+          nextBefore: moreInBlock ? null : String(Number(height) - 1),
+        },
+      };
     };
+    if (q.has("master_seqno") || q.has("before")) return readWindow();
+    let latest = latestNetworkWindows.get(provider);
+    if (!latest) {
+      latest = new LatestNetworkWindow();
+      latestNetworkWindows.set(provider, latest);
+    }
+    return latest.get(`${limit}:${offset}`, readWindow);
   }
   if (kind === "transactions") {
     if (!collector.blocks.length) await collector.refresh();
