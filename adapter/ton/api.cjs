@@ -55,6 +55,22 @@ function page(data, q, key, mode) {
         : null;
   return data;
 }
+async function blockTransactions(provider, collector, block) {
+  const header = await readHeader(provider, collector, block);
+  const count = Number(header.tx_quantity);
+  const validate = data => {
+    if (!/^\d+$/.test(String(header.tx_quantity)) || !Number.isSafeInteger(count) || count < 0
+      || !Array.isArray(data?.transactions) || data.transactions.length !== count) {
+      throw new ProviderError("Block transactions are temporarily unavailable", 503);
+    }
+  };
+  const result = await provider.request(
+    "/v2/blockchain/blocks/" + enc(block) + "/transactions",
+    86400000, undefined, undefined, validate,
+  );
+  validate(result.data);
+  return wrap(result);
+}
 async function api(url, provider, collector) {
   const parts = url.pathname
     .slice("/api/ton/".length)
@@ -214,10 +230,7 @@ async function api(url, provider, collector) {
     const height = q.get("before") || collector.blocks[0].seqno;
     if (!/^\d+$/.test(height))
       throw new ProviderError("Invalid block height", 400);
-    const result = await get(
-      "/v2/blockchain/blocks/" + enc(canonicalBlock(height)) + "/transactions",
-      86400000,
-    );
+    const result = await blockTransactions(provider, collector, canonicalBlock(height));
     result._paging = {
       nextBefore: String(Number(height) - 1),
       hasMore: Number(height) > 1,
@@ -340,11 +353,7 @@ async function api(url, provider, collector) {
         86400000,
       );
     const block = canonicalBlock(id);
-    if (sub === "transactions")
-      return get(
-        "/v2/blockchain/blocks/" + enc(block) + "/transactions",
-        86400000,
-      );
+    if (sub === "transactions") return blockTransactions(provider, collector, block);
     if (sub === "shards") {
       const seq = /^\d+$/.test(id) ? id : id.match(/,(\d+)\)$/)?.[1];
       return get("/v2/blockchain/masterchain/" + seq + "/shards", 86400000);

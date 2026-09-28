@@ -40,11 +40,26 @@ class Provider {
     this.requests = 0;
     this.cacheBytes = 0;
   }
-  async request(route, ttl = 15000, preferred, priority) {
+  async request(route, ttl = 15000, preferred, priority, validate) {
     const key = route + (preferred ? `@${preferred}` : "");
-    const old = this.cache.get(key);
+    const checked = result => {
+      try { validate?.(result.data); return result; }
+      catch (error) {
+        const cached = this.cache.get(key);
+        if (cached?.data === result.data && cached.at === result.at) {
+          this.cacheBytes -= cached.bytes || 0;
+          this.cache.delete(key);
+        }
+        throw error;
+      }
+    };
+    let old = this.cache.get(key);
+    if (old && validate) {
+      try { checked(old); }
+      catch { old = undefined; }
+    }
     if (old && Date.now() - old.at < ttl) return { ...old, stale: false };
-    if (this.pending.has(key)) return this.pending.get(key);
+    if (this.pending.has(key)) return this.pending.get(key).then(checked);
     if (this.pending.size >= 100) throw new ProviderError("Service busy");
     const deadline = Math.min(
       Date.now() + 25000,
@@ -53,6 +68,9 @@ class Provider {
     if (deadline <= Date.now()) throw new ProviderError("Request timed out");
     const task = this.fetch(route, preferred, priority, deadline)
       .then((result) => {
+        // An immutable entity may be only partially indexed. Validate before
+        // admitting it to the long-lived cache or a stale fallback.
+        checked(result);
         if (this.cache.has(key))
           this.cacheBytes -= this.cache.get(key).bytes || 0;
         result.bytes = Buffer.byteLength(JSON.stringify(result.data));

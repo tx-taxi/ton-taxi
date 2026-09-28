@@ -1,10 +1,10 @@
 import { ChangeDetectorRef, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest, Subscription } from 'rxjs';
+import { combineLatest, Subscription, throwError, timer } from 'rxjs';
 import { TonChainSelectionService } from './ton-chain-selection.service';
 import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery, tonSelectionForBlockId } from './chain-selection';
-import { finalize } from 'rxjs/operators';
+import { finalize, retry } from 'rxjs/operators';
 import { OpenGraphService } from '@app/services/opengraph.service';
 import { SeoService } from '@app/services/seo.service';
 import { StateService } from '@app/services/state.service';
@@ -119,7 +119,30 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   private loadBlock(): void {
     const generation = this.generation; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(this.id)).subscribe({ next: rawBlock => { if (generation !== this.generation) return; const block = { ...rawBlock, id: rawBlock.id || `(${rawBlock.workchain_id},${rawBlock.shard},${rawBlock.seqno})` }; this.block = block; this.data = block; this.loading = false; this.state.markBlock$.next(String(block.workchain_id) === '-1' ? { blockHeight: Number(block.seqno) } : {}); this.updateMetadata(); this.loadBlockContext(block); this.loadBlockTransactions(block); if (String(block.workchain_id) === '-1') this.loadShards(block); }, error: error => { if (generation === this.generation) { this.loading = false; this.error = error.status === 404 ? 'Not found' : 'Temporarily unavailable'; this.state.nativeBlockContext$.next({ blocks: [], loading: false, unavailable: true }); } } }));
   }
-  private loadBlockTransactions(block: any): void { this.transactionsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/transactions?limit=50').subscribe({ next: result => { this.transactions = result.transactions || []; this.transactionsLoading = false; }, error: () => { this.transactionsLoading = false; this.transactionsError = 'Block transactions are temporarily unavailable'; } })); }
+  private loadBlockTransactions(block: any): void {
+    const generation = this.generation;
+    this.transactionsLoading = true;
+    this.transactionsError = '';
+    this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/transactions?limit=50').pipe(
+      retry({
+        count: 3,
+        delay: (error, attempt) => error.status === 503 && generation === this.generation
+          ? timer(attempt * 1000)
+          : throwError(() => error),
+      }),
+    ).subscribe({
+      next: result => {
+        if (generation !== this.generation) return;
+        this.transactions = result.transactions || [];
+        this.transactionsLoading = false;
+      },
+      error: () => {
+        if (generation !== this.generation) return;
+        this.transactionsLoading = false;
+        this.transactionsError = 'Block transactions are temporarily unavailable';
+      },
+    }));
+  }
   private loadShards(block: any): void { this.shardsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/shards').subscribe({ next: result => { this.shards = (result.shards || result.blocks || []).map(shard => shard.last_known_block ? { ...shard.last_known_block, id: shard.last_known_block_id } : shard); this.shardsLoading = false; }, error: () => { this.shardsLoading = false; this.shardsError = 'Shard references are temporarily unavailable'; } })); }
   onVisibilityChange(): void { if (!document.hidden && (this.nativeRoute === 'dashboard' || this.nativeRoute === 'blocks' && !this.blocks.length) && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }
   private blockIdentity(block: any): string { return block.id || block.ton?.id || `${block.workchain_id ?? block.ton?.workchain_id}:${block.shard ?? block.ton?.shard}:${block.seqno ?? block.ton?.seqno}`; }

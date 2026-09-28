@@ -38,3 +38,12 @@ HOST=127.0.0.1 PORT=4592 node dist/index.js
 The key remains in its existing local secret file and is never included in the export or repository.
 
 GitHub publication and community configuration are verified across all eight native repositories. TON is public and the organization listing includes it. The admin-only commits used the verified Coolify `[skip cd]` mechanism and did not trigger app deployments. Runtime deployment settings remain unchanged.
+
+
+## Production transaction-list correction
+
+The actual public browser pass found a separate indexing-delay defect: masterchain block `(-1,8000000000000000,95551104)` had three verified transactions, but an early indexed empty list was cached for 24 hours. Subsequent direct upstream reads returned the complete three transactions. This was not a block-count correction.
+
+Both block-transaction API entry points now validate the full indexed list against the verified header before it can be returned or cached. Previously incomplete cached data and incomplete coalesced results are evicted, complete immutable data remains reusable, and genuine zero-transaction blocks remain valid. The existing native loading skeleton stays visible through three bounded 503 retries (1/2/3 seconds); route changes cancel the request and retry timer. No component or stylesheet was added.
+
+Four backend behavior checks cover actual delayed completeness, poisoned cache recovery, true empty blocks and coalesced cache admission. Seven related API/shared-window checks and four actual frontend retry probes passed, as did the full Angular production build. Targeted local desktop/mobile browser checks showed the original masterchain block with three transactions and a basechain block with 23; induced initial503 responses recovered after approximately one second without a false zero heading. The induced cases are explicitly labeled as local failure injection in `review/ton/accuracy-audit/transaction-completeness/`.
