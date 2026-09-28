@@ -1,0 +1,21 @@
+✔ hostname initializes the feed and restores its scope after visiting explicit block and query routes (47.532854ms)
+✔ native dashboard initialization cannot reset the masterchain hostname to basechain (37.14642ms)
+✔ workchain controls navigate through the shared transition to clean hosts and retain the blocks route (19.831321ms)
+✔ the native transition accepts a sibling TON view and navigates after its surface animation (4.79227ms)
+✔ masterchain navigation retains the host in page titles, canonical links and entity images (13.414172ms)
+✔ switching to a lower sequence workchain resets the live high-water mark and rejects the old feed (24.415598ms)
+✔ a default-shard change clears height aliases and a mixed-shard snapshot is rejected (21.230243ms)
+✔ a delayed history response from the previous selection cannot repopulate the new height cache (9.393178ms)
+✔ an initially empty blocks page recovers on a scoped live update without replacing paged history (14.724787ms)
+✔ numeric search carries the selected workchain and discards a result after that choice changes (19.388235ms)
+✔ a slower dashboard response refreshes history without moving the live head backward (15.161983ms)
+✔ full tuple and legacy block routes retain their workchain for subsequent numeric search (3.46827ms)
+✔ a live-feed scroll reset keeps the selected contextual block centered (15.805989ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 13
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 259.751313

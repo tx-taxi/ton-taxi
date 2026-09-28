@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
+import { runInNewContext } from 'node:vm';
 import ts from 'typescript';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import * as selection from './chain-selection.ts';
 
 const require = createRequire(import.meta.url);
@@ -28,6 +29,168 @@ const block = (workchain, shard, height) => ({
   ton: { workchain_id: workchain, shard, seqno: height },
 });
 const rootShard = '8000000000000000';
+
+function withLocation(href, run) {
+  const previous = globalThis.window;
+  globalThis.window = { location: new URL(href), addEventListener() {}, removeEventListener() {} };
+  try { return run(); } finally {
+    if (previous === undefined) delete globalThis.window;
+    else globalThis.window = previous;
+  }
+}
+
+function chainService() {
+  class NavigationEnd { constructor(urlAfterRedirects) { this.urlAfterRedirects = urlAfterRedirects; } }
+  const { TonChainSelectionService } = loadService('./ton-chain-selection.service.ts', {
+    '@angular/router': { NavigationEnd }, './chain-selection': selection,
+  });
+  const events = new Subject();
+  const router = {
+    url: '/', events,
+    parseUrl(value) {
+      const url = new URL(value, 'https://ton.tx.taxi');
+      return { queryParams: Object.fromEntries(url.searchParams), root: { children: { primary: { segments: url.pathname.split('/').filter(Boolean).map(path => ({ path: decodeURIComponent(path) })) } } } };
+    },
+  };
+  return { service: new TonChainSelectionService(router), navigate: url => events.next(new NavigationEnd(url)) };
+}
+
+test('hostname initializes the feed and restores its scope after visiting explicit block and query routes', () => {
+  withLocation('https://masterchain.ton.tx.taxi/', () => {
+    const { service, navigate } = chainService();
+    assert.deepEqual(service.current, { workchain: -1, shard: rootShard });
+    assert.equal(service.query, 'workchain=-1&shard=8000000000000000');
+    navigate('/block/(0,4000000000000000,100039007)');
+    assert.deepEqual(service.current, { workchain: 0, shard: '4000000000000000' });
+    navigate('/block/95544320');
+    assert.equal(service.current.workchain, -1);
+    navigate('/blocks?workchain=0&shard=c000000000000000');
+    assert.deepEqual(service.current, { workchain: 0, shard: 'c000000000000000' });
+    navigate('/blocks');
+    assert.deepEqual(service.current, { workchain: -1, shard: rootShard });
+    navigate('/?shard=c000000000000000');
+    assert.deepEqual(service.current, { workchain: -1, shard: rootShard });
+  });
+  withLocation('https://ton.tx.taxi/', () => {
+    const { service, navigate } = chainService();
+    assert.deepEqual(service.current, { workchain: 0 });
+    navigate('/?workchain=-1');
+    assert.deepEqual(service.current, { workchain: -1, shard: rootShard });
+    navigate('/');
+    assert.deepEqual(service.current, { workchain: 0 });
+  });
+});
+
+test('native dashboard initialization cannot reset the masterchain hostname to basechain', () => {
+  withLocation('https://masterchain.ton.tx.taxi/', () => {
+    const previousDocument = globalThis.document;
+    globalThis.document = { addEventListener() {}, removeEventListener() {} };
+    try {
+      const { TonNetworkData } = loadService('./ton-network-data.service.ts', {
+        './ton-page-data': { TonPageData: class {} }, './chain-selection': selection,
+      });
+      const page = Object.create(TonNetworkData.prototype);
+      const { service } = chainService();
+      const query = new BehaviorSubject(new URLSearchParams());
+      page.selection = service;
+      page.route = { paramMap: new BehaviorSubject(new Map()), queryParamMap: query, snapshot: { data: { tonPage: 'dashboard' } } };
+      const loadedSelections = [];
+      page.loadNative = () => loadedSelections.push({ ...service.current });
+      page.ngOnInit();
+      query.next(new URLSearchParams('workchain=0&shard=4000000000000000'));
+      query.next(new URLSearchParams());
+      assert.deepEqual(loadedSelections, [{ workchain: -1, shard: rootShard }, { workchain: 0, shard: '4000000000000000' }, { workchain: -1, shard: rootShard }]);
+      page.nativeRouteSub.unsubscribe();
+    } finally {
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+    }
+  });
+});
+
+test('workchain controls navigate through the shared transition to clean hosts and retain the blocks route', () => {
+  const { TonNetworkData } = loadService('./ton-network-data.service.ts', {
+    './ton-page-data': { TonPageData: class {} }, './chain-selection': selection,
+  });
+  withLocation('https://ton.tx.taxi/blocks?workchain=0&shard=4000000000000000', () => {
+    const page = Object.create(TonNetworkData.prototype);
+    page.selection = { current: { workchain: 0, shard: '4000000000000000' } };
+    const transitions = [];
+    window.__txTaxiSwitchTonView = destination => { transitions.push(destination); return true; };
+    page.selectWorkchain('-1');
+    assert.deepEqual(transitions, ['https://masterchain.ton.tx.taxi/blocks']);
+  });
+  withLocation('https://masterchain.ton.tx.taxi/en/blocks?workchain=-1&shard=8000000000000000', () => {
+    const page = Object.create(TonNetworkData.prototype);
+    page.selection = { current: { workchain: -1, shard: rootShard } };
+    const destinations = [];
+    window.location.assign = destination => destinations.push(destination);
+    page.selectWorkchain('0');
+    assert.deepEqual(destinations, ['https://ton.tx.taxi/en/blocks']);
+  });
+  assert.equal(selection.tonWorkchainDestination(0, 'https://masterchain.ton.tx.taxi/blocks?workchain=0&shard=4000000000000000', { workchain: 0, shard: '4000000000000000' }), 'https://ton.tx.taxi/blocks?shard=4000000000000000');
+});
+
+test('the native transition accepts a sibling TON view and navigates after its surface animation', async () => {
+  const assigned = [], surfaces = [], animations = [];
+  const element = () => ({
+    style: {}, setAttribute() {},
+    append(child) { this.firstElementChild = child; },
+    attachShadow() { return {}; },
+    animate(frames, timing) { animations.push({ frames, timing }); return { finished: Promise.resolve() }; },
+  });
+  const document = {
+    currentScript: { dataset: { chain: 'ton' } },
+    head: { append() {} }, documentElement: { append(surface) { surfaces.push(surface); } },
+    createElement: element, querySelector: () => null, querySelectorAll: () => [], addEventListener() {},
+  };
+  const window = { addEventListener() {} };
+  const location = new URL('https://ton.tx.taxi/blocks');
+  location.assign = destination => assigned.push(destination);
+  runInNewContext(readFileSync(new URL('../../resources/branding/chain-transition.js', import.meta.url), 'utf8'), {
+    document, window, location, URL, innerWidth: 1440, innerHeight: 900,
+    matchMedia: () => ({ matches: false }), addEventListener() {},
+    MutationObserver: class { observe() {} },
+  });
+  assert.equal(window.__txTaxiSwitchTonView('https://masterchain.ton.tx.taxi/blocks'), true);
+  assert.equal(surfaces.length, 1);
+  assert.equal(animations.length, 1);
+  assert.deepEqual(assigned, []);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(assigned, ['https://masterchain.ton.tx.taxi/blocks']);
+  assert.equal(window.__txTaxiSwitchTonView('https://user@masterchain.ton.tx.taxi/'), false);
+  assert.equal(window.__txTaxiSwitchTonView('https://masterchain.ton.tx.taxi/block/95544320'), false);
+});
+
+test('masterchain navigation retains the host in page titles, canonical links and entity images', () => {
+  withLocation('https://masterchain.ton.tx.taxi/', () => {
+    const previousDocument = globalThis.document;
+    const canonical = { href: 'https://masterchain.ton.tx.taxi/', setAttribute(key, value) { this[key] = value; } };
+    globalThis.document = { getElementById: () => canonical };
+    try {
+      const tags = new Map();
+      const meta = { updateTag(tag) { tags.set(tag.property || tag.name, tag.content); } };
+      const router = { url: '/block/(0,4000000000000000,100039007)', events: new Subject() };
+      const state = { networkChanged$: new Subject() };
+      const { SeoService } = loadService('../services/seo.service.ts');
+      const seo = new SeoService({ setTitle() {} }, meta, state, router, {});
+      seo.resetTitle();
+      seo.updateCanonical(router.url);
+      assert.equal(canonical.href, 'https://masterchain.ton.tx.taxi/block/(0,4000000000000000,100039007)');
+      assert.equal(tags.get('og:title'), 'masterchain.ton.tx.taxi - TON Explorer');
+      const { OpenGraphService } = loadService('../services/opengraph.service.ts');
+      const og = new OpenGraphService({}, meta, state, router, {});
+      og.clearOgImage();
+      assert.equal(tags.get('og:image'), 'https://masterchain.ton.tx.taxi/og/block/(0,4000000000000000,100039007).png?v=4');
+      router.url = '/';
+      og.clearOgImage();
+      assert.equal(tags.get('og:image'), 'https://masterchain.ton.tx.taxi/og.png?v=1');
+    } finally {
+      if (previousDocument === undefined) delete globalThis.document;
+      else globalThis.document = previousDocument;
+    }
+  });
+});
 
 test('switching to a lower sequence workchain resets the live high-water mark and rejects the old feed', () => {
   const { WebsocketService } = loadService('../services/websocket.service.ts');

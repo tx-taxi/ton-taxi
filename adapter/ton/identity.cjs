@@ -33,6 +33,7 @@ function input(value) {
         "tonscan.org",
         "www.tonscan.org",
         "ton.tx.taxi",
+        "masterchain.ton.tx.taxi",
       ].includes(url.hostname.toLowerCase()) ||
       url.username ||
       url.password ||
@@ -52,8 +53,12 @@ function input(value) {
         "collection",
         "jetton",
       ].includes(parts[0])
-    )
+    ) {
       value = decodeURIComponent(parts[1]);
+      if (["ton.tx.taxi", "masterchain.ton.tx.taxi"].includes(url.hostname.toLowerCase())
+        && parts[0] === "block" && /^\d+$/.test(value))
+        value = `(-1,8000000000000000,${value})`;
+    }
     else throw new ProviderError("Unsupported URL", 400);
   }
   if (/^[A-Za-z0-9_+/-]{43}=?$/.test(value))

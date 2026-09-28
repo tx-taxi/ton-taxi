@@ -4,8 +4,8 @@ const fs = require("node:fs/promises"),
   path = require("node:path"),
   sharp = require("sharp"),
   parse5 = require("parse5");
-const ORIGIN = "https://ton.tx.taxi",
-  cache = new Map(),
+const { tonSite } = require("./ton/block-selection.cjs");
+const cache = new Map(),
   pending = new Map();
 let active = 0;
 const short = (s, n = 50) => {
@@ -49,15 +49,17 @@ function identity(pathname) {
     return null;
   }
 }
-async function metadata(pathname, api, provider, collector) {
+async function metadata(pathname, api, provider, collector, host) {
+  const site = tonSite(host);
+  const origin = site.origin;
   const entity = identity(pathname);
-  const canonical = ORIGIN + (pathname === "/" ? "/" : pathname);
-  let title = "ton.tx.taxi - TON Explorer",
+  const canonical = origin + (pathname === "/" ? "/" : pathname);
+  let title = `${site.host} - TON Explorer`,
     description =
-      "Explore TON blocks, transactions, accounts, jettons and NFTs.",
+      site.workchain === -1 ? "Explore TON masterchain blocks, transactions and network activity." : "Explore TON blocks, transactions, accounts, jettons and NFTs.",
     line1 = "TON",
-    line2 = "explorer",
-    summary = "Live TON blocks, accounts, jettons and NFTs.",
+    line2 = site.workchain === -1 ? "masterchain" : "explorer",
+    summary = site.workchain === -1 ? "Live TON masterchain blocks and transactions." : "Live TON blocks, accounts, jettons and NFTs.",
     type = "TON";
   const page = pathname.split("/").filter(Boolean)[0];
   const pages = {
@@ -110,7 +112,7 @@ async function metadata(pathname, api, provider, collector) {
         id = decodeURIComponent(pathname.split("/")[2] || "");
       } catch {}
     }
-    title = `${label}${id ? " " + id : ""} - ton.tx.taxi - TON Explorer`;
+    title = `${label}${id ? " " + id : ""} - ${site.host} - TON Explorer`;
     description = detail;
     line1 = label;
     line2 = id ? abbrev(id) : "TON";
@@ -140,7 +142,7 @@ async function metadata(pathname, api, provider, collector) {
       const data = await Promise.race([
         provider.context.run({ deadline: Date.now() + 4000 }, () =>
           api(
-            new URL(ORIGIN + "/api/ton/" + kind + "/" + encodeURIComponent(id)),
+            new URL(origin + "/api/ton/" + kind + "/" + encodeURIComponent(id)),
             provider,
             collector,
           ),
@@ -202,16 +204,16 @@ async function metadata(pathname, api, provider, collector) {
     description: short(description, 300),
     canonical,
     image: entity
-      ? `${ORIGIN}/og/${entity.kind}/${encodeURIComponent(entity.id)}.png`
-      : `${ORIGIN}/og.png?v=1`,
+      ? `${origin}/og/${entity.kind}/${encodeURIComponent(entity.id)}.png`
+      : `${origin}/og.png?v=1`,
     line1,
     line2,
     summary,
     type,
   };
 }
-async function inject(html, pathname, api, provider, collector) {
-  const meta = await metadata(pathname, api, provider, collector),
+async function inject(html, pathname, api, provider, collector, host) {
+  const meta = await metadata(pathname, api, provider, collector, host),
     document = parse5.parse(html);
   let head;
   function find(n) {
@@ -271,15 +273,16 @@ async function inject(html, pathname, api, provider, collector) {
     });
   return parse5.serialize(document);
 }
-async function image(pathname, api, provider, collector, root) {
-  const key = pathname;
+async function image(pathname, api, provider, collector, root, host) {
+  const site = tonSite(host);
+  const key = site.host + pathname;
   const old = cache.get(key);
   if (old && Date.now() - old.at < 300000) return old.body;
   if (pending.has(key)) return pending.get(key);
   if (active >= 4) throw Object.assign(new Error("Busy"), { status: 503 });
   active++;
   const task = (async () => {
-    const meta = await metadata(pathname, api, provider, collector);
+    const meta = await metadata(pathname, api, provider, collector, site.host);
     const template = await fs.readFile(
       path.join(__dirname, "ton/og-template.svg"),
       "utf8",

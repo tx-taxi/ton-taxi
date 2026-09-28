@@ -108,6 +108,7 @@ export class TonPageData implements OnInit, OnDestroy {
   }
   updateMetadata(): void {
     let title=this.title(); let description='Explore TON blocks, transactions, accounts, jettons and NFTs.';
+    if (this.page === 'dashboard' && this.seo.baseDomain === 'masterchain.ton.tx.taxi') description='Explore TON masterchain blocks, transactions and network activity.';
     if(this.page === 'dashboard')this.seo.resetTitle();
     else {
       if(this.id) {

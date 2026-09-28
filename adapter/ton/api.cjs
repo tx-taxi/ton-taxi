@@ -3,7 +3,7 @@ const { ProviderError } = require("./provider.cjs");
 const { canonicalBlock, normalize } = require("./collector.cjs");
 const { blockContext, blockIdentity, readHeader } = require("./block-context.cjs");
 const { LatestNetworkWindow } = require("./latest-network-window.cjs");
-const { blockSelection } = require("./block-selection.cjs");
+const { blockSelection, tonSite } = require("./block-selection.cjs");
 const enc = encodeURIComponent;
 const networkSources = new Map();
 const latestNetworkWindows = new WeakMap();
@@ -131,12 +131,12 @@ async function api(url, provider, collector) {
     return get("/v2/staking/pool/" + enc(id), 30000);
   }
   if (kind === "dashboard") {
-    const selection = blockSelection(q);
+    const selection = blockSelection(q, tonSite(url.hostname).workchain);
     if (!collector.blocks.length) await collector.refresh();
     return collector.dashboard(selection);
   }
   if (kind === "blocks") {
-    const selection = blockSelection(q);
+    const selection = blockSelection(q, tonSite(url.hostname).workchain);
     if (!collector.blocks.length) await collector.refresh();
     const dashboard = collector.dashboard(selection);
     const shard = selection.workchain === -1 ? "8000000000000000" : selection.shard || dashboard.shard;
@@ -278,7 +278,7 @@ async function api(url, provider, collector) {
   if (kind === "resolve") {
     const value = require("./identity.cjs").input(q.get("value") || "");
     if (/^\d+$/.test(value)) {
-      const selection = blockSelection(q);
+      const selection = blockSelection(q, tonSite(url.hostname).workchain);
       if (!collector.blocks.length) await collector.refresh();
       const selected = collector.dashboard(selection);
       if (!selected.head || !selected.shard)

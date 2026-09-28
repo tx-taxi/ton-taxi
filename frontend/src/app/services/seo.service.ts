@@ -31,6 +31,9 @@ export class SeoService {
     } catch (e) {
       // leave as default
     }
+    if (typeof window !== 'undefined' && window.location.hostname === 'masterchain.ton.tx.taxi') {
+      this.baseDomain = this.baseTitle = 'masterchain.ton.tx.taxi';
+    }
 
     this.stateService.networkChanged$.subscribe((network) => this.network = network);
     this.router.events.pipe(

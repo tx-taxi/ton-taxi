@@ -1,0 +1,17 @@
+{
+  "status": "passed",
+  "verification": "controlled in-process HTTP/WebSocket handlers; no real network or browser",
+  "httpCases": 18,
+  "simultaneousSockets": 3,
+  "collectors": 1,
+  "checked": [
+    "host defaults",
+    "query overrides",
+    "numeric search",
+    "tuple and legacy identity",
+    "socket init/select/ping",
+    "selected block and pending broadcasts",
+    "invalid upgrade",
+    "closed socket removal"
+  ]
+}

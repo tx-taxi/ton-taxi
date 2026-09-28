@@ -11,7 +11,7 @@ const { PendingCollector } = require("./ton/pending.cjs");
 const { PendingInclusions } = require("./ton/pending-inclusions.cjs");
 const { tonApiKey } = require("./ton/credentials.cjs");
 const { api } = require("./ton/api.cjs");
-const { blockSelection } = require("./ton/block-selection.cjs");
+const { blockSelection, tonSite } = require("./ton/block-selection.cjs");
 const provider = new Provider(),
   collector = new Collector(provider, { basechain: true, onUpdate: () => broadcastSelected(selection => snapshot(selection)) }),
   sockets = new Set();
@@ -70,7 +70,8 @@ const server = http.createServer(async (req, res) => {
   try {
     if (req.method !== "GET" && req.method !== "HEAD")
       return json(res, { error: "Method not allowed" }, 405);
-    const url = new URL(req.url, "http://localhost");
+    const site = tonSite(req.headers.host);
+    const url = new URL(req.url, site.origin);
     if (
       url.pathname === "/og.png" ||
       /^\/og\/(tx|block|address|nft|collection|jetton|trace|message)\/[^/]+\.png$/.test(
@@ -79,7 +80,7 @@ const server = http.createServer(async (req, res) => {
     ) {
       const route =
         url.pathname === "/og.png" ? "/" : url.pathname.slice(3, -4);
-      const body = await social.image(route, api, provider, collector, root);
+      const body = await social.image(route, api, provider, collector, root, site.host);
       res.writeHead(200, {
         "Content-Type": "image/png",
         "Cache-Control": "public, max-age=300",
@@ -89,7 +90,7 @@ const server = http.createServer(async (req, res) => {
     if (url.pathname === "/healthz")
       return json(res, { status: "ok", chain: "ton" });
     if (url.pathname === "/api/provider-health") {
-      const dashboard = collector.dashboard();
+      const dashboard = collector.dashboard(blockSelection(url.searchParams, site.workchain));
       return json(res, {
         ...provider.health(),
         observedAt: dashboard.observedAt,
@@ -117,7 +118,7 @@ const server = http.createServer(async (req, res) => {
     }
     if (/^\/api\/v1\/blocks\/\d+$/.test(url.pathname)) {
       const height = Number(url.pathname.split("/").pop());
-      const selection = blockSelection(url.searchParams);
+      const selection = blockSelection(url.searchParams, site.workchain);
       const query = new URLSearchParams({limit:"10", before:String(height + 1), workchain:String(selection.workchain)});
       if (selection.shard) query.set("shard", selection.shard);
       const result = await withDeadline(() =>
@@ -135,12 +136,12 @@ const server = http.createServer(async (req, res) => {
       );
     }
     if (url.pathname === "/api/v1/blocks" || url.pathname === "/api/blocks") {
-      const selection = blockSelection(url.searchParams);
+      const selection = blockSelection(url.searchParams, site.workchain);
       if (!collector.blocks.length) await collector.refresh();
       return json(res, collector.dashboard(selection).blocks);
     }
     if (url.pathname === "/api/v1/init-data")
-      return json(res, snapshot(blockSelection(url.searchParams)));
+      return json(res, snapshot(blockSelection(url.searchParams, site.workchain)));
     if (url.pathname.startsWith("/api/"))
       return json(res, { error: "Not found" }, 404);
     let filename = path.resolve(root, "." + decodeURIComponent(url.pathname));
@@ -168,6 +169,7 @@ const server = http.createServer(async (req, res) => {
           api,
           provider,
           collector,
+          site.host,
         ),
       );
     const types = {
@@ -212,7 +214,7 @@ server.on("upgrade", (req, socket, head) => {
     return;
   }
   let selection;
-  try { selection = blockSelection(new URL(req.url, "http://localhost").searchParams); }
+  try { selection = blockSelection(new URL(req.url, "http://localhost").searchParams, tonSite(req.headers.host).workchain); }
   catch { socket.end("HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n"); return; }
   wss.handleUpgrade(req, socket, head, (ws) => {
     ws.tonSelection = selection;
@@ -227,7 +229,7 @@ wss.on("connection", (socket) => {
     try {
       const message = JSON.parse(raw);
       if (message.action === "select" || (message.action === "init" && (Object.hasOwn(message, "workchain") || Object.hasOwn(message, "shard"))))
-        socket.tonSelection = blockSelection(message);
+        socket.tonSelection = blockSelection(message, socket.tonSelection?.workchain ?? 0);
       if (message.action === "ping") {
         const {observedAt, stale, workchain, shard} = collector.dashboard(socket.tonSelection);
         // A healthy browser connection must not hide a stale upstream feed.

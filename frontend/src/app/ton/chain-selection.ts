@@ -4,6 +4,22 @@ export interface TonChainSelection {
 }
 
 export const TON_ROOT_SHARD = '8000000000000000';
+export const TON_BASECHAIN_ORIGIN = 'https://ton.tx.taxi';
+export const TON_MASTERCHAIN_ORIGIN = 'https://masterchain.ton.tx.taxi';
+
+export function tonHostnameWorkchain(hostname: string): 0 | -1 {
+  return hostname.toLowerCase() === 'masterchain.ton.tx.taxi' ? -1 : 0;
+}
+
+/** Workchain switches keep list routes, but never reuse another chain's shard. */
+export function tonWorkchainDestination(workchain: unknown, sourceUrl: string, current: TonChainSelection): string {
+  const selected = tonChainSelection(workchain);
+  const source = new URL(sourceUrl);
+  const path = /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?(?:blocks\/?)?$/.test(source.pathname) ? source.pathname : '/';
+  const destination = new URL(path, selected.workchain === -1 ? TON_MASTERCHAIN_ORIGIN : TON_BASECHAIN_ORIGIN);
+  if (selected.workchain === 0 && current.workchain === 0 && current.shard) destination.searchParams.set('shard', current.shard);
+  return destination.href;
+}
 
 export function tonChainSelection(workchain: unknown, shard?: unknown): TonChainSelection {
   const selectedWorkchain = String(workchain) === '-1' ? -1 : 0;
