@@ -1,6 +1,7 @@
 "use strict";
 const fs = require("node:fs/promises");
 const path = require("node:path");
+const { matchingTransactionFees } = require("./block-transaction-fees.cjs");
 const HISTORY_LIMIT = 2048;
 const RECOVERY_WINDOW = 64;
 const HISTORY_GAP_LIMIT = 32;
@@ -8,6 +9,7 @@ const blockId = (b) => `(${b.workchain_id},${b.shard},${b.seqno})`;
 const canonicalBlock = (id) =>
   /^\d+$/.test(id) ? `(-1,8000000000000000,${id})` : id;
 function normalize(b) {
+  const transactionFees = matchingTransactionFees(b);
   return {
     id: blockId(b),
     height: Number(b.seqno),
@@ -22,7 +24,8 @@ function normalize(b) {
     merkle_root: b.root_hash,
     previousblockhash: b.prev_refs?.[0] || "",
     extras: {
-      totalFees: b.value_flow?.fees_collected?.grams ?? null,
+      totalFees: transactionFees?.total ?? null,
+      transactionFees,
       reward: b.value_flow?.created?.grams ?? null,
       medianFee: null,
       minFee: null,

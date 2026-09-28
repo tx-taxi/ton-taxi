@@ -1,7 +1,8 @@
 "use strict";
 const { ProviderError } = require("./provider.cjs");
 const { canonicalBlock, normalize } = require("./collector.cjs");
-const { blockContext, blockIdentity, readHeader } = require("./block-context.cjs");
+const { blockContext, blockIdentity, readHeader, cachedVerifiedHeader } = require("./block-context.cjs");
+const { matchingTransactionFees } = require("./block-transaction-fees.cjs");
 const { LatestNetworkWindow } = require("./latest-network-window.cjs");
 const { blockSelection, tonSite } = require("./block-selection.cjs");
 const { blockRouteIdentity } = require("./block-route.cjs");
@@ -363,6 +364,11 @@ async function api(url, provider, collector) {
       return get("/v2/blockchain/masterchain/" + seq + "/shards", 86400000);
     }
     const header = await get("/v2/blockchain/blocks/" + enc(block), 86400000);
+    // Reuse already verified stream/context bytes without delaying the detail
+    // response on another acquisition. A cold metadata-only read stays unknown.
+    const verified = cachedVerifiedHeader(provider, collector, block);
+    header.transaction_fee_stats = verified && verified.root_hash === header.root_hash && verified.file_hash === header.file_hash
+      ? matchingTransactionFees(header, verified.transaction_fee_stats) : null;
     return { ...header, _strip: normalize(header) };
   }
   if (kind === "trace") return get("/v2/traces/" + enc(id), 86400000);

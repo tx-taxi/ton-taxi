@@ -380,6 +380,12 @@ main {
   }
 }
 
+.blocks-container .fees .symbol,
+.blocks-container .fee-span .symbol {
+  font-size: inherit;
+  color: inherit !important;
+}
+
 .break-all {
   white-space: normal;
   word-break: break-all;

@@ -2,6 +2,7 @@
   [style.left]="static ? (offset || 0) + 'px' : null" [style.--block-size]="blockWidth+'px'"
   *ngIf="static || (loadingBlocks$ | async) === false; else loadingBlocksTemplate">
   <div *ngFor="let block of blocks; let i = index; trackBy: trackByBlocksFn">
+    @let fees = transactionFeeView(block?.extras?.transactionFees);
     <ng-container *ngIf="!block.boundary">
     <ng-container *ngIf="block && !block.loading && !block.placeholder && !block.unavailable; else placeholderBlock">
       <div
@@ -16,7 +17,7 @@
         [style]="blockTransformation"
         [class.blink-bg]="isSpecial(block.height)">
         <a draggable="false" [tonBlockLink]="block" [tonBlockState]="{ data: { block: block } }"
-          [attr.title]="blockValueDetails(block.extras?.totalFees, block.extras?.medianFee, block.extras?.minFee, block.extras?.maxFee)" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
+          [attr.title]="fees.title" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
         <div *ngIf="!minimal" [attr.data-cy]="'bitcoin-block-' + i + '-height'" class="block-height">
           <a [tonBlockLink]="block" [tonBlockState]="{ data: { block: block } }" class="block-height-link">{{ block.height
             }}</a>
@@ -36,11 +37,16 @@
         }
         <div class="block-body">
           <ng-container *ngIf="!minimal">
-            <div class="fees" aria-hidden="true">&nbsp;</div>
-            <div class="fee-span" aria-hidden="true">&nbsp;</div>
+            <div class="fees">
+              <ng-container *ngIf="fees.median; else unavailableFee"><ng-container *ngIf="fees.medianBelowAtomicUnit; else medianFee">&lt;1 ng/tx</ng-container><ng-template #medianFee>~<app-amount [amount]="fees.median" displayMode="sats" [compactBlock]="true"></app-amount></ng-template></ng-container>
+            </div>
+            <div class="fee-span">
+              <ng-container *ngIf="fees.min && fees.max; else unavailableFee"><app-amount [amount]="fees.min" displayMode="sats" [compactBlock]="true" [unitStyle]="{ display: 'none' }"></app-amount>–<app-amount [amount]="fees.max" displayMode="sats" [compactBlock]="true"></app-amount></ng-container>
+            </div>
+            <ng-template #unavailableFee>—</ng-template>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + '-total-fees'" *ngIf="blockDisplayMode === 'fees'; else noMiningInfo"
               class="block-size">
-              <span *ngIf="block.extras?.totalFees == null">—</span><app-amount *ngIf="block.extras?.totalFees != null" [compactBlock]="true" [satoshis]="block.extras?.totalFees ?? 0" digitsInfo="1.2-3" [noFiat]="true"></app-amount>
+              <app-amount *ngIf="fees.total; else unavailableFee" [amount]="fees.total" displayMode="btc" [compactBlock]="true"></app-amount>
             </div>
             <ng-template #noMiningInfo>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + 'block-size'"

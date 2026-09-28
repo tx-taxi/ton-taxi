@@ -1,11 +1,12 @@
 "use strict";
 
-const { Cell, loadShardIdent, loadCurrencyCollection } = require("@ton/core");
+const { Cell, loadShardIdent } = require("@ton/core");
 const { ADNLClientTCP } = require("adnl");
 const { TLReadBuffer, TLWriteBuffer } = require("ton-tl");
 const { Codecs, Functions } = require("ton-lite-client/dist/schema");
 const { randomBytes, createHash } = require("node:crypto");
 const { decodeValueFlow } = require("./block-economics.cjs");
+const { decodeAccountBlockTransactions } = require("./block-transaction-fees.cjs");
 
 const MAX_BYTES = 16 * 1024 * 1024;
 const idOf = b => `(${b.workchain_id},${b.shard},${b.seqno})`;
@@ -15,31 +16,6 @@ function ref(slice, workchain, shard) {
   const seqno = slice.loadUint(32);
   return { workchain_id: workchain, shard: hexShard(shard), seqno, end_lt,
     root_hash: slice.loadBuffer(32).toString("hex"), file_hash: slice.loadBuffer(32).toString("hex") };
-}
-
-// Count actual leaves of HashmapAug, consuming its CurrencyCollection extras.
-// No transaction estimate or assumption about transactions-per-account is used.
-function walkAug(slice, bits, leaf, budget) {
-  if (--budget.nodes < 0) throw new Error("Block dictionary exceeds context bound");
-  let length = 0;
-  if (!slice.loadBit()) {
-    while (slice.loadBit()) { if (++length > bits) throw new Error("Invalid dictionary label"); }
-    slice.skip(length);
-  } else if (!slice.loadBit()) {
-    length = slice.loadUint(Math.ceil(Math.log2(bits + 1)));
-    slice.skip(length);
-  } else {
-    slice.loadBit();
-    length = slice.loadUint(Math.ceil(Math.log2(bits + 1)));
-  }
-  if (length > bits) throw new Error("Invalid dictionary label");
-  const remaining = bits - length;
-  if (!remaining) { loadCurrencyCollection(slice); return leaf(slice); }
-  const left = slice.loadRef(), right = slice.loadRef();
-  if (left.isExotic || right.isExotic) throw new Error("Incomplete block dictionary");
-  loadCurrencyCollection(slice);
-  return walkAug(left.beginParse(), remaining - 1, leaf, budget)
-    + walkAug(right.beginParse(), remaining - 1, leaf, budget);
 }
 
 function decodeHeader(data, identity) {
@@ -85,28 +61,15 @@ function decodeHeader(data, identity) {
     parents = [ref(previous, workchain_id, after_split ? (shardValue ^ tag) | (tag << 1n) : shardValue)];
   }
   if (extra.loadUint(32) !== 0x4a33f6fd) throw new Error("Invalid BlockExtra tag");
-  extra.loadRef(); extra.loadRef(); const accounts = extra.loadRef().beginParse();
-  const budget = {nodes:131072};
-  let tx_quantity = 0;
-  if (accounts.loadBit()) {
-    const dict = accounts.loadRef();
-    if (dict.isExotic) throw new Error("Incomplete account block dictionary");
-    tx_quantity = walkAug(dict.beginParse(),256,account=>{
-      if(account.loadUint(4)!==5) throw new Error("Invalid AccountBlock tag");
-      account.skip(256);
-      return walkAug(account,64,transaction=>{
-        const cell=transaction.loadRef();
-        if(cell.isExotic || cell.beginParse().loadUint(4)!==7) throw new Error("Invalid Transaction leaf");
-        return 1;
-      },budget);
-    },budget);
-  }
+  extra.loadRef(); extra.loadRef(); const accounts = extra.loadRef();
+  if (accounts.isExotic) throw new Error("Incomplete account blocks");
+  const { transactionCount: tx_quantity, transaction_fee_stats } = decodeAccountBlockTransactions(accounts.beginParse());
   const rand_seed = extra.loadBuffer(32).toString("hex"), created_by = extra.loadBuffer(32).toString("hex");
   return {workchain_id,shard,seqno,root_hash,file_hash,global_id,version,not_master,after_merge,before_split,after_split,
     want_split,want_merge,key_block,vert_seqno_incr,flags,vert_seqno,gen_utime,start_lt,end_lt,
     gen_validator_list_hash_short,gen_catchain_seqno,min_ref_mc_seqno,prev_key_block_seqno,...software,
     ...(master ? {master_ref:idOf(master)} : {}),prev_refs:parents.map(idOf),_prev_blocks:parents,
-    tx_quantity,rand_seed,created_by,value_flow:decodeValueFlow(data).value_flow};
+    tx_quantity,transaction_fee_stats,rand_seed,created_by,value_flow:decodeValueFlow(data).value_flow};
 }
 
 // Dedicated, finite context transport. No reconnection timer, stream engine,

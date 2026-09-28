@@ -1,4 +1,5 @@
 import { AddressTxSummary, Block, ChainStats } from './electrs.interface';
+import type { TonBlockTransactionFees } from '@app/shared/native-view.types';
 
 export interface OptimizedMempoolStats {
   added: number;
@@ -220,6 +221,7 @@ export interface PoolStat {
 }
 
 export interface BlockExtension {
+  transactionFees?: TonBlockTransactionFees | null;
   totalFees?: number;
   medianFee?: number;
   minFee?: number;

@@ -1,4 +1,4 @@
-import { blockValueDetails } from '@app/shared/block-format';
+import { transactionFeeView } from '@app/shared/block-format';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable, Subscription, delay, filter, tap } from 'rxjs';
 import { StateService } from '@app/services/state.service';
@@ -24,7 +24,7 @@ interface BlockchainBlock extends BlockExtended {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
-  blockValueDetails = blockValueDetails;
+  transactionFeeView = transactionFeeView;
   @Input() suppliedBlocks?: Array<BlockExtended | null>;
   @Input() suppliedSelectedBlockId?: string;
   @Input() suppliedBoundarySlots: number[] = [];

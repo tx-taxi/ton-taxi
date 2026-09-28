@@ -4,6 +4,7 @@ const crypto = require("node:crypto");
 const { Cell, loadCurrencyCollection } = require("@ton/core");
 const { Functions } = require("ton-lite-client/dist/schema");
 const { decodeShardTargets } = require("./shard-targets.cjs");
+const { decodeBlockTransactionFees, matchingTransactionFees } = require("./block-transaction-fees.cjs");
 
 const GLOBAL_CONFIG_URL = "https://ton.org/global.config.json";
 const BLOCK_TAG = 0x11ef55aa;
@@ -211,7 +212,12 @@ class BlockEconomics {
             attemptTimeout, "Lite server request timed out", () => this.closeSlot(slot),
           );
           const value_flow = verifyBlockBoc(response.data, identity);
-          return {value_flow, ...(identity.workchain === -1 ? {shard_refs: decodeShardTargets(response.data)} : {})};
+          // Fees are optional enrichment of these same authenticated bytes.
+          // A missing/unsupported transaction shape must not pause confirmed
+          // blocks whose identity and protocol economics already verified.
+          let transaction_fee_stats = null;
+          try { transaction_fee_stats = decodeBlockTransactionFees(response.data); } catch { /* Unavailable, never partial or zero. */ }
+          return {value_flow, transaction_fee_stats, ...(identity.workchain === -1 ? {shard_refs: decodeShardTargets(response.data)} : {})};
         } catch (error) {
           lastError = error;
           this.closeSlot(slot);
@@ -227,17 +233,18 @@ class BlockEconomics {
     const identity = blockIdentity(header);
     const key = this.cacheKey(identity);
     const cached = this.cache.get(key);
-    if (cached && cached.expires > Date.now()) return { ...header, ...cached.fields };
-    if (this.inFlight.has(key)) return this.inFlight.get(key);
+    const withFees = fields => ({ ...header, ...fields, transaction_fee_stats: matchingTransactionFees(header, fields.transaction_fee_stats) });
+    if (cached && cached.expires > Date.now()) return withFees(cached.fields);
+    if (this.inFlight.has(key)) return this.inFlight.get(key).then(withFees);
     const pending = this.getBlock(identity, servers, batchDeadline)
       .then((fields) => {
         this.cache.set(key, { fields, expires: Date.now() + this.cacheTtlMs });
         while (this.cache.size > 512) this.cache.delete(this.cache.keys().next().value);
-        return { ...header, ...fields };
+        return fields;
       })
       .finally(() => this.inFlight.delete(key));
     this.inFlight.set(key, pending);
-    return pending;
+    return pending.then(withFees);
   }
 
   hydrate(headers) {

@@ -37,6 +37,13 @@ function cachedHeader(collector, identity) {
   return cached && headerIdentity(cached).id === identity.id ? cached : null;
 }
 
+function cachedVerifiedHeader(provider, collector, requestedId) {
+  const identity = blockIdentity(requestedId);
+  const observed = cachedHeader(collector, identity);
+  const contextual = headerSources.get(provider)?.cached([identity.id]).get(identity.id);
+  return observed?.transaction_fee_stats ? observed : contextual || observed;
+}
+
 function sideLimit(value, fallback) {
   if (value == null) return fallback;
   if (!/^\d+$/.test(String(value))) throw new ProviderError("Invalid context window", 400);
@@ -232,4 +239,4 @@ function blockContext(provider, collector, id, query, options = {}) {
   return entry.promise;
 }
 
-module.exports = { blockContext, blockIdentity, readHeader };
+module.exports = { blockContext, blockIdentity, readHeader, cachedVerifiedHeader };

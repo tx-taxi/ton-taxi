@@ -1,0 +1,83 @@
+[
+  {
+    "file": "block-0-100043794.boc",
+    "header": {
+      "workchain_id": 0,
+      "shard": "8000000000000000",
+      "seqno": 100043794,
+      "root_hash": "230bc05e13688983c89a0594a97b77d74ed61bed9710039cea125829fd41b1f5",
+      "file_hash": "1ebda41dc869cf7700c1e3ecb6e88ac1a25160904ced826775d431221e679884",
+      "tx_quantity": 2,
+      "gen_utime": 1790573031,
+      "prev_refs": [
+        "(0,8000000000000000,100043793)"
+      ]
+    },
+    "expected": {
+      "transactionCount": 2,
+      "total": "527295",
+      "min": "38469",
+      "max": "488826",
+      "median": "263647",
+      "medianExact": {
+        "remainder": "1",
+        "denominator": "2"
+      },
+      "complete": true
+    },
+    "protocolCollected": "1000571741"
+  },
+  {
+    "file": "block-0-100043809.boc",
+    "header": {
+      "workchain_id": 0,
+      "shard": "8000000000000000",
+      "seqno": 100043809,
+      "root_hash": "4579c1595a8e6a66ad359e7e346742390bee465e2e798356508b3b080f9f4e28",
+      "file_hash": "f92f172411de663091c289e58866d28d026e098095c484c8173993c6cec84d3c",
+      "tx_quantity": 0,
+      "gen_utime": 1790573037,
+      "prev_refs": [
+        "(0,8000000000000000,100043808)"
+      ]
+    },
+    "expected": {
+      "transactionCount": 0,
+      "total": "0",
+      "min": null,
+      "max": null,
+      "median": null,
+      "medianExact": null,
+      "complete": true
+    },
+    "protocolCollected": "1000000000"
+  },
+  {
+    "file": "block--1-95551090.boc",
+    "header": {
+      "workchain_id": -1,
+      "shard": "8000000000000000",
+      "seqno": 95551090,
+      "root_hash": "c63052f71638aeeee12f24631d01d3f89db55170a736be867dccd23c41b415a8",
+      "file_hash": "87d2fce26cc1dc0f04deb5304b12fe55d1019ab384c25ccbd0ea78fd5d5bd409",
+      "tx_quantity": 3,
+      "gen_utime": 1790573041,
+      "prev_refs": [
+        "(-1,8000000000000000,95551089)"
+      ]
+    },
+    "expected": {
+      "transactionCount": 3,
+      "total": "0",
+      "min": "0",
+      "max": "0",
+      "median": "0",
+      "medianExact": {
+        "remainder": "0",
+        "denominator": "1"
+      },
+      "complete": true
+    },
+    "protocolCollected": "2702756237"
+  }
+]
