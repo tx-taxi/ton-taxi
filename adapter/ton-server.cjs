@@ -11,15 +11,18 @@ const { PendingCollector } = require("./ton/pending.cjs");
 const { PendingInclusions } = require("./ton/pending-inclusions.cjs");
 const { tonApiKey } = require("./ton/credentials.cjs");
 const { api } = require("./ton/api.cjs");
+const { blockSelection } = require("./ton/block-selection.cjs");
 const provider = new Provider(),
-  collector = new Collector(provider, { onUpdate: value => broadcast({...value, tonPending: pending.snapshot()}) }),
+  collector = new Collector(provider, { basechain: true, onUpdate: () => broadcastSelected(selection => snapshot(selection)) }),
   sockets = new Set();
 const pendingKey = tonApiKey();
 const pending = new PendingCollector({key: pendingKey, onUpdate: value => {
-  const {observedAt, stale} = collector.dashboard();
   // Pending traffic cannot postpone the browser's view of a stalled head.
   // This is the original block observation time, never the pending receipt time.
-  broadcast({tonPending: value, ton: {observedAt, stale}});
+  broadcastSelected(selection => {
+    const {observedAt, stale, workchain, shard} = collector.dashboard(selection);
+    return {tonPending: value, ton: {observedAt, stale, workchain, shard}};
+  });
 }});
 const inclusions = new PendingInclusions({
   key: pendingKey,
@@ -27,7 +30,7 @@ const inclusions = new PendingInclusions({
   onConfirm: value => pending.confirm(value),
   onStatus: value => pending.setReconciliationState(value.state === "live" ? "ready" : value.state),
 });
-const snapshot = () => ({...collector.snapshot(), tonPending: pending.snapshot()});
+const snapshot = selection => ({...collector.snapshot(selection), tonPending: pending.snapshot()});
 const root = path.resolve(
   process.env.TON_STATIC_ROOT ||
     path.join(__dirname, "../frontend/dist/mempool/browser"),
@@ -85,14 +88,19 @@ const server = http.createServer(async (req, res) => {
     }
     if (url.pathname === "/healthz")
       return json(res, { status: "ok", chain: "ton" });
-    if (url.pathname === "/api/provider-health")
+    if (url.pathname === "/api/provider-health") {
+      const dashboard = collector.dashboard();
       return json(res, {
         ...provider.health(),
-        observedAt: collector.observedAt,
-        stale: collector.dashboard().stale,
+        observedAt: dashboard.observedAt,
+        stale: dashboard.stale,
+        workchain: dashboard.workchain,
+        shard: dashboard.shard,
         blocks: collector.health(),
+        basechain: collector.basechain?.health?.(),
         pending: {...pending.health(), inclusions: inclusions.health()},
       });
+    }
     if (url.pathname === "/api/ton/pending") return json(res, pending.snapshot());
     if (url.pathname.startsWith("/api/ton/")) {
       const data = await withDeadline(() => api(url, provider, collector));
@@ -109,10 +117,13 @@ const server = http.createServer(async (req, res) => {
     }
     if (/^\/api\/v1\/blocks\/\d+$/.test(url.pathname)) {
       const height = Number(url.pathname.split("/").pop());
+      const selection = blockSelection(url.searchParams);
+      const query = new URLSearchParams({limit:"10", before:String(height + 1), workchain:String(selection.workchain)});
+      if (selection.shard) query.set("shard", selection.shard);
       const result = await withDeadline(() =>
         api(
           new URL(
-            "http://localhost/api/ton/blocks?limit=10&before=" + (height + 1),
+            "http://localhost/api/ton/blocks?" + query,
           ),
           provider,
           collector,
@@ -124,11 +135,12 @@ const server = http.createServer(async (req, res) => {
       );
     }
     if (url.pathname === "/api/v1/blocks" || url.pathname === "/api/blocks") {
+      const selection = blockSelection(url.searchParams);
       if (!collector.blocks.length) await collector.refresh();
-      return json(res, collector.dashboard().blocks);
+      return json(res, collector.dashboard(selection).blocks);
     }
     if (url.pathname === "/api/v1/init-data")
-      return json(res, snapshot());
+      return json(res, snapshot(blockSelection(url.searchParams)));
     if (url.pathname.startsWith("/api/"))
       return json(res, { error: "Not found" }, 404);
     let filename = path.resolve(root, "." + decodeURIComponent(url.pathname));
@@ -199,7 +211,13 @@ server.on("upgrade", (req, socket, head) => {
     socket.destroy();
     return;
   }
-  wss.handleUpgrade(req, socket, head, (ws) => wss.emit("connection", ws));
+  let selection;
+  try { selection = blockSelection(new URL(req.url, "http://localhost").searchParams); }
+  catch { socket.end("HTTP/1.1 400 Bad Request\r\nConnection: close\r\n\r\n"); return; }
+  wss.handleUpgrade(req, socket, head, (ws) => {
+    ws.tonSelection = selection;
+    wss.emit("connection", ws);
+  });
 });
 wss.on("connection", (socket) => {
   sockets.add(socket);
@@ -208,26 +226,33 @@ wss.on("connection", (socket) => {
   socket.on("message", async (raw) => {
     try {
       const message = JSON.parse(raw);
+      if (message.action === "select" || (message.action === "init" && (Object.hasOwn(message, "workchain") || Object.hasOwn(message, "shard"))))
+        socket.tonSelection = blockSelection(message);
       if (message.action === "ping") {
-        const {observedAt, stale} = collector.dashboard();
+        const {observedAt, stale, workchain, shard} = collector.dashboard(socket.tonSelection);
         // A healthy browser connection must not hide a stale upstream feed.
-        socket.send(JSON.stringify({ pong: true, ton: {observedAt, stale} }));
+        socket.send(JSON.stringify({ pong: true, ton: {observedAt, stale, workchain, shard} }));
       }
-      if (message.action === "init" || message['refresh-blocks']) {
+      if (message.action === "init" || message.action === "select" || message['refresh-blocks']) {
         if (!collector.blocks.length) await collector.refresh();
-        if (socket.readyState === 1) socket.send(JSON.stringify(snapshot()));
+        if (socket.readyState === 1) socket.send(JSON.stringify(snapshot(socket.tonSelection)));
       }
     } catch {
       if (socket.readyState === 1) socket.send(JSON.stringify({ ton: { stale: true } }));
     }
   });
 });
-function broadcast(value) {
-  const snapshot = JSON.stringify(value);
+function broadcastSelected(valueForSelection) {
+  const serialized = new Map();
   for (const socket of sockets) {
     if (socket.readyState !== 1) continue;
     if (socket.bufferedAmount > 2 * 1024 * 1024) socket.close(1013, "Reconnect for current blocks");
-    else socket.send(snapshot);
+    else {
+      const selection = socket.tonSelection || {workchain:0};
+      const key = `${selection.workchain}:${selection.shard || "default"}`;
+      if (!serialized.has(key)) serialized.set(key, JSON.stringify(valueForSelection(selection)));
+      socket.send(serialized.get(key));
+    }
   }
 }
 (async () => {

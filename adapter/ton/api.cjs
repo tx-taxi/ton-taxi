@@ -3,6 +3,7 @@ const { ProviderError } = require("./provider.cjs");
 const { canonicalBlock, normalize } = require("./collector.cjs");
 const { blockContext } = require("./block-context.cjs");
 const { LatestNetworkWindow } = require("./latest-network-window.cjs");
+const { blockSelection } = require("./block-selection.cjs");
 const enc = encodeURIComponent;
 const networkSources = new Map();
 const latestNetworkWindows = new WeakMap();
@@ -114,33 +115,50 @@ async function api(url, provider, collector) {
     return get("/v2/staking/pool/" + enc(id), 30000);
   }
   if (kind === "dashboard") {
+    const selection = blockSelection(q);
     if (!collector.blocks.length) await collector.refresh();
-    return collector.dashboard();
+    return collector.dashboard(selection);
   }
   if (kind === "blocks") {
+    const selection = blockSelection(q);
     if (!collector.blocks.length) await collector.refresh();
+    const dashboard = collector.dashboard(selection);
+    const shard = selection.workchain === -1 ? "8000000000000000" : selection.shard || dashboard.shard;
     const before = q.get("before");
     if (before && !/^\d+$/.test(before))
       throw new ProviderError("Invalid block height", 400);
     const start = before
       ? Number(before) - 1
-      : Number(collector.blocks[0].seqno);
+      : Number(dashboard.head?.seqno);
     const limit = Math.min(16, limitParam(q));
     const blocks = [];
-    let partial = false;
+    let partial = false, boundary = false;
     const readHeaders = async () => {
       for (let i = 0; i < limit && start - i > 0; i++) {
-        const cached = collector.cached?.(start - i);
-        try { blocks.push(cached ? { ...cached, _meta: {observedAt:collector.observedAt, stale:false, provider:"verified-block-stream"} } : await get("/v2/blockchain/blocks/" + enc(canonicalBlock(String(start - i))),86400000)); }
+        const id = `(${selection.workchain},${shard},${start - i})`;
+        const cached = selection.workchain === -1 ? collector.cached?.(start - i) : collector.basechain?.cached(start - i, shard);
+        try {
+          const header = cached ? { ...cached, _meta: {observedAt:dashboard.observedAt, stale:false, provider:"verified-block-stream"} } : await get("/v2/blockchain/blocks/" + enc(id),86400000);
+          if (`(${header.workchain_id},${header.shard},${header.seqno})` !== id)
+            throw new ProviderError("Block header does not match requested identity", 502);
+          blocks.push(header);
+          if (!Array.isArray(header.prev_refs) || header.prev_refs.length !== 1 || header.prev_refs[0] !== `(${selection.workchain},${shard},${start - i - 1})`) {
+            boundary = true;
+            break;
+          }
+        }
         catch (error) { if (!blocks.length) throw error; partial = true; break; }
       }
     };
     const deadline = Math.min(provider.context?.getStore()?.deadline || Infinity,Date.now()+20000);
-    if (provider.context) await provider.context.run({deadline},readHeaders); else await readHeaders();
+    if (shard && Number.isSafeInteger(start)) {
+      if (provider.context) await provider.context.run({deadline},readHeaders); else await readHeaders();
+    }
     return {
       blocks,
-      _meta: {partial,stale:blocks.some(block=>block._meta?.stale),observedAt:blocks[0]?._meta?.observedAt},
-      _paging: {nextBefore:blocks.at(-1)?.seqno,hasMore:Number(blocks.at(-1)?.seqno)>1},
+      workchain: selection.workchain, shard, activeShards: dashboard.activeShards || [],
+      _meta: {partial,stale:!blocks.length || blocks.some(block=>block._meta?.stale),observedAt:blocks[0]?._meta?.observedAt || dashboard.observedAt},
+      _paging: {nextBefore:boundary ? null : blocks.at(-1)?.seqno,hasMore:!boundary && Number(blocks.at(-1)?.seqno)>1,workchain:selection.workchain,shard,boundary},
     };
   }
 
