@@ -43,7 +43,7 @@ export class RewardStatsComponent implements OnInit {
   rewardRows(stats: EthereumRewardStats | ConfirmedDashboardData): { label: string; tooltip: string; amount?: NativeAmount; value?: number; belowAtomicUnit?: boolean; suffix: string; digits: string }[] {
     if (this.confirmedMode) {
       const data = stats as ConfirmedDashboardData;
-      const sample = `${data.source.returned} confirmed transactions${data.source.masterSeqno ? ` in masterchain block #${data.source.masterSeqno}` : ''}${data.source.partial ? ' (partial sample)' : ''}.`;
+      const sample = `${data.source.returned} confirmed transactions${data.source.masterSeqno ? ` confirmed by masterchain block #${data.source.masterSeqno}` : ''}${data.source.partial ? ' (partial sample)' : ''}.`;
       const amounts = [data.fees.count ? data.fees.sum : null, data.phaseFees.compute.sum, data.fees.mean];
       const descriptions = [`Total reported transaction fees (${data.fees.count} known).`, `Compute-phase gas fees (${data.phaseFees.compute.count} known).`, `Average reported fee across ${data.fees.count} transactions, rounded down to a whole nanogram when necessary.`];
       return amounts.map((atomic, index) => {

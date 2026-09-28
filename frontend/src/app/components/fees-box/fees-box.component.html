@@ -15,7 +15,7 @@
         <div class="card-text">
           <div class="fee-text" [ngbTooltip]="row.tooltip" placement="bottom">
             <ng-container *ngIf="row.belowAtomicUnit; else amountValue">&lt;1 <span>nanogram</span></ng-container>
-            <ng-template #amountValue><app-amount *ngIf="row.amount; else feeRate" [amount]="row.amount" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
+            <ng-template #amountValue><app-amount *ngIf="row.amount; else feeRate" [amount]="row.amount" displayMode="sats" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
             <ng-template #feeRate><app-fee-rate [fee]="row.rate" [dp]="1"></app-fee-rate></ng-template>
           </div>
           <span class="fiat">

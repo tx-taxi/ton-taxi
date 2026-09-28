@@ -1,10 +1,10 @@
-/** Pure, chain-owned projection of a bounded confirmed masterchain window. */
+/** Pure, chain-owned projection of a bounded cross-shard confirmation window. */
 export interface ConfirmedTransactionWindowSource {
   kind: 'confirmed-masterchain';
   masterSeqno: string | null;
   requestedLimit: number;
   returned: number;
-  /** Complete only for the selected masterchain block, never network-wide. */
+  /** Complete only for transactions confirmed by the selected masterchain block. */
   complete: boolean;
   partial: boolean;
   observedAt?: string;

@@ -76,7 +76,7 @@ export class DifficultyComponent implements OnInit {
       metric: successRate,
       metricLabel: 'Successful transactions',
       barLabel: 'Successful transactions in the confirmed sample',
-      barTooltip: known ? `${successful} successful of ${known} transactions with a reported outcome${unknown ? `; ${unknown} outcomes unavailable` : ''}${sample?.masterSeqno ? ` in masterchain block #${sample.masterSeqno}` : ''}${sample?.partial ? ' (partial sample)' : ''}.` : 'No transaction outcomes are available for this confirmed sample.',
+      barTooltip: known ? `${successful} successful of ${known} transactions with a reported outcome${unknown ? `; ${unknown} outcomes unavailable` : ''}${sample?.masterSeqno ? ` confirmed by masterchain block #${sample.masterSeqno}` : ''}${sample?.partial ? ' (partial sample)' : ''}.` : 'No transaction outcomes are available for this confirmed sample.',
       shapes: filled === null ? [] : [
         ...(filled > 0 ? [{ x: 0, y: 0, w: filled, h: 9, status: 'mined' as const }] : []),
         ...(filled < NETWORK_BAR_WIDTH ? [{ x: filled, y: 0, w: NETWORK_BAR_WIDTH - filled, h: 9, status: 'remaining' as const }] : []),

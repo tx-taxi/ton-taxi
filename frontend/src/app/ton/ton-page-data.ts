@@ -111,7 +111,7 @@ export class TonPageData implements OnInit, OnDestroy {
         description=`View TON ${this.title().toLowerCase()} ${this.id}.`;
         if(this.page === 'address' && this.data)description=`TON account ${this.data.name || this.id}. ${this.amount(this.data.balance)} GRAM · ${this.data.status || ''}`;
         if(['tx','message'].includes(this.page) && this.data)description=`TON transaction ${this.id}. ${this.data.success === false ? 'Failed' : this.data.success === true ? 'Confirmed' : 'Transaction'} · ${this.amount(this.data.total_fees)} GRAM fees.`;
-        if(this.page === 'block' && this.data)description=`TON block ${this.data.seqno}. ${this.data.tx_quantity} transactions · ${this.amount(this.data.value_flow?.fees_collected?.grams)} GRAM fees.`;
+        if(this.page === 'block' && this.data)description=`TON block ${this.data.seqno}. ${this.data.tx_quantity} transactions · ${this.amount(this.data.value_flow?.fees_collected?.grams)} GRAM collected fees.`;
         if(['nft','collection','jetton'].includes(this.page) && this.data)description=`${this.title()} ${name || this.id} on TON. ${this.data.metadata?.description || ''}`;
       }
       this.seo.setTitle(title.slice(0,200));

@@ -5,7 +5,7 @@
       <div class="card-text">
         <div class="fee-text">
           <ng-container *ngIf="row.belowAtomicUnit; else amountValue">&lt;1 <span>nanogram</span></ng-container>
-          <ng-template #amountValue><app-amount *ngIf="row.amount; else legacyAmount" [amount]="row.amount" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
+          <ng-template #amountValue><app-amount *ngIf="row.amount; else legacyAmount" [amount]="row.amount" displayMode="sats" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
           <ng-template #legacyAmount><app-amount [satoshis]="row.value" [digitsInfo]="row.digits" [noFiat]="true" [ignoreViewMode]="true"></app-amount></ng-template>
           <span *ngIf="row.suffix">{{ row.suffix }}</span>
         </div>
