@@ -20,6 +20,7 @@
 </ng-container>
 
   <div *ngIf="nativeRoute && tonData.error" class="alert alert-mempool" role="alert">{{ tonData.error }}</div>
+  <div *ngIf="nativeRoute && (tonData.data?.stale || tonData.data?._meta?.stale)" class="alert alert-mempool" role="status">Reconnecting…</div>
   <div style="min-height: 295px" *ngIf="!nativeRoute || !tonData.error">
     <table class="table table-borderless">
       <thead>

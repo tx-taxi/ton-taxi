@@ -10,8 +10,10 @@ The footer/header and entity context layout are unchanged. Numeric search uses t
 
 Validation:
 
-- `node --experimental-strip-types --test frontend/src/app/ton/chain-selection.test.mjs`: five actual controller/cache behavior checks passed, covering lower-height selection, cross-shard height collisions, delayed responses, initial list recovery and scoped search/cancellation.
+- `node --experimental-strip-types --test frontend/src/app/ton/chain-selection.test.mjs`: six actual controller/cache behavior checks passed, covering lower-height selection, cross-shard height collisions, delayed responses, initial list recovery scoped search/cancellation, and a slower dashboard response refreshing history without moving the live head backward. The last case failed against the prior implementation, which discarded all snapshot history when a WebSocket head was newer.
 - `node frontend/node_modules/@angular/compiler-cli/bundles/src/bin/ngc.js --noEmit -p frontend/tsconfig.app.json`: passed with the root integrator's exact selection-aware `services/hub-snapshot.ts` overlaid from `/home/lukee/dev/ton-basechain-integration`.
 - `git diff --check`: passed. No new visual component or stylesheet; no screenshots claimed by this candidate.
 
 Integration contract: `/api/ton/dashboard`, `/api/ton/blocks`, `/api/v1/init-data`, `/api/v1/blocks/:from`, `/api/ton/resolve` and `/api/v1/ws` accept workchain/shard. Dashboard includes selected workchain/shard, activeShards and masterchainHead. Native API blocks are raw headers; compatibility `/api/v1/blocks/:from` returns strip DTOs. The root-owned `readHubSnapshot` fourth argument validates selected workchain/shard. Exported BlockchainBlocks uses existing `blocksSubject$` subscription, with no new injected service and no `.value` access.
+
+Independent seam review: backend owner confirmed selected dashboard/masterchainHead, inclusive compatibility paging and numeric search contracts. The list now exposes the same existing Reconnecting alert as home when its selected feed is stale. No new visual primitive or CSS.

@@ -138,3 +138,25 @@ test('numeric search carries the selected workchain and discards a result after 
   requests[1].response.next({ type: 'block', id: '(-1,8000000000000000,100000000)' });
   assert.deepEqual(navigations, [['/', 'block', '(-1,8000000000000000,100000000)']]);
 });
+
+test('a slower dashboard response refreshes history without moving the live head backward', () => {
+  const { TonNetworkData } = loadService('./ton-network-data.service.ts', {
+    './ton-page-data': { TonPageData: class {} }, './chain-selection': selection,
+  });
+  const page = Object.create(TonNetworkData.prototype);
+  const response = new Subject();
+  const live = block(0, rootShard, 100039008);
+  page.selection = { current: { workchain: 0 } };
+  page.nativeRoute = 'dashboard'; page.generation = 1; page.dashboardRequestSequence = 0;
+  page.data = { head: live.ton, blocks: [live], shard: rootShard, history: [] };
+  page.blocks = [live]; page.requests = { add() {} };
+  page.getNative = () => response;
+  page.loadDashboardTransactions = () => {};
+  page.updateMetadata = () => {};
+  page.loadBlocks('/api/ton/dashboard', true);
+  const history = [{ seqno: '100039007', timestamp: 1790570275, fees: '123456' }];
+  response.next({ head: block(0, rootShard, 100039007).ton, blocks: [block(0, rootShard, 100039007)], shard: rootShard, history });
+  assert.deepEqual(page.data.history, history);
+  assert.equal(page.data.head.seqno, 100039008);
+  assert.equal(page.blocks[0].height, 100039008);
+});

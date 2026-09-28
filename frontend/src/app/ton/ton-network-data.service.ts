@@ -65,9 +65,11 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
         if (!current()) return;
         if (this.nativeRoute === 'dashboard') this.loadDashboardTransactions(result.masterchainHead?.seqno || (this.workchain === -1 ? result.head?.seqno : undefined));
         // A live head may have arrived while this HTTP snapshot was in flight.
-        if (this.nativeRoute === 'dashboard' && result.shard === this.data?.shard && Number(result.head?.seqno) < Number(this.data?.head?.seqno)) return;
-        this.data = result;
-        const observed = result.blocks || [];
+        // Keep that head, but still accept the snapshot's history and shard inventory.
+        const liveAhead = this.nativeRoute === 'dashboard' && result.shard === this.data?.shard
+          && Number(result.head?.seqno) < Number(this.data?.head?.seqno);
+        this.data = liveAhead ? { ...result, head: this.data.head, blocks: this.data.blocks } : result;
+        const observed = this.data.blocks || [];
         this.blocks = this.nativeRoute === 'blocks' ? this.consecutivePrefix(observed) : observed;
         const last = this.blocks[this.blocks.length - 1];
         this.nextBefore = result._paging?.nextBefore || (last ? String(last.ton?.seqno || last.seqno || last.height) : null);
