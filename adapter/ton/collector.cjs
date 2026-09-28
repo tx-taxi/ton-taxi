@@ -38,6 +38,9 @@ function normalize(b) {
 class Collector {
   constructor(provider, options = {}) {
     this.provider = provider;
+    this.workchain = String(options.workchain ?? -1);
+    this.shard = options.shard || "8000000000000000";
+    this.forceRecentRecovery = false;
     this.index = options.index || new (require("./block-index.cjs").BlockIndex)();
     this.economics = options.economics || new (require("./block-economics.cjs").BlockEconomics)();
     this.now = options.now || Date.now;
@@ -60,6 +63,7 @@ class Collector {
       onHead: event => { this.acceptHead(event).catch(() => {}); },
       onStatus: health => this.setStreamStatus(health),
     });
+    if (options.basechain) this.basechain = new (require("./basechain-collector.cjs").BasechainCollector)(this, Collector);
   }
   async restore() {
     try {
@@ -75,8 +79,8 @@ class Collector {
       this.historyGaps = Array.isArray(saved.historyGaps) ? saved.historyGaps.slice(-HISTORY_GAP_LIMIT).filter(gap =>
         Number.isSafeInteger(Number(gap?.fromSeqno)) && Number(gap.fromSeqno) > 0 &&
         Number.isSafeInteger(Number(gap?.toSeqno)) && Number(gap.toSeqno) >= Number(gap.fromSeqno) &&
-        gap.reason === "retention-window-exceeded" && typeof gap.observedAt === "string" && Number.isFinite(Date.parse(gap.observedAt))
-      ).map(({fromSeqno, toSeqno, observedAt}) => ({fromSeqno: String(fromSeqno), toSeqno: String(toSeqno), observedAt, reason: "retention-window-exceeded"})) : [];
+        ["retention-window-exceeded", "shard-lineage-changed"].includes(gap.reason) && typeof gap.observedAt === "string" && Number.isFinite(Date.parse(gap.observedAt))
+      ).map(({fromSeqno, toSeqno, observedAt, reason}) => ({fromSeqno: String(fromSeqno), toSeqno: String(toSeqno), observedAt, reason})) : [];
       this.observedAt = saved.observedAt || null;
       this.target = Number(blocks[0].seqno);
       this.reconcile = true;
@@ -91,6 +95,7 @@ class Collector {
   setStreamStatus(health) {
     const previous = this.streamState;
     this.streamState = health.state;
+    this.basechain?.setStreamStatus(health);
     if (health.state === "live" && previous !== "live" && this.blocks.length) {
       this.reconcile = true;
       this.reconcileGeneration++;
@@ -104,7 +109,7 @@ class Collector {
     return this.refresh();
   }
   needsWork() {
-    return !this.blocks.length || this.reconcile || Number(this.blocks[0].seqno) < this.target;
+    return !this.blocks.length || this.reconcile || this.forceRecentRecovery || Number(this.blocks[0].seqno) < this.target;
   }
   refresh() {
     if (this.stopped) return Promise.resolve(this.dashboard());
@@ -127,7 +132,7 @@ class Collector {
     const byHeight = new Map();
     for (const block of input) {
       const height = Number(block.seqno);
-      if (!Number.isSafeInteger(height) || height <= 0 || String(block.workchain_id) !== "-1" || block.shard !== "8000000000000000" || !/^[a-f0-9]{64}$/.test(block.root_hash || "")) throw new Error("Invalid masterchain header");
+      if (!Number.isSafeInteger(height) || height <= 0 || String(block.workchain_id) !== this.workchain || block.shard !== this.shard || !/^[a-f0-9]{64}$/.test(block.root_hash || "")) throw new Error("Invalid block lineage");
       const previous = byHeight.get(height);
       if (previous && previous.root_hash !== block.root_hash) throw new Error("Conflicting masterchain headers");
       byHeight.set(height, block);
@@ -146,7 +151,7 @@ class Collector {
       if (typeof grams !== "string" || !/^\d+$/.test(grams)) throw new Error("Block economics unavailable");
     }
   }
-  async commit(incoming, reconcileGeneration, recentRecovery = false) {
+  async commit(incoming, reconcileGeneration, recentRecovery = false, lineageBoundary = false) {
     const prior = Number(this.blocks[0]?.seqno || 0);
     if (!incoming.length || Number(incoming.at(-1).seqno) < prior) return;
     // Only a verified recent-window recovery may detach the retained header
@@ -158,7 +163,7 @@ class Collector {
     const observedAt = new Date(this.now()).toISOString();
     const historyGaps = detached ? [...this.historyGaps, {
       fromSeqno: String(prior + 1), toSeqno: String(Number(incoming[0].seqno) - 1),
-      reason: "retention-window-exceeded", observedAt,
+      reason: lineageBoundary ? "shard-lineage-changed" : "retention-window-exceeded", observedAt,
     }].slice(-HISTORY_GAP_LIMIT) : this.historyGaps;
     const samples = new Map(this.history.map(b => [Number(b.seqno), b]));
     for (const block of incoming) samples.set(Number(block.seqno), {
@@ -176,6 +181,8 @@ class Collector {
     this.observedAt = observedAt;
     this.lastError = null;
     this.failures = 0;
+    this.forceRecentRecovery = false;
+    this.basechain?.acceptMaster(this.blocks[0]);
     if (reconcileGeneration === this.reconcileGeneration) this.reconcile = false;
     this.onUpdate(this.snapshot());
   }
@@ -187,15 +194,16 @@ class Collector {
         // Replaying more than the entire retained history only delays the live
         // strip while decoding headers that will immediately be evicted. Fetch
         // one complete recent indexed batch, then resume ordinary range repair.
-        const recentRecovery = !!head && this.target - Number(head.seqno) > HISTORY_LIMIT;
+        let recentRecovery = !!head && (this.forceRecentRecovery || this.target - Number(head.seqno) > HISTORY_LIMIT);
         // Re-read the cursor itself after reconnect, so a same-height canonical
         // replacement is not hidden by a height-only deduplication rule.
         const afterBlock = recentRecovery ? undefined : this.reconcile ? this.blocks[1] : head;
         const result = await this.index.list({afterBlock, limit: recentRecovery ? RECOVERY_WINDOW : head ? 32 : 16});
         if (this.stopped) break;
         if (result.gap && !result.blocks?.length) throw new Error("Missing masterchain header");
+        if (result.lineageBoundary) recentRecovery = true;
         let incoming = this.ordered(result.blocks || []);
-        if (recentRecovery && (result.gap || incoming.length !== RECOVERY_WINDOW || incoming.some((block, i) => i > 0 && !block.prev_refs?.includes(blockId(incoming[i - 1]))))) throw new Error("Incomplete recent masterchain window");
+        if (recentRecovery && (result.gap || (!incoming.length || incoming.length !== RECOVERY_WINDOW && !(this.workchain === "0" && (incoming[0].after_split || incoming[0].after_merge))) || incoming.some((block, i) => i > 0 && !block.prev_refs?.includes(blockId(incoming[i - 1]))))) throw new Error("Incomplete recent masterchain window");
         if (head) incoming = incoming.filter(b => Number(b.seqno) >= Number(head.seqno));
         if (!incoming.length) break;
         if (head && !recentRecovery && Number(incoming[0].seqno) > Number(head.seqno) + 1) throw new Error("Missing masterchain predecessor");
@@ -205,13 +213,16 @@ class Collector {
           if (reconcileGeneration === this.reconcileGeneration) this.reconcile = false;
           this.lastError = null;
           this.failures = 0;
+          this.forceRecentRecovery = false;
+          this.basechain?.acceptMaster(this.blocks[0]);
           this.onUpdate(this.snapshot());
           break;
         }
         const complete = this.ordered(await this.economics.hydrate(incoming));
         if (complete.length !== incoming.length || complete.some((b,i) => b.root_hash !== incoming[i].root_hash || b.seqno !== incoming[i].seqno)) throw new Error("Incomplete masterchain economics");
         if (this.stopped) break;
-        await this.commit(complete, reconcileGeneration, recentRecovery);
+        await this.commit(complete, reconcileGeneration, recentRecovery, result.lineageBoundary === true || this.historyGapReason === "shard-lineage-changed");
+        this.historyGapReason = null;
         // A reported hole stops here; the next attempt resumes from the last
         // committed cursor. Neither a newer event nor a visitor can skip it.
         if (result.gap) throw new Error("Missing masterchain header");
@@ -228,10 +239,13 @@ class Collector {
     return this.blocks.find(block => Number(block.seqno) === Number(height));
   }
   health() {
-    return {stream: this.stream.health(), index: this.index.health?.(), economics: this.economics.health?.(), cursor: this.blocks[0]?.seqno || null, target: this.target || null, pendingBlocks: Math.max(0, this.target - Number(this.blocks[0]?.seqno || this.target)), historyGaps: this.historyGaps, error: this.lastError};
+    return {stream: this.stream.health(), index: this.index.health?.(), economics: this.economics.health?.(), cursor: this.blocks[0]?.seqno || null, target: this.target || null, pendingBlocks: Math.max(0, this.target - Number(this.blocks[0]?.seqno || this.target)), historyGaps: this.historyGaps, error: this.lastError, ...(this.basechain ? {basechain: this.basechain.health()} : {})};
   }
-  dashboard() {
+  dashboard(selection) {
+    if (this.basechain && String(selection?.workchain ?? 0) === "0") return this.basechain.dashboard(selection?.shard);
     return {
+      workchain: Number(this.workchain), shard: this.shard,
+      ...(this.basechain ? {activeShards: this.basechain.availableShards(), masterchainHead: this.blocks[0] || null} : {}),
       head: this.blocks[0] || null,
       blocks: this.blocks.slice(0, 32).map(normalize),
       history: this.history,
@@ -240,8 +254,8 @@ class Collector {
       stale: this.reconcile || this.streamState !== "live" || !!this.lastError || !this.observedAt || this.now() - Date.parse(this.observedAt) > 45000 || this.now() - Number(this.blocks[0]?.gen_utime || 0) * 1000 > 45000 || this.target - Number(this.blocks[0]?.seqno || 0) > 32,
     };
   }
-  snapshot() {
-    const d = this.dashboard();
+  snapshot(selection) {
+    const d = this.dashboard(selection);
     return {
       blocks: d.blocks,
       "mempool-blocks": [],
@@ -249,12 +263,13 @@ class Collector {
       vBytesPerSecond: 0, transactions: [], loadingIndicators: {},
       // Charts read bounded history via /dashboard. Live fanout needs only one
       // block window and freshness, not another copy of every historical sample.
-      ton: {observedAt: d.observedAt, stale: d.stale, historyGaps: d.historyGaps},
+      ton: {observedAt: d.observedAt, stale: d.stale, historyGaps: d.historyGaps, workchain: d.workchain, shard: d.shard, activeShards: d.activeShards, masterchainHead: d.masterchainHead},
       backendInfo: {chain: "ton"},
     };
   }
   async stop() {
     this.stopped = true;
+    await this.basechain?.stop();
     clearTimeout(this.retry);
     this.stream.stop();
     this.index.stop?.();

@@ -2,8 +2,8 @@
 
 const crypto = require("node:crypto");
 const { Cell, loadCurrencyCollection } = require("@ton/core");
-const { LiteSingleEngine, LiteRoundRobinEngine } = require("ton-lite-client");
 const { Functions } = require("ton-lite-client/dist/schema");
+const { decodeShardTargets } = require("./shard-targets.cjs");
 
 const GLOBAL_CONFIG_URL = "https://ton.org/global.config.json";
 const BLOCK_TAG = 0x11ef55aa;
@@ -36,13 +36,6 @@ const timeout = (promise, milliseconds, message, cancel) => {
     }),
   ]).finally(() => clearTimeout(timer));
 };
-
-function serverHost(server) {
-  const ip = Number(server.ip) >>> 0;
-  return `tcp://${(ip >>> 24) & 255}.${(ip >>> 16) & 255}.${
-    (ip >>> 8) & 255
-  }.${ip & 255}:${server.port}`;
-}
 
 function headerField(header, field) {
   return header?.[field] ?? header?.ton?.[field];
@@ -163,83 +156,99 @@ class BlockEconomics {
     this.cache = new Map();
     this.inFlight = new Map();
     this.engines = new Set();
+    this.slots = Array.from({length: this.concurrency}, (_, index) => ({index, serverIndex: index, engine: null, busy: false}));
+    this.connectionOpens = 0;
+    this.connectionRotations = 0;
     this.stopped = false;
     this.requests = 0;
     this.failures = 0;
     this.lastError = null;
+    this.hydrationQueue = Promise.resolve();
+    this.hydrationPending = 0;
   }
 
   cacheKey(identity) {
     return `${identity.workchain}:${identity.shard}:${identity.seqno}:${identity.rootHash}:${identity.fileHash}`;
   }
 
+  closeSlot(slot) {
+    if (slot.engine) { this.engines.delete(slot.engine); slot.engine.close(); slot.engine = null; }
+  }
+
+  connectSlot(slot, server, deadline) {
+    if (slot.engine?.closed) this.closeSlot(slot);
+    if (slot.engine) return slot.engine;
+    // Reuse the bounded ADNL transport already used by historical contexts.
+    // The SDK engine schedules reconnects after disposal and retries internally.
+    const {Connection} = require("./context-headers.cjs");
+    slot.engine = new Connection(server, deadline);
+    this.engines.add(slot.engine);
+    this.connectionOpens++;
+    return slot.engine;
+  }
+
   async getBlock(identity, servers, batchDeadline) {
+    const slot = this.slots.find(slot => !slot.busy);
+    if (!slot) throw new BlockEconomicsError("Block economics workers busy");
+    slot.busy = true;
     let lastError;
-    const candidates = servers.slice(0, 3);
-    const start = Math.abs(identity.seqno) % candidates.length;
+    const candidates = servers.slice(0, 15);
     const deadline = Math.min(Date.now() + this.timeoutMs, batchDeadline);
-    for (let offset = 0; offset < candidates.length; offset++) {
-      if (this.stopped) throw new BlockEconomicsError("Block economics stopped");
-      const remaining = deadline - Date.now();
-      if (remaining <= 0) break;
-      const attemptTimeout = Math.max(500, Math.min(3000, remaining));
-      const server = candidates[(start + offset) % candidates.length];
-      const engine = new LiteSingleEngine({
-        host: serverHost(server),
-        publicKey: Buffer.from(server.id.key, "base64"),
-        reconnectTimeout: 60000,
-      });
-      const roundRobin = new LiteRoundRobinEngine([engine]);
-      this.engines.add(roundRobin);
-      try {
-        this.requests++;
-        const response = await timeout(
-          roundRobin.query(
-            Functions.liteServer_getBlock,
-            {
+    try {
+      for (let attempt = 0; attempt < 3; attempt++) {
+        if (this.stopped) throw new BlockEconomicsError("Block economics stopped");
+        const remaining = deadline - Date.now();
+        if (remaining <= 0) break;
+        const attemptTimeout = Math.max(500, Math.min(3000, remaining));
+        const roundRobin = this.connectSlot(slot, candidates[slot.serverIndex % candidates.length], Date.now() + attemptTimeout);
+        try {
+          this.requests++;
+          const response = await timeout(
+            roundRobin.query(Functions.liteServer_getBlock, {
               kind: "liteServer.getBlock",
-              id: {
-                kind: "tonNode.blockIdExt",
-                ...identity,
-                rootHash: Buffer.from(identity.rootHash, "hex"),
-                fileHash: Buffer.from(identity.fileHash, "hex"),
-              },
-            },
-            { timeout: Math.max(250, attemptTimeout - 250) },
-          ),
-          attemptTimeout,
-          "Lite server request timed out",
-          () => roundRobin.close(),
-        );
-        return verifyBlockBoc(response.data, identity);
-      } catch (error) {
-        lastError = error;
-      } finally {
-        this.engines.delete(roundRobin);
-        roundRobin.close();
+              id: {kind: "tonNode.blockIdExt", ...identity, rootHash: Buffer.from(identity.rootHash, "hex"), fileHash: Buffer.from(identity.fileHash, "hex")},
+            }, Date.now() + attemptTimeout),
+            attemptTimeout, "Lite server request timed out", () => this.closeSlot(slot),
+          );
+          const value_flow = verifyBlockBoc(response.data, identity);
+          return {value_flow, ...(identity.workchain === -1 ? {shard_refs: decodeShardTargets(response.data)} : {})};
+        } catch (error) {
+          lastError = error;
+          this.closeSlot(slot);
+          slot.serverIndex = (slot.serverIndex + 1) % candidates.length;
+          this.connectionRotations++;
+        }
       }
-    }
-    throw lastError || new Error("No lite server response");
+      throw lastError || new Error("No lite server response");
+    } finally { slot.busy = false; }
   }
 
   async hydrateOne(header, servers, batchDeadline) {
     const identity = blockIdentity(header);
     const key = this.cacheKey(identity);
     const cached = this.cache.get(key);
-    if (cached && cached.expires > Date.now()) return { ...header, value_flow: cached.value_flow };
+    if (cached && cached.expires > Date.now()) return { ...header, ...cached.fields };
     if (this.inFlight.has(key)) return this.inFlight.get(key);
     const pending = this.getBlock(identity, servers, batchDeadline)
-      .then((value_flow) => {
-        this.cache.set(key, { value_flow, expires: Date.now() + this.cacheTtlMs });
+      .then((fields) => {
+        this.cache.set(key, { fields, expires: Date.now() + this.cacheTtlMs });
         while (this.cache.size > 512) this.cache.delete(this.cache.keys().next().value);
-        return { ...header, value_flow };
+        return { ...header, ...fields };
       })
       .finally(() => this.inFlight.delete(key));
     this.inFlight.set(key, pending);
     return pending;
   }
 
-  async hydrate(headers) {
+  hydrate(headers) {
+    if (this.hydrationPending >= 16) return Promise.reject(new BlockEconomicsError("Block economics busy"));
+    this.hydrationPending++;
+    const task = this.hydrationQueue.then(() => this.hydrateBatch(headers)).finally(() => this.hydrationPending--);
+    this.hydrationQueue = task.catch(() => undefined);
+    return task;
+  }
+
+  async hydrateBatch(headers) {
     if (this.stopped) throw new BlockEconomicsError("Block economics stopped");
     if (!Array.isArray(headers)) throw new TypeError("headers must be an array");
     if (!headers.length) return [];
@@ -277,13 +286,17 @@ class BlockEconomics {
       cacheEntries: this.cache.size,
       failures: this.failures,
       lastError: this.lastError,
+      queuedBatches: this.hydrationPending,
+      liteConnections: this.engines.size,
+      connectionOpens: this.connectionOpens,
+      connectionRotations: this.connectionRotations,
       globalConfigCached: Boolean(globalConfig && Date.now() < globalConfigExpires),
     };
   }
 
   stop() {
     this.stopped = true;
-    for (const engine of this.engines) engine.close();
+    for (const slot of this.slots) this.closeSlot(slot);
     this.engines.clear();
     this.inFlight.clear();
   }

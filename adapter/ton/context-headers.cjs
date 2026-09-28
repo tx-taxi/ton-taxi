@@ -282,4 +282,4 @@ class ContextHeaders {
   }
 }
 
-module.exports={ContextHeaders,decodeHeader};
+module.exports={ContextHeaders,decodeHeader,Connection};

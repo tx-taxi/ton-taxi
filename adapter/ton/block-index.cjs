@@ -40,8 +40,8 @@ function blockRef(ref) {
   return `(${integer(ref.workchain, true)},${ref.shard.toLowerCase()},${integer(ref.seqno)})`;
 }
 
-function normalizeBlock(raw) {
-  if (!raw || integer(raw.workchain, true) !== "-1" || raw.shard !== MASTER_SHARD)
+function normalizeBlock(raw, expectedWorkchain = "-1", shard = MASTER_SHARD) {
+  if (!raw || integer(raw.workchain, true) !== String(expectedWorkchain) || raw.shard !== shard)
     throw new BlockIndexError("Unexpected indexed block workchain", 502);
   const { workchain, tx_count, prev_blocks, ...fields } = raw;
   if (!Array.isArray(prev_blocks))
@@ -63,10 +63,11 @@ function normalizeBlock(raw) {
   return block;
 }
 
-function selectConsecutive(raw, afterBlock, limit) {
+function selectConsecutive(raw, afterBlock, limit, {workchain = "-1", shard = MASTER_SHARD, target} = {}) {
   const bySeqno = new Map();
   for (const row of raw) {
-    const block = normalizeBlock(row);
+    const block = normalizeBlock(row, workchain, shard);
+    if (target && BigInt(block.seqno) > BigInt(target.seqno)) continue;
     const old = bySeqno.get(block.seqno);
     if (old && old.root_hash !== block.root_hash)
       throw new BlockIndexError("Conflicting indexed block hashes", 502);
@@ -81,20 +82,25 @@ function selectConsecutive(raw, afterBlock, limit) {
     : ordered.filter((block) => BigInt(block.seqno) > after);
   const blocks = [];
   let expected = after === null ? null : after + 1n;
-  let gap = null;
+  let gap = null, lineageBoundary = false;
   for (const block of candidates) {
     if (blocks.length === limit) break;
     const seqno = BigInt(block.seqno);
+    const ownParent = block.prev_refs.includes(`(${workchain},${shard},${seqno - 1n})`);
+    const topologyBoundary = String(workchain) === "0" && (block.after_split || block.after_merge) && block.prev_refs.length === (block.after_merge ? 2 : 1)
+      && block.prev_refs.every(ref => ref.startsWith("(0,") && !ref.startsWith(`(0,${shard},`) && /,\d+\)$/.test(ref))
+      && block.prev_refs.some(ref => BigInt(ref.match(/,(\d+)\)$/)[1]) === seqno - 1n);
+    if (seqno > 0n && !ownParent && !topologyBoundary)
+      throw new BlockIndexError("Invalid indexed block predecessor", 502);
     if (expected !== null && seqno !== expected) {
-      gap = { expected: expected.toString(), received: block.seqno };
-      break;
+      if (after !== null && topologyBoundary && !blocks.length) lineageBoundary = true;
+      else { gap = { expected: expected.toString(), received: block.seqno }; break; }
     }
-    if (seqno > 0n && !block.prev_refs.includes(`(-1,${MASTER_SHARD},${seqno - 1n})`))
-      throw new BlockIndexError("Invalid indexed masterchain predecessor", 502);
     blocks.push(block);
+    if (after === null && topologyBoundary) break;
     expected = seqno + (after === null ? -1n : 1n);
   }
-  return { blocks, gap, hasMore: !gap && blocks.length > 0 && (candidates.length > blocks.length || raw.length === MAX_ROWS) };
+  return { blocks, gap, lineageBoundary, hasMore: !gap && blocks.length > 0 && (candidates.length > blocks.length || raw.length === MAX_ROWS) };
 }
 
 // Independent indexed-batch budget. This does not consume the TonAPI detail
@@ -134,12 +140,14 @@ class BlockIndex {
     this.stopped = false;
   }
 
-  list({ afterBlock, limit = 32 } = {}) {
+  list({ afterBlock, limit = 32, workchain = "-1", shard = MASTER_SHARD, target } = {}) {
+    workchain = String(workchain);
+    if (!["-1", "0"].includes(workchain) || !/^[a-f0-9]{16}$/.test(shard) || workchain === "-1" && shard !== MASTER_SHARD) return Promise.reject(new BlockIndexError("Invalid indexed block scope", 400));
     if (this.stopped) return Promise.reject(new BlockIndexError("Block index stopped"));
     limit = Math.max(1, Math.min(MAX_ROWS, Math.floor(Number(limit) || 32)));
     const url = new URL(this.url);
-    url.searchParams.set("workchain", "-1");
-    url.searchParams.set("shard", MASTER_SHARD);
+    url.searchParams.set("workchain", workchain);
+    url.searchParams.set("shard", shard);
     url.searchParams.set("limit", String(MAX_ROWS));
     url.searchParams.set("sort", afterBlock ? "asc" : "desc");
     if (afterBlock) {
@@ -151,13 +159,18 @@ class BlockIndex {
       // Do not assume an undocumented relationship between block end/start LT.
       url.searchParams.set("start_utime", (utime > 0n ? utime - 1n : 0n).toString());
     }
-    const key = `${url.href}:${afterBlock?.seqno || "latest"}:${limit}`;
+    if (target) {
+      target = {seqno: integer(target.seqno), gen_utime: integer(target.gen_utime)};
+      // Overlap the endpoint second, then apply the exact anchored sequence cap.
+      url.searchParams.set("end_utime", (BigInt(target.gen_utime) + 1n).toString());
+    }
+    const key = `${url.href}:${afterBlock?.seqno || "latest"}:${limit}:${target?.seqno || ""}`;
     if (this.pending.has(key)) return this.pending.get(key);
     if (this.pending.size >= 16) return Promise.reject(new BlockIndexError("Block index busy"));
     const deadline = Date.now() + this.deadlineMs;
     const task = this.queue.then(async () => {
       const result = await this.request(url, deadline);
-      const selected = selectConsecutive(result.data.blocks, afterBlock, limit);
+      const selected = selectConsecutive(result.data.blocks, afterBlock, limit, {workchain, shard, target});
       this.lastGap = selected.gap;
       this.lastSuccess = result.at;
       this.lastFailure = null;
@@ -264,4 +277,4 @@ class BlockIndex {
   }
 }
 
-module.exports = { BlockIndex, BlockIndexError };
+module.exports = { BlockIndex, BlockIndexError, normalizeBlock, selectConsecutive };
