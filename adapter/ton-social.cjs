@@ -66,7 +66,7 @@ async function metadata(pathname, api, provider, collector) {
     market: ["Market", "Explore GRAM price history and market quotes."],
     blocks: [
       "Blocks",
-      "Explore TON masterchain blocks and their shard references.",
+      "Explore TON basechain blocks, masterchain blocks and shard references.",
     ],
     txs: [
       "Transactions",
@@ -167,7 +167,7 @@ async function metadata(pathname, api, provider, collector) {
         summary = short(
           `${data.tx_quantity} transactions · ${
             amount(data.value_flow?.fees_collected?.grams) ?? "—"
-          } GRAM fees`,
+          } GRAM collected fees`,
           60,
         );
         description = `TON block ${data.seqno}. ${summary}`;
