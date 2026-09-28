@@ -7,20 +7,20 @@
           <a draggable="false" [routerLink]="[getHref(i) | relativeUrl]" [attr.title]="nativePendingMode ? pendingTitle : blockValueDetails(projectedBlock.totalFees, projectedBlock.medianFee, projectedBlock.feeRange?.[0], projectedBlock.feeRange?.[projectedBlock.feeRange.length - 1])" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
           <div class="block-body">
             <ng-container *ngIf="!minimal">
-              <div [attr.data-cy]="'mempool-block-' + i + '-fees'" class="fees">
-                <ng-container *ngIf="nativePendingMode; else legacyFee">Pending</ng-container>
+              <div [attr.data-cy]="'mempool-block-' + i + '-fees'" class="fees" [attr.aria-hidden]="nativePendingMode ? 'true' : null">
+                <ng-container *ngIf="nativePendingMode; else legacyFee">&nbsp;</ng-container>
                 <ng-template #legacyFee>~<app-fee-rate [compactBlock]="true" [fee]="projectedBlock.medianFee" unitClass="" rounding="1.0-0"></app-fee-rate></ng-template>
               </div>
-              <div [attr.data-cy]="'mempool-block-' + i + '-fee-span'" class="fee-span">
-                <ng-container *ngIf="nativePendingMode; else legacyFeeSpan">External messages</ng-container>
+              <div [attr.data-cy]="'mempool-block-' + i + '-fee-span'" class="fee-span" [attr.aria-hidden]="nativePendingMode ? 'true' : null">
+                <ng-container *ngIf="nativePendingMode; else legacyFeeSpan">&nbsp;</ng-container>
                 <ng-template #legacyFeeSpan><app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[0]" [showUnit]="false" unitClass=""></app-fee-rate> - <app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[projectedBlock.feeRange.length - 1]" unitClass=""></app-fee-rate></ng-template>
               </div>
               <div class="block-size">
-                <ng-container *ngIf="nativePendingMode; else legacySize"><span *ngIf="pendingCount !== null; else unknownPending">{{ pendingCount | number }}</span><ng-template #unknownPending>Unavailable</ng-template></ng-container>
+                <ng-container *ngIf="nativePendingMode; else legacySize">Pending</ng-container>
                 <ng-template #legacySize><app-amount *ngIf="blockDisplayMode === 'fees'; else noMiningInfo" [compactBlock]="true" [attr.data-cy]="'mempool-block-' + i + '-total-fees'" [satoshis]="projectedBlock.totalFees" digitsInfo="1.2-3" [noFiat]="true"></app-amount><ng-template #noMiningInfo><span [innerHTML]="'&lrm;' + (projectedBlock.blockSize | bytes: 2)"></span></ng-template></ng-template>
               </div>
               <div [attr.data-cy]="'mempool-block-' + i + '-transaction-count'" class="transaction-count">
-                <ng-container *ngIf="nativePendingMode; else legacyCount">{{ pendingCount === null ? 'Pending feed' : pendingCount === 1 ? 'message' : 'messages' }}</ng-container>
+                <ng-container *ngIf="nativePendingMode; else legacyCount"><ng-container *ngIf="pendingCount !== null; else unknownPending">{{ pendingCount | number }} {{ pendingCount === 1 ? 'message' : 'messages' }}</ng-container><ng-template #unknownPending>Unavailable</ng-template></ng-container>
                 <ng-template #legacyCount><ng-container *ngTemplateOutlet="projectedBlock.nTx === 1 ? transactionsSingular : transactionsPlural; context: {$implicit: projectedBlock.nTx | number}"></ng-container><ng-template #transactionsSingular let-i i18n="shared.transaction-count.singular">{{ i }} transaction</ng-template><ng-template #transactionsPlural let-i i18n="shared.transaction-count.plural">{{ i }} transactions</ng-template></ng-template>
               </div>
               <div [attr.data-cy]="'mempool-block-' + i + '-time'" class="time-difference">

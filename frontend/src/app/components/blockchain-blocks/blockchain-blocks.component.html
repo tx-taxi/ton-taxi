@@ -36,8 +36,8 @@
         }
         <div class="block-body">
           <ng-container *ngIf="!minimal">
-            <div class="fees">{{ block.ton?.workchain_id == -1 ? 'Masterchain' : block.ton?.workchain_id == 0 ? 'Basechain' : 'Workchain ' + block.ton?.workchain_id }}</div>
-            <div class="fee-span">Fees collected</div>
+            <div class="fees" aria-hidden="true">&nbsp;</div>
+            <div class="fee-span" aria-hidden="true">&nbsp;</div>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + '-total-fees'" *ngIf="blockDisplayMode === 'fees'; else noMiningInfo"
               class="block-size">
               <span *ngIf="block.extras?.totalFees == null">—</span><app-amount *ngIf="block.extras?.totalFees != null" [compactBlock]="true" [satoshis]="block.extras?.totalFees ?? 0" digitsInfo="1.2-3" [noFiat]="true"></app-amount>
