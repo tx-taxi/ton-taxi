@@ -199,7 +199,7 @@ class BlockEconomics {
         if (this.stopped) throw new BlockEconomicsError("Block economics stopped");
         const remaining = deadline - Date.now();
         if (remaining <= 0) break;
-        const attemptTimeout = Math.max(500, Math.min(3000, remaining));
+        const attemptTimeout = Math.min(3000, remaining);
         const roundRobin = this.connectSlot(slot, candidates[slot.serverIndex % candidates.length], Date.now() + attemptTimeout);
         try {
           this.requests++;
