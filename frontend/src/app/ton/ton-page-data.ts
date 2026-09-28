@@ -10,6 +10,8 @@ import { scaledJettonUnits } from './scaled-ui';
 import { publicDetails } from './transaction-view';
 import { nativeContextDepth } from '../shared/native-block-context';
 import { NativeAmount } from '../shared/native-view.types';
+import { TonChainSelectionService } from './ton-chain-selection.service';
+import { tonSelectionForBlockId } from './chain-selection';
 
 type Page = 'jettons'|'collections'|'dns'|'dns-auctions'|'staking-pool'|'extra-currency'|'config'|'message'|'trace'|'not-found'|'transactions'|'dashboard'|'blocks'|'block'|'tx'|'address'|'nft'|'collection'|'jetton'|'validators';
 interface Feed { items: any[]; loading: boolean; error: string; paging?: any; stale?: boolean; restart?: boolean; request?: Subscription; }
@@ -23,7 +25,7 @@ export class TonPageData implements OnInit, OnDestroy {
   readonly timezone$ = this.state.timezone$;
   auctionTld = 'ton'; nftFilter = ''; nftFilterInput = ''; nftCollections: any[] = []; tokenFilter = ''; tokenSort = 'name'; selectedFiat = 'USD'; fiatQuotes: {[currency:string]:number} = {}; fiatQuote: number | null = null; quoteObservedAt = ''; quoteStale = false; page: Page = 'dashboard'; id = ''; data: any; loading = true; error = ''; tab = 'activity'; generation = 0;
   feeds: {[key:string]:Feed} = {}; resources: {[key:string]: any} = {}; resourceLoading: {[key:string]:boolean} = {}; resourceErrors: {[key:string]:boolean} = {}; getterName = ''; getterArgs = ''; getterResult: any; getterError = ''; getterLoading = false; mainPaginated = false; mainLoading = false; mainError = ''; requests = new Subscription(); routeSub?: Subscription; refresh?: ReturnType<typeof setInterval>;
-  constructor(protected cdr: ChangeDetectorRef, protected http: HttpClient, protected route: ActivatedRoute, protected state: StateService, protected seo: SeoService, protected og: OpenGraphService) {}
+  constructor(protected cdr: ChangeDetectorRef, protected http: HttpClient, protected route: ActivatedRoute, protected state: StateService, protected seo: SeoService, protected og: OpenGraphService, protected chainSelection: TonChainSelectionService) {}
   private get<T>(url: string) { return this.http.get<T>(url).pipe(finalize(() => this.cdr.markForCheck())); }
   ngOnInit(): void { this.routeSub = this.route.paramMap.subscribe(params => { this.page = this.route.snapshot.data.tonPage || 'dashboard'; this.id = params.get('id') || params.get('hash') || ''; this.load(); }); }
   ngOnDestroy(): void { this.contextRequests.unsubscribe(); clearTimeout(this.contextResizeTimer); this.requests.unsubscribe(); this.routeSub?.unsubscribe(); clearInterval(this.refresh); }
@@ -49,6 +51,9 @@ export class TonPageData implements OnInit, OnDestroy {
     const generation = this.generation;
     const transaction = this.page === 'trace' ? data.transaction : data;
     const target = this.page === 'block' ? this.blockId(data) : transaction?.block;
+    const query = this.route.snapshot.queryParamMap;
+    const contextual = !query.has('workchain') && !query.has('shard') ? tonSelectionForBlockId(target) : null;
+    if (contextual) this.chainSelection.set(contextual.workchain, contextual.shard);
     const depth = nativeContextDepth(typeof window === 'undefined' ? 1440 : window.innerWidth);
     this.contextDepth = depth;
     const slots: NativeBlockContext['blocks'] = Array(depth * 2 + 1).fill(null);

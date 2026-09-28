@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { BehaviorSubject, filter } from 'rxjs';
-import { TonChainSelection, tonChainSelection, tonSelectionKey, tonSelectionQuery } from './chain-selection';
+import { TonChainSelection, tonChainSelection, tonSelectionKey, tonSelectionQuery, tonSelectionForBlockId } from './chain-selection';
 
 @Injectable({ providedIn: 'root' })
 export class TonChainSelectionService {
@@ -23,7 +23,14 @@ export class TonChainSelectionService {
   }
 
   private fromUrl(url: string): TonChainSelection {
-    const query = this.router.parseUrl(url || '/').queryParams;
-    return tonChainSelection(query.workchain, query.shard);
+    const tree = this.router.parseUrl(url || '/');
+    const query = tree.queryParams;
+    if (query.workchain != null || query.shard != null) return tonChainSelection(query.workchain, query.shard);
+    const segments = tree.root.children.primary?.segments || [];
+    if (segments[segments.length - 2]?.path === 'block') {
+      const contextual = tonSelectionForBlockId(segments[segments.length - 1]?.path);
+      if (contextual) return contextual;
+    }
+    return tonChainSelection(0);
   }
 }

@@ -33,3 +33,11 @@ export function tonBlockMatchesSelection(block: any, selection: TonChainSelectio
   const scope = tonBlockScope(block);
   return !!scope && scope.workchain === selection.workchain && (!selection.shard || scope.shard === selection.shard);
 }
+
+/** Existing bare block routes are masterchain; new destinations carry full tuples. */
+export function tonSelectionForBlockId(id: unknown): TonChainSelection | null {
+  const value = String(id ?? '');
+  if (/^\d+$/.test(value)) return tonChainSelection(-1);
+  const scope = tonBlockScope({ id: value });
+  return scope && (scope.workchain === 0 || scope.workchain === -1) ? tonChainSelection(scope.workchain, scope.shard) : null;
+}

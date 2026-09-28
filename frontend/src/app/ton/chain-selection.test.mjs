@@ -10,7 +10,7 @@ const require = createRequire(import.meta.url);
 function loadService(relativePath, additions = {}) {
   const filename = new URL(relativePath, import.meta.url);
   const source = ts.transpileModule(readFileSync(filename, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, experimentalDecorators: true },
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, experimentalDecorators: true, useDefineForClassFields: false },
   }).outputText;
   const module = { exports: {} };
   const imports = {
@@ -159,4 +159,51 @@ test('a slower dashboard response refreshes history without moving the live head
   assert.deepEqual(page.data.history, history);
   assert.equal(page.data.head.seqno, 100039008);
   assert.equal(page.blocks[0].height, 100039008);
+});
+
+
+test('full tuple and legacy block routes retain their workchain for subsequent numeric search', () => {
+  class NavigationEnd { constructor(urlAfterRedirects) { this.urlAfterRedirects = urlAfterRedirects; } }
+  const { TonChainSelectionService } = loadService('./ton-chain-selection.service.ts', {
+    '@angular/router': { NavigationEnd }, './chain-selection': selection,
+  });
+  const events = new Subject();
+  const router = {
+    url: '/block/(-1,8000000000000000,95544320)', events,
+    parseUrl(value) {
+      const url = new URL(value, 'https://ton.tx.taxi');
+      return { queryParams: Object.fromEntries(url.searchParams), root: { children: { primary: { segments: url.pathname.split('/').filter(Boolean).map(path => ({path: decodeURIComponent(path)})) } } } };
+    },
+  };
+  const service = new TonChainSelectionService(router);
+  assert.deepEqual(service.current, {workchain:-1, shard:rootShard});
+  events.next(new NavigationEnd('/block/(0,4000000000000000,100039007)'));
+  assert.deepEqual(service.current, {workchain:0, shard:'4000000000000000'});
+  events.next(new NavigationEnd('/block/95544320'));
+  assert.deepEqual(service.current, {workchain:-1, shard:rootShard});
+  events.next(new NavigationEnd('/'));
+  assert.deepEqual(service.current, {workchain:0});
+});
+
+
+test('a live-feed scroll reset keeps the selected contextual block centered', () => {
+  const decorator = () => target => target;
+  const propertyDecorator = () => () => undefined;
+  const { StartComponent } = loadService('../components/start/start.component.ts', {
+    '@angular/core': { Component: decorator, Input: propertyDecorator, ViewChild: propertyDecorator, HostListener: propertyDecorator, ChangeDetectionStrategy: { OnPush: 0 } },
+  });
+  const rail = Object.create(StartComponent.prototype);
+  rail.nativeContextMode = true;
+  rail.nativeContext = { targetSlot: 6 };
+  rail.blockWidth = 155;
+  rail.chainWidth = 1440;
+  rail.timeLtr = false;
+  rail.mempoolOffset = 0;
+  rail.scrollLeft = 0;
+  rail.resetScroll();
+  // The selected cube's center starts at 40 + 6*155 + 125/2 from the rail origin.
+  assert.equal(rail.scrollLeft, 1032.5);
+  rail.timeLtr = true;
+  rail.resetScroll();
+  assert.equal(rail.scrollLeft, -1032.5);
 });

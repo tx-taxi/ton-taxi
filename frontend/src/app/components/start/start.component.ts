@@ -546,6 +546,10 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   resetScroll(): void {
+    if (this.nativeContextMode) {
+      this.focusNativeContext();
+      return;
+    }
     this.scrollToBlock(this.chainTip);
     this.setScrollLeft(0);
   }
