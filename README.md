@@ -1,5 +1,8 @@
 <p align="center">
-  <img src="frontend/src/resources/branding/ton-dark-full.svg" width="360" alt="ton.tx.taxi banner logo">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="frontend/src/resources/branding/ton-dark-full.svg">
+    <img src="frontend/src/resources/branding/ton-light-full.svg" width="360" alt="ton.tx.taxi banner logo">
+  </picture>
 </p>
 
 <h1 align="center">TON Explorer · ton.tx.taxi</h1>
@@ -11,7 +14,15 @@
 
 This explorer adapts the existing tx.taxi/mempool interface to TON. Public chain data comes from configured indexing services and verified block data from public lite servers. Shared collectors provide consecutive masterchain blocks, actual block fees, and observed pending external messages over WebSocket. Account and asset pages expose indexed transactions, messages, jetton balances, NFT metadata and available history.
 
-## Local development
+## Features
+
+- Consecutive masterchain blocks, shard context, exact collected fees, transactions and message traces.
+- Live observed pending messages with confirmation removal and explicit stale states.
+- Wallet and contract pages with jetton balances, NFTs and available indexed history.
+- NFT, collection and jetton details, including on-chain Telegram collectibles.
+- Explorer REST and WebSocket documentation in the application.
+
+## Development
 
 Install frontend and adapter dependencies with `npm ci` in each directory. Build the TON frontend with:
 
@@ -45,4 +56,9 @@ The code is distributed under [LICENSE](LICENSE) and [COPYING.md](COPYING.md), i
 
 The software license does not grant trademark rights to the tx.taxi name or logos. Independent deployments should use their own branding and must not imply tx.taxi endorsement.
 
-[Telegram channel](https://t.me/txtaxi) · [Contact](https://t.me/hiss)
+## Links
+
+- [Live explorer](https://ton.tx.taxi)
+- [tx.taxi hub](https://tx.taxi)
+- [Telegram channel](https://t.me/txtaxi)
+- [Contact](https://t.me/hiss)
