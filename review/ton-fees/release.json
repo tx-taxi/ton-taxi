@@ -1,0 +1,23 @@
+{
+  "verifiedAt": "2026-09-28T19:51:23.387392+00:00",
+  "nativeCommit": "8296dab52c400c371bf57adcc4542fe6b256717f",
+  "nativeDeployment": "mavyhq2hvoejb8f6bxdchvec",
+  "routerCommit": "67076eddce01248bce8b037e074d6a579237bae9",
+  "routerDeployment": "oxno4zbo3dhxu1splyeanrlp",
+  "export": "70f39df1858a52b6",
+  "nativeUrls": [
+    "https://ton.tx.taxi",
+    "https://masterchain.ton.tx.taxi"
+  ],
+  "hubUrl": "https://tx.taxi",
+  "sourceFilesVerified": 47,
+  "publicExportFilesVerified": 5,
+  "priorImmutableFilesPreserved": 15,
+  "localReview": {
+    "native": "http://127.0.0.1:4530",
+    "router": "http://127.0.0.1:4851",
+    "nativePid": 2547159,
+    "routerPid": 2562880
+  },
+  "scope": "Confirmed TON transaction-fee rows and totals, exact data vs independent indexed/raw transactions, desktop/mobile native/hub components and production, advancing correctly scoped streams, missing native asset cache correction. Not exhaustive all-chain or uptime certification."
+}

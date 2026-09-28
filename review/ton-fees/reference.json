@@ -1,0 +1,818 @@
+{
+  "checkedAt": "2026-09-28T19:43:44.913Z",
+  "scope": "Independent indexed transaction fees and SDK transaction parsing versus the new block-BOC parser; real public chain fixtures, no network.",
+  "blocks": [
+    {
+      "name": "base",
+      "id": "(0,8000000000000000,100043794)",
+      "sources": {
+        "boc": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block-0-100043794.boc",
+        "header": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block-0-100043794-tonapi.json",
+        "indexed": "/tmp/ton-fee-strip/review/ton-fees/independent/base-transactions.json"
+      },
+      "indexedFees": [
+        "488826",
+        "38469"
+      ],
+      "expected": {
+        "transactionCount": 2,
+        "complete": true,
+        "total": "527295",
+        "min": "38469",
+        "max": "488826",
+        "median": "263647",
+        "medianExact": {
+          "remainder": "1",
+          "denominator": "2"
+        }
+      },
+      "decoded": {
+        "transactionCount": 2,
+        "complete": true,
+        "total": "527295",
+        "min": "38469",
+        "max": "488826",
+        "median": "263647",
+        "medianExact": {
+          "remainder": "1",
+          "denominator": "2"
+        }
+      },
+      "protocolCollected": "1000571741",
+      "persistedAndFanout": true,
+      "normalized": {
+        "id": "(0,8000000000000000,100043794)",
+        "height": 100043794,
+        "timestamp": 1790573031,
+        "version": 0,
+        "tx_count": 2,
+        "size": 0,
+        "weight": 0,
+        "bits": 0,
+        "nonce": 0,
+        "difficulty": 0,
+        "merkle_root": "230bc05e13688983c89a0594a97b77d74ed61bed9710039cea125829fd41b1f5",
+        "previousblockhash": "(0,8000000000000000,100043793)",
+        "extras": {
+          "totalFees": "527295",
+          "transactionFees": {
+            "transactionCount": 2,
+            "complete": true,
+            "total": "527295",
+            "min": "38469",
+            "max": "488826",
+            "median": "263647",
+            "medianExact": {
+              "remainder": "1",
+              "denominator": "2"
+            }
+          },
+          "reward": "1000000000",
+          "medianFee": null,
+          "minFee": null,
+          "maxFee": null,
+          "feeRange": [],
+          "pool": null
+        },
+        "ton": {
+          "tx_quantity": 2,
+          "value_flow": {
+            "from_prev_blk": {
+              "grams": "2813398705188874378",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "2333333332"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "1555555554"
+                }
+              ]
+            },
+            "to_next_blk": {
+              "grams": "2813398705188302637",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "2333333332"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "1555555554"
+                }
+              ]
+            },
+            "imported": {
+              "grams": "0",
+              "other": []
+            },
+            "exported": {
+              "grams": "0",
+              "other": []
+            },
+            "fees_collected": {
+              "grams": "1000571741",
+              "other": []
+            },
+            "fees_imported": {
+              "grams": "0",
+              "other": []
+            },
+            "recovered": {
+              "grams": "0",
+              "other": []
+            },
+            "created": {
+              "grams": "1000000000",
+              "other": []
+            },
+            "minted": {
+              "grams": "0",
+              "other": []
+            }
+          },
+          "workchain_id": 0,
+          "shard": "8000000000000000",
+          "seqno": 100043794,
+          "root_hash": "230bc05e13688983c89a0594a97b77d74ed61bed9710039cea125829fd41b1f5",
+          "file_hash": "1ebda41dc869cf7700c1e3ecb6e88ac1a25160904ced826775d431221e679884",
+          "global_id": -239,
+          "version": 0,
+          "after_merge": false,
+          "before_split": false,
+          "after_split": false,
+          "want_split": false,
+          "want_merge": true,
+          "key_block": false,
+          "gen_utime": 1790573031,
+          "start_lt": 106388708000000,
+          "end_lt": 106388708000004,
+          "vert_seqno": 1,
+          "gen_catchain_seqno": 870874,
+          "min_ref_mc_seqno": 95551062,
+          "prev_key_block_seqno": 95444355,
+          "gen_software_version": 16,
+          "gen_software_capabilities": 1006,
+          "master_ref": "(-1,8000000000000000,95551062)",
+          "prev_refs": [
+            "(0,8000000000000000,100043793)"
+          ],
+          "in_msg_descr_length": 2,
+          "out_msg_descr_length": 1,
+          "rand_seed": "9165f839591ae8d7b62d30c6caa178af4634c1b966741ba0bacf872d5c119a80",
+          "created_by": "f57568e5204c09c34e945b4dc4af0fc1a0287f474788ccc1068f5b72f3463278",
+          "transaction_fee_stats": {
+            "transactionCount": 2,
+            "complete": true,
+            "total": "527295",
+            "min": "38469",
+            "max": "488826",
+            "median": "263647",
+            "medianExact": {
+              "remainder": "1",
+              "denominator": "2"
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "empty",
+      "id": "(0,8000000000000000,100043809)",
+      "sources": {
+        "boc": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block-0-100043809.boc",
+        "header": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block-0-100043809-tonapi.json",
+        "indexed": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block-0-100043809-tonapi.json"
+      },
+      "indexedFees": [],
+      "expected": {
+        "transactionCount": 0,
+        "complete": true,
+        "total": "0",
+        "min": null,
+        "max": null,
+        "median": null,
+        "medianExact": null
+      },
+      "decoded": {
+        "transactionCount": 0,
+        "complete": true,
+        "total": "0",
+        "min": null,
+        "max": null,
+        "median": null,
+        "medianExact": null
+      },
+      "protocolCollected": "1000000000",
+      "persistedAndFanout": true,
+      "normalized": {
+        "id": "(0,8000000000000000,100043809)",
+        "height": 100043809,
+        "timestamp": 1790573037,
+        "version": 0,
+        "tx_count": 0,
+        "size": 0,
+        "weight": 0,
+        "bits": 0,
+        "nonce": 0,
+        "difficulty": 0,
+        "merkle_root": "4579c1595a8e6a66ad359e7e346742390bee465e2e798356508b3b080f9f4e28",
+        "previousblockhash": "(0,8000000000000000,100043808)",
+        "extras": {
+          "totalFees": "0",
+          "transactionFees": {
+            "transactionCount": 0,
+            "complete": true,
+            "total": "0",
+            "min": null,
+            "max": null,
+            "median": null,
+            "medianExact": null
+          },
+          "reward": "1000000000",
+          "medianFee": null,
+          "minFee": null,
+          "maxFee": null,
+          "feeRange": [],
+          "pool": null
+        },
+        "ton": {
+          "tx_quantity": 0,
+          "value_flow": {
+            "from_prev_blk": {
+              "grams": "2813398705135676655",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "2333333332"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "1555555554"
+                }
+              ]
+            },
+            "to_next_blk": {
+              "grams": "2813398705135676655",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "2333333332"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "1555555554"
+                }
+              ]
+            },
+            "imported": {
+              "grams": "0",
+              "other": []
+            },
+            "exported": {
+              "grams": "0",
+              "other": []
+            },
+            "fees_collected": {
+              "grams": "1000000000",
+              "other": []
+            },
+            "fees_imported": {
+              "grams": "0",
+              "other": []
+            },
+            "recovered": {
+              "grams": "0",
+              "other": []
+            },
+            "created": {
+              "grams": "1000000000",
+              "other": []
+            },
+            "minted": {
+              "grams": "0",
+              "other": []
+            }
+          },
+          "workchain_id": 0,
+          "shard": "8000000000000000",
+          "seqno": 100043809,
+          "root_hash": "4579c1595a8e6a66ad359e7e346742390bee465e2e798356508b3b080f9f4e28",
+          "file_hash": "f92f172411de663091c289e58866d28d026e098095c484c8173993c6cec84d3c",
+          "global_id": -239,
+          "version": 0,
+          "after_merge": false,
+          "before_split": false,
+          "after_split": false,
+          "want_split": false,
+          "want_merge": true,
+          "key_block": false,
+          "gen_utime": 1790573037,
+          "start_lt": 106388723000000,
+          "end_lt": 106388723000001,
+          "vert_seqno": 1,
+          "gen_catchain_seqno": 870874,
+          "min_ref_mc_seqno": 95551076,
+          "prev_key_block_seqno": 95444355,
+          "gen_software_version": 16,
+          "gen_software_capabilities": 1006,
+          "master_ref": "(-1,8000000000000000,95551077)",
+          "prev_refs": [
+            "(0,8000000000000000,100043808)"
+          ],
+          "in_msg_descr_length": 0,
+          "out_msg_descr_length": 0,
+          "rand_seed": "6dd88152dfba54784f1360e3a3be17672456b7b68f8cfe00219f5e45fa42d063",
+          "created_by": "29d30b646690c509009da88ace935d560876f900ffe534f9d185a832625b8f6b",
+          "transaction_fee_stats": {
+            "transactionCount": 0,
+            "complete": true,
+            "total": "0",
+            "min": null,
+            "max": null,
+            "median": null,
+            "medianExact": null
+          }
+        }
+      }
+    },
+    {
+      "name": "master",
+      "id": "(-1,8000000000000000,95551090)",
+      "sources": {
+        "boc": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block--1-95551090.boc",
+        "header": "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-production/block--1-95551090-tonapi.json",
+        "indexed": "/tmp/ton-fee-strip/review/ton-fees/independent/master-transactions.json"
+      },
+      "indexedFees": [
+        "0",
+        "0",
+        "0"
+      ],
+      "expected": {
+        "transactionCount": 3,
+        "complete": true,
+        "total": "0",
+        "min": "0",
+        "max": "0",
+        "median": "0",
+        "medianExact": {
+          "remainder": "0",
+          "denominator": "1"
+        }
+      },
+      "decoded": {
+        "transactionCount": 3,
+        "complete": true,
+        "total": "0",
+        "min": "0",
+        "max": "0",
+        "median": "0",
+        "medianExact": {
+          "remainder": "0",
+          "denominator": "1"
+        }
+      },
+      "protocolCollected": "2702756237",
+      "persistedAndFanout": true,
+      "normalized": {
+        "id": "(-1,8000000000000000,95551090)",
+        "height": 95551090,
+        "timestamp": 1790573041,
+        "version": 0,
+        "tx_count": 3,
+        "size": 0,
+        "weight": 0,
+        "bits": 0,
+        "nonce": 0,
+        "difficulty": 0,
+        "merkle_root": "c63052f71638aeeee12f24631d01d3f89db55170a736be867dccd23c41b415a8",
+        "previousblockhash": "(-1,8000000000000000,95551089)",
+        "extras": {
+          "totalFees": "0",
+          "transactionFees": {
+            "transactionCount": 3,
+            "complete": true,
+            "total": "0",
+            "min": "0",
+            "max": "0",
+            "median": "0",
+            "medianExact": {
+              "remainder": "0",
+              "denominator": "1"
+            }
+          },
+          "reward": "1700000000",
+          "medianFee": null,
+          "minFee": null,
+          "maxFee": null,
+          "feeRange": [],
+          "pool": null
+        },
+        "ton": {
+          "tx_quantity": 3,
+          "value_flow": {
+            "from_prev_blk": {
+              "grams": "2443386298008787295",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "664333333334"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "998444444446"
+                }
+              ]
+            },
+            "to_next_blk": {
+              "grams": "2443386300711543532",
+              "other": [
+                {
+                  "id": "239",
+                  "value": "664333333334"
+                },
+                {
+                  "id": "4294967279",
+                  "value": "998444444446"
+                }
+              ]
+            },
+            "imported": {
+              "grams": "0",
+              "other": []
+            },
+            "exported": {
+              "grams": "0",
+              "other": []
+            },
+            "fees_collected": {
+              "grams": "2702756237",
+              "other": []
+            },
+            "burned": {
+              "grams": "2756236",
+              "other": []
+            },
+            "fees_imported": {
+              "grams": "1005512473",
+              "other": []
+            },
+            "recovered": {
+              "grams": "2702756237",
+              "other": []
+            },
+            "created": {
+              "grams": "1700000000",
+              "other": []
+            },
+            "minted": {
+              "grams": "0",
+              "other": []
+            }
+          },
+          "workchain_id": -1,
+          "shard": "8000000000000000",
+          "seqno": 95551090,
+          "root_hash": "c63052f71638aeeee12f24631d01d3f89db55170a736be867dccd23c41b415a8",
+          "file_hash": "87d2fce26cc1dc0f04deb5304b12fe55d1019ab384c25ccbd0ea78fd5d5bd409",
+          "global_id": -239,
+          "version": 0,
+          "after_merge": false,
+          "before_split": false,
+          "after_split": false,
+          "want_split": false,
+          "want_merge": true,
+          "key_block": false,
+          "gen_utime": 1790573041,
+          "start_lt": 106388734000000,
+          "end_lt": 106388734000004,
+          "vert_seqno": 1,
+          "gen_catchain_seqno": 865764,
+          "min_ref_mc_seqno": 95551086,
+          "prev_key_block_seqno": 95444355,
+          "gen_software_version": 16,
+          "gen_software_capabilities": 1006,
+          "prev_refs": [
+            "(-1,8000000000000000,95551089)"
+          ],
+          "in_msg_descr_length": 1,
+          "out_msg_descr_length": 0,
+          "rand_seed": "e97e2a40882872d255720c7bea7b6c1f6a4a7d08bc484e83579c72dcc5002442",
+          "created_by": "66bd1199c4addccc3f8f73e237c48965e7a246ba2d946b6179036490660e3958",
+          "transaction_fee_stats": {
+            "transactionCount": 3,
+            "complete": true,
+            "total": "0",
+            "min": "0",
+            "max": "0",
+            "median": "0",
+            "medianExact": {
+              "remainder": "0",
+              "denominator": "1"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "sample": {
+    "id": "(0,8000000000000000,100160666)",
+    "indexedSource": "/tmp/ton-fee-strip/review/ton-fees/independent/sample-transactions.json",
+    "indexedFees": [
+      "582547",
+      "0",
+      "306072",
+      "308182",
+      "323424",
+      "0",
+      "307996",
+      "2841683",
+      "135308",
+      "738014",
+      "728813",
+      "3534740",
+      "66068",
+      "881889",
+      "66068"
+    ],
+    "expected": {
+      "transactionCount": 15,
+      "complete": true,
+      "total": "10820804",
+      "min": "0",
+      "max": "3534740",
+      "median": "308182",
+      "medianExact": {
+        "remainder": "0",
+        "denominator": "1"
+      }
+    },
+    "normalized": {
+      "id": "(0,8000000000000000,100160666)",
+      "height": 100160666,
+      "timestamp": 1790619913,
+      "version": 0,
+      "tx_count": 15,
+      "size": 0,
+      "weight": 0,
+      "bits": 0,
+      "nonce": 0,
+      "difficulty": 0,
+      "merkle_root": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+      "previousblockhash": "(0,8000000000000000,100160665)",
+      "extras": {
+        "totalFees": "10820804",
+        "transactionFees": {
+          "transactionCount": 15,
+          "complete": true,
+          "total": "10820804",
+          "min": "0",
+          "max": "3534740",
+          "median": "308182",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        },
+        "reward": "1000000000",
+        "medianFee": null,
+        "minFee": null,
+        "maxFee": null,
+        "feeRange": [],
+        "pool": null
+      },
+      "ton": {
+        "tx_quantity": "15",
+        "value_flow": {
+          "from_prev_blk": {
+            "grams": "2795488034718193407",
+            "other": [
+              {
+                "id": "-17",
+                "value": "1555555554"
+              },
+              {
+                "id": "239",
+                "value": "2333333332"
+              }
+            ]
+          },
+          "to_next_blk": {
+            "grams": "2795488034698130787",
+            "other": [
+              {
+                "id": "-17",
+                "value": "1555555554"
+              },
+              {
+                "id": "239",
+                "value": "2333333332"
+              }
+            ]
+          },
+          "imported": {
+            "grams": "0",
+            "other": []
+          },
+          "exported": {
+            "grams": "0",
+            "other": []
+          },
+          "fees_collected": {
+            "grams": "1020062620",
+            "other": []
+          },
+          "fees_imported": {
+            "grams": "0",
+            "other": []
+          },
+          "recovered": {
+            "grams": "0",
+            "other": []
+          },
+          "created": {
+            "grams": "1000000000",
+            "other": []
+          },
+          "minted": {
+            "grams": "0",
+            "other": []
+          }
+        },
+        "workchain_id": "0",
+        "shard": "8000000000000000",
+        "seqno": "100160666",
+        "root_hash": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+        "file_hash": "018e790d85cf42e25f5c95dba68464304d87f6d77e7d0cfaf3e5f677799ad340",
+        "global_id": "-239",
+        "version": "0",
+        "after_merge": false,
+        "before_split": false,
+        "after_split": false,
+        "want_split": false,
+        "want_merge": true,
+        "key_block": false,
+        "gen_utime": "1790619913",
+        "start_lt": "106505947000000",
+        "end_lt": "106505947000017",
+        "vert_seqno": "1",
+        "gen_catchain_seqno": "871063",
+        "min_ref_mc_seqno": "95665104",
+        "prev_key_block_seqno": "95604086",
+        "gen_software_version": "16",
+        "gen_software_capabilities": "1006",
+        "master_ref": "(-1,8000000000000000,95665104)",
+        "prev_refs": [
+          "(0,8000000000000000,100160665)"
+        ],
+        "in_msg_descr_length": "15",
+        "out_msg_descr_length": "9",
+        "rand_seed": "17af9d744821033ed37800240c80254be0e23ca5273d308f191a2ccbdf9ea0d3",
+        "created_by": "9d2e050c9f801f9a54f6d44dbd81b5e54b67b35a9c1e7bc745bbdad69f310ada",
+        "_meta": {
+          "observedAt": "2026-09-28T19:01:50.446Z",
+          "stale": false,
+          "provider": "https://tonapi.io"
+        },
+        "_strip": {
+          "id": "(0,8000000000000000,100160666)",
+          "height": 100160666,
+          "timestamp": 1790619913,
+          "version": 0,
+          "tx_count": 15,
+          "size": 0,
+          "weight": 0,
+          "bits": 0,
+          "nonce": 0,
+          "difficulty": 0,
+          "merkle_root": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+          "previousblockhash": "(0,8000000000000000,100160665)",
+          "extras": {
+            "totalFees": "1020062620",
+            "reward": "1000000000",
+            "medianFee": null,
+            "minFee": null,
+            "maxFee": null,
+            "feeRange": [],
+            "pool": null
+          },
+          "ton": {
+            "tx_quantity": "15",
+            "value_flow": {
+              "from_prev_blk": {
+                "grams": "2795488034718193407",
+                "other": [
+                  {
+                    "id": "-17",
+                    "value": "1555555554"
+                  },
+                  {
+                    "id": "239",
+                    "value": "2333333332"
+                  }
+                ]
+              },
+              "to_next_blk": {
+                "grams": "2795488034698130787",
+                "other": [
+                  {
+                    "id": "-17",
+                    "value": "1555555554"
+                  },
+                  {
+                    "id": "239",
+                    "value": "2333333332"
+                  }
+                ]
+              },
+              "imported": {
+                "grams": "0",
+                "other": []
+              },
+              "exported": {
+                "grams": "0",
+                "other": []
+              },
+              "fees_collected": {
+                "grams": "1020062620",
+                "other": []
+              },
+              "fees_imported": {
+                "grams": "0",
+                "other": []
+              },
+              "recovered": {
+                "grams": "0",
+                "other": []
+              },
+              "created": {
+                "grams": "1000000000",
+                "other": []
+              },
+              "minted": {
+                "grams": "0",
+                "other": []
+              }
+            },
+            "workchain_id": "0",
+            "shard": "8000000000000000",
+            "seqno": "100160666",
+            "root_hash": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+            "file_hash": "018e790d85cf42e25f5c95dba68464304d87f6d77e7d0cfaf3e5f677799ad340",
+            "global_id": "-239",
+            "version": "0",
+            "after_merge": false,
+            "before_split": false,
+            "after_split": false,
+            "want_split": false,
+            "want_merge": true,
+            "key_block": false,
+            "gen_utime": "1790619913",
+            "start_lt": "106505947000000",
+            "end_lt": "106505947000017",
+            "vert_seqno": "1",
+            "gen_catchain_seqno": "871063",
+            "min_ref_mc_seqno": "95665104",
+            "prev_key_block_seqno": "95604086",
+            "gen_software_version": "16",
+            "gen_software_capabilities": "1006",
+            "master_ref": "(-1,8000000000000000,95665104)",
+            "prev_refs": [
+              "(0,8000000000000000,100160665)"
+            ],
+            "in_msg_descr_length": "15",
+            "out_msg_descr_length": "9",
+            "rand_seed": "17af9d744821033ed37800240c80254be0e23ca5273d308f191a2ccbdf9ea0d3",
+            "created_by": "9d2e050c9f801f9a54f6d44dbd81b5e54b67b35a9c1e7bc745bbdad69f310ada",
+            "_meta": {
+              "observedAt": "2026-09-28T19:01:50.446Z",
+              "stale": false,
+              "provider": "https://tonapi.io"
+            }
+          }
+        },
+        "transaction_fee_stats": {
+          "transactionCount": 15,
+          "complete": true,
+          "total": "10820804",
+          "min": "0",
+          "max": "3534740",
+          "median": "308182",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        }
+      }
+    },
+    "scope": "Independent indexed/raw-transaction oracle only; no full-block BOC was supplied for this sample.",
+    "candidateContext": {
+      "file": "/tmp/ton-fee-strip/review/ton-fees/independent/sample-context.json",
+      "allFeeFieldsMatch": true,
+      "protocolCollectedUnchanged": true
+    }
+  },
+  "passed": true
+}

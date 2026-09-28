@@ -1,0 +1,176 @@
+{
+  "targetId": "(0,8000000000000000,100160666)",
+  "targetIndex": 0,
+  "blocks": [
+    {
+      "id": "(0,8000000000000000,100160666)",
+      "height": 100160666,
+      "timestamp": 1790619913,
+      "version": 0,
+      "tx_count": 15,
+      "size": 0,
+      "weight": 0,
+      "bits": 0,
+      "nonce": 0,
+      "difficulty": 0,
+      "merkle_root": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+      "previousblockhash": "(0,8000000000000000,100160665)",
+      "extras": {
+        "totalFees": "10820804",
+        "transactionFees": {
+          "transactionCount": 15,
+          "complete": true,
+          "total": "10820804",
+          "min": "0",
+          "max": "3534740",
+          "median": "308182",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        },
+        "reward": "1000000000",
+        "medianFee": null,
+        "minFee": null,
+        "maxFee": null,
+        "feeRange": [],
+        "pool": null
+      },
+      "ton": {
+        "workchain_id": 0,
+        "shard": "8000000000000000",
+        "seqno": 100160666,
+        "root_hash": "fc41caddec6998654a30252037c52632adbeba87e37aa3f1d6d1bb6830954332",
+        "file_hash": "018e790d85cf42e25f5c95dba68464304d87f6d77e7d0cfaf3e5f677799ad340",
+        "global_id": -239,
+        "version": 0,
+        "not_master": true,
+        "after_merge": false,
+        "before_split": false,
+        "after_split": false,
+        "want_split": false,
+        "want_merge": true,
+        "key_block": false,
+        "vert_seqno_incr": false,
+        "flags": 1,
+        "vert_seqno": 1,
+        "gen_utime": 1790619913,
+        "start_lt": "106505947000000",
+        "end_lt": "106505947000017",
+        "gen_validator_list_hash_short": 3991957911,
+        "gen_catchain_seqno": 871063,
+        "min_ref_mc_seqno": 95665104,
+        "prev_key_block_seqno": 95604086,
+        "gen_software_version": 16,
+        "gen_software_capabilities": "1006",
+        "master_ref": "(-1,8000000000000000,95665104)",
+        "prev_refs": [
+          "(0,8000000000000000,100160665)"
+        ],
+        "_prev_blocks": [
+          {
+            "workchain_id": 0,
+            "shard": "8000000000000000",
+            "seqno": 100160665,
+            "end_lt": "106505946000023",
+            "root_hash": "8de633b8eafb3975f3fd07812b112cc1d9e9f4fc0ef38596d3085785773e4704",
+            "file_hash": "b3588e566b93a98085e2d7093d416136e7c7003375fb77de516f9923ec03e456"
+          }
+        ],
+        "tx_quantity": 15,
+        "transaction_fee_stats": {
+          "transactionCount": 15,
+          "complete": true,
+          "total": "10820804",
+          "min": "0",
+          "max": "3534740",
+          "median": "308182",
+          "medianExact": {
+            "remainder": "0",
+            "denominator": "1"
+          }
+        },
+        "rand_seed": "17af9d744821033ed37800240c80254be0e23ca5273d308f191a2ccbdf9ea0d3",
+        "created_by": "9d2e050c9f801f9a54f6d44dbd81b5e54b67b35a9c1e7bc745bbdad69f310ada",
+        "value_flow": {
+          "from_prev_blk": {
+            "grams": "2795488034718193407",
+            "other": [
+              {
+                "id": "239",
+                "value": "2333333332"
+              },
+              {
+                "id": "4294967279",
+                "value": "1555555554"
+              }
+            ]
+          },
+          "to_next_blk": {
+            "grams": "2795488034698130787",
+            "other": [
+              {
+                "id": "239",
+                "value": "2333333332"
+              },
+              {
+                "id": "4294967279",
+                "value": "1555555554"
+              }
+            ]
+          },
+          "imported": {
+            "grams": "0",
+            "other": []
+          },
+          "exported": {
+            "grams": "0",
+            "other": []
+          },
+          "fees_collected": {
+            "grams": "1020062620",
+            "other": []
+          },
+          "fees_imported": {
+            "grams": "0",
+            "other": []
+          },
+          "recovered": {
+            "grams": "0",
+            "other": []
+          },
+          "created": {
+            "grams": "1000000000",
+            "other": []
+          },
+          "minted": {
+            "grams": "0",
+            "other": []
+          }
+        },
+        "_meta": {
+          "observedAt": "2026-09-28T19:47:28.393Z",
+          "stale": false,
+          "provider": "verified-public-lite"
+        }
+      }
+    }
+  ],
+  "older": {
+    "status": "complete",
+    "refs": []
+  },
+  "newer": {
+    "status": "complete",
+    "refs": []
+  },
+  "requested": {
+    "older": 0,
+    "newer": 0
+  },
+  "_meta": {
+    "partial": false,
+    "stale": false,
+    "observedAt": "2026-09-28T19:47:28.393Z"
+  }
+}

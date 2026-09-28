@@ -1,0 +1,65 @@
+{
+  "at": "2026-09-28T19:43:01.676Z",
+  "result": [
+    {
+      "workchain": 0,
+      "frames": [
+        {
+          "head": 100172275,
+          "count": 32,
+          "observedAt": "2026-09-28T19:42:48.565Z",
+          "stale": true,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "head": 100172275,
+          "count": 32,
+          "observedAt": "2026-09-28T19:42:48.565Z",
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "head": 100172297,
+          "count": 32,
+          "observedAt": "2026-09-28T19:43:01.131Z",
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        }
+      ],
+      "advanced": true
+    },
+    {
+      "workchain": -1,
+      "frames": [
+        {
+          "head": 95676436,
+          "count": 32,
+          "observedAt": "2026-09-28T19:42:47.271Z",
+          "stale": true,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "head": 95676454,
+          "count": 32,
+          "observedAt": "2026-09-28T19:42:54.775Z",
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "head": 95676454,
+          "count": 32,
+          "observedAt": "2026-09-28T19:42:54.775Z",
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        }
+      ],
+      "advanced": true
+    }
+  ]
+}

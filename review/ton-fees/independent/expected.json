@@ -1,0 +1,50 @@
+{
+  "checkedAt": "2026-09-28T19:38:10.959944+00:00",
+  "blocks": [
+    {
+      "id": "(0,8000000000000000,100043794)",
+      "independentSource": "public native block-transactions response from indexed TonAPI; complete count checked against matching block metadata/BOC",
+      "file": "base-transactions.json",
+      "transactionCount": 2,
+      "total": "527295",
+      "min": "38469",
+      "max": "488826",
+      "median": "263647",
+      "medianExact": {
+        "remainder": "1",
+        "denominator": "2"
+      },
+      "sourceObservedAt": "2026-09-28T19:37:52.206Z"
+    },
+    {
+      "id": "(-1,8000000000000000,95551090)",
+      "independentSource": "public native block-transactions response from indexed TonAPI; complete count checked against matching block metadata/BOC",
+      "file": "master-transactions.json",
+      "transactionCount": 3,
+      "total": "0",
+      "min": "0",
+      "max": "0",
+      "median": "0",
+      "medianExact": {
+        "remainder": "0",
+        "denominator": "1"
+      },
+      "sourceObservedAt": "2026-09-28T19:37:53.303Z"
+    },
+    {
+      "id": "(0,8000000000000000,100160666)",
+      "independentSource": "public native block-transactions response from indexed TonAPI; complete count checked against matching block metadata/BOC",
+      "file": "sample-transactions.json",
+      "transactionCount": 15,
+      "total": "10820804",
+      "min": "0",
+      "max": "3534740",
+      "median": "308182",
+      "medianExact": {
+        "remainder": "0",
+        "denominator": "1"
+      },
+      "sourceObservedAt": "2026-09-28T19:01:51.678Z"
+    }
+  ]
+}

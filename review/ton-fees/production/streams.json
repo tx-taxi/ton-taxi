@@ -1,0 +1,78 @@
+{
+  "at": "2026-09-28T19:47:58.792Z",
+  "masterDnsMapping": "40.160.19.141",
+  "certificateValidation": true,
+  "results": [
+    {
+      "host": "ton.tx.taxi",
+      "workchain": 0,
+      "frames": [
+        {
+          "at": "2026-09-28T19:47:59.329Z",
+          "head": 100173048,
+          "count": 32,
+          "workchains": [
+            0
+          ],
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "at": "2026-09-28T19:47:59.425Z",
+          "head": 100173048,
+          "count": 32,
+          "workchains": [
+            0
+          ],
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "at": "2026-09-28T19:48:00.693Z",
+          "head": 100173050,
+          "count": 32,
+          "workchains": [
+            0
+          ],
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        }
+      ],
+      "errors": [],
+      "advanced": true
+    },
+    {
+      "host": "masterchain.ton.tx.taxi",
+      "workchain": -1,
+      "frames": [
+        {
+          "at": "2026-09-28T19:47:59.277Z",
+          "head": 95677180,
+          "count": 32,
+          "workchains": [
+            -1
+          ],
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        },
+        {
+          "at": "2026-09-28T19:47:59.416Z",
+          "head": 95677187,
+          "count": 32,
+          "workchains": [
+            -1
+          ],
+          "stale": false,
+          "consecutive": true,
+          "completeFees": 32
+        }
+      ],
+      "errors": [],
+      "advanced": true
+    }
+  ]
+}

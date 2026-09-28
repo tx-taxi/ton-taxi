@@ -1,0 +1,98 @@
+{
+  "deployment_uuid": "mavyhq2hvoejb8f6bxdchvec",
+  "status": "finished",
+  "commit": "8296dab52c400c371bf57adcc4542fe6b256717f",
+  "created_at": "2026-09-28T19:46:00.000000Z",
+  "updated_at": "2026-09-28T19:47:11.000000Z",
+  "finished_at": "2026-09-28T19:47:09.000000Z",
+  "events": [
+    {
+      "timestamp": "2026-09-28T19:46:03.187279Z",
+      "output": "Docker 29.2.1 with BuildKit and Buildx detected on deployment server (game-1)."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:03.732230Z",
+      "output": "Starting deployment of tx-taxi/ton-taxi:main to game-1."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:05.090480Z",
+      "output": "Preparing container with helper image: docker.io/coollabsio/coolify-helper:1.0.17"
+    },
+    {
+      "timestamp": "2026-09-28T19:46:08.691433Z",
+      "output": "----------------------------------------"
+    },
+    {
+      "timestamp": "2026-09-28T19:46:08.703528Z",
+      "output": "Importing tx-taxi/ton-taxi:main (commit sha 8296dab52c400c371bf57adcc4542fe6b256717f) to /artifacts/mavyhq2hvoejb8f6bxdchvec."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:13.676446Z",
+      "output": "Image not found (hnovtmaezijzd4lf7lpnczef:8296dab52c400c371bf57adcc4542fe6b256717f). Building new image."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:18.187899Z",
+      "output": "----------------------------------------"
+    },
+    {
+      "timestamp": "2026-09-28T19:46:18.198732Z",
+      "output": "Building docker image started."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:18.210959Z",
+      "output": "To check the current progress, click on Show Debug Logs."
+    },
+    {
+      "timestamp": "2026-09-28T19:46:59.164244Z",
+      "output": "Building docker image completed."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:00.124141Z",
+      "output": "----------------------------------------"
+    },
+    {
+      "timestamp": "2026-09-28T19:47:00.140819Z",
+      "output": "Rolling update started."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:01.320152Z",
+      "output": "New container started."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:01.336302Z",
+      "output": "Waiting for healthcheck to pass on the new container."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:01.353623Z",
+      "output": "Healthcheck URL (inside the container): GET: http://localhost:8080/healthz"
+    },
+    {
+      "timestamp": "2026-09-28T19:47:01.372293Z",
+      "output": "Waiting for the start period (5 seconds) before starting healthcheck."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:07.328529Z",
+      "output": "Attempt 1 of 10 | Healthcheck status: \"healthy\""
+    },
+    {
+      "timestamp": "2026-09-28T19:47:07.343291Z",
+      "output": "Healthcheck logs: (no logs) | Return code: 0"
+    },
+    {
+      "timestamp": "2026-09-28T19:47:07.366912Z",
+      "output": "New container is healthy."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:07.383173Z",
+      "output": "Removing old containers."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:09.361516Z",
+      "output": "Rolling update completed."
+    },
+    {
+      "timestamp": "2026-09-28T19:47:10.844335Z",
+      "output": "Gracefully shutting down build container: mavyhq2hvoejb8f6bxdchvec"
+    }
+  ]
+}
