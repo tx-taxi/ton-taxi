@@ -122,11 +122,11 @@ export class WebsocketService {
     }
   }
 
-  private resetTonFeed(): void {
+  private resetTonFeed(preserveRouteMarker = false): void {
     this.cacheService.resetBlockCache();
     this.stateService.resetChainTip();
     this.stateService.resetBlocks([]);
-    this.stateService.markBlock$.next({});
+    if (!preserveRouteMarker) this.stateService.markBlock$.next({});
     this.stateService.resetScroll$.next(true);
   }
 
@@ -460,8 +460,9 @@ export class WebsocketService {
     if (scope) {
       const key = `${scope.workchain}:${scope.shard}`;
       if (key !== this.observedTonFeed) {
+        // Initial stream discovery must retain the route's pending/block marker.
+        this.resetTonFeed(!this.observedTonFeed);
         this.observedTonFeed = key;
-        this.resetTonFeed();
       }
     }
     let reinitBlocks = false;

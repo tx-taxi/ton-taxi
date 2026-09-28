@@ -377,21 +377,24 @@ test('switching to a lower sequence workchain resets the live high-water mark an
   assert.equal(cacheResets, 2);
 });
 
-test('a default-shard change clears height aliases and a mixed-shard snapshot is rejected', () => {
+test('initial feed discovery preserves the pending route marker; a shard change clears it and rejects mixed snapshots', () => {
   const { WebsocketService } = loadService('../services/websocket.service.ts');
   const service = Object.create(WebsocketService.prototype);
   let resets = 0;
   service.cacheService = { resetBlockCache() { resets++; } };
   service.tonSelection = { current: { workchain: 0 } };
   service.stateService = {
-    latestBlockHeight: -1, blocks: [], markBlock$: new Subject(), resetScroll$: new Subject(),
+    latestBlockHeight: -1, blocks: [], markBlock$: new BehaviorSubject({ mempoolBlockIndex: 0 }), resetScroll$: new Subject(),
     resetChainTip() { this.latestBlockHeight = -1; },
     resetBlocks(blocks) { this.blocks = blocks; },
     updateChainTip(height) { this.latestBlockHeight = Math.max(this.latestBlockHeight, height); },
   };
   const left = block(0, '4000000000000000', 100039007), right = block(0, 'c000000000000000', 100039007);
   service.handleResponse({ blocks: [left] });
+  assert.deepEqual(service.stateService.markBlock$.value, { mempoolBlockIndex: 0 });
+  assert.equal(resets, 1);
   service.handleResponse({ blocks: [right] });
+  assert.deepEqual(service.stateService.markBlock$.value, {});
   assert.equal(service.stateService.blocks[0].id, right.id);
   assert.equal(resets, 2);
   service.handleResponse({ blocks: [left, right] });
