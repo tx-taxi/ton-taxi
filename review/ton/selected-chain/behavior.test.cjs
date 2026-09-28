@@ -38,3 +38,17 @@ test('basechain loading stays empty instead of substituting masterchain and pagi
  collector.basechain.cached=()=>({workchain_id:'0',shard,seqno:'200',prev_refs:['(0,8000000000000000,199)']});
  const boundary=await request('limit=8');assert.equal(boundary.blocks.length,1);assert.equal(boundary._paging.hasMore,false);assert.equal(boundary._paging.boundary,true);
 });
+
+test('numeric search resolves the selected full tuple while explicit tuple and legacy entity URLs preserve identity',async()=>{
+ const shard='8000000000000000';
+ const header=(chain,seqno)=>({workchain_id:String(chain),shard,seqno:String(seqno),gen_utime:'1790571000',tx_quantity:'3',root_hash:'1'.repeat(64),prev_refs:[],value_flow:{fees_collected:{grams:'0'},created:{grams:'0'}}});
+ const provider={request:async route=>{const id=decodeURIComponent(route.split('/').pop());const match=/^\((-?\d+),[a-f0-9]{16},(\d+)\)$/.exec(id);return{data:header(Number(match[1]),Number(match[2])),at:Date.now(),stale:false,provider:'fixture'};}};
+ const collector={blocks:[header(-1,200)],observedAt:'2026-09-28T04:00:00Z',cached:n=>header(-1,n),dashboard:selection=>({head:header(selection.workchain,200),workchain:selection.workchain,shard}),basechain:{cached:n=>header(0,n),dashboard:()=>({head:header(0,200),observedAt:'2026-09-28T04:00:00Z'})}};
+ const resolve=query=>api(new URL('http://fixture.invalid/api/ton/resolve?'+query),provider,collector);
+ assert.equal((await resolve('value=42')).id,`(0,${shard},42)`);
+ assert.equal((await resolve('value=42&workchain=-1')).id,`(-1,${shard},42)`);
+ assert.equal((await resolve('value='+encodeURIComponent(`(-1,${shard},42)`)+'&workchain=0')).id,`(-1,${shard},42)`);
+ assert.equal((await api(new URL('http://fixture.invalid/api/ton/block/42'),provider,collector)).workchain_id,'-1');
+ collector.dashboard=()=>({head:null,workchain:0,shard});
+ await assert.rejects(resolve('value=42'),/Selected chain temporarily unavailable/);
+});

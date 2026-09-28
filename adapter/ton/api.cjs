@@ -1,7 +1,7 @@
 "use strict";
 const { ProviderError } = require("./provider.cjs");
 const { canonicalBlock, normalize } = require("./collector.cjs");
-const { blockContext } = require("./block-context.cjs");
+const { blockContext, blockIdentity, readHeader } = require("./block-context.cjs");
 const { LatestNetworkWindow } = require("./latest-network-window.cjs");
 const { blockSelection } = require("./block-selection.cjs");
 const enc = encodeURIComponent;
@@ -264,7 +264,17 @@ async function api(url, provider, collector) {
   if (kind === "validators") return get("/v2/blockchain/validators", 60000);
   if (kind === "resolve") {
     const value = require("./identity.cjs").input(q.get("value") || "");
-    if (/^\d+$/.test(value) || /^\(-?\d+,[a-fA-F0-9]{16},\d+\)$/.test(value)) {
+    if (/^\d+$/.test(value)) {
+      const selection = blockSelection(q);
+      if (!collector.blocks.length) await collector.refresh();
+      const selected = collector.dashboard(selection);
+      if (!selected.head || !selected.shard)
+        throw new ProviderError("Selected chain temporarily unavailable");
+      const identity = blockIdentity(`(${selection.workchain},${selected.shard},${value})`);
+      await readHeader(provider, collector, identity.id);
+      return { type: "block", id: identity.id };
+    }
+    if (/^\(-?\d+,[a-fA-F0-9]{16},\d+\)$/.test(value)) {
       await get(
         "/v2/blockchain/blocks/" + enc(canonicalBlock(value)),
         86400000,
