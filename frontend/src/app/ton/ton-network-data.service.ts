@@ -8,6 +8,7 @@ import { SeoService } from '@app/services/seo.service';
 import { StateService } from '@app/services/state.service';
 import { TonPageData } from './ton-page-data';
 import { confirmedDashboardData, ConfirmedTransactionWindowSource } from './dashboard-data';
+import { tonNetworkHistory } from './network-history';
 
 type NativeRoute = 'dashboard' | 'blocks' | 'block';
 
@@ -43,6 +44,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
     this.requests.add(this.getNative<any>(url).subscribe({
       next: result => {
         if (!current()) return;
+        if (this.nativeRoute === 'dashboard') this.loadDashboardTransactions(result.head?.seqno);
         // A live head may have arrived while this HTTP snapshot was in flight.
         if (this.nativeRoute === 'dashboard' && Number(result.head?.seqno) < Number(this.data?.head?.seqno)) return;
         this.data = result;
@@ -52,7 +54,6 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
         this.nextBefore = result._paging?.nextBefore || (last ? String(last.ton?.seqno || last.seqno || last.height) : null);
         this.hasMoreBlocks = result._paging?.hasMore === true || (!result._paging && this.nextBefore !== null);
         this.loading = false; this.error = ''; this.updateMetadata();
-        if (this.nativeRoute === 'dashboard') this.loadDashboardTransactions(result.head?.seqno);
       },
       error: error => {
         if (!current()) return;
@@ -78,7 +79,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
       this.queuedTransactionSeqno = null;
       if (queued && queued !== String(seqno) && generation === this.generation) this.loadDashboardTransactions(queued);
     };
-    this.transactionRequest = this.getNative<any>('/api/ton/network-transactions?limit=50&master_seqno=' + encodeURIComponent(String(seqno))).subscribe({
+    this.transactionRequest = this.getNative<any>('/api/ton/network-transactions?limit=50').subscribe({
       next: result => {
         if (generation !== this.generation) return;
         this.transactions = result.transactions || [];
@@ -113,11 +114,9 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   private cachedDashboard: any;
   private dashboardInputs: any[] = [];
   override syncDashboard(blocks: any[]): void {
-    const oldHead = this.data?.head?.seqno;
     super.syncDashboard(blocks);
     if (this.nativeRoute !== 'dashboard' || !this.data?.blocks) return;
     this.blocks = this.data.blocks;
-    if (this.data.head?.seqno !== oldHead) this.loadDashboardTransactions(this.data.head.seqno);
   }
   get dashboard(): any {
     const inputs = [this.data, this.blocks, this.transactions, this.transactionWindow];
@@ -127,16 +126,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
     return this.cachedDashboard = {
       ...this.data,
       blocks: this.blocks,
-      // Sequence-number distance counts the masterchain intervals between two
-      // observed headers. This is their mean duration, not a fabricated duration
-      // for any skipped individual block. Preserve exact fees separately.
-      history: observations.map((sample, index) => {
-        const previous = observations[index - 1];
-        const sequenceDistance = previous ? Number(sample.seqno) - Number(previous.seqno) : 0;
-        const elapsed = previous ? Number(sample.timestamp) - Number(previous.timestamp) : 0;
-        const hasFee = sample.fees !== null && sample.fees !== undefined && /^\d+$/.test(String(sample.fees));
-        return { timestamp: sample.timestamp, gapBefore: sequenceDistance > 1, feeAtomic: hasFee ? String(sample.fees) : undefined, fees: hasFee ? Number(sample.fees) / 1_000_000_000 : null, interval: sequenceDistance > 0 && elapsed > 0 ? elapsed / sequenceDistance : undefined };
-      }),
+      history: tonNetworkHistory(observations),
       intervals: this.observedIntervals(this.blocks),
       transactions: this.transactions,
       confirmed: this.transactionWindow ? confirmedDashboardData(this.transactions, this.transactionWindow) : null,

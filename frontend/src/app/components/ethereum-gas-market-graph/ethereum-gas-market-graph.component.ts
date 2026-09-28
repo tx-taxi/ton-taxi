@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, L
 import { EChartsOption } from '@app/graphs/echarts';
 import { StateService } from '@app/services/state.service';
 import { Subscription } from 'rxjs';
+import type { TonNetworkHistorySample } from '@app/ton/network-history';
 
 export interface EthereumGasMarketSample {
   added: number;
@@ -11,9 +12,9 @@ export interface EthereumGasMarketSample {
   gas_price_average_gwei: number;
   pending_sample_count?: number;
 }
-export interface TonNetworkHistorySample { timestamp: number; gapBefore?: boolean; fees?: number | string; feeAtomic?: string; interval?: number | string; }
+export type { TonNetworkHistorySample } from '@app/ton/network-history';
 
-type ChartSample = Omit<EthereumGasMarketSample, 'base_fee_gwei' | 'gas_price_average_gwei' | 'network_utilization_percentage'> & { timestamp: number; base_fee_gwei: number | null; gas_price_average_gwei: number | null; network_utilization_percentage: number | null; tonFeeAtomic?: string; gapBefore?: boolean };
+type ChartSample = Omit<EthereumGasMarketSample, 'base_fee_gwei' | 'gas_price_average_gwei' | 'network_utilization_percentage'> & { timestamp: number; base_fee_gwei: number | null; gas_price_average_gwei: number | null; network_utilization_percentage: number | null; tonFeeAtomic?: string; tonHistory?: TonNetworkHistorySample; gapBefore?: boolean };
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 const FUTURE_TOLERANCE_MS = 60 * 1000;
@@ -68,16 +69,16 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
 
   private normalizeTonSamples(samples: TonNetworkHistorySample[] | null): ChartSample[] {
     if (!samples?.length) return [];
-    const points = new Map<number, ChartSample>();
+    const points: ChartSample[] = [];
     for (const sample of samples) {
       const timestamp = Number(sample.timestamp) * 1000;
       const fees = sample.fees === null || sample.fees === undefined || String(sample.fees).trim() === '' ? null : Number(sample.fees);
       const interval = sample.interval === null || sample.interval === undefined ? NaN : Number(sample.interval);
       if (!Number.isFinite(timestamp)) continue;
       // Interval values are mean durations over observed masterchain sequence spans.
-      points.set(timestamp, { added: Math.floor(timestamp / 1000), timestamp, base_fee_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, gas_price_average_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, network_utilization_percentage: Number.isFinite(interval) && interval >= 0 ? interval : null, tonFeeAtomic: sample.feeAtomic, gapBefore: sample.gapBefore === true });
+      points.push({ added: Math.floor(timestamp / 1000), timestamp, base_fee_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, gas_price_average_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, network_utilization_percentage: Number.isFinite(interval) && interval >= 0 ? interval : null, tonFeeAtomic: sample.feeAtomic, tonHistory: sample, gapBefore: sample.gapBefore === true });
     }
-    return [...points.values()].sort((a, b) => a.timestamp - b.timestamp);
+    return points.sort((a, b) => a.timestamp - b.timestamp);
   }
 
   get accessibleSummary(): string {
@@ -91,7 +92,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
         ? `Masterchain observation at ${this.formatTime(latest.timestamp)}.`
         : `Masterchain history from ${this.formatTime(this.recentSamples[0].timestamp)} to ${this.formatTime(latest.timestamp)}.`;
       const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
-      return `${range} Latest collected fees ${fee === null ? 'not observed' : fee + ' GRAM'}; mean block interval ${latest.network_utilization_percentage === null ? 'not observed' : this.formatSeconds(latest.network_utilization_percentage)}.`;
+      return `${range} Latest mean collected fees per block ${fee === null ? 'not observed' : fee + ' GRAM'}; mean block interval ${latest.network_utilization_percentage === null ? 'not observed' : this.formatSeconds(latest.network_utilization_percentage)}.`;
     }
     if (this.recentSamples.length === 1) {
       return `Current gas market sample at ${this.formatTime(latest.timestamp)}. `
@@ -150,16 +151,15 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   }
 
   private buildChartOptions(): EChartsOption {
-    const sampleByTimestamp = new Map(this.recentSamples.map(sample => [sample.timestamp, sample]));
     const isCurrentSample = this.recentSamples.length === 1;
     const currentTimestamp = this.recentSamples[0]?.timestamp || Date.now();
 
     // A null separator breaks the native line across unobserved headers while
     // retaining both real endpoints and their exact tooltip data.
-    const lineData = (key: 'base_fee_gwei' | 'network_utilization_percentage'): Array<[number, number | null]> =>
-      this.recentSamples.flatMap(sample => sample.gapBefore
-        ? [[sample.timestamp, null], [sample.timestamp, sample[key]]] as Array<[number, number | null]>
-        : [[sample.timestamp, sample[key]]] as Array<[number, number | null]>);
+    const lineData = (key: 'base_fee_gwei' | 'network_utilization_percentage'): Array<[number, number | null, number]> =>
+      this.recentSamples.flatMap((sample, index) => sample.gapBefore
+        ? [[sample.timestamp, null, index], [sample.timestamp, sample[key], index]] as Array<[number, number | null, number]>
+        : [[sample.timestamp, sample[key], index]] as Array<[number, number | null, number]>);
 
     return {
       animation: false,
@@ -188,17 +188,23 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
           },
         },
         formatter: (params: unknown): string => {
-          const points = Array.isArray(params) ? params as Array<{ value?: [number, number] }> : [];
+          const points = Array.isArray(params) ? params as Array<{ value?: [number, number, number] }> : [];
           const timestamp = Number(points[0]?.value?.[0]);
-          const sample = sampleByTimestamp.get(timestamp);
+          const sample = this.recentSamples[Number(points[0]?.value?.[2])];
           if (!sample) {
             return '';
           }
 
           if (this.isTon) {
+            const history = sample.tonHistory;
+            const total = this.formatAtomicGram(history?.feeTotalAtomic, null);
+            const fractionalMean = !!history?.feeTotalAtomic && !!history.feeCount && BigInt(history.feeTotalAtomic) % BigInt(history.feeCount) !== 0n;
+            const blocks = history?.blockCount ? `<div>Blocks: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
             return `<div class="ethereum-gas-tooltip">
               <div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>
-              <div>Collected fees: <strong>${this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'Not observed'}</strong></div>
+              ${blocks}
+              <div>Mean collected fees / block: <strong>${fractionalMean ? '≈' : ''}${this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'Not observed'}</strong></div>
+              ${total === null ? '' : `<div>Total collected fees: <strong>${total} GRAM</strong>${history.feeCount !== history.blockCount ? ` (${history.feeCount} of ${history.blockCount} blocks)` : ''}</div>`}
               <div>Mean block interval: <strong>${sample.network_utilization_percentage === null ? 'Not observed' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div>
             </div>`;
           }
@@ -268,7 +274,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
       ],
       series: [
         {
-          name: this.isTon ? 'Collected fees' : 'Base fee',
+          name: this.isTon ? 'Mean collected fees / block' : 'Base fee',
           type: 'line',
           yAxisIndex: 0,
           data: lineData('base_fee_gwei'),
