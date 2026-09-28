@@ -7,6 +7,17 @@
   </div>
 
   <div class="clearfix"></div>
+<ng-container *ngIf="nativeRoute">
+  <div class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON block selection">
+    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Workchain" [value]="tonData.workchain" (change)="tonData.selectWorkchain($any($event.target).value)">
+      <option value="0">Basechain</option>
+      <option value="-1">Masterchain</option>
+    </select>
+    <select *ngIf="tonData.workchain === 0 && tonData.activeShards.length > 1" class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" [value]="tonData.selectedShard" (change)="tonData.selectShard($any($event.target).value)">
+      <option *ngFor="let shard of tonData.activeShards" [value]="shard.shard">Shard {{ shard.shard }}</option>
+    </select>
+  </div>
+</ng-container>
 
   <div *ngIf="nativeRoute && tonData.error" class="alert alert-mempool" role="alert">{{ tonData.error }}</div>
   <div style="min-height: 295px" *ngIf="!nativeRoute || !tonData.error">
@@ -31,7 +42,7 @@
             <a [routerLink]="['/block' | relativeUrl, nativeMode ? tonBlockRoute(block) : block.id]" [state]="nativeMode ? null : { data: { block: block } }">{{ nativeMode ? tonValue(block, 'seqno') : block.height }}</a>
           </td>
           <td  *ngIf="nativeMode || isMempoolModule" class="pool text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}">
-            <ng-container *ngIf="nativeMode; else feeRecipient"><span [ngbTooltip]="'Shard ' + tonValue(block, 'shard')">{{ tonValue(block, 'workchain_id') === -1 || tonValue(block, 'workchain_id') === '-1' ? 'Masterchain' : tonValue(block, 'workchain_id') }}</span></ng-container>
+            <ng-container *ngIf="nativeMode; else feeRecipient"><span [ngbTooltip]="'Shard ' + tonValue(block, 'shard')">{{ tonValue(block, 'workchain_id') === -1 || tonValue(block, 'workchain_id') === '-1' ? 'Masterchain' : tonValue(block, 'workchain_id') == 0 ? 'Basechain' : tonValue(block, 'workchain_id') }}</span></ng-container>
             <ng-template #feeRecipient><app-truncate [text]="block.extras.pool.name" [lastChars]="6" [link]="['/address/' | relativeUrl, block.extras.pool.name]"></app-truncate></ng-template>
           </td>
           <td class="timestamp" *ngIf="!widget" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}">
@@ -120,6 +131,7 @@
     <div *ngIf="nativeRoute && tonData.blocksError" class="alert alert-mempool" role="alert">{{ tonData.blocksError }}</div>
     <ng-template [ngIf]="!widget">
       <div class="clearfix"></div>
+
       <br>
     </ng-template>
   </div>

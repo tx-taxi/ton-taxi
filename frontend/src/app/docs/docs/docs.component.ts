@@ -59,7 +59,7 @@ export class DocsComponent implements OnInit {
       if( this.stateService.network === 'liquid' || this.stateService.network === 'liquidtestnet' ) {
         this.seoService.setDescription($localize`:@@meta.description.docs.websocket-liquid:Documentation for the liquid.network WebSocket API service: get real-time info on blocks, mempools, transactions, addresses, and more.`);
       } else {
-        this.seoService.setDescription('TON WebSocket API reference for live masterchain blocks.');
+        this.seoService.setDescription('TON WebSocket API reference for live basechain and masterchain blocks.');
       }
     } else {
       this.activeTab = 0;

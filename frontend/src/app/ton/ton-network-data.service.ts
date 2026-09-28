@@ -1,7 +1,9 @@
 import { ChangeDetectorRef, Injectable, OnDestroy, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest, Subscription } from 'rxjs';
+import { TonChainSelectionService } from './ton-chain-selection.service';
+import { tonBlockMatchesSelection, tonBlockScope, tonChainSelection, tonSelectionQuery } from './chain-selection';
 import { finalize } from 'rxjs/operators';
 import { OpenGraphService } from '@app/services/opengraph.service';
 import { SeoService } from '@app/services/seo.service';
@@ -22,31 +24,48 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   private dashboardRequestSequence = 0;
   private queuedTransactionSeqno: string | null = null;
   private visibilityListener = () => this.onVisibilityChange();
-  constructor(cdr: ChangeDetectorRef, http: HttpClient, route: ActivatedRoute, state: StateService, seo: SeoService, og: OpenGraphService) { super(cdr, http, route, state, seo, og); }
+  constructor(cdr: ChangeDetectorRef, http: HttpClient, route: ActivatedRoute, state: StateService, seo: SeoService, og: OpenGraphService, private selection: TonChainSelectionService, private router: Router) { super(cdr, http, route, state, seo, og); }
   private getNative<T>(url: string) { return this.http.get<T>(url).pipe(finalize(() => this.cdr.markForCheck())); }
   private contextResizeListener = () => this.onContextResize();
-  override ngOnInit(): void { window.addEventListener('resize', this.contextResizeListener); document.addEventListener('visibilitychange', this.visibilityListener); this.nativeRouteSub = this.route.paramMap.subscribe(params => { const page = this.route.snapshot.data.tonPage; this.nativeRoute = page === 'block' ? 'block' : page === 'blocks' ? 'blocks' : 'dashboard'; this.page = this.nativeRoute; this.id = params.get('id') || ''; this.loadNative(); }); }
+  override ngOnInit(): void { window.addEventListener('resize', this.contextResizeListener); document.addEventListener('visibilitychange', this.visibilityListener); this.nativeRouteSub = combineLatest([this.route.paramMap, this.route.queryParamMap]).subscribe(([params, query]) => { const page = this.route.snapshot.data.tonPage; this.nativeRoute = page === 'block' ? 'block' : page === 'blocks' ? 'blocks' : 'dashboard'; this.page = this.nativeRoute; this.id = params.get('id') || ''; this.selection.set(query.get('workchain'), query.get('shard')); this.loadNative(); }); }
   override ngOnDestroy(): void { window.removeEventListener('resize', this.contextResizeListener); document.removeEventListener('visibilitychange', this.visibilityListener); this.nativeRouteSub?.unsubscribe(); super.ngOnDestroy(); }
+  get workchain(): 0 | -1 { return this.selection.current.workchain; }
+  get chainLabel(): string { return this.workchain === -1 ? 'Masterchain' : 'Basechain'; }
+  get activeShards(): any[] { return (this.data?.activeShards || []).filter(shard => Number(shard.workchain) === 0); }
+  get selectedShard(): string { return this.selection.current.shard || this.data?.shard || ''; }
+  get selectionQueryParams(): { workchain: number; shard?: string } { return { ...this.selection.current, ...(this.selectedShard ? { shard: this.selectedShard } : {}) }; }
+  selectWorkchain(value: string): void {
+    const selected = tonChainSelection(value);
+    void this.router.navigate([], { relativeTo: this.route, queryParams: { workchain: selected.workchain, shard: selected.shard || null }, queryParamsHandling: 'merge' });
+  }
+  selectShard(value: string): void {
+    const selected = tonChainSelection(this.workchain, value);
+    void this.router.navigate([], { relativeTo: this.route, queryParams: { workchain: selected.workchain, shard: selected.shard || null }, queryParamsHandling: 'merge' });
+  }
+  private selectedUrl(url: string, pinObservedShard = false): string {
+    // Pin pagination to the observed shard even when the URL requests the current default.
+    return url + (url.includes('?') ? '&' : '?') + tonSelectionQuery({ ...this.selection.current, ...(pinObservedShard && this.selectedShard ? { shard: this.selectedShard } : {}) });
+  }
   private loadNative(): void {
-    this.requests.unsubscribe(); this.requests = new Subscription(); clearInterval(this.refresh); this.generation++; this.data = null; this.loadingMoreBlocks = false; this.loading = true; this.error = ''; this.blocks = []; this.block = null; this.transactions = []; this.shards = []; this.transactionsError = ''; this.shardsError = ''; this.blocksError = ''; this.transactionWindow = null; this.transactionsLoading = false; this.queuedTransactionSeqno = null; this.state.markBlock$.next({}); this.state.nativeBlockContext$.next(this.nativeRoute === 'block' ? { blocks: [], loading: true, unavailable: false } : null); this.updateMetadata();
+    this.requests.unsubscribe(); this.requests = new Subscription(); clearInterval(this.refresh); this.generation++; this.data = null; this.loadingMoreBlocks = false; this.nextBefore = null; this.hasMoreBlocks = false; this.loading = true; this.error = ''; this.blocks = []; this.block = null; this.transactions = []; this.shards = []; this.transactionsError = ''; this.shardsError = ''; this.blocksError = ''; this.transactionWindow = null; this.transactionsLoading = false; this.queuedTransactionSeqno = null; this.state.markBlock$.next({}); this.state.nativeBlockContext$.next(this.nativeRoute === 'block' ? { blocks: [], loading: true, unavailable: false } : null); this.updateMetadata();
     if (this.nativeRoute === 'block') { this.loadBlock(); return; }
     // The collector already holds a bounded, ordered block window. Rendering it
     // avoids holding the list hostage to a serial provider backfill; earlier
     // pagination remains an explicit request from the user.
     this.loadBlocks('/api/ton/dashboard');
-    if (this.nativeRoute === 'dashboard') this.requests.add(this.state.blocks$.subscribe(blocks => this.syncDashboard(blocks)));
-    this.refresh = setInterval(() => { if (!document.hidden && this.nativeRoute === 'dashboard' && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }, 15000);
+    this.requests.add(this.state.blocks$.subscribe(blocks => this.syncDashboard(blocks)));
+    this.refresh = setInterval(() => { if (!document.hidden && (this.nativeRoute === 'dashboard' || this.nativeRoute === 'blocks' && !this.blocks.length) && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }, 15000);
   }
   private loadBlocks(url: string, quiet = false): void {
     const generation = this.generation;
     const sequence = ++this.dashboardRequestSequence;
     const current = () => generation === this.generation && sequence === this.dashboardRequestSequence;
-    this.requests.add(this.getNative<any>(url).subscribe({
+    this.requests.add(this.getNative<any>(this.selectedUrl(url)).subscribe({
       next: result => {
         if (!current()) return;
-        if (this.nativeRoute === 'dashboard') this.loadDashboardTransactions(result.head?.seqno);
+        if (this.nativeRoute === 'dashboard') this.loadDashboardTransactions(result.masterchainHead?.seqno || (this.workchain === -1 ? result.head?.seqno : undefined));
         // A live head may have arrived while this HTTP snapshot was in flight.
-        if (this.nativeRoute === 'dashboard' && Number(result.head?.seqno) < Number(this.data?.head?.seqno)) return;
+        if (this.nativeRoute === 'dashboard' && result.shard === this.data?.shard && Number(result.head?.seqno) < Number(this.data?.head?.seqno)) return;
         this.data = result;
         const observed = result.blocks || [];
         this.blocks = this.nativeRoute === 'blocks' ? this.consecutivePrefix(observed) : observed;
@@ -64,7 +83,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   }
   loadMoreBlocks(): void {
     if (this.loadingMoreBlocks || !this.hasMoreBlocks || !this.nextBefore) return; this.loadingMoreBlocks = true; const generation = this.generation;
-    this.requests.add(this.getNative<any>('/api/ton/blocks?limit=8&before=' + encodeURIComponent(this.nextBefore)).subscribe({ next: result => { if (generation !== this.generation) return; const ids = new Set(this.blocks.map(block => this.blockIdentity(block))); this.blocks = this.blocks.concat((result.blocks || []).filter(block => !ids.has(this.blockIdentity(block)))); this.nextBefore = result._paging?.nextBefore || null; this.hasMoreBlocks = result._paging?.hasMore === true; this.loadingMoreBlocks = false; }, error: () => { this.loadingMoreBlocks = false; this.blocksError = 'Unable to load earlier blocks'; } }));
+    this.requests.add(this.getNative<any>(this.selectedUrl('/api/ton/blocks?limit=8&before=' + encodeURIComponent(this.nextBefore), true)).subscribe({ next: result => { if (generation !== this.generation) return; const ids = new Set(this.blocks.map(block => this.blockIdentity(block))); this.blocks = this.blocks.concat((result.blocks || []).filter(block => !ids.has(this.blockIdentity(block)))); this.nextBefore = result._paging?.nextBefore || null; this.hasMoreBlocks = result._paging?.hasMore === true; this.loadingMoreBlocks = false; }, error: () => { this.loadingMoreBlocks = false; this.blocksError = 'Unable to load earlier blocks'; } }));
   }
   private loadDashboardTransactions(seqno: string | number | undefined): void {
     if (seqno === undefined || seqno === null) { this.transactionsError = 'No masterchain head is available'; return; }
@@ -100,7 +119,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   }
   private loadBlockTransactions(block: any): void { this.transactionsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/transactions?limit=50').subscribe({ next: result => { this.transactions = result.transactions || []; this.transactionsLoading = false; }, error: () => { this.transactionsLoading = false; this.transactionsError = 'Block transactions are temporarily unavailable'; } })); }
   private loadShards(block: any): void { this.shardsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/shards').subscribe({ next: result => { this.shards = (result.shards || result.blocks || []).map(shard => shard.last_known_block ? { ...shard.last_known_block, id: shard.last_known_block_id } : shard); this.shardsLoading = false; }, error: () => { this.shardsLoading = false; this.shardsError = 'Shard references are temporarily unavailable'; } })); }
-  onVisibilityChange(): void { if (!document.hidden && this.nativeRoute === 'dashboard' && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }
+  onVisibilityChange(): void { if (!document.hidden && (this.nativeRoute === 'dashboard' || this.nativeRoute === 'blocks' && !this.blocks.length) && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }
   private blockIdentity(block: any): string { return block.id || block.ton?.id || `${block.workchain_id ?? block.ton?.workchain_id}:${block.shard ?? block.ton?.shard}:${block.seqno ?? block.ton?.seqno}`; }
   private consecutivePrefix(blocks: any[]): any[] {
     const ordered = [...blocks].sort((left, right) => Number(right.ton?.seqno || right.seqno || right.height) - Number(left.ton?.seqno || left.seqno || left.height));
@@ -114,6 +133,20 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
   private cachedDashboard: any;
   private dashboardInputs: any[] = [];
   override syncDashboard(blocks: any[]): void {
+    const selected = this.selection.current;
+    if (!blocks?.length || blocks.some(block => !tonBlockMatchesSelection(block, selected))) return;
+    if (this.nativeRoute === 'blocks') {
+      // Recover an initially empty collector window without replacing paged history.
+      if (!this.blocks.length && !this.loading) this.loadBlocks('/api/ton/dashboard', true);
+      return;
+    }
+    const shard = tonBlockScope(blocks[0])?.shard;
+    if (this.data?.shard && shard !== this.data.shard) {
+      // A split/merge can change the current default. Fetch that shard's own
+      // history instead of joining unrelated sequence numbers on one chart.
+      this.loadBlocks('/api/ton/dashboard', true);
+      return;
+    }
     super.syncDashboard(blocks);
     if (this.nativeRoute !== 'dashboard' || !this.data?.blocks) return;
     this.blocks = this.data.blocks;

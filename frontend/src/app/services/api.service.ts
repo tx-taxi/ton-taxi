@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { CpfpInfo, EthereumGasMarketStats, OptimizedMempoolStats, AddressInformation, LiquidPegs, ITranslators, PoolStat, BlockExtended, TransactionStripped, RewardStats, AuditScore, BlockSizesAndWeights,
   RbfTree, BlockAudit, CurrentPegs, AuditStatus, FederationAddress, FederationUtxo, RecentPeg, PegsVolume, AccelerationInfo, TestMempoolAcceptResult, WalletAddress, Treasury, SubmitPackageResult, ChainTip, StaleTip } from '@interfaces/node-api.interface';
@@ -24,7 +25,8 @@ export class ApiService {
   constructor(
     private httpClient: HttpClient,
     private stateService: StateService,
-    private storageService: StorageService
+    private storageService: StorageService,
+    private tonSelection: TonChainSelectionService
   ) {
     this.apiBaseUrl = ''; // use relative URL by default
     if (!stateService.isBrowser) { // except when inside AU SSR process
@@ -145,7 +147,7 @@ export class ApiService {
   }
 
   getInitData$(): Observable<WebsocketResponse> {
-    return this.httpClient.get<WebsocketResponse>(this.apiBaseUrl + this.apiBasePath + '/api/v1/init-data');
+    return this.httpClient.get<WebsocketResponse>(this.apiBaseUrl + this.apiBasePath + '/api/v1/init-data?' + this.tonSelection.query);
   }
 
   getCpfpinfo$(txid: string): Observable<CpfpInfo> {
@@ -313,8 +315,8 @@ export class ApiService {
 
   getBlocks$(from: number): Observable<BlockExtended[]> {
     return this.httpClient.get<BlockExtended[]>(
-      this.apiBaseUrl + this.apiBasePath + `/api/v1/blocks` +
-      (from !== undefined ? `/${from}` : ``)
+      this.apiBaseUrl + this.apiBasePath + '/api/v1/blocks' +
+      (from !== undefined ? '/' + from : '') + '?' + this.tonSelection.query
     );
   }
 

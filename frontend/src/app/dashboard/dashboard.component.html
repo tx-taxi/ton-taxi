@@ -1,5 +1,15 @@
 
 <div class="container-xl dashboard-container">
+  <div class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON block selection">
+    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Workchain" [value]="native.workchain" (change)="native.selectWorkchain($any($event.target).value)">
+      <option value="0">Basechain</option>
+      <option value="-1">Masterchain</option>
+    </select>
+    <select *ngIf="native.workchain === 0 && native.activeShards.length > 1" class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" [value]="native.selectedShard" (change)="native.selectShard($any($event.target).value)">
+      <option *ngFor="let shard of native.activeShards" [value]="shard.shard">Shard {{ shard.shard }}</option>
+    </select>
+  </div>
+
   <div *ngIf="native.error" class="alert alert-mempool" role="alert">{{ native.error }}</div><div *ngIf="dashboard.stale || dashboard._meta?.stale" class="alert alert-mempool" role="status">Reconnecting…</div>
   <div class="row row-cols-1 row-cols-md-2">
     <ng-container>
@@ -12,7 +22,7 @@
         </div>
       </div>
       <div class="col">
-        <app-difficulty [confirmedMode]="true" [tonNetwork]="{seqno: dashboard.head?.seqno, intervals: dashboard.intervals, transactionCount: dashboard.head?.tx_quantity}" [confirmedData]="dashboard.confirmed"></app-difficulty>
+        <app-difficulty [confirmedMode]="true" [tonNetwork]="{seqno: dashboard.head?.seqno, intervals: dashboard.intervals, transactionCount: dashboard.head?.tx_quantity, label: native.chainLabel}" [confirmedData]="dashboard.confirmed"></app-difficulty>
       </div>
     </ng-container>
     <div class="col">
@@ -45,7 +55,7 @@
       <div class="card graph-card">
         <div class="card-body">
           <div class="mempool-info-data">
-            <div class="item"><h5 class="card-title">Masterchain block</h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [routerLink]="['/block', native.blockId(dashboard.head)]">{{ dashboard.head.seqno }}</a></p></div>
+            <div class="item"><h5 class="card-title">{{ native.chainLabel }} block</h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [routerLink]="['/block', native.blockId(dashboard.head)]">{{ dashboard.head.seqno }}</a></p></div>
             <div class="item"><h5 class="card-title">Transactions</h5><p class="card-text"><ng-container *ngIf="dashboard.head; else loading">{{ dashboard.head.tx_quantity | number }} <span>TXs</span></ng-container></p></div>
             <div class="item"><h5 class="card-title">Mean block interval</h5><p class="card-text"><ng-container *ngIf="dashboard.intervals?.length; else unavailable">{{ meanInterval | number:'1.0-1' }} <span>s</span></ng-container></p></div>
             <div class="item"><h5 class="card-title">Collected fees</h5><p class="card-text"><app-amount *ngIf="dashboard.head; else loading" [amount]="native.coin(dashboard.head.value_flow?.fees_collected?.grams)" [compactBlock]="true" [noFiat]="true"></app-amount></p></div>
@@ -53,6 +63,7 @@
             <div class="ethereum-gas-market-wrapper">
               <app-ethereum-gas-market-graph
                 [tonSamples]="dashboard.history || []"
+                [tonChainLabel]="native.chainLabel"
                 [height]="gasMarketGraphHeight"
               ></app-ethereum-gas-market-graph>
             </div>
@@ -63,7 +74,7 @@
 
         <div class="card">
           <div class="card-body">
-            <a class="title-link" href="" [routerLink]="['/blocks' | relativeUrl]">
+            <a class="title-link" href="" [routerLink]="['/blocks' | relativeUrl]" [queryParams]="native.selectionQueryParams">
               <h5 class="card-title d-inline" i18n="dashboard.recent-blocks">Recent Blocks</h5>
               <span>&nbsp;</span>
               <fa-icon [icon]="['fas', 'external-link-alt']" [fixedWidth]="true" style="vertical-align: text-top; font-size: 13px; color: var(--title-fg)"></fa-icon>

@@ -1,8 +1,8 @@
-<section class="gas-market" [attr.aria-label]="(isTon ? 'TON masterchain history ' : 'Ethereum gas market ') + historyLabel.toLowerCase()">
+<section class="gas-market" [attr.aria-label]="(isTon ? 'TON ' + tonChainLabel.toLowerCase() + ' history ' : 'Ethereum gas market ') + historyLabel.toLowerCase()">
   <div class="gas-market__header">
     <div>
-      <h3 class="gas-market__title">{{ isTon ? 'Masterchain history' : 'Gas market' }}</h3>
-      <span class="sr-only">{{ isTon ? 'Masterchain history' : 'Gas market' }}, {{ historyLabel }}</span>
+      <h3 class="gas-market__title">{{ isTon ? tonChainLabel + ' history' : 'Gas market' }}</h3>
+      <span class="sr-only">{{ isTon ? tonChainLabel + ' history' : 'Gas market' }}, {{ historyLabel }}</span>
     </div>
 
     <ul class="gas-market__legend" aria-label="Chart legend">

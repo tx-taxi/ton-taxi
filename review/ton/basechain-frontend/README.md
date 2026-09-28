@@ -1,0 +1,17 @@
+# TON selected-chain frontend
+
+Candidate based on `3d0ba35186c2fe6682c0408e947b001f02d6943d`, isolated in `/home/lukee/dev/ton-basechain-frontend`. No pushes or deployment changes by this agent. The root integrator owns backend integration, hub adapter export, final screenshots and deployment.
+
+The home and Blocks pages reuse the existing `form-select form-select-sm form-control-secondary form-control` language for Basechain/Masterchain. A shard selector appears when several basechain shards are active. Basechain is the default; `?workchain=-1` selects Masterchain and optional `shard` retains a specific shard. Charts, summary labels and strip labels identify the selected chain. Existing component geometry, templates and full `(workchain,shard,seqno)` links remain in use.
+
+Selection scopes dashboard/init/blocks APIs, numeric search and the WebSocket. Changing it resets the previous chain tip, height cache, displayed strip and scroll. A late HTTP history response cannot restore another chain's height aliases. WebSocket snapshots must belong to the requested workchain/shard and may not mix shards. A changed default shard also clears the cache, and the dashboard fetches its own history rather than joining unrelated sequence counters. Pagination retains the observed shard; an initially empty Blocks page recovers after its first live window without overwriting previously loaded history.
+
+The footer/header and entity context layout are unchanged. Numeric search uses the selected workchain; existing explicit tuple inputs and old bare-height `/block/123` routes retain the server's documented behavior. TON's guide/API/WebSocket documentation describes the selected default and shard-scoped paging. Existing fee/economics AmountComponent unitStyle renders nanogram labels below values consistently, as requested after the first accuracy screenshots.
+
+Validation:
+
+- `node --experimental-strip-types --test frontend/src/app/ton/chain-selection.test.mjs`: five actual controller/cache behavior checks passed, covering lower-height selection, cross-shard height collisions, delayed responses, initial list recovery and scoped search/cancellation.
+- `node frontend/node_modules/@angular/compiler-cli/bundles/src/bin/ngc.js --noEmit -p frontend/tsconfig.app.json`: passed with the root integrator's exact selection-aware `services/hub-snapshot.ts` overlaid from `/home/lukee/dev/ton-basechain-integration`.
+- `git diff --check`: passed. No new visual component or stylesheet; no screenshots claimed by this candidate.
+
+Integration contract: `/api/ton/dashboard`, `/api/ton/blocks`, `/api/v1/init-data`, `/api/v1/blocks/:from`, `/api/ton/resolve` and `/api/v1/ws` accept workchain/shard. Dashboard includes selected workchain/shard, activeShards and masterchainHead. Native API blocks are raw headers; compatibility `/api/v1/blocks/:from` returns strip DTOs. The root-owned `readHubSnapshot` fourth argument validates selected workchain/shard. Exported BlockchainBlocks uses existing `blocksSubject$` subscription, with no new injected service and no `.value` access.

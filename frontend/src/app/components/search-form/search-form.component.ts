@@ -1,3 +1,5 @@
+import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
+import { tonSelectionKey } from '@app/ton/chain-selection';
 import { HttpClient } from '@angular/common/http';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
 import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, ViewChild, HostListener, ElementRef, Input } from '@angular/core';
@@ -126,6 +128,7 @@ export class SearchFormComponent implements OnInit {
     private relativeUrlPipe: RelativeUrlPipe,
     private elementRef: ElementRef,
     private explorerRegistry: TxTaxiExplorerRegistryService,
+    private tonSelection: TonChainSelectionService,
   ) {
     this.explorers$ = this.explorerRegistry.explorers$;
   }
@@ -383,9 +386,11 @@ export class SearchFormComponent implements OnInit {
   private searchSourceChain(searchText: string, allowAutomaticFallback = false): void {
     this.isSearching = true;
     this.searchError = '';
-    this.http.get<{type:string;id:string}>('/api/ton/resolve',{params:{value:searchText}}).pipe(finalize(() => this.cdr.markForCheck())).subscribe({
+    const selected = this.tonSelection.current;
+    const scope = tonSelectionKey(selected);
+    this.http.get<{type:string;id:string}>('/api/ton/resolve',{params:{value:searchText,workchain:String(selected.workchain),...(selected.shard ? {shard:selected.shard} : {})}}).pipe(finalize(() => this.cdr.markForCheck())).subscribe({
       next: result => {
-        if (this.searchForm.value.searchText.trim() !== searchText) { this.isSearching=false; return; }
+        if (this.searchForm.value.searchText.trim() !== searchText || scope !== tonSelectionKey(this.tonSelection.current)) { this.isSearching=false; return; }
         if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError('No match found.'); return; }
         this.router.navigate(['/',result.type,result.id]);
         this.isSearching = false;

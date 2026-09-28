@@ -28,9 +28,10 @@ const FUTURE_TOLERANCE_MS = 60 * 1000;
 })
 export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDestroy {
   @Input() samples: EthereumGasMarketSample[] | null = null;
-  /** Bounded masterchain observations. No gas/utilization fields are inferred. */
+  /** Bounded observations from one selected workchain/shard. */
   @Input() tonSamples: TonNetworkHistorySample[] | null = null;
   @Input() height = 260;
+  @Input() tonChainLabel = 'Basechain';
 
   readonly chartInitOptions = { renderer: 'svg' as const };
 
@@ -57,7 +58,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   }
 
   get emptyState(): string {
-    if (this.tonSamples !== null) return this.recentSamples.length ? '' : 'No masterchain history available';
+    if (this.tonSamples !== null) return this.recentSamples.length ? '' : 'No ' + this.tonChainLabel.toLowerCase() + ' history available';
     if (this.samples === null) {
       return 'Loading gas market history';
     }
@@ -75,7 +76,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
       const fees = sample.fees === null || sample.fees === undefined || String(sample.fees).trim() === '' ? null : Number(sample.fees);
       const interval = sample.interval === null || sample.interval === undefined ? NaN : Number(sample.interval);
       if (!Number.isFinite(timestamp)) continue;
-      // Interval values are mean durations over observed masterchain sequence spans.
+      // Interval values are mean durations over observed shard sequence spans.
       points.push({ added: Math.floor(timestamp / 1000), timestamp, base_fee_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, gas_price_average_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, network_utilization_percentage: Number.isFinite(interval) && interval >= 0 ? interval : null, tonFeeAtomic: sample.feeAtomic, tonHistory: sample, gapBefore: sample.gapBefore === true });
     }
     return points.sort((a, b) => a.timestamp - b.timestamp);
@@ -89,8 +90,8 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     const latest = this.recentSamples[this.recentSamples.length - 1];
     if (this.isTon) {
       const range = this.recentSamples.length === 1
-        ? `Masterchain observation at ${this.formatTime(latest.timestamp)}.`
-        : `Masterchain history from ${this.formatTime(this.recentSamples[0].timestamp)} to ${this.formatTime(latest.timestamp)}.`;
+        ? `${this.tonChainLabel} observation at ${this.formatTime(latest.timestamp)}.`
+        : `${this.tonChainLabel} history from ${this.formatTime(this.recentSamples[0].timestamp)} to ${this.formatTime(latest.timestamp)}.`;
       const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
       return `${range} Latest mean collected fees per block ${fee === null ? 'not observed' : fee + ' GRAM'}; mean block interval ${latest.network_utilization_percentage === null ? 'not observed' : this.formatSeconds(latest.network_utilization_percentage)}.`;
     }

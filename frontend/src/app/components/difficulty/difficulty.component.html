@@ -46,7 +46,7 @@
           </div>
           <div class="item">
             <div class="card-text">#{{ network.latestBlockHeight ?? '—' }}</div>
-            <div class="symbol">{{ isConfirmed ? 'Latest masterchain block' : 'Latest block' }}</div>
+            <div class="symbol">{{ isConfirmed ? 'Latest ' + (tonNetwork?.label || 'Masterchain').toLowerCase() + ' block' : 'Latest block' }}</div>
           </div>
         </div>
       </div>

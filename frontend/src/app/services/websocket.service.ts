@@ -1,4 +1,6 @@
 import { readHubSnapshot } from './hub-snapshot';
+import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
+import { tonBlockMatchesSelection, tonBlockScope, tonSelectionKey } from '@app/ton/chain-selection';
 import { disconnectedTonPending, readTonPending } from '@app/shared/ton-pending-state';
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
@@ -49,6 +51,7 @@ export class WebsocketService {
   private initialResponseTimeout: number | undefined;
   private subscription: Subscription;
   private network = '';
+  private observedTonFeed = '';
   private hubSnapshotClosed = false;
   private hubSnapshotApplied = false;
   private hubSnapshotListener?: EventListener;
@@ -59,6 +62,7 @@ export class WebsocketService {
     private apiService: ApiService,
     private transferState: TransferState,
     private cacheService: CacheService,
+    private tonSelection: TonChainSelectionService,
   ) {
     if (!this.stateService.isBrowser) {
       // @ts-ignore
@@ -69,7 +73,7 @@ export class WebsocketService {
         .subscribe((response) => this.handleResponse(response));
     } else {
       this.network = this.stateService.network === this.stateService.env.ROOT_NETWORK ? '' : this.stateService.network;
-      this.websocketSubject = webSocket<WebsocketResponse>(this.webSocketUrl.replace('{network}', this.network ? '/' + this.network : ''));
+      this.websocketSubject = webSocket<WebsocketResponse>(this.selectedWebSocketUrl());
 
       const { response: theInitData } = this.transferState.get<any>(initData, null) || {};
       if (theInitData) {
@@ -86,6 +90,20 @@ export class WebsocketService {
       }
 
       this.installHubSnapshot();
+      let selected = tonSelectionKey(this.tonSelection.current);
+      this.tonSelection.selection$.subscribe(selection => {
+        const next = tonSelectionKey(selection);
+        if (next === selected) return;
+        selected = next;
+        this.stopHubSnapshot();
+        this.hubSnapshotApplied = false;
+        this.observedTonFeed = '';
+        this.resetTonFeed();
+        this.stateService.isLoadingWebSocket$.next(true);
+        clearTimeout(this.onlineCheckTimeout);
+        clearTimeout(this.onlineCheckTimeoutTwo);
+        this.reconnectWebsocket();
+      });
 
       this.stateService.networkChanged$.subscribe((network) => {
         if (network === this.network || (this.network === '' && network === this.stateService.env.ROOT_NETWORK)) {
@@ -104,6 +122,18 @@ export class WebsocketService {
     }
   }
 
+  private resetTonFeed(): void {
+    this.cacheService.resetBlockCache();
+    this.stateService.resetChainTip();
+    this.stateService.resetBlocks([]);
+    this.stateService.markBlock$.next({});
+    this.stateService.resetScroll$.next(true);
+  }
+
+  private selectedWebSocketUrl(): string {
+    return this.webSocketUrl.replace('{network}', this.network ? '/' + this.network : '') + '?' + this.tonSelection.query;
+  }
+
   private stopHubSnapshot(): void {
     this.hubSnapshotClosed = true;
     if (this.hubSnapshotListener) window.removeEventListener('tx-taxi:hub-snapshot', this.hubSnapshotListener);
@@ -118,7 +148,7 @@ export class WebsocketService {
     if (!isDashboard()) { this.stopHubSnapshot(); return; }
     const apply = (envelope: unknown): void => {
       if (this.hubSnapshotClosed || !isDashboard()) return;
-      const snapshot = readHubSnapshot(envelope, 'ton');
+      const snapshot = readHubSnapshot(envelope, 'ton', Date.now(), this.tonSelection.current);
       if (!snapshot) return;
       this.stopHubSnapshot();
       this.hubSnapshotApplied = true;
@@ -144,7 +174,7 @@ export class WebsocketService {
     this.subscription?.unsubscribe();
     this.websocketSubject.complete();
     this.websocketSubject = webSocket<WebsocketResponse>(
-      this.webSocketUrl.replace('{network}', this.network ? '/' + this.network : '')
+      this.selectedWebSocketUrl()
     );
 
     this.startSubscription(retrying, hasInitData);
@@ -159,7 +189,7 @@ export class WebsocketService {
     }, 25000);
     if (!hasInitData) {
       if (!this.hubSnapshotApplied && !this.stateService.blocksSubject$.value.length) this.stateService.isLoadingWebSocket$.next(true);
-      this.websocketSubject.next({'action': 'init'});
+      this.websocketSubject.next({'action': 'init', ...this.tonSelection.current} as any);
     }
     if (retrying) {
       this.stateService.connectionState$.next(1);
@@ -417,6 +447,23 @@ export class WebsocketService {
   }
 
   handleResponse(response: WebsocketResponse) {
+    const selection = this.tonSelection.current;
+    if (response.blocks?.some(block => !tonBlockMatchesSelection(block, selection))
+      || response.block && !tonBlockMatchesSelection(response.block, selection)) return;
+    // Each feed is one shard; accepting mixed shard arrays would corrupt height-keyed state.
+    const scopes = new Set((response.blocks || []).map(block => {
+      const scope = tonBlockScope(block);
+      return `${scope.workchain}:${scope.shard}`;
+    }));
+    if (scopes.size > 1) return;
+    const scope = tonBlockScope(response.blocks?.[0] || response.block);
+    if (scope) {
+      const key = `${scope.workchain}:${scope.shard}`;
+      if (key !== this.observedTonFeed) {
+        this.observedTonFeed = key;
+        this.resetTonFeed();
+      }
+    }
     let reinitBlocks = false;
     const pending = readTonPending((response as any).tonPending);
     if (pending) this.stateService.tonPending$.next(pending);

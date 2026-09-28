@@ -25,6 +25,7 @@ export class CacheService {
   blockPriorities: number[] = [];
   private blockPageLoadQueue: number[] = [];
   private blockPageLoadsInFlight = 0;
+  private blockCacheGeneration = 0;
   private readonly maxConcurrentBlockPageLoads = 2;
 
   constructor(
@@ -119,8 +120,10 @@ export class CacheService {
 
   private async loadBlockPage(maxHeight: number): Promise<void> {
     const chunkSize = 10;
+    const generation = this.blockCacheGeneration;
     try {
       const result = await firstValueFrom(this.apiService.getBlocks$(maxHeight));
+      if (generation !== this.blockCacheGeneration) return;
       if (result?.length) {
         result.forEach(block => {
           if (this.blockLoading[block.height]) {
@@ -132,6 +135,7 @@ export class CacheService {
     } catch (e) {
       console.log('failed to load blocks: ', e.message);
     } finally {
+      if (generation !== this.blockCacheGeneration) return;
       for (let i = 0; i < chunkSize; i++) {
         delete this.blockLoading[maxHeight - i];
       }
@@ -164,6 +168,7 @@ export class CacheService {
 
   // remove all blocks from the cache
   resetBlockCache() {
+    this.blockCacheGeneration++;
     this.blockHashCache = {};
     this.blockCache = {};
     this.apiService.blockAuditLoaded = {};

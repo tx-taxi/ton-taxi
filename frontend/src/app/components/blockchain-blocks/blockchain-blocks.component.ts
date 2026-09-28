@@ -140,9 +140,13 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
     this.networkSubscription = this.stateService.networkChanged$.subscribe((network) => this.network = network);
     this.tabHiddenSubscription = this.stateService.isTabHidden$.subscribe((tabHidden) => this.tabHidden = tabHidden);
     if (!this.static && this.suppliedBlocks === undefined) {
-      this.blocksSubscription = this.stateService.blocks$
+      this.blocksSubscription = this.stateService.blocksSubject$
         .subscribe((blocks) => {
           if (!blocks?.length) {
+            this.blocks = [];
+            this.blockStyles = [];
+            this.chainTip = undefined;
+            this.cd.markForCheck();
             return;
           }
           const latestHeight = blocks[0].height;
