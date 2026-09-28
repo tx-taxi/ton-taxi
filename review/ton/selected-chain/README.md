@@ -15,3 +15,5 @@ NODE_PATH=/home/lukee/dev/ton-taxi/adapter/node_modules node --test review/ton/l
 ```
 
 Live integration and browser verification remain the integrator's next step. No push or production changes made by this agent.
+
+Basechain context follow-up: the existing context assembler now consults the selected basechain's verified cached headers and uses its exact tuple as the observed-tip boundary. It skips speculative future acquisition at that tip and never reuses a same-height sibling/masterchain header. Two targeted behavior checks cover cached zero-provider context, masterchain/basechain same-height isolation, and rejecting a sibling-shard cache collision.

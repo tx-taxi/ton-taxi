@@ -25,6 +25,18 @@ function headerIdentity(header) {
   return blockIdentity(`(${header.workchain_id},${header.shard},${header.seqno})`);
 }
 
+function observedChain(collector, identity) {
+  if (identity.workchain === -1) return {head: collector.blocks?.[0], observedAt: collector.observedAt};
+  if (identity.workchain === 0) return collector.basechain?.dashboard(identity.shard) || {};
+  return {};
+}
+
+function cachedHeader(collector, identity) {
+  const cached = identity.workchain === -1 ? collector.cached?.(identity.seqno)
+    : identity.workchain === 0 ? collector.basechain?.cached(identity.seqno, identity.shard) : null;
+  return cached && headerIdentity(cached).id === identity.id ? cached : null;
+}
+
 function sideLimit(value, fallback) {
   if (value == null) return fallback;
   if (!/^\d+$/.test(String(value))) throw new ProviderError("Invalid context window", 400);
@@ -61,10 +73,10 @@ async function requestHeader(provider, route) {
 async function readHeader(provider, collector, requestedId, preferCollector = true, supplied = null) {
   const expected = blockIdentity(requestedId);
   let header;
-  if (preferCollector && expected.workchain === -1) {
-    const cached = collector.cached?.(expected.seqno);
-    if (cached && headerIdentity(cached).id === expected.id) {
-      header = { ...cached, _meta: { observedAt: collector.observedAt, stale: false, provider: "verified-block-stream" } };
+  if (preferCollector) {
+    const cached = cachedHeader(collector, expected);
+    if (cached) {
+      header = { ...cached, _meta: { observedAt: observedChain(collector, expected).observedAt, stale: false, provider: "verified-block-stream" } };
     }
   }
   if (!header && supplied?.has(expected.id)) header = supplied.get(expected.id);
@@ -120,9 +132,8 @@ async function assembleContext(provider, collector, requestedId, olderCount, new
       try {
         const currentId = headerIdentity(current);
         if (current.before_split === true) { boundary(newer, "split"); break; }
-        const observedHead = Number(collector.blocks?.[0]?.seqno);
-        if (currentId.workchain === -1 && Number.isSafeInteger(observedHead)
-            && currentId.seqno === observedHead) { boundary(newer, "observed-tip"); break; }
+        const observedHead = observedChain(collector, currentId).head;
+        if (observedHead && headerIdentity(observedHead).id === currentId.id) { boundary(newer, "observed-tip"); break; }
         // A numerical candidate is not adjacency evidence. Shard IDs can change
         // at splits/merges. Include a candidate only after its header proves an
         // edge back to the exact current tuple; never substitute master_ref.
@@ -151,15 +162,14 @@ async function assembleContext(provider, collector, requestedId, olderCount, new
 async function buildContext(provider, collector, requestedId, olderCount, newerCount, source) {
   if (!source) return assembleContext(provider, collector, requestedId, olderCount, newerCount, null);
   const target = blockIdentity(requestedId), candidates = [];
-  const observedHead = Number(collector.blocks?.[0]?.seqno);
+  const observedHeader = observedChain(collector, target).head;
+  const observedHead = observedHeader && headerIdentity(observedHeader).workchain === target.workchain
+    && headerIdentity(observedHeader).shard === target.shard ? Number(observedHeader.seqno) : null;
   const add = seqno => {
     if (seqno < 0 || seqno > 4294967295) return;
     const id = `(${target.workchain},${target.shard},${seqno})`;
-    if (target.workchain === -1) {
-      const cached = collector.cached?.(seqno);
-      if (cached && headerIdentity(cached).id === id) return;
-      if (Number.isSafeInteger(observedHead) && seqno > observedHead && target.seqno <= observedHead) return;
-    }
+    if (cachedHeader(collector, blockIdentity(id))) return;
+    if (Number.isSafeInteger(observedHead) && seqno > observedHead && target.seqno <= observedHead) return;
     candidates.push(id);
   };
   add(target.seqno);
