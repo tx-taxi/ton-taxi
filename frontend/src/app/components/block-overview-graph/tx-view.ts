@@ -5,6 +5,8 @@ import { hexToColor } from '@components/block-overview-graph/utils';
 import BlockScene from '@components/block-overview-graph/block-scene';
 import { TransactionStripped } from '@interfaces/node-api.interface';
 import { TransactionFlags } from '@app/shared/filters.utils';
+import { ConfirmedTransactionMetadata } from '@components/block-overview-graph/confirmed-transaction';
+import { TonPendingMessage } from '@app/shared/ton-pending.types';
 
 const hoverTransitionTime = 300;
 const defaultHoverColor = hexToColor('1bd8f4');
@@ -35,6 +37,10 @@ export default class TxView implements TransactionStripped {
   time?: number;
   status?: 'found' | 'missing' | 'sigop' | 'fresh' | 'freshcpfp' | 'added' | 'added_prioritized' | 'prioritized' | 'added_deprioritized' | 'deprioritized' | 'censored' | 'selected' | 'rbf' | 'accelerated' | 'matched' | 'unmatched';
   context?: 'projected' | 'actual' | 'stale' | 'canonical';
+  /** Unitless area for supplied confirmed data; never a protocol byte measurement. */
+  layoutWeight?: number;
+  confirmed?: ConfirmedTransactionMetadata;
+  pendingMessage?: TonPendingMessage;
   scene?: BlockScene;
 
   initialised: boolean;
@@ -63,6 +69,9 @@ export default class TxView implements TransactionStripped {
     this.rate = tx.rate;
     this.status = tx.status;
     this.flags = tx.flags || 0;
+    this.layoutWeight = (tx as any).layoutWeight;
+    this.confirmed = (tx as any).confirmed;
+    this.pendingMessage = (tx as any).pendingMessage;
     this.bigintFlags = tx.flags ? (BigInt(tx.flags) | (this.acc ? TransactionFlags.acceleration : 0n)): 0n;
     this.initialised = false;
     this.vertexArray = scene.vertexArray;

@@ -24,6 +24,7 @@ export default class BlockScene {
   gridHeight: number;
   gridSize: number;
   vbytesPerUnit: number;
+  blockLimit: number;
   unitPadding: number;
   unitWidth: number;
   initialised: boolean;
@@ -57,6 +58,17 @@ export default class BlockScene {
     this.flip = flip;
     this.dirty = true;
     if (this.initialised && this.scene) {
+      this.updateAll(performance.now(), 50);
+    }
+  }
+
+  setBlockLimit(blockLimit: number): void {
+    if (!Number.isFinite(blockLimit) || blockLimit <= 0 || blockLimit === this.blockLimit) return;
+    this.blockLimit = blockLimit;
+    this.vbytesPerUnit = blockLimit / Math.pow(this.gridWidth / 1.02, 2);
+    if (this.initialised && this.layout) {
+      this.layout = new BlockLayout({ width: this.gridWidth, height: this.gridHeight });
+      Object.values(this.txs).sort(feeRateDescending).forEach(tx => this.place(tx));
       this.updateAll(performance.now(), 50);
     }
   }
@@ -261,6 +273,7 @@ export default class BlockScene {
     };
 
     // Set the scale of the visualization (with a 5% margin)
+    this.blockLimit = blockLimit;
     this.vbytesPerUnit = blockLimit / Math.pow(resolution / 1.02, 2);
     this.gridWidth = resolution;
     this.gridHeight = resolution;
@@ -489,7 +502,8 @@ export default class BlockScene {
 
   // calculates and returns the size of the tx in multiples of the grid size
   private txSize(tx: TxView): number {
-    const scale = Math.max(1, Math.round(Math.sqrt(1.1 * tx.vsize / this.vbytesPerUnit)));
+    const area = tx.layoutWeight ?? tx.vsize;
+    const scale = Math.max(1, Math.round(Math.sqrt(1.1 * area / this.vbytesPerUnit)));
     return Math.min(this.gridWidth, Math.max(1, scale)); // bound between 1 and the max displayable size (just in case!)
   }
 

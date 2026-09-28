@@ -1,0 +1,130 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+.box {
+  background: var(--box-bg);
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+.table {
+  margin-bottom: 0;
+}
+.table th {
+  white-space: normal;
+}
+.table td {
+  overflow-wrap: anywhere;
+  white-space: normal;
+  vertical-align: middle;
+}
+.table td:first-child {
+  width: 34%;
+}
+.asset-table {
+  table-layout: fixed;
+}
+.asset-table td:first-child {
+  width: 55%;
+}
+.asset-table td:last-child {
+  font-variant-numeric: tabular-nums;
+}
+summary {
+  cursor: pointer;
+  color: var(--info);
+}
+pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: var(--fg);
+  margin: 1rem 0 0;
+  max-height: 600px;
+  overflow: auto;
+}
+h2 {
+  font-size: 1.75rem;
+  margin: 1.5rem 0 1rem;
+}
+h3 {
+  font-size: 1.1rem;
+}
+.feed-state {
+  text-align: center;
+  padding: 1.5rem;
+}
+.feed-state .skeleton-loader {
+  height: 24px;
+}
+.resource-record {
+  margin-top: 1rem;
+}
+.scaled-amount-details {
+  font-size: 0.8rem;
+  margin-top: 0.5rem;
+}
+.scaled-amount-details table {
+  margin-top: 0.75rem;
+}
+/* NFT detail media; inventory cards live in the shared TON NFT grid. */
+.asset-media {
+  position: relative;
+  aspect-ratio: 1;
+  background: var(--secondary);
+  overflow: hidden;
+}
+.asset-media {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.asset-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.media-skeleton {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  margin: 0;
+}
+.media-pending > .media-skeleton {
+  display: block;
+}
+.no-image,
+.asset-media.image-unavailable::after {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.65;
+  font-size: 0.85rem;
+}
+.asset-media.image-unavailable::after {
+  content: "Image unavailable";
+}
+@media (max-width: 767px) {
+  .asset-media {
+    max-width: 400px;
+    width: 100%;
+    margin: auto;
+  }
+  .table {
+    font-size: 0.85rem;
+  }
+  .table td:first-child {
+    width: 36%;
+  }
+  .asset-table td:first-child {
+    width: 55%;
+  }
+  h2 {
+    font-size: 1.35rem;
+  }
+}

@@ -26,7 +26,7 @@ export class PrivacyPolicyComponent {
 
   ngOnInit(): void {
     this.seoService.setTitle('Privacy Policy');
-    this.seoService.setDescription('How eth.tx.taxi handles the limited technical data required to operate its Ethereum explorer.');
+    this.seoService.setDescription('How ton.tx.taxi handles the limited technical data required to operate its TON explorer.');
     this.ogService.setManualOgImage('privacy.jpg');
 
     this.themeStateSubscription = this.themeService.themeState$.subscribe((state) => {

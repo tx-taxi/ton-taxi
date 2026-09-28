@@ -444,3 +444,13 @@
     animation-duration: 1.5s;
   }
 }
+
+.token-contract app-truncate { display: block; min-width: 0; flex: 1; }
+.token-metric .token-metric__amount { white-space: normal; overflow: visible; overflow-wrap: anywhere; }
+.token-description { min-width: 0; }
+.asset-description { white-space: pre-wrap; overflow-wrap: anywhere; }
+.token-summary { margin: 0; table-layout: fixed; }
+.token-summary td { overflow-wrap: anywhere; white-space: normal; }
+.token-summary td:first-child { width: 34%; }
+.nft-media-layout { display: grid; grid-template-columns: minmax(220px,360px) minmax(0,1fr); gap: 1.5rem; }
+@media(max-width:767px) { .nft-media-layout { grid-template-columns: 1fr; } }

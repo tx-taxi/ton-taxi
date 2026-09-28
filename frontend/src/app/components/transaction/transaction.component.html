@@ -1,332 +1,127 @@
 <div class="container-xl">
-
   <div class="title-block">
-    <ng-container *ngIf="!rbfTransaction || rbfTransaction?.size || tx">
-      <h1 i18n="shared.transaction">Transaction</h1>
-
-      <span class="tx-link">
-        <span class="txid">
-          <app-truncate [text]="txId" [lastChars]="12" [link]="['/tx/' | relativeUrl, txId]">
-            <app-clipboard [text]="txId"></app-clipboard>
-          </app-truncate>
-        </span>
+    <h1>{{ title() }}</h1>
+    <span class="tx-link">
+      <span class="txid">
+        <app-truncate [text]="id" [lastChars]="12" [link]="[page === 'message' ? '/message' : page === 'trace' ? '/trace' : '/tx', id]">
+          <app-clipboard [text]="id"></app-clipboard>
+        </app-truncate>
       </span>
-
-      <div class="container-buttons">
-        <app-confirmations
-          *ngIf="tx"
-          [chainTip]="latestBlock?.height"
-          [height]="tx?.status?.block_height"
-          [replaced]="replaced"
-          [removed]="this.rbfInfo?.mined && !this.tx?.status?.confirmed"
-          [cached]="isCached"
-        ></app-confirmations>
-      </div>
-    </ng-container>
+    </span>
+    <div class="container-buttons">
+      <span *ngIf="data?._meta?.stale || data?.stale" class="badge bg-warning text-dark">Updates delayed</span>
+    </div>
   </div>
   <div class="clearfix"></div>
 
-  @if (!error) {
+  <ng-container *ngIf="!error || data">
     <app-transaction-details
-      [network]="network"
-      [tx]="tx"
-      [isLoadingTx]="isLoadingTx"
+      [nativeMode]="true"
+      [nativeTransaction]="page === 'trace' ? data?.transaction : data"
+      [isLoadingTx]="loading && !data"
       [isMobile]="isMobile"
-      [transactionTime]="transactionTime"
-      [isLoadingFirstSeen]="isLoadingFirstSeen"
-      [featuresEnabled]="featuresEnabled"
-      [auditStatus]="auditStatus"
-      [filters]="filters"
-      [miningStats]="miningStats"
-      [pool]="pool"
-      [isAcceleration]="isAcceleration"
-      [acceleratorAvailable]="acceleratorAvailable"
-      [accelerateCtaType]="accelerateCtaType"
-      [notAcceleratedOnLoad]="notAcceleratedOnLoad"
-      [showAccelerationSummary]="showAccelerationSummary"
-      [eligibleForAcceleration]="eligibleForAcceleration"
-      [hasEffectiveFeeRate]="hasEffectiveFeeRate"
-      [cpfpInfo]="cpfpInfo"
-      [hasCpfp]="hasCpfp"
-      [cpfpMode]="cpfpMode"
-      [accelerationInfo]="accelerationInfo"
-      [replaced]="replaced"
-      [isCached]="isCached"
-      [ETA$]="ETA$"
-      (accelerateClicked)="onAccelerateClicked()"
-      (toggleCpfp$)="toggleCpfp()"
     ></app-transaction-details>
-  }
+  </ng-container>
 
-  <ng-template [ngIf]="!isLoadingTx && !error">
-
-    <!-- CPFP Details -->
-    <ng-container *ngIf="cpfpMode && hasCpfp">
-      <span id="cluster" #cluster class="anchor"></span>
+  <ng-container *ngIf="data && !loading">
+    <ng-container *ngIf="page === 'tx' || page === 'message'">
+      <p *ngIf="page === 'message'" class="mt-3">
+        Transaction <app-truncate [text]="data.hash" [lastChars]="8" [link]="['/tx', data.hash]"></app-truncate>
+        <span *ngIf="!selectedMessageFound()" class="grey-info-text"> · Message details unavailable</span>
+      </p>
       <br>
-      <div class="title float-start">
-        <h2 *ngIf="cpfpInfo?.cluster && !isAcceleration" i18n="transaction.cluster|Cluster">Cluster</h2>
-        <h2 *ngIf="!cpfpInfo?.cluster || isAcceleration" i18n="transaction.related-transactions|CPFP List">Related Transactions</h2>
+      <div class="subtitle-block">
+        <div class="title"><h2 id="state" class="anchor">State</h2></div>
       </div>
-      <button type="button" class="btn btn-outline-info btn-sm float-end" (click)="toggleCpfp()" i18n="hide">Hide</button>
-      <div class="clearfix"></div>
-      <ng-container *ngIf="cpfpInfo?.cluster && !isAcceleration; else legacyCpfp">
-        <div class="box">
-          <app-cluster-diagram
-            [cluster]="cpfpInfo.cluster" [txid]="tx.txid">
-          </app-cluster-diagram>
+      <span id="messages" class="anchor"></span>
+      <app-transactions-list
+        [nativeTransactions]="[displayedTransaction]"
+        [transactionPage]="true"
+        [selectedMessageHash]="page === 'message' ? id : ''"
+      ></app-transactions-list>
+
+      <br>
+      <div class="title text-start"><h2 id="execution" class="anchor">Details</h2></div>
+      <div class="box ethereum-details">
+        <div class="row">
+          <div class="col-sm">
+            <table class="table table-borderless table-striped"><tbody>
+              <tr><td>Transaction type</td><td>{{ data.transaction_type || '—' }}</td></tr>
+              <tr><td>Aborted</td><td>{{ data.aborted === true ? 'Yes' : data.aborted === false ? 'No' : 'Unknown' }}</td></tr>
+              <tr><td>Destroyed</td><td>{{ data.destroyed === true ? 'Yes' : data.destroyed === false ? 'No' : 'Unknown' }}</td></tr>
+            </tbody></table>
+          </div>
+          <div class="col-sm">
+            <table class="table table-borderless table-striped"><tbody>
+              <tr><td>Previous transaction</td><td><app-truncate *ngIf="data.prev_trans_hash; else unknown" [text]="data.prev_trans_hash" [lastChars]="8" [link]="['/tx',data.prev_trans_hash]"></app-truncate></td></tr>
+              <tr><td>Previous logical time</td><td>{{ data.prev_trans_lt || '—' }}</td></tr>
+              <tr><td>State update</td><td><details *ngIf="data.state_update_old || data.state_update_new; else unknown"><summary>State hashes</summary><div *ngIf="data.state_update_old">Before <app-truncate [text]="data.state_update_old" [lastChars]="8"><app-clipboard [text]="data.state_update_old"></app-clipboard></app-truncate></div><div *ngIf="data.state_update_new">After <app-truncate [text]="data.state_update_new" [lastChars]="8"><app-clipboard [text]="data.state_update_new"></app-clipboard></app-truncate></div></details></td></tr>
+            </tbody></table>
+          </div>
         </div>
+        <details *ngFor="let phase of phases" class="transaction-phase mt-3">
+          <summary>{{ fieldLabel(phase).replace(' phase','') | titlecase }} phase</summary>
+          <ng-container *ngIf="data[phase]; else notApplicable">
+            <table *ngIf="typeofValue(data[phase]) === 'object'; else scalarPhase" class="table table-borderless table-striped"><tbody>
+              <tr *ngFor="let field of phaseFields(data[phase])"><td>{{ field.label | titlecase }}</td><td><app-amount *ngIf="field.amount; else phaseText" [amount]="field.amount"></app-amount><ng-template #phaseText>{{ text(field.value) }}</ng-template></td></tr>
+            </tbody></table>
+            <ng-template #scalarPhase><p>{{ text(data[phase]) }}</p></ng-template>
+          </ng-container>
+          <ng-template #notApplicable><p class="grey-info-text">Not applicable</p></ng-template>
+        </details>
+        <details class="mt-3"><summary>Transaction details</summary><pre>{{ publicDetails(data) | json }}</pre></details>
+      </div>
+
+      <ng-container *ngIf="data.event || relatedLoading.event || relatedErrors.event">
+        <br>
+        <div class="subtitle-block"><div class="title"><h2 id="actions" class="anchor">Actions</h2></div></div>
+        <app-transactions-list *ngIf="data.event" [nativeEvents]="[data.event]"></app-transactions-list>
+        <div *ngIf="relatedLoading.event" class="box" aria-label="Loading actions"><span class="skeleton-loader"></span></div>
+        <p *ngIf="relatedErrors.event" class="grey-info-text">Actions unavailable <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('event')">Retry</button></p>
       </ng-container>
-      <ng-template #legacyCpfp>
-        <app-cpfp-info [cpfpInfo]="cpfpInfo" [tx]="tx"></app-cpfp-info>
-      </ng-template>
+      <ng-container *ngIf="data.trace || relatedLoading.trace || relatedErrors.trace">
+        <br>
+        <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor">Related transactions</h2></div></div>
+        <ng-container *ngIf="data.trace"><ng-container *ngTemplateOutlet="relatedTransactions; context: {$implicit:data.trace}"></ng-container></ng-container>
+        <div *ngIf="relatedLoading.trace" class="box" aria-label="Loading related transactions"><span class="skeleton-loader"></span></div>
+        <p *ngIf="relatedErrors.trace" class="grey-info-text">Related transactions unavailable <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('trace')">Retry</button></p>
+      </ng-container>
     </ng-container>
 
-    <!-- Accelerator -->
-    <ng-container *ngIf="!tx?.status?.confirmed && showAccelerationSummary && (ETA$ | async) as eta;">
-      <span id='accelerate' #accelerate class="anchor"></span>
+    <ng-container *ngIf="page === 'trace'">
       <br>
-      <div class="title float-start mb-1">
-        <h2><a [href]="[ isMempoolSpaceBuild ? '/accelerator' : 'https://mempool.space/accelerator']" [target]="isMempoolSpaceBuild ? '' : 'blank'"><app-svg-images name="accelerator" [height]="isMobile ? '35px' : '45px'"></app-svg-images></a></h2>
-      </div>
-      <button type="button" class="btn btn-outline-info accelerator-toggle btn-sm float-end" [class.hide-on-mobile]="hasAccelerationDetails" (click)="closeAccelerator()" i18n="accelerator.hide">Hide accelerator</button>
-      <button *ngIf="hasAccelerationDetails" class="btn btn-sm btn-outline-info details-button float-end ms-2" (click)="showAccelerationDetails = !showAccelerationDetails" i18n="transaction.details|Transaction Details">Details</button>
-
-      <div class="clearfix"></div>
-
-      <app-accelerate-checkout
-        *ngIf="(da$ | async) as da;"
-        [advancedEnabled]="true"
-        [tx]="tx"
-        [accelerating]="isAcceleration"
-        [eta]="eta"
-        [miningStats]="miningStats"
-        [showDetails]="showAccelerationDetails"
-        [noCTA]="true"
-        [partnerCode]="this.partnerCode"
-        (hasDetails)="setHasAccelerationDetails($event)"
-        (completed)="onAccelerationCompleted()"
-        (unavailable)="eligibleForAcceleration = false"
-        class="h-100 w-100"
-      ></app-accelerate-checkout>
+      <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor">Related transactions</h2></div></div>
+      <ng-container *ngTemplateOutlet="relatedTransactions; context: {$implicit:data}"></ng-container>
     </ng-container>
+  </ng-container>
 
+  <ng-container *ngIf="loading && !data && !error">
     <br>
-
-    <ng-container *ngIf="transactionTime > 0 && tx.acceleratedAt > 0 && (isAcceleration || accelerationCanceled)">
-      <div class="title float-start">
-        <h2 id="acceleration-timeline" i18n="transaction.acceleration-timeline|Acceleration Timeline">Acceleration Timeline</h2>
-      </div>
-      <div class="clearfix"></div>
-      <app-acceleration-timeline [transactionTime]="transactionTime" [acceleratedAt]="tx.acceleratedAt" [tx]="tx" [accelerationInfo]="accelerationInfo" [eta]="(ETA$ | async)" [canceled]="accelerationCanceled"></app-acceleration-timeline>
-      <br>
-    </ng-container>
-
-    <ng-container *ngIf="tx?.ethereum">
-      <br>
-
-      <div class="subtitle-block">
-        <div class="title">
-          <h2 id="state" class="anchor">State</h2>
-        </div>
-      </div>
-
-      <app-transactions-list #txList [transactions]="[tx]" [cached]="isCached" [errorUnblinded]="errorUnblinded" [inputIndex]="inputIndex" [outputIndex]="outputIndex" [transactionPage]="true"></app-transactions-list>
-    </ng-container>
-
-    <ng-container *ngIf="!tx?.ethereum">
-      <br>
-
-      <div class="subtitle-block">
-        <div class="title">
-          <h2>From &amp; To</h2>
-        </div>
-      </div>
-
-      <app-transactions-list #txList [transactions]="[tx]" [cached]="isCached" [errorUnblinded]="errorUnblinded" [inputIndex]="inputIndex" [outputIndex]="outputIndex" [transactionPage]="true"></app-transactions-list>
-    </ng-container>
-
+    <div class="title"><h2>State</h2></div>
+    <div class="box"><div class="row"><div class="col-sm" *ngFor="let column of [0,1]">
+      <table class="table table-borderless table-striped"><tbody><tr><td><span class="skeleton-loader"></span></td></tr></tbody></table>
+    </div></div></div>
     <br>
+    <div class="title"><h2>Details</h2></div>
+    <div class="box"><div class="row"><div class="col-sm" *ngFor="let column of [0,1]">
+      <table class="table table-borderless table-striped"><tbody><tr *ngFor="let row of skeletonRows"><td><span class="skeleton-loader"></span></td><td><span class="skeleton-loader"></span></td></tr></tbody></table>
+    </div></div></div>
+  </ng-container>
 
-    <div class="title text-start">
-      <h2 i18n="transaction.details|Transaction Details">Details</h2>
-    </div>
-    <div class="box ethereum-details">
-      <div class="row">
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td>Input data</td>
-                <td [innerHTML]="'&lrm;' + (tx.size | bytes: 2)"></td>
-              </tr>
-              <tr>
-                <td>Gas used</td>
-                <td>
-                  <ng-container *ngIf="tx?.ethereum; else legacyGasUsed">
-                    {{ tx.ethereum.gasUsed ? formatEthereumInteger(tx.ethereum.gasUsed) + ' gas' : 'Not executed' }}
-                  </ng-container>
-                  <ng-template #legacyGasUsed>&lrm;{{ tx.weight / 4 | number }} gas</ng-template>
-                </td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.gasLimit">
-                <td>Gas limit</td>
-                <td>&lrm;{{ formatEthereumInteger(tx.ethereum.gasLimit) }} gas</td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.feeWei || tx?.ethereum?.maximumFeeWei">
-                <td>{{ tx.ethereum.maximumFeeWei ? 'Maximum fee' : 'Transaction fee' }}</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.maximumFeeWei || tx.ethereum.feeWei, '18') }} ETH <span class="fiat"><app-fiat [blockConversion]="tx.price" [value]="ethereumWeiNumber(tx.ethereum.maximumFeeWei || tx.ethereum.feeWei)"></app-fiat></span></td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.blobFeeWei">
-                <td>Execution fee</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.executionFeeWei, '18') }} ETH <span class="fiat"><app-fiat [blockConversion]="tx.price" [value]="ethereumWeiNumber(tx.ethereum.executionFeeWei)"></app-fiat></span></td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.blobFeeWei">
-                <td>Blob fee</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.blobFeeWei, '18') }} ETH <span class="fiat"><app-fiat [blockConversion]="tx.price" [value]="ethereumWeiNumber(tx.ethereum.blobFeeWei)"></app-fiat></span></td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.maximumBlobFeeWei">
-                <td>Maximum blob fee</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.maximumBlobFeeWei, '18') }} ETH <span class="fiat"><app-fiat [blockConversion]="tx.price" [value]="ethereumWeiNumber(tx.ethereum.maximumBlobFeeWei)"></app-fiat></span></td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.blobGasUsed">
-                <td>Blob gas used</td>
-                <td>&lrm;{{ formatEthereumInteger(tx.ethereum.blobGasUsed) }} blob gas</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td>Transaction type</td>
-                <td>&lrm;Type {{ tx?.ethereum?.type || tx.version }}</td>
-              </tr>
-              <tr>
-                <td>Nonce</td>
-                <td>&lrm;{{ tx?.ethereum?.nonce ? formatEthereumInteger(tx.ethereum.nonce) : (tx.vin[0]?.sequence | number) }}</td>
-              </tr>
-              <tr>
-                <td>Method</td>
-                <td class="ethereum-detail-method">{{ ethereumMethod() }}</td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.gasPriceWei">
-                <td>{{ tx.ethereum.maximumFeeWei ? 'Maximum fee per gas' : 'Gas price' }}</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.maximumFeeWei ? (tx.ethereum.maxFeePerGasWei || tx.ethereum.gasPriceWei) : tx.ethereum.gasPriceWei, '9', 4) }} gwei</td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.blobGasPriceWei">
-                <td>Blob gas price</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.blobGasPriceWei, '9', 4) }} gwei</td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.maxFeePerBlobGasWei">
-                <td>Maximum blob fee per gas</td>
-                <td>&lrm;{{ formatEthereumQuantity(tx.ethereum.maxFeePerBlobGasWei, '9', 4) }} gwei</td>
-              </tr>
-              <tr *ngIf="tx?.ethereum?.revertReason">
-                <td>Revert reason</td>
-                <td class="ethereum-detail-error">{{ tx.ethereum.revertReason }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </ng-template>
-
-  <ng-template [ngIf]="(isLoadingTx && !error) || loadingCachedTx">
-    <br>
-
-    <div class="title">
-      <h2>From &amp; To</h2>
-    </div>
-
-    <div class="box">
-      <div class="row">
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-    <br>
-
-    <div class="title">
-      <h2 i18n="transaction.details|Transaction Details">Details</h2>
-    </div>
-
-    <div class="box">
-      <div class="row">
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="col-sm">
-          <table class="table table-borderless table-striped">
-            <tbody>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-              <tr>
-                <td><span class="skeleton-loader"></span></td>
-                <td><span class="skeleton-loader"></span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-
-  </ng-template>
-
-  <ng-template [ngIf]="error && !loadingCachedTx">
-
-    <div class="text-center" *ngIf="waitingForTransaction; else errorTemplate">
-      <h3 i18n="transaction.error.transaction-not-found">Transaction not found.</h3>
-      <h5 i18n="transaction.error.waiting-for-it-to-appear">Waiting for it to appear in the mempool...</h5>
-      <div class="spinner-border text-light mt-2"></div>
-    </div>
-
-    <ng-template #errorTemplate>
-      <app-http-error [error]="error">
-        <span i18n="transaction.error.loading-transaction-data">Error loading transaction data.</span>
-      </app-http-error>
-    </ng-template>
-  </ng-template>
-
+  <div *ngIf="error && !data" class="alert alert-mempool" role="alert">
+    {{ error }} <button type="button" class="btn btn-sm btn-outline-info" (click)="load()">Retry</button>
+  </div>
 </div>
+
+<ng-template #relatedTransactions let-trace>
+  <p *ngIf="!traceRows(trace).length" class="grey-info-text">Trace transactions unavailable</p>
+  <ng-container *ngFor="let step of traceRows(trace); let index = index">
+    <p class="mb-2 mt-3">
+      Step {{ index + 1 }}
+      <ng-container *ngIf="step.parent"> · From transaction <app-truncate [text]="step.parent" [lastChars]="8" [link]="['/tx',step.parent]"></app-truncate><a *ngIf="step.message" [routerLink]="['/message',step.message]"> via message</a></ng-container>
+    </p>
+    <app-transactions-list [nativeTransactions]="[step.transaction]" [nativeCompact]="true"></app-transactions-list>
+  </ng-container>
+  <details class="box"><summary>Trace details</summary><pre>{{ publicDetails(trace) | json }}</pre></details>
+</ng-template>
+<ng-template #unknown><span class="grey-info-text">—</span></ng-template>

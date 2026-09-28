@@ -1,5 +1,6 @@
 import { Inject, Injectable, PLATFORM_ID, LOCALE_ID } from '@angular/core';
 import { ReplaySubject, BehaviorSubject, Subject, fromEvent, Observable } from 'rxjs';
+import { initialTonPending } from '@app/shared/ton-pending-state';
 import { Transaction } from '@interfaces/electrs.interface';
 import { AccelerationDelta, HealthCheckHost, IBackendInfo, MempoolBlock, MempoolBlockUpdate, MempoolInfo, Recommendedfees, ReplacedTransaction, ReplacementInfo, StratumJob, isMempoolState } from '@interfaces/websocket.interface';
 import { Acceleration, AccelerationPosition, BlockExtended, CpfpInfo, DifficultyAdjustment, EthereumGasMarketStats, MempoolPosition, OptimizedMempoolStats, RbfTree, TransactionStripped } from '@interfaces/node-api.interface';
@@ -9,6 +10,15 @@ import { filter, map, scan, share, shareReplay } from 'rxjs/operators';
 import { StorageService } from '@app/services/storage.service';
 import { hasTouchScreen } from '@app/shared/pipes/bytes-pipe/utils';
 import { ActiveFilter } from '@app/shared/filters.utils';
+
+export interface NativeBlockContext {
+  blocks: Array<BlockExtended | null>;
+  loading: boolean;
+  unavailable: boolean;
+  targetId?: string;
+  targetSlot?: number;
+  boundarySlots?: number[];
+}
 
 export interface MarkBlockState {
   blockHeight?: number;
@@ -172,6 +182,7 @@ export class StateService {
   bsqPrice$ = new ReplaySubject<number>(1);
   mempoolInfo$ = new ReplaySubject<MempoolInfo>(1);
   mempoolBlocks$ = new ReplaySubject<MempoolBlock[]>(1);
+  tonPending$ = new BehaviorSubject(initialTonPending());
   mempoolBlockUpdate$ = new Subject<MempoolBlockUpdate>();
   liveMempoolBlockTransactions$: Observable<{ block: number, transactions: { [txid: string]: TransactionStripped} }>;
   accelerations$ = new Subject<AccelerationDelta>();
@@ -209,6 +220,7 @@ export class StateService {
   connectionState$ = new BehaviorSubject<0 | 1 | 2>(2);
   isTabHidden$: Observable<boolean>;
 
+  nativeBlockContext$ = new BehaviorSubject<NativeBlockContext | null>(null);
   markBlock$ = new BehaviorSubject<MarkBlockState>({});
   keyNavigation$ = new Subject<KeyboardEvent>();
   searchText$ = new BehaviorSubject<string>('');

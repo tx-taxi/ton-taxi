@@ -1,7 +1,9 @@
 {
-  "commit": "dfe5b38130078db146494dda4fca72741d77bc3c",
   "repository": "tx-taxi/eth-taxi",
-  "approval": "explorer-kit verified shared palette/promotion rollout 2026-09-24",
-  "formattingBaseline": "81aa2425d2037767665bf48fc1dca04bea026b00",
-  "formattingReconciliation": "2026-09-26: preserve deployed native source and approved extraction wrapper; compact display only, exact overlay tooltips, DOGE consistent ETA/count. Generated provenance records actual build commit and source hashes."
+  "commit": "9327a28da7fcf95828adf51e3b4b3c45658241c1",
+  "approval": "Approved deployed ETH ancestor; TON adaptation is a local candidate awaiting user review.",
+  "chain": "ton",
+  "worktree": "codex/ton-native-explorer",
+  "reconciliation": "review/ton/reconciliation/README.md",
+  "provenance": "Generated file hashes identify the actual local TON sources, including uncommitted adaptations. No TON production revision exists."
 }

@@ -29,7 +29,7 @@
         }
       }
       @if (!enterpriseInfo || enterpriseInfo.dualLogo) {
-        <img *ngIf="!officialMempoolSpace" src="/resources/branding/eth-dark-navbar.svg" alt="eth.tx.taxi Ethereum explorer" class="tx-taxi-navbar-logo" [ngStyle]="{'opacity': connectionState.val === 2 ? 1 : 0.5 }">
+        <img *ngIf="!officialMempoolSpace" src="/resources/branding/ton-dark-navbar.svg" alt="ton.tx.taxi TON explorer" class="tx-taxi-navbar-logo" [ngStyle]="{'opacity': connectionState.val === 2 ? 1 : 0.5 }">
         <app-svg-images *ngIf="officialMempoolSpace" name="officialMempoolSpace" viewBox="0 0 500 126"></app-svg-images>
       }
       <div class="connection-badge">
@@ -50,7 +50,7 @@
         }
       }
       @if (!enterpriseInfo || enterpriseInfo.dualLogo) {
-        <img *ngIf="!officialMempoolSpace" src="/resources/branding/eth-dark-navbar.svg" alt="eth.tx.taxi Ethereum explorer" class="tx-taxi-navbar-logo" [ngStyle]="{'opacity': connectionState.val === 2 ? 1 : 0.5 }">
+        <img *ngIf="!officialMempoolSpace" src="/resources/branding/ton-dark-navbar.svg" alt="ton.tx.taxi TON explorer" class="tx-taxi-navbar-logo" [ngStyle]="{'opacity': connectionState.val === 2 ? 1 : 0.5 }">
         <app-svg-images *ngIf="officialMempoolSpace" name="officialMempoolSpace" viewBox="0 0 500 126"></app-svg-images>
       }
       <div class="connection-badge">
@@ -89,7 +89,7 @@
         </a>
       </li>
       <li class="nav-item" routerLinkActive="active" id="btn-production">
-        <a class="nav-link" [routerLink]="['/production' | relativeUrl]" (click)="collapse()" title="Block production" aria-label="Block production">
+        <a class="nav-link" [routerLink]="['/validators' | relativeUrl]" (click)="collapse()" title="Validators" aria-label="Validators">
           <div class="svg-wrapper"><app-svg-images name="nav-enterprise" width="21.59" height="100%"></app-svg-images></div>
         </a>
       </li>
@@ -99,7 +99,7 @@
         </a>
       </li>
       <li class="nav-item" routerLinkActive="active" id="btn-docs">
-        <a class="nav-link" [routerLink]="['/docs']" (click)="collapse()" title="Ethereum documentation" aria-label="Ethereum documentation">
+        <a class="nav-link" [routerLink]="['/docs']" (click)="collapse()" title="TON documentation" aria-label="TON documentation">
           <div class="svg-wrapper"><app-svg-images name="nav-book" width="21.59" height="100%"></app-svg-images></div>
         </a>
       </li>

@@ -40,26 +40,26 @@ export class DocsComponent implements OnInit {
 
     const url = this.route.snapshot.url;
 
-    if (url[0].path === 'faq' ) {
+    if (url[0]?.path === 'faq' ) {
       this.activeTab = 0;
-      this.seoService.setTitle('Ethereum Guide');
-      this.seoService.setDescription('Understand Ethereum transactions, gas, account activity, confirmations, and the data shown by eth.tx.taxi.');
+      this.seoService.setTitle('TON Guide');
+      this.seoService.setDescription('Explore TON transactions, messages, wallets, jettons, NFTs and validators.');
       this.ogService.setManualOgImage('faq.jpg');
-    } else if( url[1].path === 'rest' ) {
+    } else if( url[1]?.path === 'rest' ) {
       this.activeTab = 1;
       this.seoService.setTitle($localize`:@@meta.title.docs.rest:REST API`);
       if (this.stateService.network === 'liquid' || this.stateService.network === 'liquidtestnet' ) {
         this.seoService.setDescription($localize`:@@meta.description.docs.rest-liquid:Documentation for the liquid.network REST API service: get info on addresses, transactions, assets, blocks, and more.`);
       } else {
-        this.seoService.setDescription('Documentation for the eth.tx.taxi REST API: blocks, transactions, accounts, tokens, gas estimates, and explorer state.');
+        this.seoService.setDescription('TON REST API reference for blocks, transactions, messages, accounts, jettons and NFTs.');
       }
-    } else if( url[1].path === 'websocket' ) {
+    } else if( url[1]?.path === 'websocket' ) {
       this.activeTab = 2;
       this.seoService.setTitle($localize`:@@meta.title.docs.websocket:WebSocket API`);
       if( this.stateService.network === 'liquid' || this.stateService.network === 'liquidtestnet' ) {
         this.seoService.setDescription($localize`:@@meta.description.docs.websocket-liquid:Documentation for the liquid.network WebSocket API service: get real-time info on blocks, mempools, transactions, addresses, and more.`);
       } else {
-        this.seoService.setDescription('Documentation for the eth.tx.taxi WebSocket API: live Ethereum blocks, pending transactions, accounts, and transaction status.');
+        this.seoService.setDescription('TON WebSocket API reference for live masterchain blocks.');
       }
     } else {
       this.activeTab = 0;

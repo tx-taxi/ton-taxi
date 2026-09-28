@@ -1,19 +1,19 @@
-<app-indexing-progress *ngIf="!widget"></app-indexing-progress>
+<app-indexing-progress *ngIf="!widget && !nativeMode"></app-indexing-progress>
 
-<div [class]="widget === false ? 'full-container' : ''">
+<div [class]="widget === false ? 'full-container' : ''" [class.native-price]="nativeMode" [style.height.px]="nativeMode && !widget ? height : null">
 
   <div *ngIf="widget">
     <div class="pool-distribution" *ngIf="(pricesObservable$ | async) as stats; else loadingStats">
       <div class="item">
-        <h5 class="card-title" i18n="price-chart.bitcoin-price">Bitcoin Price</h5>
+        <h5 class="card-title">{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</h5>
         <p class="card-text">
-          <app-fiat [value]="100_000_000"></app-fiat>
+          <ng-container *ngIf="nativeMode; else bitcoinWidgetPrice">{{ stats.latestPrice == null ? '—' : (stats.latestPrice | currency:currency:'symbol':'1.2-6') }}</ng-container><ng-template #bitcoinWidgetPrice><app-fiat [value]="100_000_000"></app-fiat></ng-template>
         </p>
       </div>
       <div class="item">
         <h5 class="card-title" i18n="price-chart.percent-change">% Change</h5>
         <p class="card-text" [ngClass]="{'text-success': stats.percentChange > 0, 'text-danger': stats.percentChange < 0}">
-          {{ stats.percentChange > 0 ? '+' : '' }}{{ stats.percentChange | number:'1.2-2' }}%
+          {{ stats.percentChange == null ? '—' : ((stats.percentChange > 0 ? '+' : '') + (stats.percentChange | number:'1.2-2') + '%') }}
         </p>
       </div>
     </div>
@@ -21,34 +21,35 @@
 
   <div class="card-header mb-0 mb-md-4" [style]="widget ? 'display:none' : ''">
     <div class="d-flex d-md-block align-items-baseline">
-      <span i18n="price-chart.title">Bitcoin Price</span>
-      <button class="btn p-0 ps-2" style="margin: 0 0 4px 0px" (click)="onSaveChart()">
+      <span>{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</span>
+      <button class="btn p-0 ps-2" style="margin: 0 0 4px 0px" (click)="onSaveChart()" aria-label="Download price chart" [disabled]="!chartInstance || nativeLoading || (nativeMode && !nativePrices?.points?.length)">
         <fa-icon [icon]="['fas', 'download']" [fixedWidth]="true"></fa-icon>
       </button>
     </div>  
+    <span *ngIf="nativeMode && nativePrices?.stale" class="badge bg-warning text-dark native-chart-stale">Updates delayed</span>
 
     <form [formGroup]="radioGroupForm" class="formRadioGroup" *ngIf="pricesObservable$ | async">
       <div class="btn-group" name="radioBasic">
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '1m'">
-          <input type="radio" class="btn-check" [value]="'1m'" fragment="1m" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 1M
+          <input type="radio" class="btn-check" [value]="'1m'" fragment="1m" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 1M
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '3m'">
-          <input type="radio" class="btn-check" [value]="'3m'" fragment="3m" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 3M
+          <input type="radio" class="btn-check" [value]="'3m'" fragment="3m" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 3M
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '6m'">
-          <input type="radio" class="btn-check" [value]="'6m'" fragment="6m" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 6M
+          <input type="radio" class="btn-check" [value]="'6m'" fragment="6m" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 6M
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '1y'">
-          <input type="radio" class="btn-check" [value]="'1y'" fragment="1y" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 1Y
+          <input type="radio" class="btn-check" [value]="'1y'" fragment="1y" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 1Y
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '2y'">
-          <input type="radio" class="btn-check" [value]="'2y'" fragment="2y" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 2Y
+          <input type="radio" class="btn-check" [value]="'2y'" fragment="2y" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 2Y
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === '3y'">
-          <input type="radio" class="btn-check" [value]="'3y'" fragment="3y" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 3Y
+          <input type="radio" class="btn-check" [value]="'3y'" fragment="3y" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> 3Y
         </label>
         <label class="btn btn-primary btn-sm" [class.active]="radioGroupForm.get('dateSpan').value === 'all'">
-          <input type="radio" class="btn-check" [value]="'all'" fragment="all" [routerLink]="['/graphs/price' | relativeUrl]" formControlName="dateSpan"> ALL
+          <input type="radio" class="btn-check" [value]="'all'" fragment="all" [routerLink]="nativeMode ? null : ['/graphs/price' | relativeUrl]" formControlName="dateSpan"> ALL
         </label>
       </div>
     </form>
@@ -63,10 +64,15 @@
 
 </div>
 
+<section *ngIf="marketPage" class="container-xl native-market-quotes">
+  <div class="title-block"><h2>Market quotes</h2><span *ngIf="marketQuotesStale" class="badge bg-warning text-dark">Updates delayed</span></div>
+  <div class="box"><table *ngIf="marketQuotes.length" class="table table-borderless table-striped"><thead><tr><th>Market</th><th class="text-end">USD price</th><th>Updated</th></tr></thead><tbody><tr *ngFor="let quote of marketQuotes"><td>{{ quote.market }}</td><td class="text-end">{{ quote.usd_price | currency:'USD':'symbol':'1.2-6' }}</td><td><app-timestamp *ngIf="marketTimestamp(quote.last_date_update) as date; else noMarketDate" [unixTime]="date" [customFormat]="'yyyy-MM-dd HH:mm:ss'" [hideTimeSince]="true"></app-timestamp><ng-template #noMarketDate>—</ng-template></td></tr></tbody></table><div *ngIf="marketQuotesLoading && !marketQuotes.length" class="skeleton-loader"></div><p *ngIf="marketQuotesError" role="alert">{{ marketQuotesError }}</p><p *ngIf="!marketQuotesLoading && !marketQuotes.length && !marketQuotesError">No market quotes available</p></div>
+</section>
+
 <ng-template #loadingStats>
   <div class="pool-distribution">
     <div class="item">
-      <h5 class="card-title" i18n="price-chart.bitcoin-price">Bitcoin Price</h5>
+      <h5 class="card-title">{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</h5>
       <p class="card-text">
         <span class="skeleton-loader skeleton-loader-big"></span>
       </p>

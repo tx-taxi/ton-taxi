@@ -1,3 +1,5 @@
+import { PriceChartModule } from '@app/components/price-chart/price-chart.module';
+import { TonNetworkViewsModule } from '@app/ton/ton-network-views.module';
 import { NgModule } from '@angular/core';
 import { NgxEchartsModule } from 'ngx-echarts';
 import { GraphsRoutingModule } from '@app/graphs/graphs.routing.module';
@@ -53,10 +55,7 @@ import { AsmStylerPipe } from '@app/shared/pipes/asm-styler/asm-styler.pipe';
 
 @NgModule({
   declarations: [
-    DashboardComponent,
     CustomDashboardComponent,
-    MempoolBlockComponent,
-    AddressComponent,
     WalletComponent,
     WalletPreviewComponent,
 
@@ -70,14 +69,11 @@ import { AsmStylerPipe } from '@app/shared/pipes/asm-styler/asm-styler.pipe';
     AccelerationFeesGraphComponent,
     BlockFeesGraphComponent,
     BlockFeesSubsidyGraphComponent,
-    PriceChartComponent,
     BlockRewardsGraphComponent,
     BlockFeeRatesGraphComponent,
     BlockSizesWeightsGraphComponent,
     FeeDistributionGraphComponent,
     IncomingTransactionsGraphComponent,
-    EthereumGasMarketGraphComponent,
-    EthereumTokenComponent,
     MempoolGraphComponent,
     LbtcPegsGraphComponent,
     ReservesSupplyStatsComponent,
@@ -101,7 +97,12 @@ import { AsmStylerPipe } from '@app/shared/pipes/asm-styler/asm-styler.pipe';
     TaprootAddressScriptsComponent,
   ],
   imports: [
+    MempoolBlockComponent,
     CommonModule,
+    PriceChartModule,
+    TonNetworkViewsModule,
+    AddressComponent,
+    EthereumTokenComponent,
     SharedModule,
     GraphsRoutingModule,
     NgxEchartsModule.forRoot({

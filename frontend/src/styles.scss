@@ -1,13 +1,13 @@
 @use "sass:color";
 
-/* Ethereum explorer theme. The Mempool interface remains intact while
- * Ethereum's blue-violet identity drives the shared visual tokens. */
-$bg: #10111a;
-$active-bg: #070812;
-$hover-bg: #191b2a;
+/* TON explorer theme. The Mempool interface remains intact while
+ * TON's blue-violet identity drives the shared visual tokens. */
+$bg: #101a22;
+$active-bg: #080f15;
+$hover-bg: #192a36;
 $fg: #fff;
 $nav-bg: $bg;
-$title-fg: #8c9eff;
+$title-fg: #55c8ff;
 
 $taproot: #eba814;
 $taproot-light: #d5a90a;
@@ -21,11 +21,11 @@ $gray-700: $fg;
 
 $nav-tabs-link-active-bg: $active-bg;
 
-$primary: #627eea;
-$secondary: #20243b;
-$tertiary: #4e61c7;
+$primary: #0098ea;
+$secondary: #193646;
+$tertiary: #087eaf;
 $success: #35c99a;
-$info: #aab7ff;
+$info: #88d9ff;
 
 $h5-font-size: 1.15rem !default;
 
@@ -88,11 +88,13 @@ $dropdown-link-active-bg: $active-bg;
 );
 
 .input-group-text {
-  background-color: #1c2031 !important;
-  border: 1px solid #20263e !important;
+  background-color: var(--input-addon-bg) !important;
+  border: 1px solid var(--input-addon-border) !important;
 }
 
 :root {
+  --input-addon-bg: #142733;
+  --input-addon-border: #234457;
   --bg: #{$bg};
   --active-bg: #{$active-bg};
   --hover-bg: #{$hover-bg};
@@ -110,26 +112,26 @@ $dropdown-link-active-bg: $active-bg;
   --link-color: #{$link-color};
   --link-hover-color: #{$link-hover-color};
   --icon: #f1f1f1;
-  --skeleton-bg: #303752;
-  --skeleton-bg-light: #59658e;
+  --skeleton-bg: #274657;
+  --skeleton-bg-light: #557e94;
 
-  --box-bg: #151827;
-  --stat-box-bg: #0d0f1c;
+  --box-bg: #13242f;
+  --stat-box-bg: #0c1821;
   --border-subtle: rgba(255, 255, 255, 0.11);
-  --block-top: #292f4d;
-  --block-side: #1a1e32;
-  --block-goggles-overlay: #15192b7f;
-  --mempool-block-top: #34406e;
-  --mempool-block-side: #22294b;
-  --mempool-block-loading: #4b5783;
-  --alert-bg: #303a73;
-  --navbar-bg: #171a2d;
+  --block-top: #23566f;
+  --block-side: #143d54;
+  --block-goggles-overlay: #1329367f;
+  --mempool-block-top: #245e7a;
+  --mempool-block-side: #143c52;
+  --mempool-block-loading: #2b607c;
+  --alert-bg: #245976;
+  --navbar-bg: #13232e;
   --transparent-fg: #ffffffbb;
   --footer-fg: rgba(255, 255, 255, 0.4);
-  --fade-out-box-bg-start: rgba(21, 24, 39, 0);
-  --fade-out-box-bg-end: rgba(21, 24, 39, 1);
+  --fade-out-box-bg-start: rgba(19, 36, 47, 0);
+  --fade-out-box-bg-end: rgba(19, 36, 47, 1);
   --opacity: 0.57;
-  --world-map-bg: #262c48;
+  --world-map-bg: #204759;
   --world-map-border: #000;
 
   --testnet: #1d486f;
@@ -138,7 +140,7 @@ $dropdown-link-active-bg: $active-bg;
   --liquid: #116761;
   --liquidtestnet: #494a4a;
 
-  --mainnet-alt: #4e61c7;
+  --mainnet-alt: #087eaf;
   --testnet-alt: #183550;
   --signet-alt: #471850;
   --regtest-alt: #4a4a4a;
@@ -153,18 +155,18 @@ $dropdown-link-active-bg: $active-bg;
   --yellow: #fff000;
   --grey: #7e7e7e;
   --tooltip-grey: #b1b1b1;
-  --orange: #8c9eff;
+  --orange: #55c8ff;
   --pink: #e83e8c;
 
   --fee-tier-slow: #374474;
   --fee-tier-normal: #5368c8;
-  --fee-tier-fast: #627eea;
-  --fee-tier-fastest: #aab7ff;
+  --fee-tier-fast: #0098ea;
+  --fee-tier-fastest: #88d9ff;
 
-  --search-button: #4e61c7;
+  --search-button: #087eaf;
   --search-button-border: #4355b5;
   --search-button-focus: #6379e0;
-  --search-button-shadow: #8c9eff80;
+  --search-button-shadow: #55c8ff80;
   
   --bs-body-color: var(--fg);
   --bs-body-bg: var(--active-bg);
@@ -1703,4 +1705,4 @@ form label:not(.form-check-label):not(.btn) {
 
 .fiat-color { color: var(--fiat-color, var(--info)); }
 
-:root { --eth-utilization: #b8c2ee; }
+:root { --eth-utilization: #a4dcf4; }

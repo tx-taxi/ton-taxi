@@ -1,0 +1,1271 @@
+<app-address
+  *ngIf="page === 'address'"
+  [account]="accountView"
+  [addressString]="id"
+  [isLoadingAddress]="loading"
+  [error]="error"
+  (retry)="load()"
+>
+  <ng-container *ngIf="data">
+    <section *ngIf="extraCurrencies().length" class="box mb-4">
+      <div class="card-header"><h2>Extra currencies</h2></div>
+      <ng-container
+        *ngTemplateOutlet="
+          extraCurrencyTable;
+          context: { $implicit: extraCurrencies() }
+        "
+      ></ng-container>
+    </section>
+    <details
+      class="box mb-3"
+      *ngFor="let currency of extraCurrencies()"
+      (toggle)="
+        $any($event.target).open &&
+          !feeds['currency-' + (currency.preview?.id ?? currency.id)] &&
+          loadFeed('currency-' + (currency.preview?.id ?? currency.id))
+      "
+    >
+      <summary>
+        {{ currency.preview?.symbol || (currency.preview?.id ?? currency.id) }}
+        history
+      </summary>
+      <ng-container
+        *ngTemplateOutlet="
+          events;
+          context: {
+            $implicit:
+              feeds['currency-' + (currency.preview?.id ?? currency.id)]?.items
+          }
+        "
+      ></ng-container
+      ><ng-container
+        *ngTemplateOutlet="
+          feedState;
+          context: {
+            $implicit: 'currency-' + (currency.preview?.id ?? currency.id)
+          }
+        "
+      ></ng-container>
+    </details>
+
+    <ul
+      ngbNav
+      #accountNav="ngbNav"
+      [(activeId)]="tab"
+      (activeIdChange)="openTab($event)"
+      [destroyOnHide]="false"
+      class="nav nav-tabs mb-4"
+    >
+      <li *ngFor="let item of accountTabs" [ngbNavItem]="item.id">
+        <button ngbNavLink>{{ item.label }}</button
+        ><ng-template ngbNavContent>
+          <ng-container
+            [ngTemplateOutlet]="accountTab"
+            [ngTemplateOutletContext]="{ $implicit: item.id }"
+          ></ng-container>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="accountNav"></div>
+    <details class="box mt-4">
+      <summary>Account details</summary>
+      <pre>{{ data | json }}</pre>
+    </details>
+  </ng-container>
+</app-address>
+
+<ng-template #accountTab let-activeTab>
+  <ng-container *ngIf="activeTab === 'events'"
+    ><app-transactions-list
+      [nativeEvents]="feeds.events?.items || []"
+    ></app-transactions-list
+    ><ng-container
+      *ngTemplateOutlet="feedState; context: { $implicit: 'events' }"
+    ></ng-container
+  ></ng-container>
+  <ng-container *ngIf="activeTab === 'activity'"
+    ><app-transactions-list
+      [nativeTransactions]="feeds.activity?.items || []"
+      [nativeCompact]="true"
+    ></app-transactions-list
+    ><ng-container
+      *ngTemplateOutlet="feedState; context: { $implicit: 'activity' }"
+    ></ng-container
+  ></ng-container>
+  <ng-container *ngIf="activeTab === 'jettons'">
+    <div class="row mb-3">
+      <label class="col-sm"
+        >Find jetton<input
+          type="search"
+          class="form-control"
+          placeholder="Name, symbol or address"
+          [value]="tokenFilter"
+          (input)="tokenFilter = $any($event.target).value" /></label
+      ><label class="col-sm"
+        >Sort<select
+          class="form-control"
+          [value]="tokenSort"
+          (change)="tokenSort = $any($event.target).value"
+        >
+          <option value="name">Name</option>
+          <option value="balance">Balance</option>
+        </select></label
+      >
+    </div>
+    <div class="box table-responsive">
+      <table class="table table-borderless table-striped asset-table">
+        <thead>
+          <tr>
+            <th>Jetton</th>
+            <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngIf="
+              tokenFilter && !filteredTokens().length && !feeds.jettons?.loading
+            "
+          >
+            <td colspan="2">No matching jettons</td>
+          </tr>
+          <tr *ngFor="let holding of filteredTokens()">
+            <td>
+              <app-ethereum-identity
+                [entity]="nativeIdentity(holding.jetton)"
+                [link]="'/jetton/' + holding.jetton.address"
+                [compact]="true"
+                chainName="TON"
+                chainSymbol="GRAM"
+              ></app-ethereum-identity>
+              <button
+                type="button"
+                class="btn btn-link btn-sm d-block p-0 mt-1"
+                (click)="selectJetton(holding.jetton.address)"
+              >
+                Activity
+              </button>
+            </td>
+            <td>
+              <app-amount
+                [amount]="jettonValue(holding.balance, holding.jetton)"
+              ></app-amount
+              ><ng-container *ngIf="holding.jetton.scaled_ui"
+                ><ng-container
+                  *ngTemplateOutlet="
+                    scaledAmountDetails;
+                    context: {
+                      $implicit: holding.balance,
+                      jetton: holding.jetton
+                    }
+                  "
+                ></ng-container
+              ></ng-container>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-container
+      *ngTemplateOutlet="feedState; context: { $implicit: 'jettons' }"
+    ></ng-container>
+    <section id="account-jetton-activity" class="mt-4">
+      <h2>Jetton activity</h2>
+      <label class="d-block"
+        >Jetton
+        <select
+          class="form-control mb-3"
+          [value]="selectedJetton"
+          (change)="selectJetton($any($event.target).value)"
+        >
+          <option value="">All jettons</option>
+          <option
+            *ngFor="let holding of feeds.jettons?.items"
+            [value]="holding.jetton.address"
+          >
+            {{
+              holding.jetton.name ||
+                holding.jetton.symbol ||
+                holding.jetton.address
+            }}
+          </option>
+        </select>
+      </label>
+      <button
+        *ngIf="!feeds['jetton-history']"
+        type="button"
+        class="btn btn-outline-info"
+        (click)="selectJetton(selectedJetton)"
+      >
+        Load activity
+      </button>
+      <app-transactions-list
+        [nativeEvents]="assetEvents(feeds['jetton-history']?.items)"
+      ></app-transactions-list>
+      <ng-container
+        *ngTemplateOutlet="feedState; context: { $implicit: 'jetton-history' }"
+      ></ng-container>
+    </section>
+  </ng-container>
+  <ng-container *ngIf="activeTab === 'traces'">
+    <div class="box table-responsive" *ngIf="feeds.traces?.items?.length">
+      <table class="table table-borderless table-striped">
+        <thead>
+          <tr>
+            <th>Trace</th>
+            <th>Logical time</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let trace of feeds.traces?.items">
+            <td>
+              <app-truncate
+                [text]="traceId(trace)"
+                [link]="['/trace', traceId(trace)]"
+                [lastChars]="8"
+                ><app-clipboard [text]="traceId(trace)"></app-clipboard
+              ></app-truncate>
+            </td>
+            <td class="numeric">{{ trace.lt || "—" }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <ng-container
+      *ngTemplateOutlet="feedState; context: { $implicit: 'traces' }"
+    ></ng-container>
+  </ng-container>
+  <ng-container *ngIf="activeTab === 'nfts'">
+    <div class="row mb-3">
+      <label class="col-sm"
+        >Collection<select
+          class="form-control"
+          [value]="nftFilter"
+          (change)="filterNfts($any($event.target).value)"
+        >
+          <option value="">All collections</option>
+          <option
+            *ngFor="let collection of nftCollections"
+            [value]="collection.address"
+          >
+            {{ collection.name || short(collection.address) }}
+          </option>
+        </select></label
+      >
+      <form
+        (submit)="$event.preventDefault(); filterNfts(nftFilterInput)"
+        class="col-sm"
+      >
+        <label for="collection-address">Collection address</label>
+        <div class="input-group">
+          <input
+            id="collection-address"
+            class="form-control"
+            [value]="nftFilterInput"
+            (input)="nftFilterInput = $any($event.target).value"
+            placeholder="Collection address"
+          /><button type="submit" class="btn btn-outline-info">Apply</button
+          ><button
+            *ngIf="nftFilter"
+            type="button"
+            class="btn btn-outline-info"
+            (click)="filterNfts('')"
+          >
+            Clear
+          </button>
+        </div>
+      </form>
+    </div>
+    <p *ngIf="feeds.nfts?.paging?.total != null">
+      {{ feeds.nfts.paging.total }} NFTs
+    </p>
+    <ng-container
+      *ngTemplateOutlet="nftGrid; context: { $implicit: feeds.nfts?.items }"
+    ></ng-container
+    ><ng-container
+      *ngTemplateOutlet="feedState; context: { $implicit: 'nfts' }"
+    ></ng-container>
+    <details
+      class="box mt-4"
+      (toggle)="
+        $any($event.target).open &&
+          !feeds['nft-history'] &&
+          loadFeed('nft-history')
+      "
+    >
+      <summary>NFT activity</summary>
+      <app-transactions-list
+        [nativeEvents]="assetEvents(feeds['nft-history']?.items)"
+      ></app-transactions-list>
+      <ng-container
+        *ngTemplateOutlet="feedState; context: { $implicit: 'nft-history' }"
+      ></ng-container>
+    </details>
+  </ng-container>
+  <ng-container *ngIf="activeTab === 'contract'">
+    <section
+      class="box mb-3"
+      *ngIf="
+        data.get_methods?.includes('seqno') ||
+        data.get_methods?.includes('get_public_key')
+      "
+    >
+      <h2>Wallet</h2>
+      <table class="table table-borderless table-striped">
+        <tbody>
+          <ng-container *ngFor="let method of ['seqno', 'get_public_key']">
+            <tr *ngIf="data.get_methods.includes(method)">
+              <td>
+                {{
+                  method === "seqno" ? "Sequence number" : "Public key (hex)"
+                }}
+              </td>
+              <td>
+                <span
+                  *ngIf="resourceLoading['methods/' + method]"
+                  class="skeleton-loader"
+                  aria-label="Loading"
+                ></span>
+                <ng-container
+                  *ngIf="walletGetter(method) as value; else unavailableGetter"
+                  ><span class="numeric text-break">{{ value }}</span
+                  ><app-clipboard
+                    *ngIf="method === 'get_public_key'"
+                    [text]="value"
+                  ></app-clipboard
+                ></ng-container>
+                <ng-template #unavailableGetter
+                  ><span *ngIf="!resourceLoading['methods/' + method]"
+                    >Unavailable</span
+                  ></ng-template
+                >
+                <button
+                  *ngIf="resourceErrors['methods/' + method]"
+                  type="button"
+                  class="btn btn-sm btn-outline-info"
+                  (click)="loadResource('methods/' + method)"
+                >
+                  Retry
+                </button>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </section>
+    <section class="box mb-3">
+      <h2>Contract state</h2>
+      <table class="table table-borderless table-striped">
+        <tbody>
+          <ng-container *ngFor="let entry of entries(data.state)"
+            ><ng-container
+              *ngIf="
+                ![
+                  'code',
+                  'data',
+                  'last_transaction_lt',
+                  'last_transaction_hash',
+                  'storage',
+                  'extra_balance',
+                  '_meta'
+                ].includes(entry.key)
+              "
+              ><tr>
+                <td>{{ fieldLabel(entry.key) | titlecase }}</td>
+                <td [ngSwitch]="entry.key">
+                  <app-amount
+                    *ngSwitchCase="'balance'"
+                    [amount]="nativeAmount(entry.value)"
+                  ></app-amount>
+                  <app-ethereum-identity
+                    *ngSwitchCase="'address'"
+                    [entity]="nativeIdentity(entry.value)"
+                    [link]="'/address/' + address(entry.value)"
+                    [compact]="true"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                  <ng-container *ngSwitchDefault>{{
+                    text(entry.value)
+                  }}</ng-container>
+                </td>
+              </tr></ng-container
+            ></ng-container
+          >
+          <tr *ngIf="data.state?.last_transaction_hash">
+            <td>Last transaction</td>
+            <td>
+              <app-truncate
+                [text]="data.state.last_transaction_hash"
+                [link]="['/tx', data.state.last_transaction_hash]"
+                [lastChars]="8"
+                ><app-clipboard
+                  [text]="data.state.last_transaction_hash"
+                ></app-clipboard
+              ></app-truncate>
+            </td>
+          </tr>
+          <tr *ngIf="data.state?.last_transaction_lt">
+            <td>Last transaction logical time</td>
+            <td>{{ data.state.last_transaction_lt }}</td>
+          </tr>
+          <ng-container *ngIf="data.state?.storage as storage">
+            <tr>
+              <td>Storage cells</td>
+              <td>{{ storage.used_cells ?? "—" }}</td>
+            </tr>
+            <tr>
+              <td>Storage bits</td>
+              <td>{{ storage.used_bits ?? "—" }}</td>
+            </tr>
+            <tr>
+              <td>Public storage cells</td>
+              <td>{{ storage.used_public_cells ?? "—" }}</td>
+            </tr>
+            <tr>
+              <td>Storage last paid</td>
+              <td>
+                <app-timestamp
+                  *ngIf="storage.last_paid; else noStoragePayment"
+                  [unixTime]="asNumber(storage.last_paid)"
+                ></app-timestamp
+                ><ng-template #noStoragePayment>—</ng-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Storage payment due</td>
+              <td>
+                <app-amount
+                  [amount]="nativeAmount(storage.due_payment)"
+                ></app-amount>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+      <details *ngIf="data.state">
+        <summary>Code and data</summary>
+        <pre>{{ data.state | json }}</pre>
+      </details>
+      <span *ngIf="data.stateUnavailable">State unavailable</span>
+    </section>
+    <section class="box mb-3" *ngIf="data.get_methods?.length">
+      <h2>Read contract</h2>
+      <label for="ton-method">Method</label
+      ><select
+        id="ton-method"
+        class="form-control"
+        [value]="getterName"
+        (change)="getterName = $any($event.target).value"
+      >
+        <option value="">Select method</option>
+        <option *ngFor="let method of data.get_methods" [value]="method">
+          {{ method }}
+        </option></select
+      ><label for="ton-args">Arguments</label
+      ><input
+        id="ton-args"
+        class="form-control"
+        [value]="getterArgs"
+        (input)="getterArgs = $any($event.target).value"
+        placeholder="Comma-separated arguments"
+      /><button
+        type="button"
+        class="btn btn-outline-info mt-2"
+        [disabled]="!getterName || getterLoading"
+        (click)="runGetter()"
+      >
+        Read</button
+      ><span *ngIf="getterError">{{ getterError }}</span>
+      <pre *ngIf="getterResult">{{ getterResult | json }}</pre>
+    </section>
+    <details
+      class="box mb-3"
+      *ngFor="
+        let resource of [
+          'staking',
+          'multisigs',
+          'subscriptions',
+          'defi',
+          'dns-expiring',
+          'inspect'
+        ]
+      "
+      (toggle)="$any($event.target).open && loadResource(resource)"
+    >
+      <summary>
+        {{
+          resource === "dns-expiring"
+            ? "Expiring domains"
+            : resource === "defi"
+            ? "DeFi"
+            : resource === "inspect"
+            ? "Contract inspection"
+            : (resource | titlecase)
+        }}
+      </summary>
+      <div *ngIf="resourceLoading[resource]" class="skeleton-loader"></div>
+      <ng-container *ngIf="resources[resource] as result" [ngSwitch]="resource">
+        <ng-container *ngSwitchCase="'dns-expiring'"
+          ><p *ngIf="!result.items?.length">No expiring domains</p>
+          <table
+            class="table table-borderless table-striped"
+            *ngFor="let domain of result.items"
+          >
+            <tbody>
+              <tr>
+                <td>Domain</td>
+                <td>
+                  <a [routerLink]="['/dns', domain.name]">{{ domain.name }}</a>
+                </td>
+              </tr>
+              <tr>
+                <td>Expires</td>
+                <td>
+                  <app-timestamp
+                    [unixTime]="asNumber(domain.expiring_at)"
+                  ></app-timestamp>
+                </td>
+              </tr>
+              <ng-container *ngIf="domain.dns_item"
+                ><tr>
+                  <td>NFT</td>
+                  <td>
+                    <a [routerLink]="['/nft', domain.dns_item.address]">{{
+                      name(domain.dns_item)
+                    }}</a>
+                  </td>
+                </tr></ng-container
+              >
+            </tbody>
+          </table></ng-container
+        ><ng-container *ngSwitchCase="'staking'"
+          ><p *ngIf="!result.pools?.length">No staking positions</p>
+          <table
+            class="table table-borderless table-striped resource-record"
+            *ngFor="let pool of result.pools"
+          >
+            <tbody>
+              <tr>
+                <td>Pool</td>
+                <td>
+                  <a [routerLink]="['/staking-pool', pool.pool]">{{
+                    pool.pool
+                  }}</a>
+                </td>
+              </tr>
+              <tr>
+                <td>Staked</td>
+                <td>
+                  <app-amount [amount]="nativeAmount(pool.amount)"></app-amount>
+                </td>
+              </tr>
+              <tr>
+                <td>Pending deposit</td>
+                <td>
+                  <app-amount
+                    [amount]="nativeAmount(pool.pending_deposit)"
+                  ></app-amount>
+                </td>
+              </tr>
+              <tr>
+                <td>Pending withdrawal</td>
+                <td>
+                  <app-amount
+                    [amount]="nativeAmount(pool.pending_withdraw)"
+                  ></app-amount>
+                </td>
+              </tr>
+              <tr>
+                <td>Ready to withdraw</td>
+                <td>
+                  <app-amount
+                    [amount]="nativeAmount(pool.ready_withdraw)"
+                  ></app-amount>
+                </td>
+              </tr>
+            </tbody></table
+        ></ng-container>
+        <ng-container *ngSwitchCase="'subscriptions'"
+          ><p *ngIf="!result.subscriptions?.length">No subscriptions</p>
+          <table
+            class="table table-borderless table-striped resource-record"
+            *ngFor="let subscription of result.subscriptions"
+          >
+            <tbody>
+              <tr>
+                <td>Subscription</td>
+                <td>
+                  {{
+                    subscription.metadata?.name || subscription.subscription_id
+                  }}
+                </td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>{{ subscription.status }}</td>
+              </tr>
+              <tr>
+                <td>Payment</td>
+                <td>
+                  <app-amount
+                    *ngIf="
+                      saleValue({
+                        price: subscription.payment_per_period
+                      }) as amount
+                    "
+                    [amount]="amount"
+                  ></app-amount>
+                </td>
+              </tr>
+              <tr>
+                <td>Period</td>
+                <td>{{ subscription.period }} seconds</td>
+              </tr>
+              <tr>
+                <td>Scheduled charge</td>
+                <td>
+                  <app-timestamp
+                    [unixTime]="asNumber(subscription.next_charge_at)"
+                  ></app-timestamp>
+                </td>
+              </tr>
+              <tr>
+                <td>Wallet</td>
+                <td>
+                  <app-ethereum-identity
+                    [entity]="nativeIdentity(subscription.wallet)"
+                    [link]="'/address/' + address(address(subscription.wallet))"
+                    [compact]="true"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td>
+              </tr>
+              <ng-container *ngIf="subscription.beneficiary"
+                ><tr>
+                  <td>Beneficiary</td>
+                  <td>
+                    <app-ethereum-identity
+                      [entity]="nativeIdentity(subscription.beneficiary)"
+                      [link]="
+                        '/address/' + address(address(subscription.beneficiary))
+                      "
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td></tr
+              ></ng-container>
+            </tbody></table
+        ></ng-container>
+        <ng-container *ngSwitchCase="'multisigs'"
+          ><p *ngIf="!result.multisigs?.length">No multisigs</p>
+          <section
+            class="resource-record"
+            *ngFor="let multisig of result.multisigs"
+          >
+            <table class="table table-borderless table-striped">
+              <tbody>
+                <tr>
+                  <td>Multisig</td>
+                  <td>
+                    <app-ethereum-identity
+                      [entity]="nativeIdentity(multisig.address)"
+                      [link]="'/address/' + address(multisig.address)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Threshold</td>
+                  <td>
+                    {{ multisig.threshold }} of {{ multisig.signers?.length }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Sequence number</td>
+                  <td>{{ multisig.seqno }}</td>
+                </tr>
+                <tr>
+                  <td>Signers</td>
+                  <td>
+                    <app-ethereum-identity
+                      *ngFor="let signer of multisig.signers"
+                      [entity]="nativeIdentity(signer)"
+                      [link]="'/address/' + address(signer)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Proposers</td>
+                  <td>
+                    <app-ethereum-identity
+                      *ngFor="let proposer of multisig.proposers"
+                      [entity]="nativeIdentity(proposer)"
+                      [link]="'/address/' + address(proposer)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <h3 class="mt-3">Orders</h3>
+            <p *ngIf="!multisig.orders?.length">No orders</p>
+            <table
+              class="table table-borderless table-striped resource-record"
+              *ngFor="let order of multisig.orders"
+            >
+              <tbody>
+                <tr>
+                  <td>Order</td>
+                  <td>
+                    <app-ethereum-identity
+                      [entity]="nativeIdentity(order.address)"
+                      [link]="'/address/' + address(order.address)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Approvals</td>
+                  <td>{{ order.approvals_num }} / {{ order.threshold }}</td>
+                </tr>
+                <tr>
+                  <td>Execution</td>
+                  <td>
+                    {{
+                      order.sent_for_execution
+                        ? "Sent for execution"
+                        : "Awaiting execution"
+                    }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>Expires</td>
+                  <td>
+                    <app-timestamp
+                      [unixTime]="asNumber(order.expiration_date)"
+                    ></app-timestamp>
+                  </td>
+                </tr>
+                <tr>
+                  <td>Signed by</td>
+                  <td>
+                    <app-ethereum-identity
+                      *ngFor="let signer of order.signed_by"
+                      [entity]="nativeIdentity(signer)"
+                      [link]="'/address/' + address(signer)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td>
+                </tr>
+              </tbody>
+            </table></section
+        ></ng-container>
+        <ng-container *ngSwitchCase="'defi'"
+          ><p *ngIf="!result.assets?.length">No DeFi positions</p>
+          <table
+            class="table table-borderless table-striped resource-record"
+            *ngFor="let asset of result.assets"
+          >
+            <tbody>
+              <tr>
+                <td>Protocol</td>
+                <td>{{ asset.defi_provider?.name }}</td>
+              </tr>
+              <tr>
+                <td>Position</td>
+                <td>{{ fieldLabel(asset.type) | titlecase }}</td>
+              </tr>
+              <tr>
+                <td>Amount</td>
+                <td>
+                  <app-amount
+                    [amount]="
+                      asset.locked_asset?.type === 'native'
+                        ? nativeAmount(asset.amount)
+                        : jettonValue(asset.amount, asset.locked_asset?.jetton)
+                    "
+                  ></app-amount>
+                </td>
+              </tr>
+              <ng-container *ngIf="asset.locked_asset?.jetton"
+                ><tr>
+                  <td>Jetton</td>
+                  <td>
+                    <a
+                      [routerLink]="[
+                        '/jetton',
+                        asset.locked_asset.jetton.address
+                      ]"
+                      >{{ asset.locked_asset.jetton.name }}</a
+                    >
+                  </td>
+                </tr></ng-container
+              ><ng-container *ngIf="asset.pool_address"
+                ><tr>
+                  <td>Pool</td>
+                  <td>
+                    <app-ethereum-identity
+                      [entity]="nativeIdentity(asset.pool_address)"
+                      [link]="'/address/' + address(asset.pool_address)"
+                      [compact]="true"
+                      chainName="TON"
+                      chainSymbol="GRAM"
+                    ></app-ethereum-identity>
+                  </td></tr
+              ></ng-container>
+            </tbody></table
+        ></ng-container>
+        <ng-container *ngSwitchCase="'inspect'"
+          ><table class="table table-borderless table-striped resource-record">
+            <tbody>
+              <ng-container *ngFor="let entry of entries(result)"
+                ><ng-container *ngIf="!entry.key.startsWith('_')"
+                  ><tr>
+                    <td>{{ fieldLabel(entry.key) | titlecase }}</td>
+                    <td>{{ text(entry.value) }}</td>
+                  </tr></ng-container
+                ></ng-container
+              >
+            </tbody>
+          </table></ng-container
+        >
+        <details>
+          <summary>Details</summary>
+          <pre>{{ result | json }}</pre>
+        </details> </ng-container
+      ><span *ngIf="resourceErrors[resource]"
+        >Temporarily unavailable
+        <button
+          class="btn btn-sm btn-outline-info"
+          (click)="loadResource(resource)"
+        >
+          Retry
+        </button></span
+      >
+    </details>
+  </ng-container>
+</ng-template>
+
+<app-ethereum-token
+  *ngIf="page !== 'address'"
+  [asset]="assetView"
+  [isLoading]="loading"
+  [errorMessage]="error"
+  (retry)="load()"
+>
+  <div
+    asset-media
+    *ngIf="data && page !== 'jetton'"
+    class="asset-media"
+    [class.media-pending]="media(data)"
+  >
+    <div
+      *ngIf="media(data)"
+      class="skeleton-loader media-skeleton"
+      aria-hidden="true"
+    ></div>
+    <img
+      *ngIf="media(data); else noMedia"
+      [src]="media(data)"
+      [alt]="name(data)"
+      referrerpolicy="no-referrer"
+      (load)="imageLoaded($event)"
+      (error)="hideImage($event)"
+    /><ng-template #noMedia><span>No image</span></ng-template>
+  </div>
+  <div asset-links *ngIf="data">
+    <a
+      *ngIf="safeUrl(data.metadata?.external_url)"
+      [href]="safeUrl(data.metadata.external_url)"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Website ↗</a
+    ><a
+      class="ms-3"
+      *ngIf="safeUrl(data.metadata?.animation_url)"
+      [href]="safeUrl(data.metadata.animation_url)"
+      target="_blank"
+      rel="noopener noreferrer"
+      >Open animation ↗</a
+    >
+  </div>
+  <ng-container *ngIf="data">
+    <ng-container *ngIf="page === 'jetton'">
+      <ng-container *ngIf="data.scaled_ui"
+        ><ng-container
+          *ngTemplateOutlet="
+            scaledAmountDetails;
+            context: { $implicit: data.total_supply, jetton: data }
+          "
+        ></ng-container
+      ></ng-container>
+      <section class="token-transfers">
+        <h2>Holders</h2>
+        <div class="box table-responsive">
+          <table class="table table-borderless table-striped asset-table">
+            <thead>
+              <tr>
+                <th>Account</th>
+                <th>Balance</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let holder of feeds.holders?.items">
+                <td>
+                  <app-ethereum-identity
+                    [entity]="nativeIdentity(holder.owner || holder.address)"
+                    [link]="
+                      '/address/' + address(holder.owner || holder.address)
+                    "
+                    [compact]="true"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td>
+                <td>
+                  <app-amount
+                    [amount]="jettonValue(holder.balance, data)"
+                  ></app-amount
+                  ><ng-container *ngIf="data.scaled_ui"
+                    ><ng-container
+                      *ngTemplateOutlet="
+                        scaledAmountDetails;
+                        context: { $implicit: holder.balance, jetton: data }
+                      "
+                    ></ng-container
+                  ></ng-container>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <ng-container
+          *ngTemplateOutlet="feedState; context: { $implicit: 'holders' }"
+        ></ng-container>
+      </section>
+      <details class="box">
+        <summary>Metadata</summary>
+        <pre>{{ data.metadata | json }}</pre>
+      </details>
+    </ng-container>
+    <ng-container *ngIf="page === 'nft' || page === 'collection'">
+      <section *ngIf="data.interfaces?.includes('sbt')" class="box mb-4">
+        <h2>Soulbound details</h2>
+        <p>Non-transferable</p>
+        <div *ngIf="resourceLoading.sbt" class="skeleton-loader"></div>
+        <table
+          *ngIf="resources.sbt as sbt"
+          class="table table-borderless table-striped"
+        >
+          <tbody>
+            <tr>
+              <td>Authority</td>
+              <td>
+                <app-ethereum-identity
+                  *ngIf="sbt.authority; else unknownAuthority"
+                  [entity]="nativeIdentity(sbt.authority)"
+                  [link]="'/address/' + address(sbt.authority)"
+                  [compact]="true"
+                  chainName="TON"
+                  chainSymbol="GRAM"
+                ></app-ethereum-identity
+                ><ng-template #unknownAuthority>Unknown</ng-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Revocation</td>
+              <td>
+                {{
+                  sbt.revokedAt === "0" || sbt.revokedAt === 0
+                    ? "Not revoked"
+                    : sbt.revokedAt
+                    ? "Revoked"
+                    : "Unknown"
+                }}<span *ngIf="sbt.revokedAt && sbt.revokedAt !== '0'">
+                  ·
+                  <app-timestamp
+                    [unixTime]="asNumber(sbt.revokedAt)"
+                  ></app-timestamp
+                ></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="resourceErrors.sbt">
+          Temporarily unavailable
+          <button
+            class="btn btn-sm btn-outline-info"
+            (click)="loadResource('sbt')"
+          >
+            Retry
+          </button>
+        </p>
+      </section>
+      <section *ngIf="data.sale" class="box mb-4">
+        <h2>For sale</h2>
+        <table class="table table-borderless table-striped">
+          <tbody>
+            <tr>
+              <td>Price</td>
+              <td>
+                <app-amount
+                  *ngIf="saleValue(data.sale) as amount; else unavailablePrice"
+                  [amount]="amount"
+                ></app-amount
+                ><ng-template #unavailablePrice>—</ng-template>
+              </td>
+            </tr>
+            <tr>
+              <td>Seller</td>
+              <td>
+                <app-ethereum-identity
+                  *ngIf="address(data.sale.owner)"
+                  [entity]="nativeIdentity(data.sale.owner)"
+                  [link]="'/address/' + address(address(data.sale.owner))"
+                  [compact]="true"
+                  chainName="TON"
+                  chainSymbol="GRAM"
+                ></app-ethereum-identity>
+              </td>
+            </tr>
+            <ng-container *ngIf="data.sale.market"
+              ><tr>
+                <td>Marketplace</td>
+                <td>
+                  {{ data.sale.market.name || address(data.sale.market) }}
+                </td>
+              </tr></ng-container
+            ><ng-container *ngIf="data.sale.address"
+              ><tr>
+                <td>Sale contract</td>
+                <td>
+                  <app-ethereum-identity
+                    [entity]="nativeIdentity(data.sale.address)"
+                    [link]="'/address/' + address(data.sale.address)"
+                    [compact]="true"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td></tr
+            ></ng-container>
+          </tbody>
+        </table>
+      </section>
+      <section *ngIf="data.metadata?.attributes?.length" class="box mb-4">
+        <div class="card-header"><h2>Attributes</h2></div>
+        <div class="table-responsive">
+          <table class="table table-striped">
+            <tbody>
+              <tr *ngFor="let attribute of data.metadata.attributes">
+                <th>
+                  {{ attribute.trait_type || attribute.name || "Attribute" }}
+                </th>
+                <td>{{ text(attribute.value) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section *ngIf="data.royalty_params?.decoded" class="box mb-4">
+        <h2>Royalties</h2>
+        <table class="table table-borderless table-striped">
+          <tbody>
+            <ng-container
+              *ngFor="let entry of entries(data.royalty_params.decoded)"
+              ><tr>
+                <td>{{ fieldLabel(entry.key) | titlecase }}</td>
+                <td>
+                  <app-ethereum-identity
+                    *ngIf="isAddress(entry.value); else royaltyValue"
+                    [entity]="nativeIdentity(entry.value)"
+                    [link]="'/address/' + address(entry.value)"
+                    [compact]="true"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity
+                  ><ng-template #royaltyValue>{{
+                    text(entry.value)
+                  }}</ng-template>
+                </td>
+              </tr></ng-container
+            >
+          </tbody>
+        </table>
+      </section>
+      <details class="box mb-4">
+        <summary>Metadata</summary>
+        <pre>{{ data.metadata | json }}</pre>
+      </details>
+      <ng-container *ngIf="page === 'collection'"
+        ><h2>Items</h2>
+        <ng-container
+          *ngTemplateOutlet="
+            nftGrid;
+            context: { $implicit: feeds.items?.items }
+          "
+        ></ng-container
+        ><ng-container
+          *ngTemplateOutlet="feedState; context: { $implicit: 'items' }"
+        ></ng-container
+      ></ng-container>
+      <ng-container *ngIf="page === 'nft'"
+        ><h2>
+          {{
+            data.interfaces?.includes("sbt") ? "History" : "Transfer history"
+          }}
+        </h2>
+        <ng-container
+          *ngTemplateOutlet="
+            events;
+            context: { $implicit: feeds.history?.items }
+          "
+        ></ng-container
+        ><ng-container
+          *ngTemplateOutlet="feedState; context: { $implicit: 'history' }"
+        ></ng-container
+      ></ng-container>
+    </ng-container>
+    <details class="box">
+      <summary>
+        {{
+          page === "nft"
+            ? "NFT details"
+            : page === "collection"
+            ? "Collection details"
+            : "Jetton details"
+        }}
+      </summary>
+      <pre>{{ data | json }}</pre>
+    </details>
+  </ng-container>
+</app-ethereum-token>
+<ng-template #nftGrid let-items
+  ><app-ton-nft-grid [items]="nftCards(items)"></app-ton-nft-grid
+></ng-template>
+<ng-template #events let-items
+  ><app-transactions-list
+    [nativeEvents]="assetEvents(items)"
+  ></app-transactions-list
+  ><ng-container *ngFor="let event of items"
+    ><details class="box mb-3" *ngIf="otherActions(event).length">
+      <summary>Other actions ({{ otherActions(event).length }})</summary>
+      <app-transactions-list
+        *ngIf="otherActions(event).length"
+        [nativeEvents]="assetOtherEvents(event)"
+      ></app-transactions-list></details></ng-container
+></ng-template>
+<ng-template #feedState let-name
+  ><div class="feed-state" *ngIf="feeds[name] as feed">
+    <span *ngIf="feed.stale" class="badge badge-warning">Updates delayed</span>
+    <div
+      *ngIf="feed.loading"
+      class="skeleton-loader"
+      role="status"
+      aria-label="Loading"
+    ></div>
+    <p *ngIf="!feed.loading && !feed.error && !feed.items.length">
+      {{
+        name === "nfts" || name === "items"
+          ? "No NFTs"
+          : name === "jettons"
+          ? "No jettons"
+          : name === "shards"
+          ? "No shards"
+          : "No activity"
+      }}
+    </p>
+    <p *ngIf="feed.error">
+      {{ feed.error }}
+      <button
+        type="button"
+        class="btn btn-sm btn-outline-info"
+        (click)="loadFeed(name, !feed.restart && feed.items.length > 0)"
+      >
+        {{ feed.restart ? "Refresh" : "Retry" }}
+      </button>
+    </p>
+    <button
+      *ngIf="feed.paging?.hasMore && !feed.error"
+      type="button"
+      class="btn btn-outline-info"
+      [disabled]="feed.loading"
+      (click)="loadFeed(name, true)"
+    >
+      Load more
+    </button>
+  </div></ng-template
+>
+
+<ng-template #extraCurrencyTable let-items
+  ><div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Currency ID</th>
+          <th>Symbol</th>
+          <th>Balance</th>
+          <th>Raw units</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of items">
+          <td>
+            <a
+              [routerLink]="['/extra-currency', item.preview?.id ?? item.id]"
+              >{{ item.preview?.id ?? item.id }}</a
+            >
+          </td>
+          <td>{{ item.preview?.symbol || "—" }}</td>
+          <td>
+            <app-amount
+              [amount]="currencyValue(item.amount ?? item.value, item.preview)"
+            ></app-amount>
+          </td>
+          <td class="numeric">{{ item.amount ?? item.value }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div></ng-template
+>
+
+<ng-template #scaledAmountDetails let-value let-jetton="jetton"
+  ><details class="scaled-amount-details">
+    <summary>Amount details</summary>
+    <table class="table table-borderless table-striped">
+      <tbody>
+        <tr>
+          <td>On-chain amount</td>
+          <td>
+            <app-amount
+              [amount]="jettonValue(value, jetton, false)"
+            ></app-amount>
+          </td>
+        </tr>
+        <tr>
+          <td>Raw units</td>
+          <td>{{ value }}</td>
+        </tr>
+        <tr>
+          <td>Display multiplier</td>
+          <td>
+            {{ jetton.scaled_ui.numerator }} /
+            {{ jetton.scaled_ui.denominator }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </details></ng-template
+>

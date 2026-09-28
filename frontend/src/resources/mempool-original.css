@@ -35,3 +35,17 @@
 :root { --fiat-color: #83fd00; }
 
 :root { --eth-utilization: #2ec4b6; }
+
+/* Complete shared shell tokens; retain chain identity in selector icons. */
+:root {
+  --nav-bg: #11131f;
+  --link-color: #00ddff;
+  --link-hover-color: #66ebff;
+  --bs-dark-rgb: 17, 19, 31;
+  --fee-tier-slow: #9339f4;
+  --fee-tier-normal: #6225b2;
+  --fee-tier-fast: #007cfa;
+  --fee-tier-fastest: #00ddff;
+  --input-addon-bg: #272f4e;
+  --input-addon-border: #3b4263;
+}

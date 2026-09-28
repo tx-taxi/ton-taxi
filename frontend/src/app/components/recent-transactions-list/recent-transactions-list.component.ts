@@ -1,3 +1,5 @@
+import { ActivatedRoute } from '@angular/router';
+import { TonTransactionsData } from '@app/ton/ton-transactions-data.service';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, HostListener } from '@angular/core';
 import { BehaviorSubject, Observable, Subscription, combineLatest, merge, of } from 'rxjs';
 import { distinctUntilChanged, filter, map, scan, shareReplay } from 'rxjs/operators';
@@ -5,6 +7,7 @@ import { StateService } from '@app/services/state.service';
 import { WebsocketService } from '@app/services/websocket.service';
 import { SeoService } from '@app/services/seo.service';
 import { TransactionStripped } from '@interfaces/node-api.interface';
+import { NativeAmount } from '@app/shared/native-view.types';
 
 @Component({
   selector: 'app-recent-transactions-list',
@@ -12,9 +15,18 @@ import { TransactionStripped } from '@interfaces/node-api.interface';
   styleUrls: ['./recent-transactions-list.component.scss'],
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [TonTransactionsData],
 })
 export class RecentTransactionsList implements OnInit, OnDestroy {
   @Input() widget: boolean = false;
+  /** Native account/message-chain rows; bypasses the mempool stream and gas/vsize assumptions. */
+  private suppliedTransactions: any[] | null = null;
+  @Input() set tonTransactions(value: any[] | null) { this.suppliedTransactions = value; }
+  get tonTransactions(): any[] | null { return this.nativeRoute ? (this.native.data?.transactions || []) : this.suppliedTransactions; }
+  get nativeMode(): boolean { return this.nativeRoute || this.suppliedTransactions !== null; }
+  get nativeRoute(): boolean { return !this.widget && this.route.snapshot.data.tonPage === 'transactions'; }
+  get rows(): any[] | null { return this.nativeMode ? (this.native.loading && !this.native.data && !this.widget ? null : this.tonLoading && !this.tonTransactions?.length ? null : this.tonTransactions) : null; }
+  @Input() tonLoading = false;
 
   transactions$: Observable<TransactionStripped[]>;
   bufferedCount$: Observable<number>;
@@ -30,11 +42,15 @@ export class RecentTransactionsList implements OnInit, OnDestroy {
 
   constructor(
     public stateService: StateService,
+    public native: TonTransactionsData,
+    private route: ActivatedRoute,
     private websocketService: WebsocketService,
     private seoService: SeoService,
   ) {}
 
   ngOnInit(): void {
+    if (this.nativeRoute) { this.native.ngOnInit(); return; }
+    if (this.nativeMode) return;
     this.limit$ = new BehaviorSubject<number>(this.widget ? 6 : 50);
 
     if (!this.widget) {
@@ -125,11 +141,17 @@ export class RecentTransactionsList implements OnInit, OnDestroy {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  trackByTxid(index: number, tx: TransactionStripped): string {
-    return tx.txid;
+  trackByTxid(index: number, tx: TransactionStripped | any): string {
+    return tx.hash || tx.txid;
+  }
+
+  tonAmount(atomic: string | number | null | undefined): NativeAmount | null {
+    if (atomic === null || atomic === undefined) return null;
+    return { atomic: String(atomic), decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true };
   }
 
   ngOnDestroy(): void {
+    if (this.nativeRoute) this.native.ngOnDestroy();
     this.currencySubscription?.unsubscribe();
   }
 }

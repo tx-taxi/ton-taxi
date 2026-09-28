@@ -21,6 +21,7 @@
   max-width: 100%;
 }
 
+
 tr, td, th {
   border: 0px;
   padding-top: 0.65rem !important;
@@ -280,4 +281,19 @@ tr, td, th {
 	vertical-align: middle;
 	max-width: 50vw;
   text-align: left;
+}
+
+.native-mode {
+  .fees, .txs { display: table-cell; }
+  .fees { white-space: nowrap; }
+  .height { width: 13%; }
+  .pool { width: 24%; }
+  .txs { width: 12%; }
+  .fees { width: 31%; }
+  @media (max-width: 575px) {
+    .pool { display: none; }
+    .height { width: 25%; }
+    .txs { width: 15%; }
+    .fees { width: 60%; }
+  }
 }

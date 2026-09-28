@@ -16,3 +16,9 @@ frontend/cypress/videos
 .env
 .env.*
 !.env.sample
+
+frontend/mempool-frontend-config.json
+frontend/frontend
+review
+adapter/ton/evidence
+.ton-data

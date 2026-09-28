@@ -14,6 +14,22 @@ const nativeCategoryColors = {
   contractCall: hexToColor('aab7ff'),
   tokenTransfer: hexToColor('d9ddeb'),
 };
+// Confirmed TON records have their own protocol categories. Keep them in the
+// explorer's cyan family rather than borrowing Ethereum's lavender token tiles.
+const tonConfirmedColors = {
+  transfer: hexToColor('1bd8f4'),
+  jetton: hexToColor('29c7b8'),
+  nft: hexToColor('35a9ee'),
+  contract: hexToColor('547ee8'),
+  fallback: hexToColor('688fa3'),
+};
+const tonConfirmedNativeColors = {
+  transfer: hexToColor('32d9ef'),
+  jetton: hexToColor('44cfc1'),
+  nft: hexToColor('56b7ed'),
+  contract: hexToColor('748ee9'),
+  fallback: hexToColor('7fa5b4'),
+};
 
 export function hexToColor(hex: string): Color {
   return {
@@ -79,6 +95,22 @@ export function ethereumCategoryColorFunction(tx: TxView): Color {
     return colors.transfer;
   }
   return colors.fallback;
+}
+
+/** TON confirmed-data categories use the same native palette family as the graph. */
+export function confirmedCategoryColorFunction(tx: TxView): Color {
+  const colors = tx.scene?.theme.theme === 'default' ? tonConfirmedNativeColors : tonConfirmedColors;
+  switch (tx.confirmed?.category) {
+    case 'transfer': return colors.transfer;
+    case 'jetton': return colors.jetton;
+    case 'nft': return colors.nft;
+    case 'contract': return colors.contract;
+    default: return colors.fallback;
+  }
+}
+
+export function pendingMessageColorFunction(tx: TxView): Color {
+  return tx.scene?.theme.theme === 'default' ? tonConfirmedNativeColors.transfer : tonConfirmedColors.transfer;
 }
 
 interface ColorPalette {

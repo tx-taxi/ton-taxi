@@ -1,16 +1,23 @@
 <main class="container-xl ethereum-token-page">
-  <div *ngIf="isLoading" class="token-state" role="status" aria-live="polite">
-    <span class="token-state__spinner" aria-hidden="true"></span>
-    <span>Loading token data...</span>
+  <div
+    *ngIf="isLoading && !asset"
+    class="token-state"
+    role="status"
+    aria-live="polite"
+  >
+    <span class="token-state__spinner" aria-hidden="true"></span
+    ><span>Loading asset data…</span>
   </div>
-
-  <section *ngIf="!isLoading && errorMessage" class="token-state token-state--error" role="alert">
-    <h1>Token unavailable</h1>
+  <section
+    *ngIf="!isLoading && errorMessage && !asset"
+    class="token-state token-state--error"
+    role="alert"
+  >
+    <h1>Asset unavailable</h1>
     <p>{{ errorMessage }}</p>
-    <button type="button" class="btn btn-primary" (click)="retry()">Try again</button>
+    <button class="btn btn-primary" (click)="retry.emit()">Try again</button>
   </section>
-
-  <ng-container *ngIf="!isLoading && token">
+  <ng-container *ngIf="asset as token">
     <header class="token-header">
       <div class="token-logo" aria-hidden="true">
         <img
@@ -19,133 +26,135 @@
           alt=""
           decoding="async"
           referrerpolicy="no-referrer"
-          (error)="onLogoError()"
-        >
-        <span *ngIf="!token.iconUrl || logoFailed">{{ tokenInitials() }}</span>
+          (error)="logoFailed = true"
+        /><span *ngIf="!token.iconUrl || logoFailed">{{
+          tokenInitials()
+        }}</span>
       </div>
-
       <div class="token-heading">
         <div class="token-heading__title-line">
-          <h1>{{ tokenTitle() }}</h1>
-          <span *ngIf="token.symbol" class="token-symbol">{{ token.symbol }}</span>
-          <span class="token-type">{{ token.type }}</span>
+          <h1>{{ token.name }}</h1>
+          <span *ngIf="token.symbol" class="token-symbol">{{
+            token.symbol
+          }}</span
+          ><span class="token-type">{{
+            token.kind === "nft" ? "NFT" : (token.kind | titlecase)
+          }}</span
+          ><span *ngIf="token.soulbound" class="token-type">Soulbound</span
+          ><span *ngIf="token.stale" class="badge badge-warning"
+            >Updates delayed</span
+          >
         </div>
         <div class="token-contract">
-          <span class="token-contract__label">Contract</span>
-          <a [routerLink]="['/address', token.address]" [title]="token.address">{{ token.address }}</a>
-          <app-clipboard [text]="token.address"></app-clipboard>
+          <span class="token-contract__label">Contract</span
+          ><app-truncate
+            [text]="token.address"
+            [lastChars]="8"
+            [link]="['/address', token.address]"
+            ><app-clipboard [text]="token.address"></app-clipboard
+          ></app-truncate>
         </div>
       </div>
     </header>
-
     <section
-      *ngIf="token.holdersCount || token.totalSupply || token.circulatingSupply || token.exchangeRate || token.marketCap || token.volume24h"
+      *ngIf="token.kind === 'jetton'"
       class="token-metrics"
-      aria-label="Token metrics"
+      aria-label="Jetton metrics"
     >
-      <div *ngIf="token.exchangeRate" class="token-metric">
-        <span class="token-metric__label">Price</span>
-        <strong>{{ formatUsd(token.exchangeRate, 6) }}</strong>
+      <div class="token-metric" *ngIf="token.supply">
+        <span class="token-metric__label">Total supply</span
+        ><strong class="token-metric__amount"
+          ><app-amount [amount]="token.supply"></app-amount
+        ></strong>
       </div>
-      <div *ngIf="token.marketCap" class="token-metric">
-        <span class="token-metric__label">Market cap</span>
-        <strong>{{ formatUsd(token.marketCap) }}</strong>
+      <div class="token-metric">
+        <span class="token-metric__label">Holders</span
+        ><strong>{{ token.holders ?? "—" }}</strong>
       </div>
-      <div *ngIf="token.volume24h" class="token-metric">
-        <span class="token-metric__label">24h volume</span>
-        <strong>{{ formatUsd(token.volume24h) }}</strong>
+      <div class="token-metric">
+        <span class="token-metric__label">Decimals</span
+        ><strong>{{ token.decimals ?? "—" }}</strong>
       </div>
-      <div *ngIf="token.holdersCount" class="token-metric">
-        <span class="token-metric__label">Holders</span>
-        <strong>{{ formatInteger(token.holdersCount) }}</strong>
-      </div>
-      <div *ngIf="token.totalSupply" class="token-metric">
-        <span class="token-metric__label">Total supply</span>
-        <strong class="token-metric__value" [title]="exactSupply(token.totalSupply) + ' ' + token.symbol">
-          <span>{{ formatCompactSupply(token.totalSupply) }}</span>
-          <span class="token-metric__unit">{{ token.symbol }}</span>
-        </strong>
-      </div>
-      <div *ngIf="token.circulatingSupply" class="token-metric">
-        <span class="token-metric__label">Circulating supply</span>
-        <strong class="token-metric__value" [title]="exactSupply(token.circulatingSupply) + ' ' + token.symbol">
-          <span>{{ formatCompactSupply(token.circulatingSupply) }}</span>
-          <span class="token-metric__unit">{{ token.symbol }}</span>
-        </strong>
+      <div class="token-metric">
+        <span class="token-metric__label">Mintable</span
+        ><strong>{{
+          token.mintable == null ? "Unknown" : token.mintable ? "Yes" : "No"
+        }}</strong>
       </div>
     </section>
-
-    <section class="token-transfers" aria-labelledby="token-transfers-heading">
-      <div class="section-heading">
-        <h2 id="token-transfers-heading">{{ transfers.length && (transfersRecentOnly || transfersUnavailable) ? 'Recent transfer sample' : 'Transfer history' }}</h2>
-        <span>{{ transfers.length }} shown</span>
-      </div>
-
-      <div *ngIf="transfers.length && (transfersRecentOnly || transfersUnavailable)" class="token-history-scope" role="status">
-        This is a bounded recent sample from Ethereum RPC. Complete indexed transfer history is temporarily unavailable.
-      </div>
-
-      <div *ngIf="transfers.length; else noTransfers" class="transfer-list">
-        <article *ngFor="let item of visibleTransfers; trackBy: trackTransfer" class="transfer-row">
-          <div class="transfer-primary">
-            <a class="transfer-amount" [routerLink]="['/tx', item.transfer.transactionHash]" [title]="transferExactAmount(item.transfer)">
-              {{ formatTransferAmount(item.transfer) }} {{ transferSymbol(item.transfer) }}
-            </a>
-            <span class="transfer-kind">{{ item.transfer.method || item.transfer.type }}</span>
-          </div>
-
-          <div class="transfer-party transfer-party--from">
-            <span class="transfer-party__label">From</span>
-            <app-ethereum-identity
-              [entity]="item.from"
-              [compact]="true"
-              [link]="'/address/' + item.transfer.from.address"
-            ></app-ethereum-identity>
-          </div>
-
-          <span class="transfer-direction" aria-hidden="true">&rarr;</span>
-
-          <div class="transfer-party transfer-party--to">
-            <span class="transfer-party__label">To</span>
-            <app-ethereum-identity
-              *ngIf="item.transfer.to as recipient; else contractCreation"
-              [entity]="item.to"
-              [compact]="true"
-              [link]="'/address/' + recipient.address"
-            ></app-ethereum-identity>
-            <ng-template #contractCreation>
-              <span class="transfer-missing">Contract creation</span>
-            </ng-template>
-          </div>
-
-          <div class="transfer-meta">
-            <a [routerLink]="['/tx', item.transfer.transactionHash]" [title]="item.transfer.transactionHash">
-              {{ item.transfer.transactionHash | slice:0:10 }}...{{ item.transfer.transactionHash | slice:-8 }}
-            </a>
-            <time *ngIf="item.transfer.timestamp" [attr.datetime]="item.transfer.timestamp">
-              {{ formatTimestamp(item.transfer.timestamp) }}
-            </time>
-          </div>
-        </article>
-        <button
-          *ngIf="hiddenTransferCount || showAllTransfers"
-          type="button"
-          class="transfer-list__toggle"
-          (click)="toggleTransfers()"
-        >
-          {{ showAllTransfers ? 'Show fewer transfers' : 'Show ' + hiddenTransferCount + ' more transfers' }}
-        </button>
-      </div>
-
-      <ng-template #noTransfers>
-        <div *ngIf="transfersUnavailable; else emptyTransferHistory" class="token-empty token-empty--degraded" role="status">
-          <strong>Transfer history is temporarily unavailable</strong>
-          <span>Token metadata is current, but the indexed transfer feed could not be loaded.</span>
+    <div [class.nft-media-layout]="token.kind !== 'jetton'">
+      <ng-content select="[asset-media]"></ng-content>
+      <section class="token-description">
+        <p *ngIf="token.description" class="asset-description">
+          {{ token.description }}
+        </p>
+        <div class="box">
+          <table class="table table-borderless table-striped token-summary">
+            <tbody>
+              <tr *ngIf="token.collection">
+                <td>Collection</td>
+                <td>
+                  <app-ethereum-identity
+                    [entity]="token.collection"
+                    [compact]="true"
+                    [link]="'/collection/' + token.collection.address"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td>
+              </tr>
+              <tr *ngIf="token.owner">
+                <td>Owner</td>
+                <td>
+                  <app-ethereum-identity
+                    [entity]="token.owner"
+                    [compact]="true"
+                    [link]="'/address/' + token.owner.address"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td>
+              </tr>
+              <tr *ngIf="token.admin">
+                <td>Admin</td>
+                <td>
+                  <app-ethereum-identity
+                    [entity]="token.admin"
+                    [compact]="true"
+                    [link]="'/address/' + token.admin.address"
+                    chainName="TON"
+                    chainSymbol="GRAM"
+                  ></app-ethereum-identity>
+                </td>
+              </tr>
+              <tr *ngIf="token.index != null">
+                <td>Index</td>
+                <td>{{ token.index }}</td>
+              </tr>
+              <tr *ngIf="token.nextIndex != null">
+                <td>Next item index</td>
+                <td>{{ token.nextIndex }}</td>
+              </tr>
+              <tr *ngIf="token.membership">
+                <td>Collection membership</td>
+                <td>{{ token.membership }}</td>
+              </tr>
+              <tr>
+                <td>Trust</td>
+                <td [class.text-danger]="token.trust === 'Flagged'">
+                  {{ token.trust }}
+                </td>
+              </tr>
+              <tr *ngIf="token.approvedBy.length">
+                <td>Recognized by</td>
+                <td>{{ token.approvedBy.join(", ") }}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <ng-template #emptyTransferHistory>
-          <div class="token-empty">No transfers were found for this token.</div>
-        </ng-template>
-      </ng-template>
-    </section>
+        <ng-content select="[asset-links]"></ng-content>
+      </section>
+    </div>
+    <ng-content></ng-content>
   </ng-container>
 </main>

@@ -1,4 +1,4 @@
-<button *ngIf="!widget && (bufferedCount$ | async) > 0 && !(manualPaused$ | async)"
+<button *ngIf="!nativeMode && !widget && (bufferedCount$ | async) > 0 && !(manualPaused$ | async)"
   type="button"
   class="new-tx-pill"
   (click)="scrollToTop()"
@@ -12,7 +12,7 @@
   <div class="title-row" *ngIf="!widget">
     <h1 i18n="page.recent-transactions">Recent Transactions</h1>
 
-    <div class="controls">
+    <div class="controls" *ngIf="!nativeMode">
       <div class="btn-group" role="group">
         <button *ngFor="let limit of limitOptions"
           type="button"
@@ -29,30 +29,31 @@
     </div>
   </div>
 
+  <div *ngIf="nativeRoute && native.error" class="alert alert-mempool">{{ native.error }}</div>
   <table class="table latest-transactions">
     <thead>
       <th class="table-cell-txid" i18n="dashboard.latest-transactions.txid">TXID</th>
       <th class="table-cell-satoshis">Value</th>
-      <th class="table-cell-vsize" *ngIf="!widget">Gas used</th>
-      <th class="table-cell-fees">Gas price</th>
+      <th class="table-cell-vsize" *ngIf="!widget">{{ nativeMode ? 'Messages' : 'Gas used' }}</th>
+      <th class="table-cell-fees">{{ nativeMode ? 'Fees' : 'Gas price' }}</th>
     </thead>
-    <tbody data-cy="transactions-list" *ngIf="transactions$ | async as transactions; else skeleton">
+    <tbody data-cy="transactions-list" *ngIf="(nativeMode ? rows : (transactions$ | async)) as transactions; else skeleton">
       <tr *ngFor="let transaction of transactions; trackBy: trackByTxid">
         <td class="table-cell-txid">
-          <a [routerLink]="['/tx' | relativeUrl, transaction.txid]">
-            <app-truncate [text]="transaction.txid" [lastChars]="5"></app-truncate>
+          <a [class.text-danger]="nativeMode && transaction.success === false" [title]="nativeMode && transaction.success === false ? 'Failed transaction' : ''" [routerLink]="['/tx' | relativeUrl, (transaction.hash || transaction.txid)]">
+            <app-truncate [text]="transaction.hash || transaction.txid" [lastChars]="5"></app-truncate>
           </a>
         </td>
         <td class="table-cell-satoshis">
-          <app-amount *ngIf="(network$ | async) !== 'liquidtestnet'; else liquidAmount" [satoshis]="transaction.value" digitsInfo="1.2-4" [noFiat]="true"></app-amount>
-          <ng-template #liquidAmount i18n="shared.confidential">Confidential</ng-template>
+          <app-amount *ngIf="!nativeMode && (network$ | async) !== 'liquidtestnet'" [satoshis]="transaction.value" digitsInfo="1.2-4" [noFiat]="true"></app-amount>
+          <span *ngIf="!nativeMode && (network$ | async) === 'liquidtestnet'">Confidential</span><app-amount *ngIf="nativeMode" [amount]="native.coin(transaction.in_msg?.value)" [compactBlock]="widget" [noFiat]="true"></app-amount>
         </td>
-        <td class="table-cell-vsize" *ngIf="!widget">{{ transaction.vsize | number }} gas</td>
+        <td class="table-cell-vsize" *ngIf="!widget"><ng-container *ngIf="!nativeMode">{{ transaction.vsize | number }} gas</ng-container><ng-container *ngIf="nativeMode">{{ (transaction.in_msg ? 1 : 0) + (transaction.out_msgs?.length || 0) }}</ng-container></td>
         <td class="table-cell-fees">
-          <app-fee-rate [fee]="transaction.fee" [weight]="transaction.vsize * 4"></app-fee-rate>
+          <app-amount *ngIf="nativeMode" [amount]="native.coin(transaction.total_fees)" [compactBlock]="widget" [noFiat]="true"></app-amount><app-fee-rate *ngIf="!nativeMode" [fee]="transaction.fee" [weight]="transaction.vsize * 4"></app-fee-rate>
         </td>
       </tr>
-      <tr *ngIf="!widget && transactions.length < (limit$ | async)" data-cy="transactions-skeleton-row">
+      <tr *ngIf="!nativeMode && !widget && transactions.length < (limit$ | async)" data-cy="transactions-skeleton-row">
         <td class="table-cell-txid"><span class="skeleton-loader"></span></td>
         <td class="table-cell-satoshis"><span class="skeleton-loader"></span></td>
         <td class="table-cell-vsize"><span class="skeleton-loader"></span></td>
@@ -70,4 +71,5 @@
       </tbody>
     </ng-template>
   </table>
+  <div class="d-flex justify-content-center gap-2 my-4" *ngIf="nativeRoute && native.data"><button class="btn btn-primary" *ngIf="native.data._paging?.hasMore" [disabled]="native.mainLoading" (click)="native.loadMoreMain()">{{ native.mainLoading ? 'Loading…' : 'Load more' }}</button><button class="btn btn-outline-primary" (click)="native.load()">Latest</button></div><div class="alert alert-mempool" *ngIf="nativeRoute && native.mainError">{{ native.mainError }}</div>
 </div>

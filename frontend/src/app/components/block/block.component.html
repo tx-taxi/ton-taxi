@@ -7,23 +7,23 @@
     </div>
     <h1>
       @if (!block?.stale) {
-        <ng-container *ngIf="blockHeight == null || blockHeight > 0; else genesis" i18n="shared.block-title">Block</ng-container>
+        <ng-container *ngIf="nativeMode || blockHeight == null || blockHeight > 0; else genesis" i18n="shared.block-title">Block</ng-container>
         <ng-template #genesis i18n="@@2303359202781425764">Genesis</ng-template>
       } @else {
         <ng-container i18n="shared.stale-block-title">Stale Block</ng-container>
       }
       <span class="next-previous-blocks">
-        <a *ngIf="showNextBlocklink" class="nav-arrow next" [routerLink]="['/block/' | relativeUrl, nextBlockHeight]" (click)="navigateToNextBlock()" i18n-ngbTooltip="Next Block" ngbTooltip="Next Block" placement="bottom">
+        <a *ngIf="canGoNext" class="nav-arrow next" [routerLink]="['/block/' | relativeUrl, nextBlockHeight]" (click)="navigateToNextBlock()" i18n-ngbTooltip="Next Block" ngbTooltip="Next Block" placement="bottom">
           <fa-icon [icon]="['fas', 'angle-left']" [fixedWidth]="true"></fa-icon>
         </a>
-        <span *ngIf="!showNextBlocklink" placement="bottom" class="disable nav-arrow next">
+        <span *ngIf="!canGoNext" placement="bottom" class="disable nav-arrow next">
           <fa-icon [icon]="['fas', 'angle-left']" [fixedWidth]="true"></fa-icon>
         </span>
-        <a [routerLink]="['/block/' | relativeUrl, blockHash]" class="block-link">{{ blockHeight }}</a>
-        <a *ngIf="showPreviousBlocklink && block" class="nav-arrow prev"  [routerLink]="['/block/' | relativeUrl, block.previousblockhash]" (click)="navigateToPreviousBlock()" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
+        <a [routerLink]="['/block/' | relativeUrl, displayBlockHash]" class="block-link">{{ displayBlockHeight }}</a>
+        <a *ngIf="canGoPrevious" class="nav-arrow prev"  [routerLink]="['/block/' | relativeUrl, nativeMode ? nativePreviousBlock : block.previousblockhash]" (click)="nativeMode ? null : navigateToPreviousBlock()" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
           <fa-icon [icon]="['fas', 'angle-right']" [fixedWidth]="true"></fa-icon>
         </a>
-        <span *ngIf="!showPreviousBlocklink || !block" placement="bottom" class="disable nav-arrow prev">
+        <span *ngIf="!canGoPrevious" placement="bottom" class="disable nav-arrow prev">
           <fa-icon [icon]="['fas', 'angle-right']" [fixedWidth]="true"></fa-icon>
         </span>
       </span>
@@ -38,11 +38,20 @@
 
   <div class="clearfix"></div>
 
-  <div class="box" *ngIf="!error">
+  <div class="box" *ngIf="!displayError">
     <div class="row">
       <div class="col-sm">
-        <table class="table table-borderless table-striped">
+        <table class="table table-borderless table-striped" [class.ton-block-details]="nativeMode">
           <tbody>
+            <ng-container *ngIf="nativeMode; else legacyPrimaryRows">
+              <ng-container *ngIf="nativeBlock as block; else skeletonRows">
+                <tr><td class="td-width">Block ID</td><td><span class="d-flex align-items-center"><app-truncate [text]="tonBlockId(block)" [lastChars]="12"></app-truncate><app-clipboard [text]="tonBlockId(block)"></app-clipboard></span></td></tr>
+                <tr><td>Timestamp</td><td><app-timestamp [customFormat]="'yyyy-MM-dd HH:mm:ss'" [unixTime]="block.gen_utime ?? block.timestamp" [hideTimeSince]="true"></app-timestamp></td></tr>
+                <tr><td>Workchain</td><td>{{ block.workchain_id === -1 || block.workchain_id === '-1' ? 'Masterchain' : block.workchain_id }}</td></tr>
+                <tr><td>Shard</td><td>{{ block.shard ?? '—' }}</td></tr>
+              </ng-container>
+            </ng-container>
+            <ng-template #legacyPrimaryRows>
             <ng-container *ngIf="block && !isLoadingBlock; else skeletonRows">
               <tr>
                 <td class="td-width" i18n="block.hash">Hash</td>
@@ -83,6 +92,7 @@
                 </td>
               </tr>
             </ng-container>
+            </ng-template>
             <ng-template #skeletonRows>
               <tr>
                 <td class="td-width" colspan="2"><span class="skeleton-loader"></span></td>
@@ -111,7 +121,8 @@
           </tbody>
         </table>
         <div class="col-sm chart-container" *ngIf="webGlEnabled && !showComparison">
-          <app-block-overview-graph
+          <app-mempool-block-overview *ngIf="nativeMode" [suppliedConfirmedTransactions]="nativeTransactions" [suppliedLoading]="nativeTransactionsLoading" [suppliedError]="nativeRoute ? tonData.transactionsError : null" orientation="top" [flip]="false"></app-mempool-block-overview>
+          <app-block-overview-graph *ngIf="!nativeMode"
             #blockGraphActual
             [isLoading]="!stateService.isBrowser || isLoadingOverview"
             [resolution]="86"
@@ -124,7 +135,7 @@
             [relativeTime]="block?.timestamp"
             (txClickEvent)="onTxClick($event)"
           ></app-block-overview-graph>
-          @if (!isMobile || mode === 'actual') {
+          @if (!nativeMode && (!isMobile || mode === 'actual')) {
             <ng-container *ngTemplateOutlet="emptyBlockInfo; context: { $implicit: block?.stale ? canonicalBlock : block }"></ng-container>
           }
         </div>
@@ -133,6 +144,13 @@
   </div>
 
   <ng-template #restOfTable>
+    <ng-container *ngIf="nativeMode; else legacyRestRows">
+      <ng-container *ngIf="nativeBlock as block; else loadingRest">
+        <tr><td class="td-width">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
+        <tr><td>Collected fees</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
+      </ng-container>
+    </ng-container>
+    <ng-template #legacyRestRows>
     <ng-container *ngIf="block && !isLoadingBlock; else loadingRest">
       <tr *ngIf="block.extras?.medianFee != undefined">
         <td class="td-width">Base fee</td>
@@ -169,6 +187,7 @@
         <td><app-truncate [text]="block.extras.pool.name" [lastChars]="8" [link]="['/address/' | relativeUrl, block.extras.pool.name]"></app-truncate></td>
       </tr>
     </ng-container>
+    </ng-template>
     <ng-template #loadingRest>
       <tr>
         <td class="td-width" colspan="2"><span class="skeleton-loader"></span></td>
@@ -277,15 +296,19 @@
     </div>
   </div>
 
-  <ng-template [ngIf]="block && !isLoadingBlock && !error">
+  <ng-template [ngIf]="(nativeMode ? nativeBlock : (block && !isLoadingBlock)) && !displayError">
     <div [hidden]="!showDetails" id="details">
       <br>
 
       <div class="box">
         <div class="row">
           <div class="col-sm">
-            <table class="table table-borderless table-striped">
+            <table class="table table-borderless table-striped" [class.ton-block-details]="nativeMode">
               <tbody>
+              <ng-container *ngIf="nativeMode; else legacyDetails0"><tr><td class="td-width">Root hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash"></app-clipboard></span></td></tr>
+                <tr><td>File hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash"></app-clipboard></span></td></tr>
+                <tr><td>Logical time</td><td>{{ nativeBlock.start_lt ?? '—' }} – {{ nativeBlock.end_lt ?? '—' }}</td></tr></ng-container>
+              <ng-template #legacyDetails0>
                 <tr>
                   <td class="td-width">Parent hash</td>
                   <td><app-truncate [text]="block.previousblockhash" [lastChars]="8" [link]="['/block/' | relativeUrl, block.previousblockhash]"></app-truncate></td>
@@ -298,12 +321,17 @@
                   <td>Data size</td>
                   <td [innerHTML]="'&lrm;' + (block.size | bytes: 2)"></td>
                 </tr>
+              </ng-template>
               </tbody>
             </table>
           </div>
           <div class="col-sm">
-            <table class="table table-borderless table-striped">
+            <table class="table table-borderless table-striped" [class.ton-block-details]="nativeMode">
               <tbody>
+              <ng-container *ngIf="nativeMode; else legacyDetails1"><tr><td class="td-width">Previous blocks</td><td><ng-container *ngFor="let previous of nativeBlock.prev_refs || nativeBlock.ton?.prev_refs; let last = last"><app-truncate [text]="previous" [lastChars]="8" [link]="['/block', previous]"></app-truncate><span *ngIf="!last">, </span></ng-container><span *ngIf="!(nativeBlock.prev_refs || nativeBlock.ton?.prev_refs)?.length">—</span></td></tr>
+                <tr *ngIf="nativeBlock.key_block"><td>Key block</td><td><a routerLink="/config" [queryParams]="{ master_seqno: nativeBlock.seqno }">View configuration</a></td></tr>
+                <tr><td>BOC</td><td><a [href]="tonBocUrl(tonBlockId(nativeBlock))">Download BOC</a></td></tr></ng-container>
+              <ng-template #legacyDetails1>
                 <tr *ngIf="isMobile"></tr>
                 <tr>
                   <td class="td-width">Gas used</td>
@@ -317,12 +345,15 @@
                   <td>Fee recipient</td>
                   <td><app-truncate [text]="block.extras?.pool?.name" [lastChars]="8" [link]="['/address/' | relativeUrl, block.extras?.pool?.name]"></app-truncate></td>
                 </tr>
+              </ng-template>
               </tbody>
             </table>
           </div>
         </div>
       </div>
     </div>
+
+    <details *ngIf="nativeMode && showDetails" class="box"><summary>Advanced block data</summary><pre>{{ publicTonBlockDetails(nativeBlock) | json }}</pre></details>
 
     @if (!block?.stale && block?.extras?.orphans?.length > 0) {
       <br>
@@ -360,6 +391,19 @@
       >Details</button>
     </div>
 
+    <ng-container *ngIf="nativeMode; else legacyBlockTransactions">
+      <div class="block-tx-title"><h2 class="text-start">{{ nativeTransactionsLoading || nativeRoute && tonData.transactionsError ? 'Transactions' : nativeTransactions.length + (nativeTransactions.length === 1 ? ' transaction' : ' transactions') }}</h2></div>
+      <div class="clearfix"></div>
+      <div *ngIf="nativeTransactionsLoading" class="tx-skeleton"><div class="header-bg box"><span class="skeleton-loader"></span></div></div>
+      <div *ngIf="nativeRoute && tonData.transactionsError" class="alert alert-mempool" role="alert">{{ tonData.transactionsError }}</div>
+      <app-transactions-list *ngIf="!nativeTransactionsLoading && !(nativeRoute && tonData.transactionsError)" [nativeTransactions]="nativeTransactions"></app-transactions-list>
+      <ng-container *ngIf="nativeRoute && (tonData.shardsLoading || tonData.shards.length || tonData.shardsError)">
+        <h2>Shard blocks</h2>
+        <div *ngIf="tonData.shardsError" class="alert alert-mempool" role="alert">{{ tonData.shardsError }}</div>
+        <app-blocks-list [showTitle]="false" [tonBlocks]="tonData.shards" [tonLoading]="tonData.shardsLoading"></app-blocks-list>
+      </ng-container>
+    </ng-container>
+    <ng-template #legacyBlockTransactions>
     @defer (on viewport) {
       @if (!block?.stale) {
       <app-block-transactions [paginationMaxSize]="paginationMaxSize" [block]="block" [block$]="block$" [txCount]="block.tx_count" [timestamp]="block.timestamp" [blockHash]="blockHash" [previousBlockHash]="block.previousblockhash" (blockReward)="updateBlockReward($event)"></app-block-transactions>
@@ -395,11 +439,13 @@
         </div>
       </div>
     }
+    </ng-template>
 
     <div class="clearfix"></div>
     <br>
   </ng-template>
-  <ng-template [ngIf]="error">
+  <div *ngIf="nativeRoute && displayError" class="alert alert-mempool" role="alert">{{ displayError }}</div>
+  <ng-template [ngIf]="!nativeMode && error">
     <app-http-error [error]="error">
       <span i18n="block.error.loading-block-data">Error loading block data.</span>
     </app-http-error>

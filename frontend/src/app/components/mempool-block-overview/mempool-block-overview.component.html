@@ -1,15 +1,19 @@
 <app-block-overview-graph
   #blockGraph
   [isLoading]="(isLoading$ | async) || !stateService.isBrowser"
+  [unavailable]="hasSuppliedTransactions && !!suppliedEmptyMessage && !suppliedTransactions.length"
+  [unavailableMessage]="suppliedEmptyMessage"
   [resolution]="resolution"
-  [blockLimit]="stateService.blockVSize"
-  [orientation]="timeLtr ? 'right' : 'left'"
-  [flip]="true"
+  [blockLimit]="hasSuppliedTransactions ? suppliedBlockLimit : stateService.blockVSize"
+  [orientation]="orientation || (timeLtr ? 'right' : 'left')"
+  [flip]="flip"
   [showFilters]="showFilters"
   [filterFlags]="filterFlags"
   [filterMode]="filterMode"
   [gradientMode]="gradientMode"
   [excludeFilters]="['nonstandard']"
   [overrideColors]="overrideColors"
+  [confirmedMode]="hasSuppliedTransactions && !hasSuppliedPendingMessages"
+  [pendingMode]="hasSuppliedPendingMessages"
   (txClickEvent)="onTxClick($event)"
 ></app-block-overview-graph>

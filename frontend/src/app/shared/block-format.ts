@@ -1,4 +1,4 @@
-const DECIMALS = 18, SYMBOL = 'ETH', FEE_UNIT = 'gwei', FEE_SCALE = 1000000000;
+const DECIMALS = 9, SYMBOL = 'GRAM', FEE_UNIT = 'gwei', FEE_SCALE = 1000000000;
 
 // Presentation only: never round provider data or detail-page amounts.
 export function compactBlockNumber(value: number, amount = false): string {
@@ -32,6 +32,5 @@ export function exactBlockAmount(value: number | string): string {
 }
 
 export function blockValueDetails(total: number | string, median: number, min: number, max: number): string {
-  const rate = (value: number) => value == null || !Number.isFinite(value) ? '—' : String(value / FEE_SCALE);
-  return `Total fees: ${exactBlockAmount(total)} ${SYMBOL}. Median fee rate: ${rate(median)} ${FEE_UNIT}. Fee range: ${rate(min)}–${rate(max)} ${FEE_UNIT}.`;
+  return `Fees collected: ${exactBlockAmount(total)} ${SYMBOL}.`;
 }

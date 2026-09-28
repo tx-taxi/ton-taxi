@@ -8,28 +8,28 @@
 
   <main class="doc-content">
     <section class="docs-intro" *ngIf="whichTab === 'faq'">
-      <p class="eyebrow">Ethereum mainnet</p>
+      <p class="eyebrow">TON mainnet</p>
       <h1>Understand what the explorer shows</h1>
-      <p>Learn how Ethereum transactions, gas, accounts, contracts, and pending activity map to the mempool-style interface.</p>
+      <p>Explore TON transactions, messages, wallets, jettons and NFTs.</p>
     </section>
 
     <section class="docs-intro" *ngIf="whichTab === 'rest'">
       <p class="eyebrow">Developer reference</p>
-      <h1>Ethereum REST API</h1>
-      <p>Read the same normalized Ethereum data used by this explorer. Only endpoints implemented by the current adapter are listed.</p>
+      <h1>TON REST API</h1>
+      <p>Read blocks, transactions, accounts and assets.</p>
       <div class="connection-line"><span>Base URL</span><code>{{ hostname }}</code></div>
     </section>
 
     <section class="docs-intro" *ngIf="whichTab === 'websocket'">
       <p class="eyebrow">Live data</p>
-      <h1>Ethereum WebSocket API</h1>
-      <p>Receive chain-tip and pending-sample updates, then subscribe to a transaction, account, or next-slot estimate.</p>
+      <h1>TON WebSocket API</h1>
+      <p>Follow live masterchain blocks.</p>
       <div class="connection-line"><span>Endpoint</span><code>{{ websocketUrl() }}</code></div>
     </section>
 
     <aside class="support-note" *ngIf="whichTab === 'faq'">
       <app-svg-images name="warning" viewBox="0 0 304 304" fill="#ffc107" width="30" height="30"></app-svg-images>
-      <p><strong>eth.tx.taxi displays public network data.</strong> It cannot recover funds, reverse transactions, or access wallets.</p>
+      <p><strong>ton.tx.taxi displays public network data.</strong> It cannot recover funds, reverse transactions, or access wallets.</p>
     </aside>
 
     <ng-container *ngFor="let item of docs">

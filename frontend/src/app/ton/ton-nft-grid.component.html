@@ -1,0 +1,33 @@
+<div class="nft-grid">
+  <a
+    class="card nft-card"
+    *ngFor="let item of items; trackBy: trackItem"
+    [routerLink]="['/' + itemKind, item.address]"
+  >
+    <div class="nft-image" [class.media-pending]="item.image">
+      <div
+        *ngIf="item.image"
+        class="skeleton-loader media-skeleton"
+        aria-hidden="true"
+      ></div>
+      <span *ngIf="!item.image" class="no-image">No image</span>
+      <img
+        *ngIf="item.image"
+        [src]="item.image"
+        alt=""
+        loading="lazy"
+        referrerpolicy="no-referrer"
+        (load)="imageLoaded($event)"
+        (error)="hideImage($event)"
+      />
+    </div>
+    <div class="card-body">
+      <strong>{{ item.name }}</strong>
+      <small *ngIf="item.collectionLabel">{{ item.collectionLabel }}</small>
+      <small *ngIf="item.sale"
+        >For sale · <app-amount [amount]="item.sale"></app-amount
+      ></small>
+      <small *ngIf="item.flagged" class="text-danger">Flagged</small>
+    </div>
+  </a>
+</div>

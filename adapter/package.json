@@ -1,11 +1,15 @@
 {
-  "name": "eth-taxi-adapter",
+  "name": "ton-taxi-adapter",
   "private": true,
   "version": "0.1.0",
   "type": "commonjs",
   "dependencies": {
+    "@ton/core": "0.63.1",
+    "adnl": "1.0.3",
     "parse5": "^6.0.1",
     "sharp": "^0.34.4",
+    "ton-lite-client": "3.1.1",
+    "ton-tl": "1.0.1",
     "ws": "^8.18.0"
   }
 }

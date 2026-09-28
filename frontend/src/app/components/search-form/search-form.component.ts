@@ -1,5 +1,6 @@
+import { HttpClient } from '@angular/common/http';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
-import { Component, OnInit, ChangeDetectionStrategy, EventEmitter, Output, ViewChild, HostListener, ElementRef, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, EventEmitter, Output, ViewChild, HostListener, ElementRef, Input } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { EventType, NavigationStart, Router } from '@angular/router';
 import { AssetsService } from '@app/services/assets.service';
@@ -33,10 +34,10 @@ interface SearchTarget {
 })
 export class SearchFormComponent implements OnInit {
   @Input() hamburgerOpen = false;
-  readonly sourceChainId = 'ethereum';
-  readonly defaultChainIconUrl = 'https://tx.taxi/assets/chains/ethereum.png';
-  readonly defaultChainIconAlt = 'Ethereum explorer';
-  readonly defaultChainAccent = '#627eea';
+  readonly sourceChainId = 'ton';
+  readonly defaultChainIconUrl = 'https://tx.taxi/assets/chains/ton.png';
+  readonly defaultChainIconAlt = 'TON explorer';
+  readonly defaultChainAccent = '#0098ea';
   env: Env;
   network = '';
   assets: object = {};
@@ -52,7 +53,7 @@ export class SearchFormComponent implements OnInit {
   activeTarget$ = new BehaviorSubject<SearchTarget>({
     kind: 'explorer',
     chainId: this.sourceChainId,
-    name: 'Ethereum',
+    name: 'TON',
     accentColor: this.defaultChainAccent,
     iconUrl: this.defaultChainIconUrl,
     iconAlt: this.defaultChainIconAlt,
@@ -66,6 +67,7 @@ export class SearchFormComponent implements OnInit {
   private manualOverrideSearchText: string | undefined;
   private manualOverrideTarget: SearchTarget | undefined;
   private searchOptions: TxTaxiSearchOptions | undefined;
+  private suppressMenuOnFocus = false;
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event) {
@@ -113,10 +115,12 @@ export class SearchFormComponent implements OnInit {
   @ViewChild('searchInput') searchInput: ElementRef;
 
   constructor(
+    private cdr: ChangeDetectorRef,
     private formBuilder: UntypedFormBuilder,
     private router: Router,
     private assetsService: AssetsService,
     private stateService: StateService,
+    private http: HttpClient,
     private electrsApiService: ElectrsApiService,
     private apiService: ApiService,
     private relativeUrlPipe: RelativeUrlPipe,
@@ -145,9 +149,9 @@ export class SearchFormComponent implements OnInit {
 
     this.stateService.searchFocus$.subscribe(() => {
       if (!this.searchInput) { // Try again a bit later once the view is properly initialized
-        setTimeout(() => this.searchInput.nativeElement.focus(), 100);
+        setTimeout(() => this.focusSearchInputWithoutMenu(), 100);
       } else if (this.searchInput) {
-        this.searchInput.nativeElement.focus();
+        this.focusSearchInputWithoutMenu();
       }
     });
 
@@ -203,125 +207,7 @@ export class SearchFormComponent implements OnInit {
       }
     });
 
-    const sourceSearchText$ = combineLatest([searchText$, this.selectedChainId$]).pipe(
-      map(([searchText, chainId]) => chainId === this.sourceChainId ? searchText : ''),
-      distinctUntilChanged(),
-    );
-
-    const searchResults$ = sourceSearchText$.pipe(
-      debounceTime(200),
-      switchMap((text) => {
-        if (!text.length) {
-          return of([
-            [],
-            { nodes: [], channels: [] },
-            this.pools
-          ]);
-        }
-        this.isTypeaheading$.next(true);
-        if (!this.stateService.networkSupportsLightning()) {
-          return zip(
-            this.electrsApiService.getAddressesByPrefix$(text).pipe(catchError(() => of([]))),
-            [{ nodes: [], channels: [] }],
-            this.getMiningPools()
-          );
-        }
-        return zip(
-          this.electrsApiService.getAddressesByPrefix$(text).pipe(catchError(() => of([]))),
-          this.apiService.lightningSearch$(text).pipe(catchError(() => of({
-            nodes: [],
-            channels: [],
-          }))),
-          this.getMiningPools()
-        );
-      }),
-      map((result: any[]) => {
-        return result;
-      }),
-      tap(() => {
-        this.isTypeaheading$.next(false);
-      })
-    );
-
-    this.typeAhead$ = combineLatest(
-      [
-        sourceSearchText$,
-        searchResults$.pipe(
-        startWith([
-          [],
-          {
-            nodes: [],
-            channels: [],
-          },
-          this.pools
-        ]))
-      ]
-      ).pipe(
-        map((latestData) => {
-          this.pools = latestData[1][2] || [];
-
-          let searchText = latestData[0];
-          if (!searchText.length) {
-            return {
-              searchText: '',
-              hashQuickMatch: false,
-              blockHeight: false,
-              txId: false,
-              address: false,
-              otherNetworks: [],
-              addresses: [],
-              nodes: [],
-              channels: [],
-              liquidAsset: [],
-              pools: []
-            };
-          }
-
-          const result = latestData[1];
-          const addressPrefixSearchResults = result[0];
-          const lightningResults = result[1];
-
-          // Do not show date and timestamp results for liquid
-          const isNetworkBitcoin = this.network === '' || this.network === 'testnet' || this.network === 'testnet4' || this.network === 'signet';
-
-          const matchesBlockHeight = this.regexBlockheight.test(searchText) && parseInt(searchText) <= this.stateService.latestBlockHeight;
-          const matchesDateTime = this.regexDate.test(searchText) && new Date(searchText).toString() !== 'Invalid Date' && new Date(searchText).getTime() <= Date.now() && isNetworkBitcoin;
-          const matchesUnixTimestamp = this.regexUnixTimestamp.test(searchText) && parseInt(searchText) <= Math.floor(Date.now() / 1000) && isNetworkBitcoin;
-          const matchesTxId = this.regexTransaction.test(searchText) && !this.regexBlockhash.test(searchText);
-          const matchesBlockHash = this.regexBlockhash.test(searchText);
-          const matchesAddress = !matchesTxId && this.regexAddress.test(searchText);
-          const publicKey = matchesAddress && searchText.startsWith('0');
-          const otherNetworks = findOtherNetworks(searchText, this.network as any || 'mainnet', this.env);
-          const liquidAsset = this.assets ? (this.assets[searchText] || []) : [];
-          const pools = this.pools.filter(pool => pool['name'].toLowerCase().includes(searchText.toLowerCase())).slice(0, 10);
-
-          if (matchesDateTime && searchText.indexOf('/') !== -1) {
-            searchText = searchText.replace(/\//g, '-');
-          }
-
-          if (publicKey) {
-            otherNetworks.length = 0;
-          }
-
-          return {
-            searchText: searchText,
-            hashQuickMatch: +(matchesBlockHeight || matchesBlockHash || matchesTxId || matchesAddress || matchesUnixTimestamp || matchesDateTime),
-            blockHeight: matchesBlockHeight,
-            dateTime: matchesDateTime,
-            unixTimestamp: matchesUnixTimestamp,
-            txId: matchesTxId,
-            blockHash: matchesBlockHash,
-            address: matchesAddress,
-            publicKey: publicKey,
-            addresses: matchesAddress && addressPrefixSearchResults.length === 1 && searchText === addressPrefixSearchResults[0] ? [] : addressPrefixSearchResults, // If there is only one address and it matches the search text, don't show it in the dropdown
-            otherNetworks: otherNetworks,
-            nodes: lightningResults.nodes,
-            channels: lightningResults.channels,
-            liquidAsset: liquidAsset,
-            pools: pools
-          };
-        })
-      );
+    this.typeAhead$ = this.searchForm.valueChanges.pipe(startWith(this.searchForm.value), map(value => ({searchText:value.searchText?.trim() || '',addresses:[],nodes:[],channels:[],otherNetworks:[],pools:[],liquidAsset:[],hashQuickMatch:0})));
   }
 
   handleKeyDown($event): void {
@@ -384,8 +270,22 @@ export class SearchFormComponent implements OnInit {
     setTimeout(() => this.dropdownHidden = true);
   }
 
+  private focusSearchInputWithoutMenu(): void {
+    if (!this.searchInput) return;
+    this.suppressMenuOnFocus = true;
+    this.searchInput.nativeElement.focus();
+    this.suppressMenuOnFocus = false;
+  }
+
+  onSearchInputFocus(): void {
+    if (!this.suppressMenuOnFocus) this.showSourceSuggestions();
+  }
+
   showSourceSuggestions(): void {
     this.chainMenu?.open();
+    if (document.activeElement !== this.searchInput?.nativeElement) {
+      this.searchInput?.nativeElement.focus();
+    }
     this.dropdownHidden = !this.isSourceChainSelected();
   }
 
@@ -394,6 +294,7 @@ export class SearchFormComponent implements OnInit {
   }
 
   selectedResult(result: any): void {
+    if (result == null) { this.search(); return; }
     if (!this.isSourceChainSelected()) {
       if (typeof result === 'string') {
         this.search(result);
@@ -435,6 +336,14 @@ export class SearchFormComponent implements OnInit {
       return;
     }
 
+    if (this.manualChainId === this.sourceChainId) {
+      this.searchSourceChain(searchText, true);
+      return;
+    }
+    this.searchAutomatic(searchText);
+  }
+
+  private searchAutomatic(searchText: string): void {
     const resolvedCandidate = this.resolvedCandidate();
     if (resolvedCandidate) {
       this.searchTarget(this.targetForCandidate(resolvedCandidate), searchText);
@@ -471,54 +380,24 @@ export class SearchFormComponent implements OnInit {
     });
   }
 
-  private searchSourceChain(searchText: string): void {
+  private searchSourceChain(searchText: string, allowAutomaticFallback = false): void {
     this.isSearching = true;
     this.searchError = '';
-
-    if (!this.regexTransaction.test(searchText) && this.regexAddress.test(searchText)) {
-      this.navigate('/address/', searchText);
-    } else if (this.regexBlockhash.test(searchText)) {
-      this.navigate('/block/', searchText);
-    } else if (this.regexBlockheight.test(searchText)) {
-      if (parseInt(searchText) <= this.stateService.latestBlockHeight) {
-        this.navigate('/block/', searchText);
-      } else {
-        this.showSearchError('That block has not been produced yet.');
+    this.http.get<{type:string;id:string}>('/api/ton/resolve',{params:{value:searchText}}).pipe(finalize(() => this.cdr.markForCheck())).subscribe({
+      next: result => {
+        if (this.searchForm.value.searchText.trim() !== searchText) { this.isSearching=false; return; }
+        if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError('No match found.'); return; }
+        this.router.navigate(['/',result.type,result.id]);
+        this.isSearching = false;
+        this.chainMenu?.close();
+        this.searchTriggered.emit();
+      },
+      error: error => {
+        if (this.currentSearchText() !== searchText) return;
+        if (allowAutomaticFallback && [400,404].includes(error.status)) { this.searchAutomatic(searchText); return; }
+        this.showSearchError(error.status === 404 ? 'No match found.' : 'Search unavailable. Try again.');
       }
-    } else if (this.regexTransaction.test(searchText)) {
-      const matches = this.regexTransaction.exec(searchText);
-      if (this.network === 'liquid' || this.network === 'liquidtestnet') {
-        if (this.assets[matches[0]]) {
-          this.navigate('/assets/asset/', matches[0]);
-        }
-        this.electrsApiService.getAsset$(matches[0])
-          .subscribe(
-            () => { this.navigate('/assets/asset/', matches[0]); },
-            () => {
-              this.electrsApiService.getBlock$(matches[0])
-                .subscribe(
-                  (block) => { this.navigate('/block/', matches[0], { state: { data: { block } } }); },
-                  () => { this.navigate('/tx/', matches[0]); });
-            }
-          );
-      } else {
-        this.navigate('/tx/', matches[0]);
-      }
-    } else if (this.regexDate.test(searchText) || this.regexUnixTimestamp.test(searchText)) {
-      let timestamp: number;
-      this.regexDate.test(searchText) ? timestamp = Math.floor(new Date(searchText).getTime() / 1000) : timestamp = Number(searchText);
-      // Check if timestamp is too far in the future or before the genesis block
-      if (timestamp > Math.floor(Date.now() / 1000)) {
-        this.showSearchError('Enter a date or timestamp that is not in the future.');
-        return;
-      }
-      this.apiService.getBlockDataFromTimestamp$(timestamp).subscribe(
-        (data) => { this.navigate('/block/', data.hash); },
-        () => { this.showSearchError('No Ethereum block was found for that time.'); }
-      );
-    } else {
-      this.showSearchError('Enter an Ethereum address, transaction hash, or block number.');
-    }
+    });
   }
 
   private searchTarget(target: SearchTarget, searchText: string): void {
@@ -531,6 +410,7 @@ export class SearchFormComponent implements OnInit {
     this.searchError = '';
     this.searchTriggered.emit();
     if (target.kind === 'candidate' && target.confirmed && target.directUrl) {
+      if (target.chainId === this.sourceChainId) { this.router.navigateByUrl(new URL(target.directUrl).pathname); this.isSearching=false; return; }
       window.location.assign(target.directUrl);
       return;
     }
@@ -621,7 +501,7 @@ export class SearchFormComponent implements OnInit {
     return explorer ? this.targetForExplorer(explorer) : {
       kind: 'explorer',
       chainId: this.sourceChainId,
-      name: 'Ethereum',
+      name: 'TON',
       accentColor: this.defaultChainAccent,
       iconUrl: this.defaultChainIconUrl,
       iconAlt: this.defaultChainIconAlt,
@@ -656,7 +536,7 @@ export class SearchFormComponent implements OnInit {
     kind: 'router',
     name: 'tx.taxi',
     accentColor: '#ffd21f',
-    iconUrl: 'https://tx.taxi/assets/brand/taxi-logo.svg',
+    iconUrl: 'https://tx.taxi/assets/brand/router-favicon.svg',
     iconAlt: 'tx.taxi',
   };
 
@@ -664,6 +544,7 @@ export class SearchFormComponent implements OnInit {
     this.isSearching = false;
     this.dropdownHidden = true;
     this.searchError = message;
+    this.cdr.markForCheck();
   }
 
 

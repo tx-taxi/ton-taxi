@@ -1,3 +1,13 @@
+import { TonAssetCatalogComponent } from './ton/ton-asset-catalog.component';
+import { PriceChartComponent } from './components/price-chart/price-chart.component';
+import { PriceChartModule } from './components/price-chart/price-chart.module';
+import { TonNetworkViewsModule } from './ton/ton-network-views.module';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { BlockComponent } from './components/block/block.component';
+import { MempoolBlockComponent } from './components/mempool-block/mempool-block.component';
+import { TransactionComponent } from './components/transaction/transaction.component';
+import { TonAssetsPageComponent } from './ton/ton-assets-page.component';
+import { TonPageComponent } from './ton/ton-page.component';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
@@ -22,145 +32,31 @@ const browserWindow = window || {};
 // @ts-ignore
 const browserWindowEnv = browserWindow.__env || {};
 
-const routes: Routes = [
-  {
-    path: '',
-    component: MasterPageComponent,
-    children: [
-      {
-        path: 'mining/blocks',
-        redirectTo: 'blocks',
-        pathMatch: 'full'
-      },
-      {
-        path: 'tx/push',
-        component: PushTransactionComponent,
-      },
-      {
-        path: 'pushtx',
-        component: PushTransactionComponent,
-      },
-      {
-        path: 'tx/test',
-        component: TestTransactionsComponent,
-      },
-      {
-        path: 'about',
-        loadChildren: () => import('@components/about/about.module').then(m => m.AboutModule),
-      },
-      {
-        path: 'blocks/stale',
-        component: StaleList,
-      },
-      {
-        path: 'blocks/:page',
-        component: BlocksList,
-      },
-      {
-        path: 'blocks',
-        redirectTo: 'blocks/1',
-      },
-      {
-        path: 'rbf',
-        component: RbfList,
-      },
-      {
-        path: 'txs',
-        component: RecentTransactionsList,
-      },
-      ...(browserWindowEnv.STRATUM_ENABLED ? [{
-        path: 'stratum',
-        component: StartComponent,
-        children: [
-          {
-            path: '',
-            component: StratumList,
-          }
-        ]
-      }] : []),
-      {
-        path: 'terms-of-service',
-        loadChildren: () => import('@components/terms-of-service/terms-of-service.module').then(m => m.TermsOfServiceModule),
-      },
-      {
-        path: 'privacy-policy',
-        loadChildren: () => import('@components/privacy-policy/privacy-policy.module').then(m => m.PrivacyPolicyModule),
-      },
-      {
-        path: 'trademark-policy',
-        loadChildren: () => import('@components/trademark-policy/trademark-policy.module').then(m => m.TrademarkModule),
-      },
-      {
-        path: 'tx',
-        component: StartComponent,
-        data: { preload: true, networkSpecific: true },
-        loadChildren: () => import('@components/transaction/transaction.module').then(m => m.TransactionModule),
-      },
-      {
-        path: 'block',
-        component: StartComponent,
-        data: { preload: true, networkSpecific: true },
-        loadChildren: () => import('@components/block/block.module').then(m => m.BlockModule),
-      },
-      {
-        path: 'docs',
-        loadChildren: () => import('@app/docs/docs.module').then(m => m.DocsModule),
-        data: { preload: true },
-      },
-      {
-        path: 'api',
-        loadChildren: () => import('@app/docs/docs.module').then(m => m.DocsModule)
-      },
-      {
-        path: 'lightning',
-        loadChildren: () => import('@app/lightning/lightning.module').then(m => m.LightningModule),
-        data: { preload: browserWindowEnv && browserWindowEnv.LIGHTNING === true, networks: ['bitcoin'] },
-      }
-    ],
-  }
-];
-
-if (window['__env']?.OFFICIAL_MEMPOOL_SPACE) {
-  routes[0].children.push({
-    path: 'monitoring',
-    data: { networks: ['bitcoin', 'liquid'] },
-    component: ServerHealthComponent
-  });
-  routes[0].children.push({
-    path: 'nodes',
-    data: { networks: ['bitcoin', 'liquid'] },
-    component: ServerStatusComponent
-  });
-  if (window['isMempoolSpaceBuild']) {
-    routes[0].children.push({
-      path: 'faucet',
-      canActivate: [(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
-        return state.url.startsWith('/testnet4/');
-      }],
-      component: StartComponent,
-      data: { preload: true, networkSpecific: true },
-      children: [{
-        path: '',
-        data: { networks: ['bitcoin'] },
-        component: FaucetComponent,
-      }]
-    });
-  }
-}
-
-if (window['__env']?.customize?.dashboard?.widgets?.some(w => w.component ==='simpleproof')) {
-  routes[0].children.push({
-    path: 'sp/verified',
-    component: SimpleProofWidgetComponent,
-  });
-}
-
-if (window['__env']?.customize?.dashboard?.widgets?.some(w => w.component ==='simpleproof_cubo')) {
-  routes[0].children.push({
-    path: 'sp/cubo',
-    component: SimpleProofCuboWidgetComponent,
-  });
-}
+const routes: Routes = [{path:'', component:MasterPageComponent, children:[
+  {path:'', component:StartComponent, children:[
+    {path:'', pathMatch:'full',component:DashboardComponent,data:{tonPage:'dashboard'}},
+    {path:'block/:id',component:BlockComponent,data:{tonPage:'block'}},
+    {path:'mempool-block/0',component:MempoolBlockComponent},
+    ...[{path:'message/:id',page:'message'},{path:'trace/:id',page:'trace'},{path:'tx/:id',page:'tx'}].map(r=>({path:r.path,component:TransactionComponent,data:{tonPage:r.page}})),
+  ]},
+  {path:'market',component:PriceChartComponent,data:{tonMarket:true}},
+  ...['jettons','collections'].map(page=>({path:page,component:TonAssetCatalogComponent,data:{tonPage:page}})),
+  {path:'txs',component:RecentTransactionsList,data:{tonPage:'transactions'}},
+  ...[{path:'address/:id',page:'address'},{path:'nft/:id',page:'nft'},{path:'collection/:id',page:'collection'},{path:'jetton/:id',page:'jetton'}].map(r=>({path:r.path,component:TonAssetsPageComponent,data:{tonPage:r.page}})),
+  {path:'blocks',component:BlocksList,data:{tonPage:'blocks'}},
+  ...[{path:'validators',page:'validators'},
+    {path:'dns/:id',page:'dns'},{path:'dns',page:'dns-auctions'},
+    {path:'staking-pool/:id',page:'staking-pool'},{path:'extra-currency/:id',page:'extra-currency'},{path:'config',page:'config'}].map(r=>({path:r.path,component:TonPageComponent,data:{tonPage:r.page}})),
+  {path:'about',loadChildren:()=>import('@components/about/about.module').then(m=>m.AboutModule)},
+  {path:'docs',loadChildren:()=>import('@app/docs/docs.module').then(m=>m.DocsModule)},
+  {path:'api',redirectTo:'docs',pathMatch:'full'},
+  {path:'production',redirectTo:'validators',pathMatch:'full'},
+  {path:'token/:id',redirectTo:'jetton/:id',pathMatch:'full'},
+  {path:'terms-of-service',loadChildren:()=>import('@components/terms-of-service/terms-of-service.module').then(m=>m.TermsOfServiceModule)},
+  {path:'privacy-policy',loadChildren:()=>import('@components/privacy-policy/privacy-policy.module').then(m=>m.PrivacyPolicyModule)},
+  {path:'trademark-policy',loadChildren:()=>import('@components/trademark-policy/trademark-policy.module').then(m=>m.TrademarkModule)},
+  {path:'**',component:TonPageComponent,data:{tonPage:'not-found'}}
+]}];
 
 @NgModule({
   imports: [
@@ -177,6 +73,13 @@ export class MasterPageRoutingModule { }
     CommonModule,
     MasterPageRoutingModule,
     SharedModule,
+    TonPageComponent,
+    TonAssetCatalogComponent,
+    PriceChartModule,
+    TonNetworkViewsModule,
+    TransactionComponent,
+    MempoolBlockComponent,
+    TonAssetsPageComponent,
   ],
   declarations: [
     MasterPageComponent,

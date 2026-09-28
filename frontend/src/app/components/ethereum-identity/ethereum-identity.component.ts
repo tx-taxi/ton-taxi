@@ -23,6 +23,8 @@ export interface EthereumIdentityEntity {
 })
 export class EthereumIdentityComponent implements OnChanges {
   @Input() entity: EthereumIdentityEntity | null | undefined;
+  @Input() chainName = 'Ethereum';
+  @Input() chainSymbol = 'ETH';
   @Input() compact = false;
   @Input() link: string | null | undefined;
 
@@ -38,7 +40,8 @@ export class EthereumIdentityComponent implements OnChanges {
 
   get iconUrl(): string | null {
     const iconUrl = this.entity?.iconUrl?.trim();
-    return iconUrl || null;
+    if (!iconUrl) return null;
+    try { const url = new URL(iconUrl, window.location.origin); return ['http:', 'https:'].includes(url.protocol) ? url.href : null; } catch { return null; }
   }
 
   get primaryLabel(): string {
@@ -48,7 +51,7 @@ export class EthereumIdentityComponent implements OnChanges {
       this.entity?.ensName,
       this.entity?.tokenSymbol,
       this.abbreviatedAddress,
-    ) || 'Unknown Ethereum entity';
+    ) || `Unknown ${this.chainName} entity`;
   }
 
   get secondaryLabel(): string | null {
@@ -82,7 +85,7 @@ export class EthereumIdentityComponent implements OnChanges {
     );
 
     if (!source) {
-      return 'ETH';
+      return this.chainSymbol;
     }
 
     const words = source.match(/[a-zA-Z0-9]+/g) || [];
@@ -95,7 +98,7 @@ export class EthereumIdentityComponent implements OnChanges {
   get accessibleLabel(): string {
     const address = this.entity?.address?.trim();
     return address && address !== this.primaryLabel
-      ? `${this.primaryLabel}, Ethereum address ${address}`
+      ? `${this.primaryLabel}, ${this.chainName} address ${address}`
       : this.primaryLabel;
   }
 

@@ -1,6 +1,8 @@
 import { formatDate, formatNumber } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, Input, LOCALE_ID, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { EChartsOption } from '@app/graphs/echarts';
+import { StateService } from '@app/services/state.service';
+import { Subscription } from 'rxjs';
 
 export interface EthereumGasMarketSample {
   added: number;
@@ -9,8 +11,9 @@ export interface EthereumGasMarketSample {
   gas_price_average_gwei: number;
   pending_sample_count?: number;
 }
+export interface TonNetworkHistorySample { timestamp: number; gapBefore?: boolean; fees?: number | string; feeAtomic?: string; interval?: number | string; }
 
-type ChartSample = EthereumGasMarketSample & { timestamp: number };
+type ChartSample = Omit<EthereumGasMarketSample, 'base_fee_gwei' | 'gas_price_average_gwei' | 'network_utilization_percentage'> & { timestamp: number; base_fee_gwei: number | null; gas_price_average_gwei: number | null; network_utilization_percentage: number | null; tonFeeAtomic?: string; gapBefore?: boolean };
 
 const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
 const FUTURE_TOLERANCE_MS = 60 * 1000;
@@ -22,28 +25,59 @@ const FUTURE_TOLERANCE_MS = 60 * 1000;
   standalone: false,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class EthereumGasMarketGraphComponent implements OnChanges {
+export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDestroy {
   @Input() samples: EthereumGasMarketSample[] | null = null;
+  /** Bounded masterchain observations. No gas/utilization fields are inferred. */
+  @Input() tonSamples: TonNetworkHistorySample[] | null = null;
   @Input() height = 260;
 
   readonly chartInitOptions = { renderer: 'svg' as const };
 
   chartOptions: EChartsOption = {};
   recentSamples: ChartSample[] = [];
+  private timezone = 'local';
+  private timezoneSubscription?: Subscription;
 
-  constructor(@Inject(LOCALE_ID) private readonly locale: string) {}
+  constructor(@Inject(LOCALE_ID) private readonly locale: string, private readonly stateService: StateService, private readonly cdr: ChangeDetectorRef) {}
+
+  ngOnInit(): void {
+    this.timezoneSubscription = this.stateService.timezone$.subscribe(timezone => {
+      this.timezone = timezone;
+      this.chartOptions = this.recentSamples.length ? this.buildChartOptions() : {};
+      this.cdr.markForCheck();
+    });
+  }
+
+  ngOnDestroy(): void { this.timezoneSubscription?.unsubscribe(); }
 
   ngOnChanges(): void {
-    this.recentSamples = this.normalizeSamples(this.samples);
+    this.recentSamples = this.tonSamples !== null ? this.normalizeTonSamples(this.tonSamples) : this.normalizeSamples(this.samples);
     this.chartOptions = this.recentSamples.length ? this.buildChartOptions() : {};
   }
 
   get emptyState(): string {
+    if (this.tonSamples !== null) return this.recentSamples.length ? '' : 'No masterchain history available';
     if (this.samples === null) {
       return 'Loading gas market history';
     }
 
     return 'No gas market samples are available for the last two hours';
+  }
+
+  get isTon(): boolean { return this.tonSamples !== null; }
+
+  private normalizeTonSamples(samples: TonNetworkHistorySample[] | null): ChartSample[] {
+    if (!samples?.length) return [];
+    const points = new Map<number, ChartSample>();
+    for (const sample of samples) {
+      const timestamp = Number(sample.timestamp) * 1000;
+      const fees = sample.fees === null || sample.fees === undefined || String(sample.fees).trim() === '' ? null : Number(sample.fees);
+      const interval = sample.interval === null || sample.interval === undefined ? NaN : Number(sample.interval);
+      if (!Number.isFinite(timestamp)) continue;
+      // Interval values are mean durations over observed masterchain sequence spans.
+      points.set(timestamp, { added: Math.floor(timestamp / 1000), timestamp, base_fee_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, gas_price_average_gwei: Number.isFinite(fees) && fees >= 0 ? fees : null, network_utilization_percentage: Number.isFinite(interval) && interval >= 0 ? interval : null, tonFeeAtomic: sample.feeAtomic, gapBefore: sample.gapBefore === true });
+    }
+    return [...points.values()].sort((a, b) => a.timestamp - b.timestamp);
   }
 
   get accessibleSummary(): string {
@@ -52,6 +86,13 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
     }
 
     const latest = this.recentSamples[this.recentSamples.length - 1];
+    if (this.isTon) {
+      const range = this.recentSamples.length === 1
+        ? `Masterchain observation at ${this.formatTime(latest.timestamp)}.`
+        : `Masterchain history from ${this.formatTime(this.recentSamples[0].timestamp)} to ${this.formatTime(latest.timestamp)}.`;
+      const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+      return `${range} Latest collected fees ${fee === null ? 'not observed' : fee + ' GRAM'}; mean block interval ${latest.network_utilization_percentage === null ? 'not observed' : this.formatSeconds(latest.network_utilization_percentage)}.`;
+    }
     if (this.recentSamples.length === 1) {
       return `Current gas market sample at ${this.formatTime(latest.timestamp)}. `
         + `Base fee ${this.formatGwei(latest.base_fee_gwei)} gwei; `
@@ -113,6 +154,13 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
     const isCurrentSample = this.recentSamples.length === 1;
     const currentTimestamp = this.recentSamples[0]?.timestamp || Date.now();
 
+    // A null separator breaks the native line across unobserved headers while
+    // retaining both real endpoints and their exact tooltip data.
+    const lineData = (key: 'base_fee_gwei' | 'network_utilization_percentage'): Array<[number, number | null]> =>
+      this.recentSamples.flatMap(sample => sample.gapBefore
+        ? [[sample.timestamp, null], [sample.timestamp, sample[key]]] as Array<[number, number | null]>
+        : [[sample.timestamp, sample[key]]] as Array<[number, number | null]>);
+
     return {
       animation: false,
       grid: {
@@ -147,15 +195,23 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
             return '';
           }
 
+          if (this.isTon) {
+            return `<div class="ethereum-gas-tooltip">
+              <div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>
+              <div>Collected fees: <strong>${this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'Not observed'}</strong></div>
+              <div>Mean block interval: <strong>${sample.network_utilization_percentage === null ? 'Not observed' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div>
+            </div>`;
+          }
+
           const pendingCount = Number.isFinite(sample.pending_sample_count)
             ? `<div>Pending txs sampled: <strong>${formatNumber(sample.pending_sample_count as number, this.locale, '1.0-0')}</strong></div>`
             : '';
 
           return `<div class="ethereum-gas-tooltip">
             <div><strong>${formatDate(timestamp, 'mediumTime', this.locale)}</strong></div>
-            <div>Base fee: <strong>${this.formatGwei(sample.base_fee_gwei)} gwei</strong></div>
+            <div>Base fee: <strong>${this.formatGwei(sample.base_fee_gwei as number)} gwei</strong></div>
             <div>Network utilization: <strong>${this.formatPercentage(sample.network_utilization_percentage)}</strong></div>
-            <div>Average gas price: <strong>${this.formatGwei(sample.gas_price_average_gwei)} gwei</strong></div>
+            <div>Average gas price: <strong>${this.formatGwei(sample.gas_price_average_gwei as number)} gwei</strong></div>
             ${pendingCount}
           </div>`;
         },
@@ -200,10 +256,10 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
         {
           type: 'value',
           min: 0,
-          max: 100,
+          ...(this.isTon ? {} : { max: 100 }),
           axisLabel: {
             color: 'var(--transparent-fg)',
-            formatter: (value: number): string => `${formatNumber(value, this.locale, '1.0-0')}%`,
+            formatter: (value: number): string => this.isTon ? `${this.formatCompact(value)} s` : `${formatNumber(value, this.locale, '1.0-0')}%`,
           },
           axisLine: { show: false },
           axisTick: { show: false },
@@ -212,10 +268,11 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
       ],
       series: [
         {
-          name: 'Base fee',
+          name: this.isTon ? 'Collected fees' : 'Base fee',
           type: 'line',
           yAxisIndex: 0,
-          data: this.recentSamples.map(sample => [sample.timestamp, sample.base_fee_gwei]),
+          data: lineData('base_fee_gwei'),
+          connectNulls: false,
           showSymbol: isCurrentSample,
           symbol: 'circle',
           symbolSize: isCurrentSample ? 9 : 4,
@@ -228,10 +285,11 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
           emphasis: { focus: 'series' },
         },
         {
-          name: 'Network utilization',
+          name: this.isTon ? 'Mean block interval' : 'Network utilization',
           type: 'line',
           yAxisIndex: 1,
-          data: this.recentSamples.map(sample => [sample.timestamp, sample.network_utilization_percentage]),
+          data: lineData('network_utilization_percentage'),
+          connectNulls: false,
           showSymbol: isCurrentSample,
           symbol: 'diamond',
           symbolSize: isCurrentSample ? 9 : 4,
@@ -253,7 +311,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
   }
 
   private formatTime(timestamp: number): string {
-    return formatDate(timestamp, 'shortTime', this.locale);
+    return formatDate(timestamp, 'shortTime', this.locale, this.timezone);
   }
 
   private formatAxisTime(timestamp: number): string {
@@ -265,9 +323,9 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
       if (Math.abs(timestamp - first) > edgeTolerance && Math.abs(timestamp - last) > edgeTolerance) {
         return '';
       }
-      return formatDate(timestamp, 'mediumTime', this.locale);
+      return formatDate(timestamp, 'mediumTime', this.locale, this.timezone);
     }
-    return formatDate(timestamp, 'shortTime', this.locale);
+    return formatDate(timestamp, 'shortTime', this.locale, this.timezone);
   }
 
   private formatGwei(value: number): string {
@@ -277,6 +335,23 @@ export class EthereumGasMarketGraphComponent implements OnChanges {
 
   private formatPercentage(value: number): string {
     return `${formatNumber(value, this.locale, '1.0-1')}%`;
+  }
+
+  private formatGram(value: number): string {
+    const digits = value < 0.001 ? '1.0-6' : value < 1 ? '1.0-4' : '1.0-2';
+    return formatNumber(value, this.locale, digits);
+  }
+
+  private formatSeconds(value: number): string {
+    return `${formatNumber(value, this.locale, value < 10 ? '1.0-1' : '1.0-0')} s`;
+  }
+
+  private formatAtomicGram(atomic: string | undefined, fallback: number | null): string | null {
+    if (!atomic || !/^\d+$/.test(atomic)) return fallback === null ? null : this.formatGram(fallback);
+    const padded = atomic.padStart(10, '0');
+    const whole = padded.slice(0, -9);
+    const fraction = padded.slice(-9).replace(/0+$/, '');
+    return fraction ? `${whole}.${fraction}` : whole;
   }
 
   private formatCompact(value: number): string {

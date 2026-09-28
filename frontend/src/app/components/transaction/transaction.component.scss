@@ -100,19 +100,6 @@
 }
 
 @media (max-width: 767.98px) {
-	.ethereum-details table {
-		table-layout: fixed;
-	}
-
-	.ethereum-details td {
-		min-width: 0;
-		overflow-wrap: anywhere;
-	}
-
-	.ethereum-details td:first-child {
-		width: 42%;
-	}
-
 	.mobile-bottomcol {
 		margin-top: 15px;
 	}
@@ -326,3 +313,11 @@ h2 .cpfp-beta {
     color: var(--info);
   }
 }
+
+// Exact TON identifiers and execution fields occupy the existing Details tables.
+.ethereum-details table { table-layout: fixed; }
+.ethereum-details td { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+.ethereum-details td:first-child { width: 42%; overflow-wrap: normal; }
+.ethereum-details app-truncate { display: block; max-width: 100%; white-space: nowrap; }
+summary { color: var(--info); cursor: pointer; }
+pre { color: var(--fg); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 36rem; overflow: auto; margin-top: 1rem; }

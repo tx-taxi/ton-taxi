@@ -43,7 +43,7 @@ if (browserWindowEnv.BASE_MODULE && browserWindowEnv.BASE_MODULE === 'liquid') {
     },
     {
       path: 'faq',
-      data: { networks: ['ethereum'] },
+      data: { networks: ['ton'] },
       component: DocsComponent
     },
     {

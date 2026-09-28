@@ -19,6 +19,8 @@ import { processInputSignatures, Sighash, SigInfo, SighashLabels, parseTaproot }
 import { ActivatedRoute } from '@angular/router';
 import { SighashFlag } from '@app/shared/transaction.utils';
 import { EthereumTokenTransfer } from '@interfaces/ethereum-api.interface';
+import { TonPendingMessage } from '@app/shared/ton-pending.types';
+import { TonTransaction, TonEvent, TonMessage, tonAddress, tonLabel, tonIdentity, tonAmount, tonExecution, tonMessages, publicDetails, readableField, actionTitle, tonActionFields } from '@app/ton/transaction-view';
 
 @Component({
   selector: 'app-transactions-list',
@@ -28,6 +30,50 @@ import { EthereumTokenTransfer } from '@interfaces/ethereum-api.interface';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
+  @Input() nativeTransactions: TonTransaction[] | null = null;
+  @Input() nativeEvents: TonEvent[] | null = null;
+  @Input() nativePendingMessages: TonPendingMessage[] | null = null;
+  @Input() nativeCompact = false;
+  @Input() selectedMessageHash = '';
+  tonAddress = tonAddress;
+  tonLabel = tonLabel;
+  tonIdentity = tonIdentity;
+  tonAmount = tonAmount;
+  tonExecution = tonExecution;
+  tonMessages = tonMessages;
+  publicDetails = publicDetails;
+  readableField = readableField;
+  actionTitle = actionTitle;
+  tonActionFields = tonActionFields;
+  get nativeMode(): boolean { return this.nativeTransactions !== null || this.nativeEvents !== null || this.nativePendingMessages !== null; }
+  messageAmount(message: TonMessage) { return tonAmount(message.value); }
+  messageKind(message: TonMessage): string { return message.msg_type === 'ext_in_msg' ? 'External incoming' : message.msg_type === 'ext_out_msg' ? 'External outgoing' : message.msg_type === 'int_msg' ? 'Internal message' : 'Message'; }
+  actionHash(value: any): string { return typeof value === 'string' ? value : value?.hash || ''; }
+  private suppliedTxSource: TonTransaction[] | null = null;
+  private suppliedEventSource: TonEvent[] | null = null;
+  private suppliedPendingSource: TonPendingMessage[] | null = null;
+  private suppliedRows: any[] = [];
+  private suppliedRowCache = new WeakMap<object, any>();
+  get displayRows(): any[] {
+    if (!this.nativeMode) return this.transactions || [];
+    if (this.nativeTransactions !== this.suppliedTxSource || this.nativeEvents !== this.suppliedEventSource || this.nativePendingMessages !== this.suppliedPendingSource) {
+      this.suppliedTxSource = this.nativeTransactions;
+      this.suppliedEventSource = this.nativeEvents;
+      this.suppliedPendingSource = this.nativePendingMessages;
+      const row = (value: TonTransaction | TonEvent | TonPendingMessage, key: string) => {
+        let result = this.suppliedRowCache.get(value);
+        if (!result) { result = { [key]: value }; this.suppliedRowCache.set(value, result); }
+        return result;
+      };
+      this.suppliedRows = [...(this.nativeTransactions || []).map(value => row(value, 'nativeTransaction')), ...(this.nativeEvents || []).map(value => row(value, 'nativeEvent')), ...(this.nativePendingMessages || []).map(value => row(value, 'nativePendingMessage'))];
+    }
+    return this.suppliedRows;
+  }
+  displayHash(row: any): string { return row.nativeTransaction?.hash || row.nativeEvent?.event_id || row.nativePendingMessage?.normalizedHash || row.txid || ''; }
+  displayLink(row: any): string[] { return row.nativePendingMessage ? ['/mempool-block', '0'] : [row.nativeEvent ? '/trace' : '/tx', this.displayHash(row)]; }
+  pendingTime(value: string): number | null { const time = Date.parse(value || ''); return Number.isFinite(time) ? time / 1000 : null; }
+  displayTime(row: any): number | null { if (row.nativePendingMessage) return this.pendingTime(row.nativePendingMessage.firstSeenAt); return row.nativeTransaction?.utime || row.nativeEvent?.timestamp || (row.status?.confirmed ? row.status.block_time : null); }
+  trackByDisplayRow(index: number, row: any): unknown { return row.nativePendingMessage ? row.nativePendingMessage.destination + row.nativePendingMessage.normalizedHash : row.nativeTransaction || row.nativeEvent || this.trackByFn(index, row); }
   network = '';
   nativeAssetId = this.stateService.network === 'liquidtestnet' ? environment.nativeTestAssetId : environment.nativeAssetId;
   isLiquid = this.stateService.network === 'liquid' || this.stateService.network === 'liquidtestnet';
@@ -98,6 +144,7 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.nativeMode) return;
     this.latestBlock$ = this.stateService.blocks$.pipe(map((blocks) => blocks[0]));
     this.networkSubscription = this.stateService.networkChanged$.subscribe((network) => {
       this.network = network;
@@ -296,6 +343,7 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes): void {
+    if (this.nativeMode) return;
     if (changes.inputIndex || changes.outputIndex || changes.rowLimit) {
       this.inputRowLimit = Math.max(this.rowLimit, (this.inputIndex || 0) + 3);
       this.outputRowLimit = Math.max(this.rowLimit, (this.outputIndex || 0) + 3);
@@ -783,9 +831,10 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.outspendsSubscription.unsubscribe();
+    this.outspendsSubscription?.unsubscribe();
     this.currencyChangeSubscription?.unsubscribe();
-    this.networkSubscription.unsubscribe();
-    this.signaturesSubscription.unsubscribe();
+    this.networkSubscription?.unsubscribe();
+    this.signaturesSubscription?.unsubscribe();
+    this.queryParamsSubscription?.unsubscribe();
   }
 }

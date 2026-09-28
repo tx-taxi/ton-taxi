@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
-  EthereumDocItem,
-  ethereumGuideData,
-  ethereumRestData,
-  ethereumWebsocketData,
-} from '@app/docs/api-docs/ethereum-docs-data';
+  TonDocItem,
+  tonGuideData,
+  tonRestData,
+  tonWebsocketData,
+} from '@app/docs/api-docs/ton-docs-data';
 
 @Component({
   selector: 'app-api-docs-nav',
@@ -16,14 +16,14 @@ export class ApiDocsNavComponent implements OnInit {
   @Input() whichTab: 'faq' | 'rest' | 'websocket';
   @Output() navLinkClickEvent = new EventEmitter<{ event: Event; fragment: string }>();
 
-  tabData: EthereumDocItem[] = [];
+  tabData: TonDocItem[] = [];
 
   ngOnInit(): void {
     this.tabData = this.whichTab === 'rest'
-      ? ethereumRestData
+      ? tonRestData
       : this.whichTab === 'websocket'
-        ? ethereumWebsocketData
-        : ethereumGuideData;
+        ? tonWebsocketData
+        : tonGuideData;
   }
 
   navLinkClick(event: Event, fragment: string): void {

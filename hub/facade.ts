@@ -1,9 +1,11 @@
 import {BehaviorSubject, ReplaySubject, Subject} from 'rxjs';
 import {nativeMempoolFeeColors} from '@app/app.constants';
+import {initialTonPending} from '@app/shared/ton-pending-state';
 export class StateService {
  env={KEEP_BLOCKS_AMOUNT:8,ROOT_NETWORK:'',BASE_MODULE:'mempool',BLOCK_WEIGHT_UNITS:60000000,MEMPOOL_BLOCKS_AMOUNT:8}; network=''; isBrowser=true; blockVSize=15000000; latestBlockHeight=0;
  blocks$=new ReplaySubject<any[]>(1); blocksSubject$=this.blocks$; chainTip$=new ReplaySubject<number>(1);
  mempoolBlocks$=new ReplaySubject<any[]>(1); difficultyAdjustment$=new ReplaySubject<any>(1);
+ tonPending$=new BehaviorSubject(initialTonPending());
  blockDisplayMode$=new BehaviorSubject('fees'); timeLtr=new BehaviorSubject(false); connectionState$=new BehaviorSubject(2);
  isLoadingWebSocket$=new BehaviorSubject(true);isLoadingMempool$=new BehaviorSubject(true);
  networkChanged$=new BehaviorSubject('');isTabHidden$=new BehaviorSubject(false);markBlock$=new Subject();txConfirmed$=new Subject(); keyNavigation$=new Subject();blockScrolling$=new BehaviorSubject(false);

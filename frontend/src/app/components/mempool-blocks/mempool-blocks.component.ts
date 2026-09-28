@@ -1,3 +1,4 @@
+import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Observable, of, combineLatest } from 'rxjs';
@@ -29,6 +30,52 @@ import { ThemeService } from '@app/services/theme.service';
 })
 export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   blockValueDetails = blockValueDetails;
+  nativePendingMode = false;
+  nativePending: TonPendingSnapshot;
+  readonly nativePendingBlocks: Array<Partial<MempoolBlock>> = [{ index: 0 }];
+  private pendingSubscription: Subscription;
+  private latestConfirmedId = '';
+
+  get pendingCount(): number | null {
+    return this.nativePending?.totalObserved ?? (this.nativePending?.messages.length ? this.nativePending.messages.length : null);
+  }
+  get pendingObservedTime(): number | null {
+    const time = Date.parse(this.nativePending?.observedAt || '');
+    return Number.isFinite(time) ? time / 1000 : null;
+  }
+  get pendingTitle(): string {
+    const count = this.pendingCount;
+    const summary = count == null ? 'Pending feed unavailable' : `${count} pending external message${count === 1 ? '' : 's'}`;
+    const updated = this.nativePending?.observedAt ? ` · Last updated ${this.nativePending.observedAt}` : '';
+    const stale = this.nativePending?.state === 'stale' ? ' · Reconnecting' : '';
+    return summary + updated + stale;
+  }
+  private initTonPending(): void {
+    this.nativePendingMode = true;
+    this.mempoolWidth = this.containerOffset + this.blockOffset;
+    this.widthChange.emit(this.mempoolWidth);
+    this.mempoolEmptyBlocks = [{ index: 0 } as MempoolBlock];
+    this.mempoolEmptyBlockStyles = [this.getStyleForMempoolEmptyBlock(0)];
+    this.mempoolBlockStyles = [this.getStyleForMempoolEmptyBlock(0)];
+    this.loadingBlocks$ = this.stateService.tonPending$.pipe(map(snapshot => snapshot.state === 'loading' && snapshot.totalObserved === null));
+    this.pendingSubscription = this.stateService.tonPending$.subscribe(snapshot => {
+      this.nativePending = snapshot;
+      this.cd.markForCheck();
+    });
+    this.timeLtrSubscription = this.stateService.timeLtr.subscribe(ltr => { this.timeLtr = !this.forceRtl && !!ltr; this.cd.markForCheck(); });
+    this.networkSubscription = this.stateService.networkChanged$.subscribe(network => this.network = network);
+    this.blockSubscription = this.stateService.blocks$.subscribe(blocks => this.latestConfirmedId = blocks?.[0]?.id || '');
+    this.markBlocksSubscription = this.stateService.markBlock$.subscribe(mark => {
+      this.markIndex = mark?.mempoolBlockIndex;
+      this.arrowVisible = this.markIndex === 0;
+      this.rightPosition = this.blockWidth / 2;
+      this.cd.markForCheck();
+    });
+    this.keySubscription = this.stateService.keyNavigation$.subscribe(event => {
+      if (this.markIndex !== 0 || event.key !== (this.timeLtr ? 'ArrowRight' : 'ArrowLeft') || !this.latestConfirmedId) return;
+      this.router.navigate([this.relativeUrlPipe.transform('/block/'), this.latestConfirmedId]);
+    });
+  }
   @Input() minimal: boolean = false;
   @Input() blockWidth: number = 125;
   @Input() containerWidth: number = null;
@@ -105,6 +152,7 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   ) { }
 
   ngOnInit() {
+    if (this.stateService.tonPending$) { this.initTonPending(); return; }
     this.chainTip = this.stateService.latestBlockHeight;
 
     const width = this.containerOffset + (this.stateService.env.MEMPOOL_BLOCKS_AMOUNT) * this.blockOffset;
@@ -304,26 +352,28 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.markBlocksSubscription.unsubscribe();
-    this.blockSubscription.unsubscribe();
-    this.networkSubscription.unsubscribe();
-    this.blockDisplayModeSubscription.unsubscribe();
-    this.timeLtrSubscription.unsubscribe();
-    this.themeStateSubscription.unsubscribe();
-    this.chainTipSubscription.unsubscribe();
-    this.keySubscription.unsubscribe();
-    this.isTabHiddenSubscription.unsubscribe();
+    this.pendingSubscription?.unsubscribe();
+    this.markBlocksSubscription?.unsubscribe();
+    this.blockSubscription?.unsubscribe();
+    this.networkSubscription?.unsubscribe();
+    this.blockDisplayModeSubscription?.unsubscribe();
+    this.timeLtrSubscription?.unsubscribe();
+    this.themeStateSubscription?.unsubscribe();
+    this.chainTipSubscription?.unsubscribe();
+    this.keySubscription?.unsubscribe();
+    this.isTabHiddenSubscription?.unsubscribe();
     clearTimeout(this.resetTransitionTimeout);
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(): void {
+    if (this.nativePendingMode) { this.cd.markForCheck(); return; }
     this.animateEntry = false;
     this.reduceEmptyBlocksToFitScreen(this.mempoolEmptyBlocks);
     this.cd.markForCheck();
   }
 
-  trackByFn(index: number, block: MempoolBlock) {
+  trackByFn(index: number, block: Partial<MempoolBlock>) {
     return (block.isStack) ? `stack-${block.index}` : block.index;
   }
 

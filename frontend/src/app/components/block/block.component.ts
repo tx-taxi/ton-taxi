@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, ChangeDetectorRef, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { ElectrsApiService } from '@app/services/electrs-api.service';
@@ -18,6 +18,8 @@ import { CacheService } from '@app/services/cache.service';
 import { ServicesApiServices } from '@app/services/services-api.service';
 import { PreloadService } from '@app/services/preload.service';
 import { identifyPrioritizedTransactions } from '@app/shared/transaction.utils';
+import { NativeAmount } from '@app/shared/native-view.types';
+import { TonNetworkData } from '@app/ton/ton-network-data.service';
 
 interface ComparisonStats {
   totalFees: number;
@@ -33,6 +35,7 @@ interface ComparisonStats {
   selector: 'app-block',
   templateUrl: './block.component.html',
   standalone: false,
+  providers: [TonNetworkData],
   styleUrls: ['./block.component.scss'],
   styles: [`
     .loadingGraphs {
@@ -44,6 +47,10 @@ interface ComparisonStats {
   `],
 })
 export class BlockComponent implements OnInit, OnDestroy {
+  /** Supplied TON block detail. It bypasses the EVM block/mempool controller. */
+  @Input() tonBlock: any | null = null;
+  @Input() tonTransactions: any[] = [];
+  nativeRoute = false;
   network = '';
   block: BlockExtended;
   blockAudit: BlockAudit = undefined;
@@ -121,13 +128,29 @@ export class BlockComponent implements OnInit, OnDestroy {
     private servicesApiService: ServicesApiServices,
     private cd: ChangeDetectorRef,
     private preloadService: PreloadService,
+    public tonData: TonNetworkData,
   ) {
     this.webGlEnabled = this.stateService.isBrowser && detectWebGL();
   }
 
   get showComparison() {
+    if (this.nativeMode) return false;
     return this.showAudit || this.block?.stale;
   }
+
+  get nativeMode(): boolean { return this.nativeRoute || this.tonBlock !== null; }
+  get nativeBlock(): any { return this.nativeRoute ? this.tonData.block : this.tonBlock; }
+  get nativeTransactions(): any[] { return this.nativeRoute ? this.tonData.transactions : this.tonTransactions; }
+  get nativeTransactionsLoading(): boolean { return this.nativeRoute && this.tonData.transactionsLoading; }
+  get displayError(): any { return this.nativeRoute ? this.tonData.error : this.error; }
+  get displayBlockHeight(): string | number { return this.nativeMode ? this.nativeBlock?.seqno : this.blockHeight; }
+  get displayBlockHash(): string { return this.nativeMode ? this.tonBlockId(this.nativeBlock) : this.blockHash; }
+  get nativePreviousBlock(): string | null {
+    const parents = this.nativeBlock?.prev_refs || this.nativeBlock?.ton?.prev_refs || [];
+    return parents.length === 1 ? parents[0] : null;
+  }
+  get canGoNext(): boolean { return !this.nativeMode && this.showNextBlocklink; }
+  get canGoPrevious(): boolean { return this.nativeMode ? !!this.nativePreviousBlock : this.showPreviousBlocklink && !!this.block; }
 
   formatEthereumWei(value: number | null | undefined): string {
     if (!Number.isFinite(value)) {
@@ -140,6 +163,16 @@ export class BlockComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    if (this.tonBlock === null && this.route.snapshot.data.tonPage === 'block') {
+      this.nativeRoute = true;
+      this.tonData.ngOnInit();
+    }
+    if (this.nativeMode) {
+      this.auditAvailable = false;
+      this.timeLtrSubscription = this.stateService.timeLtr.subscribe(ltr => this.timeLtr = !!ltr);
+      this.queryParamsSubscription = this.route.queryParams.subscribe(params => this.showDetails = params.showDetails === 'true');
+      return;
+    }
     this.websocketService.want(['blocks', 'mempool-blocks']);
     this.network = this.stateService.network;
 
@@ -487,12 +520,14 @@ export class BlockComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    if (this.nativeMode) return;
     this.childChangeSubscription = combineLatest([this.blockGraphProjected.changes.pipe(startWith(null)), this.blockGraphActual.changes.pipe(startWith(null))]).subscribe(() => {
       this.setupBlockGraphs();
     });
   }
 
   ngOnDestroy(): void {
+    if (this.nativeRoute) this.tonData.ngOnDestroy();
     this.stateService.markBlock$.next({});
     this.overviewSubscription?.unsubscribe();
     this.canonicalSubscription?.unsubscribe();
@@ -508,12 +543,31 @@ export class BlockComponent implements OnInit, OnDestroy {
     this.isAuditEnabledSubscription?.unsubscribe();
     this.oobSubscription?.unsubscribe();
     this.priceSubscription?.unsubscribe();
-    this.blockGraphProjected.forEach(graph => {
+    this.blockGraphProjected?.forEach(graph => {
       graph.destroy();
     });
-    this.blockGraphActual.forEach(graph => {
+    this.blockGraphActual?.forEach(graph => {
       graph.destroy();
     });
+  }
+
+  tonAmount(atomic: string | number | null | undefined): NativeAmount | null {
+    if (atomic === null || atomic === undefined) return null;
+    return { atomic: String(atomic), decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true };
+  }
+
+  tonBocUrl(blockId: string): string {
+    return `/api/ton/block/${encodeURIComponent(blockId)}/boc`;
+  }
+
+  tonBlockId(block: any): string {
+    return block ? block.id || `(${block.workchain_id},${block.shard},${block.seqno})` : '';
+  }
+
+  publicTonBlockDetails(block: any): Record<string, any> {
+    const visible = (value: any): any => Array.isArray(value) ? value.map(visible) : value && typeof value === 'object'
+      ? Object.fromEntries(Object.entries(value).filter(([key]) => !key.startsWith('_')).map(([key, nested]) => [key, visible(nested)])) : value;
+    return visible(block || {});
   }
 
   // TODO - Refactor this.fees/this.reward for liquid because it is not
@@ -523,6 +577,11 @@ export class BlockComponent implements OnInit, OnDestroy {
   }
 
   toggleShowDetails(): void {
+    if (this.nativeMode) {
+      this.showDetails = !this.showDetails;
+      this.router.navigate([], { relativeTo: this.route, queryParams: { showDetails: this.showDetails }, queryParamsHandling: 'merge', fragment: this.showDetails ? 'details' : 'block' });
+      return;
+    }
     if (this.showDetails) {
       this.showDetails = false;
       this.router.navigate([], {
@@ -920,7 +979,7 @@ export class BlockComponent implements OnInit, OnDestroy {
     this.isMobile = isMobile;
     this.paginationMaxSize = target.innerWidth < 670 ? 3 : 5;
 
-    if (changed) {
+    if (changed && !this.nativeMode) {
       this.changeMode(this.mode);
     }
   }

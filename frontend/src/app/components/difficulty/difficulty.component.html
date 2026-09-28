@@ -1,18 +1,18 @@
-<div *ngIf="showTitle && mode === 'network'" class="main-title">Ethereum Network</div>
-<div *ngIf="showTitle && mode === 'rewards'" class="main-title">Recent execution rewards</div>
+<div *ngIf="showTitle && mode === 'network'" class="main-title">{{ isConfirmed ? 'TON Network' : 'Ethereum Network' }}</div>
+<div *ngIf="showTitle && mode === 'rewards'" class="main-title">{{ isConfirmed ? 'TON Economics' : 'Recent execution rewards' }}</div>
 <div class="card-wrapper">
   <div class="card">
-    <div class="widget-toggler" role="group" aria-label="Ethereum network dashboard panel">
+    <div class="widget-toggler" role="group" [attr.aria-label]="isConfirmed ? 'TON network dashboard panel' : 'Ethereum network dashboard panel'">
       <a href="" (click)="setMode('network')" class="toggler-option"
         [ngClass]="{'inactive': mode === 'network'}" [attr.aria-pressed]="mode === 'network'"><small>network</small></a>
       <span aria-hidden="true"> | </span>
       <a href="" (click)="setMode('rewards')" class="toggler-option"
-        [ngClass]="{'inactive': mode === 'rewards'}" [attr.aria-pressed]="mode === 'rewards'"><small>rewards</small></a>
+        [ngClass]="{'inactive': mode === 'rewards'}" [attr.aria-pressed]="mode === 'rewards'"><small>{{ isConfirmed ? 'economics' : 'rewards' }}</small></a>
     </div>
     <div *ngIf="mode === 'network'; else rewards" class="card-body more-padding">
-      <div class="difficulty-adjustment-container" *ngIf="networkStats$ | async as network; else loadingNetwork">
+      <div class="difficulty-adjustment-container" *ngIf="(isConfirmed ? suppliedNetwork : (networkStats$ | async)) as network; else loadingNetwork">
         <div class="epoch-progress">
-          <svg class="epoch-blocks" height="22px" width="100%" viewBox="0 0 224 9" shape-rendering="crispEdges" preserveAspectRatio="none" role="img" aria-label="Latest block gas utilization">
+          <svg *ngIf="network.shapes.length; else unavailableOutcomes" class="epoch-blocks" [ngbTooltip]="network.barTooltip" height="22px" width="100%" viewBox="0 0 224 9" shape-rendering="crispEdges" preserveAspectRatio="none" role="img" [attr.aria-label]="network.barLabel">
             <defs>
               <linearGradient id="diff-gradient" x1="0%" y1="0%" x2="100%" y2="0%" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stop-color="var(--primary)" />
@@ -26,23 +26,27 @@
               class="rect {{rect.status}}"
             ></rect>
           </svg>
+          <ng-template #unavailableOutcomes><span class="symbol" [ngbTooltip]="network.barTooltip">Success rate unavailable</span></ng-template>
         </div>
         <div class="difficulty-stats">
           <div class="item">
             <div class="card-text">
-              ~<app-time [time]="network.observedBlockTime" [fractionDigits]="1"></app-time>
+              <ng-container *ngIf="network.observedBlockTime !== null; else unavailable">
+                <ng-container *ngIf="isConfirmed && network.observedBlockTime < 1; else wholeSeconds"><span [title]="network.observedBlockTime + ' seconds'">{{ network.observedBlockTime < 0.001 ? '&lt;0.001' : '~' + (network.observedBlockTime | number:'1.1-3') }} seconds</span></ng-container>
+                <ng-template #wholeSeconds>~<app-time [time]="network.observedBlockTime" [fractionDigits]="1"></app-time></ng-template>
+              </ng-container>
             </div>
             <div class="symbol">Observed block time</div>
           </div>
           <div class="item">
             <div class="card-text bigger">
-              {{ network.gasUtilization | number: '1.0-1' }}<span class="symbol">%</span>
+              <ng-container *ngIf="network.metric !== null; else unavailable">{{ network.metric | number: '1.0-1' }}<span class="symbol">%</span></ng-container>
             </div>
-            <div class="symbol">Block gas used</div>
+            <div class="symbol" [ngbTooltip]="network.barTooltip">{{ network.metricLabel }}</div>
           </div>
           <div class="item">
-            <div class="card-text">#{{ network.latestBlockHeight | number }}</div>
-            <div class="symbol">Latest block</div>
+            <div class="card-text">#{{ network.latestBlockHeight ?? '—' }}</div>
+            <div class="symbol">{{ isConfirmed ? 'Latest masterchain block' : 'Latest block' }}</div>
           </div>
         </div>
       </div>
@@ -52,7 +56,7 @@
 
 <ng-template #rewards>
   <div class="card-body more-padding reward-stats-panel">
-    <app-reward-stats></app-reward-stats>
+    <app-reward-stats [confirmedMode]="isConfirmed" [confirmedData]="confirmedData"></app-reward-stats>
   </div>
 </ng-template>
 
@@ -66,3 +70,5 @@
     <div class="item"><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
   </div>
 </ng-template>
+
+<ng-template #unavailable>—</ng-template>

@@ -1,0 +1,35 @@
+{
+  "mode": "Controlled collector; unchanged real historical header fixtures; no network",
+  "results": [
+    {
+      "name": "Long restart atomically replaces the visible window with64 exact linked headers and records the missing interval",
+      "pass": true,
+      "durationMs": 14,
+      "oldHead": 95277158,
+      "newHead": 95525765,
+      "missingInterval": {
+        "fromSeqno": "95277159",
+        "toSeqno": "95525701",
+        "reason": "retention-window-exceeded",
+        "observedAt": "2026-09-28T02:31:36.000Z"
+      },
+      "historySamples": 80,
+      "indexCalls": 1
+    },
+    {
+      "name": "Missing recent header, explicit index gap or economics failure retains prior complete data and persistence",
+      "pass": true,
+      "durationMs": 17
+    },
+    {
+      "name": "Indexer lag after recent recovery resumes ordered repair to the announced target without another bootstrap",
+      "pass": true,
+      "durationMs": 6
+    },
+    {
+      "name": "Reconnect during a long recovery still revalidates the new cursor overlap",
+      "pass": true,
+      "durationMs": 5
+    }
+  ]
+}

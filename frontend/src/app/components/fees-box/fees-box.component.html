@@ -1,78 +1,45 @@
-<div class="fee-estimation-wrapper" *ngIf="(isLoading$ | async) === false && (recommendedFees$ | async) as recommendedFees; else loadingFees">
+<div class="fee-estimation-wrapper">
   <div class="d-flex">
     <div class="fee-progress-bar" [style.background]="noPriority">
-      <span class="fee-label" i18n="fees-box.no-priority" i18n-ngbTooltip="Transaction feerate tooltip (economy)" ngbTooltip="Either 2x the minimum, or the Low Priority rate (whichever is lower)" placement="top">No Priority</span>
+      <span class="fee-label" [ngbTooltip]="labelTooltip(0)" placement="top">{{ labels[0] }}</span>
     </div>
     <div class="band-separator fill"></div>
     <div class="fee-progress-bar priority" [style.background]="gradient">
-      <span class="fee-label prority" i18n="fees-box.low-priority" i18n-ngbTooltip="Transaction feerate tooltip (low priority)" ngbTooltip="Usually places your transaction in between the second and third mempool blocks" placement="top">Low Priority</span>
-      <span class="fee-label prority" i18n="fees-box.medium-priority" i18n-ngbTooltip="Transaction feerate tooltip (medium priority)" ngbTooltip="Usually places your transaction in between the first and second mempool blocks" placement="top">Medium Priority</span>
-      <span class="fee-label prority" i18n="fees-box.high-priority" i18n-ngbTooltip="Transaction feerate tooltip (high priority)" ngbTooltip="Places your transaction in the first mempool block" placement="top">High Priority</span>
+      <span class="fee-label prority" *ngFor="let index of [1, 2, 3]" [ngbTooltip]="labelTooltip(index)" placement="top">{{ labels[index] }}</span>
     </div>
   </div>
 
-  <div class="fee-estimation-container">
-    <div class="item">
-      <div class="card-text">
-        <div class="fee-text"><app-fee-rate [fee]="recommendedFees.economyFee" [dp]="1"></app-fee-rate></div> <span class="fiat"><app-fiat i18n-ngbTooltip="Transaction fee tooltip" ngbTooltip="Based on a simple ETH transfer using 21,000 gas" placement="bottom" [value]="recommendedFees.economyFee * 21000"></app-fiat></span>
+  <div class="fee-estimation-container" *ngIf="confirmedMode ? confirmedFees : ((isLoading$ | async) === false && (recommendedFees$ | async)); else loadingFees">
+    <ng-container *ngFor="let row of feeRows; let index = index; trackBy: trackByIndex">
+      <div class="item">
+        <div class="card-text">
+          <div class="fee-text" [ngbTooltip]="row.tooltip" placement="bottom">
+            <ng-container *ngIf="row.belowAtomicUnit; else amountValue">&lt;1 <span>nanogram</span></ng-container>
+            <ng-template #amountValue><app-amount *ngIf="row.amount; else feeRate" [amount]="row.amount" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
+            <ng-template #feeRate><app-fee-rate [fee]="row.rate" [dp]="1"></app-fee-rate></ng-template>
+          </div>
+          <span class="fiat">
+            <ng-container *ngIf="row.belowAtomicUnit; else fiatValue">—</ng-container>
+            <ng-template #fiatValue><app-amount *ngIf="row.amount; else fiatRate" [amount]="row.amount" displayMode="fiat"></app-amount></ng-template>
+            <ng-template #fiatRate><app-fiat [ngbTooltip]="row.tooltip" placement="bottom" [value]="row.rate * 21000"></app-fiat></ng-template>
+          </span>
+        </div>
       </div>
-    </div>
-    <div class="band-separator"></div>
-    <div class="item">
-      <div class="card-text">
-        <div class="fee-text"><app-fee-rate [fee]="recommendedFees.hourFee" [dp]="1"></app-fee-rate></div> <span class="fiat"><app-fiat i18n-ngbTooltip="Transaction fee tooltip" ngbTooltip="Based on a simple ETH transfer using 21,000 gas" placement="bottom" [value]="recommendedFees.hourFee * 21000"></app-fiat></span>
-      </div>
-    </div>
-    <div class="item">
-      <div class="card-text">
-        <div class="fee-text"><app-fee-rate [fee]="recommendedFees.halfHourFee" [dp]="1"></app-fee-rate></div> <span class="fiat"><app-fiat i18n-ngbTooltip="Transaction fee tooltip" ngbTooltip="Based on a simple ETH transfer using 21,000 gas" placement="bottom" [value]="recommendedFees.halfHourFee * 21000"></app-fiat></span>
-      </div>
-    </div>
-    <div class="item">
-      <div class="card-text">
-        <div class="fee-text"><app-fee-rate [fee]="recommendedFees.fastestFee" [dp]="1"></app-fee-rate></div> <span class="fiat"><app-fiat i18n-ngbTooltip="Transaction fee tooltip" ngbTooltip="Based on a simple ETH transfer using 21,000 gas" placement="bottom" [value]="recommendedFees.fastestFee * 21000"></app-fiat></span>
-      </div>
-    </div>
+      <div class="band-separator" *ngIf="index === 0"></div>
+    </ng-container>
   </div>
 </div>
 
 <ng-template #loadingFees>
-  <div class="d-flex">
-    <div class="fee-progress-bar" [style.background]="noPriority">
-      <span class="fee-label" i18n="fees-box.no-priority">No Priority</span>
-    </div>
-    <div class="band-separator fill"></div>
-    <div class="fee-progress-bar priority" [style.background]="gradient">
-      <span class="fee-label prority" i18n="fees-box.low-priority">Low Priority</span>
-      <span class="fee-label prority" i18n="fees-box.medium-priority">Medium Priority</span>
-      <span class="fee-label prority" i18n="fees-box.high-priority">High Priority</span>
-    </div>
-  </div>
   <div class="fee-estimation-container loading-container">
-    <div class="item">
-      <div class="card-text">
-        <div class="skeleton-loader"></div>
-        <div class="skeleton-loader"></div>
+    <ng-container *ngFor="let index of [0, 1, 2, 3]">
+      <div class="item">
+        <div class="card-text">
+          <div class="skeleton-loader"></div>
+          <div class="skeleton-loader"></div>
+        </div>
       </div>
-    </div>
-    <div class="band-separator"></div>
-    <div class="item">
-      <div class="card-text">
-        <div class="skeleton-loader"></div>
-        <div class="skeleton-loader"></div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="card-text">
-        <div class="skeleton-loader"></div>
-        <div class="skeleton-loader"></div>
-      </div>
-    </div>
-    <div class="item">
-      <div class="card-text">
-        <div class="skeleton-loader"></div>
-        <div class="skeleton-loader"></div>
-      </div>
-    </div>
+      <div class="band-separator" *ngIf="index === 0"></div>
+    </ng-container>
   </div>
 </ng-template>

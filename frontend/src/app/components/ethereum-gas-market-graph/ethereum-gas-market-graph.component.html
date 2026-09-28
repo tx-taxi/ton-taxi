@@ -1,13 +1,13 @@
-<section class="gas-market" [attr.aria-label]="'Ethereum gas market ' + historyLabel.toLowerCase()">
+<section class="gas-market" [attr.aria-label]="(isTon ? 'TON masterchain history ' : 'Ethereum gas market ') + historyLabel.toLowerCase()">
   <div class="gas-market__header">
     <div>
-      <h3 class="gas-market__title">Gas market</h3>
-      <span class="sr-only">Gas market, {{ historyLabel }}</span>
+      <h3 class="gas-market__title">{{ isTon ? 'Masterchain history' : 'Gas market' }}</h3>
+      <span class="sr-only">{{ isTon ? 'Masterchain history' : 'Gas market' }}, {{ historyLabel }}</span>
     </div>
 
     <ul class="gas-market__legend" aria-label="Chart legend">
-      <li><span class="gas-market__swatch gas-market__swatch--fee" aria-hidden="true"></span>Base fee (gwei)</li>
-      <li><span class="gas-market__swatch gas-market__swatch--utilization" aria-hidden="true"></span>Network utilization (%)</li>
+      <li><span class="gas-market__swatch gas-market__swatch--fee" aria-hidden="true"></span>{{ isTon ? 'Collected fees (GRAM)' : 'Base fee (gwei)' }}</li>
+      <li><span class="gas-market__swatch gas-market__swatch--utilization" aria-hidden="true"></span>{{ isTon ? 'Mean block interval (s)' : 'Network utilization (%)' }}</li>
     </ul>
   </div>
 

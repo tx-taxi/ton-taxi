@@ -8,7 +8,7 @@ import { Transaction } from '@interfaces/electrs.interface';
 import { Conversion } from '@app/services/price.service';
 import { StorageService } from '@app/services/storage.service';
 import { WebsocketResponse } from '@interfaces/websocket.interface';
-import { TxAuditStatus } from '@components/transaction/transaction.component';
+import { TxAuditStatus } from '@interfaces/transaction-audit.interface';
 
 @Injectable({
   providedIn: 'root'

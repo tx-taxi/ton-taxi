@@ -13,7 +13,8 @@ import { LanguageService } from '@app/services/language.service';
 })
 export class LanguageSelectorComponent implements OnInit {
   languageForm: UntypedFormGroup;
-  languages = languages;
+  // TON-specific content has not yet been translated. Offer only shipped content.
+  languages = languages.filter(language => language.code === 'en');
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -25,7 +26,7 @@ export class LanguageSelectorComponent implements OnInit {
     this.languageForm = this.formBuilder.group({
       language: ['en']
     });
-    this.languageForm.get('language').setValue(this.languageService.getLanguage());
+    this.languageForm.get('language').setValue('en');
   }
 
   changeLanguage() {

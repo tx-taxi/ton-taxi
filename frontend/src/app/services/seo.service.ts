@@ -9,9 +9,9 @@ import { StateService } from '@app/services/state.service';
 })
 export class SeoService {
   network = '';
-  baseTitle = 'eth.tx.taxi';
-  baseDescription = 'Track Ethereum blocks, transactions, addresses, and live gas conditions on eth.tx.taxi.';
-  baseDomain = 'eth.tx.taxi';
+  baseTitle = 'ton.tx.taxi';
+  baseDescription = 'Explore TON blocks, transactions, accounts, NFTs, jettons and messages.';
+  baseDomain = 'ton.tx.taxi';
 
   canonicalLink: HTMLLinkElement = document.getElementById('canonical') as HTMLLinkElement;
 
@@ -23,8 +23,8 @@ export class SeoService {
     private activatedRoute: ActivatedRoute,
   ) {
     // save original meta tags
-    this.baseDescription = metaService.getTag('name=\'description\'')?.content || this.baseDescription;
-    this.baseTitle = titleService.getTitle()?.split(' - ')?.[0] || this.baseTitle;
+    // Entity metadata must not become the defaults for subsequent root navigation.
+
     try {
       const canonicalUrl = new URL(this.canonicalLink?.href || '');
       this.baseDomain = canonicalUrl?.host;
@@ -101,7 +101,7 @@ export class SeoService {
       {return this.baseTitle + ' - Liquid Network';}
     if (this.network === 'liquidtestnet')
       {return this.baseTitle + ' - Liquid Testnet';}
-    return this.baseTitle + ' - Ethereum Explorer';
+    return this.baseTitle + ' - TON Explorer';
   }
 
   getDescription(): string {

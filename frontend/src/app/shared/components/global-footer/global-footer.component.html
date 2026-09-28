@@ -3,9 +3,9 @@
     <div class="row main" [class]="{'services': isServicesPage}">
       <div class="col-md-12 branding mt-2">
         <div class="main-logo" [class]="{'services': isServicesPage}">
-          <img src="/resources/branding/eth-dark-navbar.svg" alt="eth.tx.taxi Ethereum explorer" class="tx-taxi-footer-logo">
+          <img src="/resources/branding/ton-dark-navbar.svg" alt="ton.tx.taxi TON explorer" class="tx-taxi-footer-logo">
         </div>
-        <p class="explore-tagline-mobile">Ethereum blocks, transactions, and gas at a glance</p>
+        <p class="explore-tagline-mobile">TON blocks, transactions, and accounts</p>
         <div class="site-options language-selector d-flex justify-content-center align-items-center" [class]="{'services': isServicesPage}">
           <div class="selector"><app-language-selector></app-language-selector></div>
           <div class="selector"><app-fiat-selector></app-fiat-selector></div>
@@ -25,7 +25,7 @@
             <app-theme-selector class="add-margin"></app-theme-selector>
           </div>
         }
-        <p class="explore-tagline-desktop">Ethereum blocks, transactions, and gas at a glance</p>
+        <p class="explore-tagline-desktop">TON blocks, transactions, and accounts</p>
       </div>
     </div>
 
@@ -35,18 +35,24 @@
         <p><a [routerLink]="['/' | relativeUrl]">Dashboard</a></p>
         <p><a [routerLink]="['/blocks' | relativeUrl]">Recent Blocks</a></p>
         <p><a [routerLink]="['/txs' | relativeUrl]">Recent Transactions</a></p>
-        <p><a [routerLink]="['/mempool-block/0' | relativeUrl]">Pending Transactions</a></p>
+        <p><a routerLink="/jettons">Jettons</a></p>
+        <p><a routerLink="/collections">NFT Collections</a></p>
+        <p><a routerLink="/market">Markets</a></p>
+        <p><a [routerLink]="['/validators' | relativeUrl]">Validators</a></p>
+        <p><a [routerLink]="['/dns']">TON DNS</a></p>
+        <p><a [routerLink]="['/config']">Network Configuration</a></p>
       </div>
       <div class="links">
-        <p class="category">Ethereum</p>
-        <p><a href="https://ethereum.org/what-is-ethereum/" target="_blank" rel="noopener noreferrer">What is Ethereum?</a></p>
-        <p><a href="https://ethereum.org/developers/docs/blocks/" target="_blank" rel="noopener noreferrer">Blocks</a></p>
-        <p><a href="https://ethereum.org/developers/docs/transactions/" target="_blank" rel="noopener noreferrer">Transactions</a></p>
-        <p><a href="https://ethereum.org/developers/docs/gas/" target="_blank" rel="noopener noreferrer">Gas and fees</a></p>
+        <p class="category">TON</p>
+        <p><a href="https://ton.org/" target="_blank" rel="noopener noreferrer">What is TON?</a></p>
+        <p><a href="https://docs.ton.org/learn/overviews/blocks" target="_blank" rel="noopener noreferrer">Blocks</a></p>
+        <p><a href="https://docs.ton.org/learn/overviews/transactions" target="_blank" rel="noopener noreferrer">Transactions</a></p>
+        <p><a href="/docs/guide" target="_blank" rel="noopener noreferrer">Messages and fees</a></p>
       </div>
       <div class="links">
-        <p class="category">eth.tx.taxi</p>
+        <p class="category">ton.tx.taxi</p>
         <p><a [routerLink]="['/about']">About</a></p>
+        <p><a class="footer-telegram-link" href="https://t.me/txtaxi" target="_blank" rel="noopener noreferrer" aria-label="Join the tx.taxi Telegram channel">Telegram Channel</a></p>
         <p><a href="https://t.me/hiss" target="_blank" rel="noopener noreferrer">Contact Us</a></p>
         <p>AGPLv3</p>
       </div>

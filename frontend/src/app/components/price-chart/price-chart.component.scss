@@ -9,6 +9,17 @@
   }
 }
 
+.native-price { position: relative; padding: 0; }
+.native-price .card-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: .75rem; padding-left: 0; padding-right: 0; height: auto; }
+.native-price .card-header .formRadioGroup { position: static; top: auto; float: none; margin-top: 0; }
+.native-price .card-header .formRadioGroup .btn-sm { font-size: .75rem; min-height: 30px; }
+.native-price .chart { min-height: 240px; }
+.native-chart-stale { font-size: .75rem; margin-left: .75rem; }
+.native-market-quotes { padding-bottom: 3rem; }
+.native-market-quotes table { table-layout: fixed; }
+.native-market-quotes td, .native-market-quotes th { overflow-wrap: anywhere; white-space: normal; }
+.native-market-quotes app-timestamp { white-space: normal; overflow-wrap: anywhere; }
+
 .main-title {
   position: relative;
   color: var(--fg);

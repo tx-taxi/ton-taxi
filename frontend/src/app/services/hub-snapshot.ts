@@ -1,3 +1,4 @@
+import { readTonPending } from '@app/shared/ton-pending-state';
 /** Conservative, one-shot warm strip hydration. Live websocket initialization remains authoritative. */
 export function readHubSnapshot(value: unknown, chainId: string, now = Date.now()): any | null {
   try {
@@ -11,6 +12,29 @@ export function readHubSnapshot(value: unknown, chainId: string, now = Date.now(
     const fees = (a: unknown): boolean => Array.isArray(a) && a.length >= 1 && a.length <= 128 && a.every(nonnegative);
     if (!snapshot || !Array.isArray(snapshot.blocks) || snapshot.blocks.length < 1 || snapshot.blocks.length > 8
       || !Array.isArray(snapshot.mempoolBlocks) || snapshot.mempoolBlocks.length > 8) return null;
+    if (chainId === 'ton') {
+      if (snapshot.mempoolBlocks.length !== 0) return null;
+      for (let i = 0; i < snapshot.blocks.length; i++) {
+        const block = snapshot.blocks[i];
+        const id = typeof block?.id === 'string' && block.id.match(/^\(-1,8000000000000000,(\d+)\)$/);
+        if (!id || !Number.isSafeInteger(block.height) || block.height < 0 || String(block.height) !== id[1]
+          || !Number.isSafeInteger(block.timestamp) || block.timestamp <= 0
+          || !Number.isSafeInteger(block.tx_count) || block.tx_count < 0
+          || block.size !== 0 || block.weight !== 0
+          || (i > 0 && block.height >= snapshot.blocks[i - 1].height)) return null;
+        const extras = block.extras;
+        if (!extras || !/^[0-9]{1,100}$/.test(extras.totalFees) || typeof extras.totalFees !== 'string'
+          || extras.medianFee !== null || extras.minFee !== null || extras.maxFee !== null
+          || !Array.isArray(extras.feeRange) || extras.feeRange.length !== 0) return null;
+      }
+      const result = structuredClone(snapshot);
+      // Pending changes much faster than blocks; a handoff is retained as stale
+      // until this explorer receives its own live source state.
+      delete result.tonPending;
+      const pending = readTonPending(snapshot.tonPending);
+      if (pending) result.tonPending = {...pending, state: pending.observedAt ? 'stale' : 'loading'};
+      return result;
+    }
     for (let i = 0; i < snapshot.blocks.length; i++) {
       const block = snapshot.blocks[i];
       if (!block || typeof block.id !== 'string' || !/^(?:0x)?[a-f0-9]{64}$/i.test(block.id)

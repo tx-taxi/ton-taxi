@@ -3,23 +3,24 @@
     <span>
       <div class="blocks-wrapper">
         <div class="scroll-spacer" *ngIf="minScrollWidth" [style.left]="minScrollWidth + 'px'"></div>
-        <app-mempool-blocks *ngIf="!deferInitialPageLoad && !historicalDetailView && pageIndex === 0" [allBlocks]="scrollableMempool" (widthChange)="onMempoolWidthChange($event)"></app-mempool-blocks>
-        <app-blockchain-blocks *ngIf="!deferInitialPageLoad && !historicalDetailView && pageIndex === 0"></app-blockchain-blocks>
-        <ng-container *ngFor="let page of pages; trackBy: trackByPageFn">
+        <app-mempool-blocks *ngIf="!nativeContext && !deferInitialPageLoad && !historicalDetailView && pageIndex === 0" [allBlocks]="scrollableMempool" (widthChange)="onMempoolWidthChange($event)"></app-mempool-blocks>
+        <app-blockchain-blocks *ngIf="nativeContext" [static]="true" [offset]="40" [suppliedBlocks]="nativeContext.blocks" [suppliedLoading]="nativeContext.loading" [suppliedSelectedBlockId]="nativeContext.targetId" [suppliedBoundarySlots]="nativeContext.boundarySlots || []"></app-blockchain-blocks>
+        <app-blockchain-blocks *ngIf="!nativeContext && !deferInitialPageLoad && !historicalDetailView && pageIndex === 0"></app-blockchain-blocks>
+        <ng-container *ngFor="let page of (nativeContext ? [] : pages); trackBy: trackByPageFn">
           <app-blockchain-blocks [static]="true" [offset]="page.offset" [height]="page.height" [count]="blocksPerPage" [loadingTip]="loadingTip" [connected]="connected"></app-blockchain-blocks>
         </ng-container>
       </div>
-      <div id="divider" [hidden]="pageIndex > 0">
-        <a class="chain-divider-mark" [routerLink]="['/' | relativeUrl]" aria-label="Ethereum explorer dashboard"><img src="/resources/branding/ethereum-divider.png" alt=""></a>
+      <div id="divider" [hidden]="pageIndex > 0 || !!nativeContext">
+        <a class="chain-divider-mark" [routerLink]="['/' | relativeUrl]" aria-label="TON explorer dashboard"><img src="/resources/branding/ton-divider.png" alt=""></a>
         <button
           type="button"
           class="block-display-toggle"
           (click)="toggleBlockDisplayMode()"
           [attr.aria-label]="blockDisplayMode === 'fees'
-            ? 'Switch to displaying block sizes'
+            ? 'Switch to displaying transaction counts'
             : 'Switch to displaying total fees per block'"
           [attr.title]="blockDisplayMode === 'fees'
-            ? 'Switch to displaying block sizes'
+            ? 'Switch to displaying transaction counts'
             : 'Switch to displaying total fees per block'">
           <fa-icon [icon]="['fas', 'exchange-alt']" [fixedWidth]="true"></fa-icon>
         </button>

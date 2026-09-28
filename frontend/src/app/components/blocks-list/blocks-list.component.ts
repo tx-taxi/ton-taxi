@@ -9,16 +9,24 @@ import { WebsocketService } from '@app/services/websocket.service';
 import { SeoService } from '@app/services/seo.service';
 import { OpenGraphService } from '@app/services/opengraph.service';
 import { RelativeUrlPipe } from '@app/shared/pipes/relative-url/relative-url.pipe';
+import { NativeAmount } from '@app/shared/native-view.types';
+import { TonNetworkData } from '@app/ton/ton-network-data.service';
 
 @Component({
   selector: 'app-blocks-list',
   templateUrl: './blocks-list.component.html',
   styleUrls: ['./blocks-list.component.scss'],
   standalone: false,
+  providers: [TonNetworkData],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlocksList implements OnInit {
   @Input() widget: boolean = false;
+  @Input() showTitle = true;
+  /** Route-free TON mode. These are masterchain/shard records, never synthetic EVM blocks. */
+  @Input() tonBlocks: any[] | null = null;
+  @Input() tonLoading = false;
+  nativeRoute = false;
 
   blocks$: Observable<BlockExtended[]> = undefined;
 
@@ -52,6 +60,7 @@ export class BlocksList implements OnInit {
     private router: Router,
     private relativeUrlPipe: RelativeUrlPipe,
     @Inject(LOCALE_ID) private locale: string,
+    public tonData: TonNetworkData,
   ) {
     this.isMempoolModule = this.stateService.env.BASE_MODULE === 'mempool';
     if (this.locale.startsWith('ar') || this.locale.startsWith('fa') || this.locale.startsWith('he')) {
@@ -60,6 +69,14 @@ export class BlocksList implements OnInit {
   }
 
   ngOnInit(): void {
+    if (this.tonBlocks === null && !this.widget && this.route.snapshot.data.tonPage === 'blocks') {
+      this.nativeRoute = true;
+      this.tonData.ngOnInit();
+    }
+    if (this.nativeMode) {
+      this.skeletonLines = this.widget ? [...Array(6).keys()] : [...Array(15).keys()];
+      return;
+    }
     this.indexingAvailable = (this.stateService.env.BASE_MODULE === 'mempool' &&
       this.stateService.env.MINING_DASHBOARD === true);
     this.auditAvailable = this.indexingAvailable && this.stateService.env.AUDIT;
@@ -183,12 +200,34 @@ export class BlocksList implements OnInit {
       );
   }
 
+  get nativeMode(): boolean { return this.nativeRoute || this.tonBlocks !== null; }
+  get nativeBlocks(): any[] { return this.nativeRoute ? this.tonData.blocks : this.tonBlocks || []; }
+  get nativeLoading(): boolean { return this.nativeRoute ? this.tonData.loading : this.tonLoading; }
+
   pageChange(page: number): void {
     this.router.navigate([this.relativeUrlPipe.transform('/blocks/'), page]);
   }
 
-  trackByBlock(index: number, block: BlockExtended): number {
-    return block.height;
+  trackByBlock(index: number, block: BlockExtended | any): number | string {
+    return block.id || block.height || `${block.workchain_id}:${block.shard}:${block.seqno}`;
+  }
+
+  tonAmount(atomic: string | number | null | undefined): NativeAmount | null {
+    if (atomic === null || atomic === undefined) return null;
+    return { atomic: String(atomic), decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true };
+  }
+
+  tonValue(block: any, key: string): any {
+    return block?.ton?.[key] !== undefined ? block.ton[key] : block?.[key];
+  }
+
+  tonBlockRoute(block: any): string {
+    return block?.id || `(${this.tonValue(block, 'workchain_id')},${this.tonValue(block, 'shard')},${this.tonValue(block, 'seqno')})`;
+  }
+
+  tonTransactionCount(block: any): string | number {
+    const count = this.tonValue(block, 'tx_quantity');
+    return count === null || count === undefined ? (block?.tx_count ?? '—') : count;
   }
 
   isEllipsisActive(e): boolean {
@@ -196,6 +235,7 @@ export class BlocksList implements OnInit {
   }
 
   ngOnDestroy(): void {
+    if (this.nativeRoute) this.tonData.ngOnDestroy();
     this.blocksCountInitializedSubscription?.unsubscribe();
     this.keyNavigationSubscription?.unsubscribe();
   }

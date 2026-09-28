@@ -1,9 +1,10 @@
 import { Component, ElementRef, HostListener, OnInit, OnDestroy, ViewChild, Input, ChangeDetectorRef, ChangeDetectionStrategy, AfterViewChecked } from '@angular/core';
 import { filter, Subscription } from 'rxjs';
-import { MarkBlockState, StateService } from '@app/services/state.service';
+import { MarkBlockState, NativeBlockContext, StateService } from '@app/services/state.service';
 import { specialBlocks } from '@app/app.constants';
 import { BlockExtended } from '@interfaces/node-api.interface';
 import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
+import { nativeContextDepth } from '@app/shared/native-block-context';
 import { handleDemoRedirect } from '@app/shared/common.utils';
 
 @Component({
@@ -38,6 +39,9 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
   routerSubscription: Subscription;
   deferInitialPageLoad = false;
   historicalDetailView = false;
+  nativeContextMode = false;
+  nativeContextSubscription: Subscription;
+  nativeContext: NativeBlockContext = { blocks: [], loading: true, unavailable: false };
   pinnedHistoricalBlockHeight?: number;
   initialPageLoadTimer?: number;
 
@@ -80,7 +84,14 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   ngOnInit() {
     handleDemoRedirect(this.route, this.router);
-    this.deferInitialPageLoad = this.isDeepDetailRoute();
+    this.nativeContextMode = this.isDeepDetailRoute();
+    this.deferInitialPageLoad = this.nativeContextMode;
+    this.nativeContextSubscription = this.stateService.nativeBlockContext$.subscribe(context => {
+      const previousSlot = this.nativeContext.targetSlot ?? nativeContextDepth(this.chainWidth);
+      this.nativeContext = context || { blocks: [], loading: true, unavailable: false };
+      if (this.nativeContextMode && previousSlot !== (this.nativeContext.targetSlot ?? nativeContextDepth(this.chainWidth))) this.focusNativeContext();
+      this.cd.markForCheck();
+    });
     // Keep the live rail dormant until a direct detail route identifies its
     // block. A historical detail route should never compete with head data.
     this.historicalDetailView = this.deferInitialPageLoad;
@@ -96,21 +107,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
       }
     });
     this.onResize();
-    if (this.deferInitialPageLoad) {
-      // A deep historical detail view will shortly mark its block. Do not
-      // spend the provider budget rendering the head of the chain first.
-      this.initialPageLoadTimer = window.setTimeout(() => {
-        if (!this.deferInitialPageLoad) {
-          return;
-        }
-        this.historicalDetailView = false;
-        this.pinnedHistoricalBlockHeight = undefined;
-        this.releaseInitialPageLoad();
-        this.updatePages();
-      }, 5000);
-    } else {
-      this.updatePages();
-    }
+    if (!this.deferInitialPageLoad) this.updatePages();
     this.timeLtrSubscription = this.stateService.timeLtr.subscribe((ltr) => {
       this.timeLtr = !!ltr;
     });
@@ -123,6 +120,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
       this.applyPendingMarkArrow();
     });
     this.markBlockSubscription = this.stateService.markBlock$.subscribe((mark) => {
+      if (this.nativeContextMode) return;
       let blockHeight;
       let newMark = true;
       if (mark?.blockHeight != null) {
@@ -154,6 +152,15 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
         if (wasDeferringInitialPageLoad && blockHeight < 0) {
           this.updatePages();
         }
+        if (mark?.mempoolBlockIndex === 0 && this.stateService.tonPending$) {
+          // TON's pending cube is an aggregate, not a future block height.
+          // Keep its normal centered position even when the mark precedes the tip.
+          this.pendingMark = null;
+          this.pageIndex = 0;
+          this.updatePages();
+          this.setScrollLeft(0);
+          return;
+        }
         if (this.tipIsSet) {
           let scrollToHeight = blockHeight;
           if (blockHeight < 0) {
@@ -171,7 +178,17 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.routerSubscription = this.router.events.pipe(
       filter((event): event is NavigationEnd => event instanceof NavigationEnd),
     ).subscribe(() => {
-      if (this.isDeepDetailRoute()) {
+      this.nativeContextMode = this.isDeepDetailRoute();
+      if (this.nativeContextMode) {
+        this.historicalDetailView = true;
+        this.deferInitialPageLoad = true;
+        this.pages = [];
+        this.pageIndex = 0;
+        this.pendingMark = null;
+        // A new pinned window has its own selected identity and slot origin.
+        // Do not carry a horizontal pan from the previous route into it.
+        this.focusNativeContext();
+        this.cd.markForCheck();
         return;
       }
       const wasHistoricalDetailView = this.historicalDetailView;
@@ -248,7 +265,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
   applyScrollLeft(): void {
     if (this.blockchainContainer?.nativeElement?.scrollWidth) {
       let lastScrollLeft = null;
-      const canPageHistoricalRail = !this.historicalDetailView || this.mouseDragStartX != null || Math.abs(this.velocity) >= 0.005;
+      const canPageHistoricalRail = !this.nativeContextMode && (!this.historicalDetailView || this.mouseDragStartX != null || Math.abs(this.velocity) >= 0.005);
       if (!this.timeLtr && canPageHistoricalRail) {
         while (this.scrollLeft < 0 && this.shiftPagesForward() && lastScrollLeft !== this.scrollLeft) {
           lastScrollLeft = this.scrollLeft;
@@ -296,7 +313,9 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.pageWidth = this.blocksPerPage * this.blockWidth;
     this.minScrollWidth = 40 + (8 * this.blockWidth) + (this.pageWidth * 2);
 
-    if (firstVisibleBlock != null) {
+    if (this.nativeContextMode) {
+      this.focusNativeContext();
+    } else if (firstVisibleBlock != null) {
       this.scrollToBlock(firstVisibleBlock, offset + (this.isMobile ? this.blockWidth : 0));
     } else if (!this.deferInitialPageLoad) {
       this.updatePages();
@@ -399,6 +418,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
   }
 
   onScroll(e) {
+    if (this.nativeContextMode) { this.scrollLeft = this.blockchainContainer?.nativeElement?.scrollLeft || 0; return; }
     if (this.blockchainContainer?.nativeElement?.scrollLeft == null) {
       return;
     }
@@ -412,7 +432,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.scrollLeft = this.blockchainContainer?.nativeElement?.scrollLeft;
     const middlePage = this.pageIndex === 0 ? this.pages[0] : this.pages[1];
     // compensate for css transform
-    const translation = (this.isMobile ? this.chainWidth * 0.95 : this.chainWidth * 0.5);
+    const translation = (this.isMobile ? this.chainWidth * 0.5 : this.chainWidth * 0.5);
     const backThreshold = middlePage.offset + (this.pageWidth * 0.5) + translation;
     const forwardThreshold = middlePage.offset - (this.pageWidth * 0.5) + translation;
     this.scrollLeft = this.blockchainContainer.nativeElement.scrollLeft;
@@ -517,6 +537,14 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
     };
   }
 
+  private focusNativeContext(): void {
+    const slot = this.nativeContext.targetSlot ?? nativeContextDepth(this.chainWidth);
+    // Keep the strip's positive origin so newer neighbors remain scrollable.
+    const offset = 40 + slot * this.blockWidth + 125 / 2;
+    this.scrollLeft = this.timeLtr ? -offset - (this.mempoolOffset || 0) : offset + (this.mempoolOffset || 0);
+    if (this.blockchainContainer?.nativeElement) this.applyScrollLeft();
+  }
+
   resetScroll(): void {
     this.scrollToBlock(this.chainTip);
     this.setScrollLeft(0);
@@ -532,7 +560,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
       return false;
     }
     const firstHeight = this.pages[0].height;
-    const translation = (this.isMobile ? this.chainWidth * 0.95 : this.chainWidth * 0.5);
+    const translation = (this.isMobile ? this.chainWidth * 0.5 : this.chainWidth * 0.5);
     const firstX = this.pages[0].offset - this.getConvertedScrollOffset(this.scrollLeft) + translation;
     const xPos = firstX + ((firstHeight - height) * 155);
     return xPos > -55 && xPos < (this.chainWidth - 100);
@@ -570,6 +598,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
     this.timeLtrSubscription.unsubscribe();
     this.chainTipSubscription.unsubscribe();
     this.markBlockSubscription.unsubscribe();
+    this.nativeContextSubscription?.unsubscribe();
     this.blockCounterSubscription.unsubscribe();
     this.resetScrollSubscription.unsubscribe();
     this.routerSubscription.unsubscribe();
@@ -580,7 +609,7 @@ export class StartComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   private isDeepDetailRoute(): boolean {
     const path = this.router.url.split(/[?#]/, 1)[0];
-    return /(?:^|\/)(?:block|tx)\/[^/]+$/.test(path);
+    return /(?:^|\/)(?:block|tx|message|trace)\/[^/]+$/.test(path);
   }
 
   private isHistoricalDetailBlock(blockHeight: number): boolean {

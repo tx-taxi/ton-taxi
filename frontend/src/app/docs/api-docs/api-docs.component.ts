@@ -1,12 +1,12 @@
 import { AfterViewInit, Component, HostListener, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
-  EthereumDocEntry,
-  EthereumDocItem,
-  ethereumGuideData,
-  ethereumRestData,
-  ethereumWebsocketData,
-} from '@app/docs/api-docs/ethereum-docs-data';
+  TonDocEntry,
+  TonDocItem,
+  tonGuideData,
+  tonRestData,
+  tonWebsocketData,
+} from '@app/docs/api-docs/ton-docs-data';
 
 @Component({
   selector: 'app-api-docs',
@@ -20,16 +20,16 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
   hostname = `${document.location.protocol}//${document.location.host}`;
   mobileViewport = window.innerWidth <= 992;
   expandedFragments = new Set<string>();
-  docs: EthereumDocItem[] = [];
+  docs: TonDocItem[] = [];
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     this.docs = this.whichTab === 'rest'
-      ? ethereumRestData
+      ? tonRestData
       : this.whichTab === 'websocket'
-        ? ethereumWebsocketData
-        : ethereumGuideData;
+        ? tonWebsocketData
+        : tonGuideData;
   }
 
   ngAfterViewInit(): void {
@@ -55,7 +55,7 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
     this.openAndScroll(fragment);
   }
 
-  isEntry(item: EthereumDocItem): item is EthereumDocEntry {
+  isEntry(item: TonDocItem): item is TonDocEntry {
     return item.type === 'entry';
   }
 
@@ -68,7 +68,7 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
   }
 
   curlExample(path: string): string {
-    return `curl ${this.endpointUrl(path)}`;
+    return `curl '${this.endpointUrl(path)}'`;
   }
 
   websocketUrl(): string {

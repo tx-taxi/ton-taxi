@@ -22,7 +22,7 @@ export class OpenGraphService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.defaultImageUrl = 'https://tx.taxi/assets/og/explorers/ethereum.png?v=20260925-brand';
+    this.defaultImageUrl = 'https://ton.tx.taxi/og.png?v=1';
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(() => this.activatedRoute),
@@ -52,8 +52,8 @@ export class OpenGraphService {
   }
 
   clearOgImage() {
-    const entity = this.router.url.split('?')[0].match(/^\/(tx|block|address|token)\/([^/]+)$/);
-    const image = entity ? `https://eth.tx.taxi/og/${entity[1]}/${entity[2]}.png?v=4` : this.defaultImageUrl;
+    const entity = this.router.url.split('?')[0].match(/^\/(tx|block|address|jetton|nft|collection|message|trace)\/([^/]+)$/);
+    const image = entity ? `https://ton.tx.taxi/og/${entity[1]}/${entity[2]}.png?v=4` : this.defaultImageUrl;
     this.metaService.updateTag({ property: 'og:image', content: image });
     this.metaService.updateTag({ name: 'twitter:image', content: image });
     this.metaService.updateTag({ property: 'og:image:type', content: 'image/png' });

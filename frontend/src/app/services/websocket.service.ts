@@ -1,4 +1,5 @@
 import { readHubSnapshot } from './hub-snapshot';
+import { disconnectedTonPending, readTonPending } from '@app/shared/ton-pending-state';
 import { Injectable } from '@angular/core';
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
 import { WebsocketResponse } from '@interfaces/websocket.interface';
@@ -45,6 +46,7 @@ export class WebsocketService {
   private onlineCheckTimeout: number;
   private onlineCheckTimeoutTwo: number;
   private reconnectTimeout: number | undefined;
+  private initialResponseTimeout: number | undefined;
   private subscription: Subscription;
   private network = '';
   private hubSnapshotClosed = false;
@@ -116,11 +118,12 @@ export class WebsocketService {
     if (!isDashboard()) { this.stopHubSnapshot(); return; }
     const apply = (envelope: unknown): void => {
       if (this.hubSnapshotClosed || !isDashboard()) return;
-      const snapshot = readHubSnapshot(envelope, 'ethereum');
+      const snapshot = readHubSnapshot(envelope, 'ton');
       if (!snapshot) return;
       this.stopHubSnapshot();
       this.hubSnapshotApplied = true;
       this.handleResponse({ blocks: snapshot.blocks.reverse(), 'mempool-blocks': snapshot.mempoolBlocks,
+        ...(snapshot.tonPending ? {tonPending: snapshot.tonPending} : {}),
         ...(snapshot.difficultyAdjustment ? {da: snapshot.difficultyAdjustment} : {}) } as WebsocketResponse);
       this.stateService.isLoadingWebSocket$.next(false);
       this.stateService.isLoadingMempool$.next(false);
@@ -148,8 +151,14 @@ export class WebsocketService {
   }
 
   startSubscription(retrying = false, hasInitData = false) {
+    clearTimeout(this.initialResponseTimeout);
+    this.initialResponseTimeout = window.setTimeout(() => {
+      this.subscription?.unsubscribe();
+      this.websocketSubject.complete();
+      this.goOffline();
+    }, 25000);
     if (!hasInitData) {
-      if (!this.hubSnapshotApplied) this.stateService.isLoadingWebSocket$.next(true);
+      if (!this.hubSnapshotApplied && !this.stateService.blocksSubject$.value.length) this.stateService.isLoadingWebSocket$.next(true);
       this.websocketSubject.next({'action': 'init'});
     }
     if (retrying) {
@@ -157,11 +166,12 @@ export class WebsocketService {
     }
     this.subscription = this.websocketSubject
       .subscribe((response: WebsocketResponse) => {
-        if (Array.isArray(response.blocks) || response.block || Array.isArray(response['mempool-blocks'])) {
+        if (response.blocks?.length || response.block) {
+          clearTimeout(this.initialResponseTimeout);
           this.hubSnapshotApplied = false;
           this.stopHubSnapshot();
         }
-        this.stateService.isLoadingWebSocket$.next(false);
+        if (response.blocks?.length || response.block || this.stateService.blocksSubject$.value.length) this.stateService.isLoadingWebSocket$.next(false);
         this.handleResponse(response);
 
         if (this.goneOffline === true) {
@@ -196,13 +206,12 @@ export class WebsocketService {
           if (this.isTrackingStratum !== false) {
             this.startTrackStratum(this.isTrackingStratum);
           }
-          this.stateService.connectionState$.next(2);
         }
 
-        if (this.stateService.connectionState$.value !== 2) {
-          this.stateService.connectionState$.next(2);
+        // A pending-only update proves neither freshness nor availability of blocks.
+        if (response.blocks?.length || response.block || (response as any).ton) {
+          this.stateService.connectionState$.next((response as any).ton?.stale ? 1 : 2);
         }
-
         this.startOnlineCheck();
       },
       (err: Error) => {
@@ -373,6 +382,9 @@ export class WebsocketService {
   }
 
   goOffline() {
+    clearTimeout(this.initialResponseTimeout);
+    clearTimeout(this.onlineCheckTimeout);
+    clearTimeout(this.onlineCheckTimeoutTwo);
     if (this.reconnectTimeout !== undefined) {
       return;
     }
@@ -380,6 +392,7 @@ export class WebsocketService {
     console.log(`trying to reconnect websocket in ${retryDelay} seconds`);
     this.goneOffline = true;
     this.stateService.connectionState$.next(0);
+    this.stateService.tonPending$.next(disconnectedTonPending(this.stateService.tonPending$.value));
     this.reconnectTimeout = window.setTimeout(() => {
       this.reconnectTimeout = undefined;
       this.reconnectWebsocket(true);
@@ -405,13 +418,15 @@ export class WebsocketService {
 
   handleResponse(response: WebsocketResponse) {
     let reinitBlocks = false;
+    const pending = readTonPending((response as any).tonPending);
+    if (pending) this.stateService.tonPending$.next(pending);
 
     if (response.backend) {
       this.stateService.backend$.next(response.backend);
     }
 
     if (response.blocks && response.blocks.length) {
-      const blocks = response.blocks;
+      const blocks = [...response.blocks].sort((a,b)=>b.height-a.height).slice(0,8).reverse();
       this.stateService.resetBlocks(blocks);
       const maxHeight = blocks.reduce((max, block) => Math.max(max, block.height), this.stateService.latestBlockHeight);
       this.stateService.updateChainTip(maxHeight);

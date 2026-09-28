@@ -2,14 +2,18 @@ import { blockValueDetails } from '@app/shared/block-format';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { Observable, Subscription, delay, filter, tap } from 'rxjs';
 import { StateService } from '@app/services/state.service';
+import { nativeContextDepth } from '@app/shared/native-block-context';
 import { specialBlocks } from '@app/app.constants';
 import { BlockExtended } from '@interfaces/node-api.interface';
 import { Location } from '@angular/common';
 import { CacheService } from '@app/services/cache.service';
 
 interface BlockchainBlock extends BlockExtended {
+  ton?: { workchain_id: string | number; shard?: string; seqno?: string | number };
   placeholder?: boolean;
   loading?: boolean;
+  unavailable?: boolean;
+  boundary?: boolean;
 }
 
 @Component({
@@ -21,6 +25,10 @@ interface BlockchainBlock extends BlockExtended {
 })
 export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
   blockValueDetails = blockValueDetails;
+  @Input() suppliedBlocks?: Array<BlockExtended | null>;
+  @Input() suppliedSelectedBlockId?: string;
+  @Input() suppliedBoundarySlots: number[] = [];
+  @Input() suppliedLoading = false;
   @Input() static: boolean = false;
   @Input() offset: number = 0;
   @Input() height: number = 0; // max height of blocks in chunk (dynamic blocks only)
@@ -131,7 +139,7 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
     this.loadingBlocks$ = this.stateService.isLoadingWebSocket$;
     this.networkSubscription = this.stateService.networkChanged$.subscribe((network) => this.network = network);
     this.tabHiddenSubscription = this.stateService.isTabHidden$.subscribe((tabHidden) => this.tabHidden = tabHidden);
-    if (!this.static) {
+    if (!this.static && this.suppliedBlocks === undefined) {
       this.blocksSubscription = this.stateService.blocks$
         .subscribe((blocks) => {
           if (!blocks?.length) {
@@ -151,7 +159,10 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
 
           this.blockStyles = [];
           if (animate) {
-            this.blocks.forEach((b, i) => this.blockStyles.push(this.getStyleForBlock(b, i, i ? -this.blockOffset : -this.dividerBlockOffset)));
+            // TON's observed pending pool does not become a masterchain block.
+            // Enter the new tip in the confirmed area; retain the existing slide
+            // for older blocks without crossing over the pending cube.
+            this.blocks.forEach((b, i) => this.blockStyles.push(this.getStyleForBlock(b, i, i ? -this.blockOffset : 0)));
             setTimeout(() => {
               this.blockStyles = [];
               this.blocks.forEach((b, i) => this.blockStyles.push(this.getStyleForBlock(b, i)));
@@ -180,7 +191,7 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
           this.moveArrowToPosition(true, false);
         }
       });
-    } else {
+    } else if (this.suppliedBlocks === undefined) {
       this.blockPageSubscription = this.cacheService.loadedBlocks$.subscribe((block) => {
         if (block.height <= this.height && block.height > this.height - this.count) {
           this.onBlockLoaded(block);
@@ -190,6 +201,7 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
 
     this.markBlockSubscription = this.stateService.markBlock$
       .subscribe((state) => {
+        if (this.suppliedBlocks !== undefined) return;
         this.markHeight = undefined;
         if (state.blockHeight !== undefined) {
           this.markHeight = state.blockHeight;
@@ -243,7 +255,7 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
     if (this.chainTip == null) {
       this.pendingMarkBlock = { animate, newBlockFromLeft };
     }
-    const blockindex = this.blocks.findIndex((b) => b.height === this.markHeight);
+    const blockindex = this.suppliedBlocks !== undefined ? this.blocks.findIndex(b => !!this.suppliedSelectedBlockId && b.id === this.suppliedSelectedBlockId) : this.blocks.findIndex(b => b.height === this.markHeight);
     if (blockindex > -1) {
       if (!animate) {
         this.arrowTransition = 'inherit';
@@ -271,10 +283,33 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   trackByBlocksFn(index: number, item: BlockchainBlock) {
-    return item.height;
+    return item.id || item.height;
+  }
+
+  unavailablePredecessors(index: number): number {
+    const newer = this.blocks[index];
+    const older = this.blocks[index + 1];
+    if (!newer?.ton || !older?.ton || newer.ton.workchain_id !== older.ton.workchain_id || newer.ton.shard !== older.ton.shard) return 0;
+    return Math.max(0, Number(newer.ton.seqno) - Number(older.ton.seqno) - 1);
   }
 
   updateStaticBlocks(animateSlide: boolean = false) {
+    if (this.suppliedBlocks !== undefined) {
+      const slots = this.suppliedBlocks.length ? this.suppliedBlocks : Array(nativeContextDepth(window.innerWidth) * 2 + 1).fill(null);
+      const empty = this.mountEmptyBlocks()[0];
+      this.blocks = slots.map((block, index) => block || {
+        ...empty, id: '', height: -1 - index,
+        loading: this.suppliedLoading,
+        boundary: this.suppliedBoundarySlots.includes(index),
+        unavailable: !this.suppliedLoading && !this.suppliedBoundarySlots.includes(index),
+      });
+      this.blockStyles = this.blocks.map((block, i) => this.getStyleForBlock(block, i));
+      this.chainTip = this.blocks.find(block => !!block.id)?.height;
+      this.markHeight = this.blocks.find(block => !!this.suppliedSelectedBlockId && block.id === this.suppliedSelectedBlockId)?.height;
+      this.moveArrowToPosition(false);
+      this.cd.markForCheck();
+      return;
+    }
     // reset blocks
     this.blocks = [];
     this.blockStyles = [];
@@ -343,10 +378,10 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
   getStyleForBlock(block: BlockchainBlock, index: number, animateEnterFrom: number = 0) {
     if (!block || block.placeholder) {
       return this.getStyleForPlaceholderBlock(index, animateEnterFrom);
-    } else if (block.loading) {
+    } else if (block.loading || block.unavailable) {
       return this.getStyleForLoadingBlock(index, animateEnterFrom);
     }
-    const greenBackgroundHeight = 100 - (block.weight / this.stateService.env.BLOCK_WEIGHT_UNITS) * 100;
+    const greenBackgroundHeight = 0; // TON blocks expose no common utilization denominator.
     let addLeft = 0;
 
     if (animateEnterFrom) {

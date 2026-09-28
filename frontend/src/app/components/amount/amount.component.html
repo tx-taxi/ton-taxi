@@ -1,8 +1,12 @@
+@if (amount) {
+  @let display = nativeDisplay;
+  <span [title]="display.title" [class.amount-stale]="display.stale">{{ addPlus && amount.atomic && !amount.atomic.startsWith('-') && display.value !== '—' ? '+' : '' }}{{ display.value }}<span *ngIf="display.unit" class="symbol" [style]="unitStyle"> {{ display.unit }}</span></span>
+} @else {
 @if (compactBlock) {
   @if ((viewAmountMode$ | async) === 'btc' || (viewAmountMode$ | async) === 'fiat' || ignoreViewMode) {
-    {{ compactBlockAmount(satoshis) }} <span class="symbol" [style]="unitStyle">ETH</span>
+    {{ compactBlockAmount(satoshis) }} <span class="symbol" [style]="unitStyle">GRAM</span>
   } @else {
-    {{ compactBlockAmount(satoshis, true) }} <span class="symbol" [style]="unitStyle">wei</span>
+    {{ compactBlockAmount(satoshis, true) }} <span class="symbol" [style]="unitStyle">nanograms</span>
   }
 } @else {
 <ng-container *ngIf="!noFiat && ignoreViewMode === false && (viewAmountMode$ | async) === 'fiat' && (conversions$ | async) as conversions; else viewFiatVin">
@@ -11,11 +15,11 @@
       (
         (blockConversion.price[currency] > -1 ? blockConversion.price[currency] : null) ??
         (blockConversion.price['USD']    > -1 ? blockConversion.price['USD'] * blockConversion.exchangeRates['USD' + currency] : null) ?? 0
-      ) * satoshis / 1000000000000000000 | fiatCurrency : digitsInfo : currency
+      ) * satoshis / 1000000000 | fiatCurrency : digitsInfo : currency
     }}
   </span>
   <ng-template #noblockconversion>
-    <span class="fiat" *ngIf="!forceBlockConversion; else zeroValue">{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ (conversions[currency] > -1 ? conversions[currency] : 0) * satoshis / 1000000000000000000 | fiatCurrency : digitsInfo : currency }}
+    <span class="fiat" *ngIf="!forceBlockConversion; else zeroValue">{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ (conversions[currency] > -1 ? conversions[currency] : 0) * satoshis / 1000000000 | fiatCurrency : digitsInfo : currency }}
     </span>
   </ng-template>
   <ng-template #zeroValue>
@@ -29,9 +33,9 @@
   </ng-template>
   <ng-template #default>
     @if ((viewAmountMode$ | async) === 'btc' || (viewAmountMode$ | async) === 'fiat' || ignoreViewMode === true) {
-      &lrm;{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ satoshis / 1000000000000000000 | number : digitsInfo }}
+      &lrm;{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ satoshis / 1000000000 | number : digitsInfo }}
       <span class="symbol" [style]="unitStyle">
-        ETH
+        GRAM
       </span>
     } @else {
       @if (digitsInfo === '1.8-8') {
@@ -40,7 +44,7 @@
         &lrm;{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ satoshis | amountShortener : (satoshis < 1000 && satoshis > -1000 ? 0 : 1) : undefined : true }}
       }
       <span class="symbol" [style]="unitStyle">
-        wei
+        nanograms
       </span>
     }
   </ng-template>
@@ -53,5 +57,7 @@
   <ng-template [ngIf]="network === 'testnet4'">t</ng-template>
   <ng-template [ngIf]="network === 'signet'">s</ng-template>
 </ng-template>
+
+}
 
 }

@@ -2,7 +2,8 @@
   [style.left]="static ? (offset || 0) + 'px' : null" [style.--block-size]="blockWidth+'px'"
   *ngIf="static || (loadingBlocks$ | async) === false; else loadingBlocksTemplate">
   <div *ngFor="let block of blocks; let i = index; trackBy: trackByBlocksFn">
-    <ng-container *ngIf="connected && block && !block.loading && !block.placeholder; else placeholderBlock">
+    <ng-container *ngIf="!block.boundary">
+    <ng-container *ngIf="block && !block.loading && !block.placeholder && !block.unavailable; else placeholderBlock">
       <div
         *ngIf="minimal && spotlight < 0 && chainTip + spotlight + 1 === block.height"
         class="spotlight-bottom"
@@ -35,32 +36,15 @@
         }
         <div class="block-body">
           <ng-container *ngIf="!minimal">
-            <div *ngIf="block?.extras; else emptyfees" [attr.data-cy]="'bitcoin-block-offset=' + offset + '-index-' + i + '-fees'" class="fees">
-              ~<app-fee-rate [compactBlock]="true" [fee]="block?.extras?.medianFee" unitClass="" rounding="1.0-0"></app-fee-rate>
-            </div>
-            <ng-template #emptyfees>
-              <div [attr.data-cy]="'bitcoin-block-offset=' + offset + '-index-' + i + '-fees'" class="fees">
-                <app-fee-rate [compactBlock]="true" unitClass=""></app-fee-rate>
-              </div>
-            </ng-template>
-            <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + '-fee-span'" class="fee-span"
-              *ngIf="block?.extras?.minFee != null && block?.extras?.maxFee != null; else emptyfeespan">
-              <app-fee-rate [compactBlock]="true" [fee]="block?.extras?.minFee" [showUnit]="false" unitClass=""></app-fee-rate>
-              -
-              <app-fee-rate [compactBlock]="true" [fee]="block?.extras?.maxFee" unitClass=""></app-fee-rate>
-            </div>
-            <ng-template #emptyfeespan>
-              <div [attr.data-cy]="'bitcoin-block-offset=' + offset + '-index-' + i + '-fees'" class="fee-span">
-                <app-fee-rate [compactBlock]="true" unitClass=""></app-fee-rate>
-              </div>
-            </ng-template>
+            <div class="fees">{{ block.ton?.workchain_id == -1 ? 'Masterchain' : 'Workchain ' + block.ton?.workchain_id }}</div>
+            <div class="fee-span">Fees collected</div>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + '-total-fees'" *ngIf="blockDisplayMode === 'fees'; else noMiningInfo"
               class="block-size">
-              <app-amount [compactBlock]="true" [satoshis]="block.extras?.totalFees ?? 0" digitsInfo="1.2-3" [noFiat]="true"></app-amount>
+              <span *ngIf="block.extras?.totalFees == null">—</span><app-amount *ngIf="block.extras?.totalFees != null" [compactBlock]="true" [satoshis]="block.extras?.totalFees ?? 0" digitsInfo="1.2-3" [noFiat]="true"></app-amount>
             </div>
             <ng-template #noMiningInfo>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + 'block-size'"
-              class="block-size" [innerHTML]="'&lrm;' + (block.size | bytes: 2)"></div>
+              class="block-size">{{ block.tx_count | number }} transactions</div>
             </ng-template>
             <div [attr.data-cy]="'bitcoin-block-' + i + '-transactions'" class="transaction-count">
               <ng-container
@@ -69,7 +53,7 @@
               <ng-template #transactionsPlural let-i i18n="shared.transaction-count.plural">{{ i }} transactions</ng-template>
             </div>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + '-time'" class="time-difference">
-              <app-time kind="since" [time]="block.timestamp" [fastRender]="true" [precision]="1" minUnit="minute"></app-time>
+              <app-time kind="since" [time]="block.timestamp" [fastRender]="true" [precision]="1" minUnit="second"></app-time>
               <a *ngIf="!minimal && showIsEarlierThanParent(i)" [routerLink]="['/docs/faq' | relativeUrl ]" class="timestamp-info" fragment="why-block-timestamps-dont-always-increase">
                 <fa-icon [icon]="['fas', 'info-circle']" [fixedWidth]="true"></fa-icon>
               </a>
@@ -87,6 +71,10 @@
             </ng-template>
           </a>
         </div>
+        <div *ngIf="unavailablePredecessors(i) as missing" class="pool-container small text-muted"
+          [attr.title]="missing + ' intervening block headers are unavailable'">
+          {{ missing | number }} {{ missing === 1 ? 'block unavailable' : 'blocks unavailable' }}
+        </div>
       </div>
     </ng-container>
     <ng-template #placeholderBlock>
@@ -99,21 +87,22 @@
       </ng-container>
     </ng-template>
     <ng-template #loadingBlock>
-      <ng-container *ngIf="!connected || loadingTip || (block && block.loading)">
-        <div class="flashing loading">
+      <ng-container *ngIf="!connected || loadingTip || (block && (block.loading || block.unavailable))">
+        <div class="loading" [class.flashing]="!block.unavailable">
           <div class="text-center bitcoin-block mined-block" id="bitcoin-block-{{ block.height }}"
             [ngStyle]="convertStyleForLoadingBlock(blockStyles[i])"
-            [attr.aria-label]="block?.height >= 0 ? 'Loading block ' + block.height : 'Loading block data'">
+            [attr.aria-label]="block.unavailable ? 'Block data unavailable' : block?.height >= 0 ? 'Loading block ' + block.height : 'Loading block data'">
             <div *ngIf="!minimal && block?.height >= 0" class="block-height loading-height">{{ block.height }}</div>
             <div *ngIf="!minimal" class="loading-block-body" aria-hidden="true">
               <span class="loading-line loading-line-short"></span>
               <span class="loading-line"></span>
-              <span class="loading-label">Loading</span>
+              <span class="loading-label">{{ block.unavailable ? 'Unavailable' : 'Loading' }}</span>
             </div>
           </div>
         </div>
       </ng-container>
     </ng-template>
+    </ng-container>
   </div>
   <div [hidden]="!arrowVisible" id="arrow-up" [style.transition]="arrowTransition"
     [ngStyle]="{'left': arrowLeftPx + 8 + 'px' }"></div>

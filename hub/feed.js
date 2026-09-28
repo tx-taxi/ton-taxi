@@ -1,7 +1,7 @@
 /** Chain-owned native explorer transport; snapshot age and stream liveness are distinct. */
 export function startFeed({onSnapshot,onStatus,signal}) {
- const endpoint='wss://eth.tx.taxi/api/v1/ws';
- let socket,retry,watchdog,initial,lastMessage=0,lastData=0,attempt=0,stopped=false,haveData=false;
+ const endpoint=(['localhost','127.0.0.1'].includes(location.hostname)?'ws://127.0.0.1:4530':'wss://ton.tx.taxi')+'/api/v1/ws';
+ let socket,retry,watchdog,initial,lastMessage=0,lastData=0,attempt=0,stopped=false,haveData=false,pending;
  const status=(state,error)=>onStatus?.({state,updatedAt:lastData||null,error});
  const block=value=>value && typeof value==='object' && Number.isSafeInteger(value.height) && typeof value.id==='string';
  function connect(){
@@ -17,22 +17,24 @@ export function startFeed({onSnapshot,onStatus,signal}) {
    if(!data || typeof data!=='object' || Array.isArray(data))return;
    lastMessage=Date.now();
    const snapshot={};
-   if(Array.isArray(data.blocks) && data.blocks.every(block))snapshot.blocks=[...data.blocks].reverse();
+   if(Array.isArray(data.blocks) && data.blocks.every(block))snapshot.blocks=[...data.blocks].sort((a,b)=>b.height-a.height).slice(0,8);
    else if(block(data.block))snapshot.block=data.block;
    if(Array.isArray(data['mempool-blocks']))snapshot.mempoolBlocks=data['mempool-blocks'];
    if(data.da && typeof data.da==='object')snapshot.difficultyAdjustment=data.da;
-   const hasData=Object.hasOwn(snapshot,'blocks') || Object.hasOwn(snapshot,'block') || Object.hasOwn(snapshot,'mempoolBlocks');
+   if(data.tonPending && typeof data.tonPending==='object' && !Array.isArray(data.tonPending))snapshot.tonPending=pending=data.tonPending;
+   const hasData=Object.hasOwn(snapshot,'blocks') || Object.hasOwn(snapshot,'block');
    if(hasData){
-    haveData=true;receivedData=true;lastData=lastMessage;attempt=0;clearTimeout(initial);
-    onSnapshot(snapshot);
+    haveData=true;receivedData=true;lastData=data.ton?.observedAt?Date.parse(data.ton.observedAt):lastMessage;attempt=0;clearTimeout(initial);
    }
+   if(hasData || snapshot.tonPending)onSnapshot(snapshot);
    // Regular stats keep a loaded, quiet chain live; they cannot initialize an empty view.
-   status(haveData && receivedData?'live':haveData?'stale':'loading');
+   if(hasData || data.ton)status(data.ton?.stale ? (haveData?'stale':'unavailable') : haveData && receivedData?'live':haveData?'stale':'loading');
   };
   current.onerror=()=>{};
   current.onclose=()=>{
    clearTimeout(initial);
    if(stopped || socket!==current)return;
+   if(pending){pending={...pending,state:pending.observedAt?'stale':'unavailable'};onSnapshot({tonPending:pending});}
    status(haveData?'stale':'unavailable','Explorer stream interrupted');
    retry=setTimeout(connect,Math.min(30000,1000*2**Math.min(attempt++,5)));
   };

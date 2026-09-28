@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Input, Output, EventEmitter, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { firstValueFrom, Subscription } from 'rxjs';
-import { StateService } from '@app/services/state.service';
+import { NativeBlockContext, StateService } from '@app/services/state.service';
 import { StorageService } from '@app/services/storage.service';
 
 @Component({
@@ -11,6 +11,7 @@ import { StorageService } from '@app/services/storage.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() nativeContext: NativeBlockContext | null = null;
   @Input() pages: any[] = [];
   @Input() pageIndex: number;
   @Input() blocksPerPage: number = 8;
@@ -33,7 +34,7 @@ export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
   blockDisplayMode: 'size' | 'fees';
 
   dividerOffset: number | null = null;
-  mempoolOffset: number | null = null;
+  mempoolOffset: number | null = 0;
   positionStyle = {
     transform: 'translateX(1280px)',
   };
@@ -47,6 +48,7 @@ export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnInit(): void {
     this.onResize();
+    this.mempoolOffsetChange.emit(0);
     this.network = this.stateService.network;
     this.timeLtrSubscription = this.stateService.timeLtr.subscribe((ltr) => {
       this.timeLtr = !!ltr;
@@ -114,7 +116,7 @@ export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
     }
     const oldTransform = this.positionStyle.transform;
     this.positionStyle = this.timeLtr ? {
-      transform: `translateX(calc(100vw - ${this.dividerOffset + this.mempoolOffset}px)`,
+      transform: `translateX(calc(100vw - ${this.dividerOffset + this.mempoolOffset}px))`,
     } : {
       transform: `translateX(${this.dividerOffset + this.mempoolOffset}px)`,
     };
@@ -141,7 +143,7 @@ export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
       if (this.stateService.isLiquid()) {
         this.dividerOffset = width * 0.5;
       } else {
-        this.dividerOffset = width * 0.95;
+        this.dividerOffset = width * 0.5;
       }
     }
     this.updateStyle();

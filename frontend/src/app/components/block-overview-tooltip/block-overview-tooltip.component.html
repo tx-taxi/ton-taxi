@@ -6,6 +6,50 @@
   [style.left]="getTooltipLeftPosition()"
   [style.top]="tooltipPosition.y + 'px'"
 >
+  <table *ngIf="hasPendingMetadata; else transactionTooltip" class="table-fixed">
+    <tbody>
+      <tr><td class="label">Message</td><td class="value"><a [routerLink]="['/mempool-block/0' | relativeUrl]" [fragment]="pendingMessage.normalizedHash">{{ pendingMessage.normalizedHash | shortenString : 16 }}</a></td></tr>
+      <tr><td class="label">Destination</td><td class="value"><a [routerLink]="['/address' | relativeUrl, pendingMessage.destination]">{{ pendingMessage.destination | shortenString : 16 }}</a></td></tr>
+      <tr><td class="label">First seen</td><td class="value"><i><app-time kind="since" [time]="pendingFirstSeen" [fastRender]="true"></app-time></i></td></tr>
+      <tr><td class="label">Message size</td><td class="value">{{ pendingMessage.bocBytes | number }} bytes</td></tr>
+      <tr><td class="label">Status</td><td class="value"><span class="badge bg-secondary">Pending</span></td></tr>
+    </tbody>
+  </table>
+  <ng-template #transactionTooltip>
+  <table *ngIf="hasConfirmedMetadata; else legacyTooltip" class="table-fixed">
+    <tbody>
+      <tr>
+        <td class="label" i18n="shared.transaction">Transaction</td>
+        <td class="value"><a [routerLink]="['/tx/' | relativeUrl, txid]">{{ txid | shortenString : 16 }}</a></td>
+      </tr>
+      <tr *ngIf="confirmed?.utime">
+        <td class="label" i18n="transaction.confirmed|Transaction confirmed state">Confirmed</td>
+        <td class="value"><i><app-time kind="since" [time]="confirmed?.utime" [fastRender]="true"></app-time></i></td>
+      </tr>
+      <tr>
+        <td class="label" i18n="transaction.status">Status</td>
+        <td class="value">
+          <span *ngIf="confirmed?.success === true" class="badge bg-success" i18n="transaction.success">Successful</span>
+          <span *ngIf="confirmed?.success === false" class="badge bg-danger" i18n="transaction.failed">Failed</span>
+          <span *ngIf="confirmed?.success === null" class="badge bg-secondary" i18n="shared.unknown">Unknown</span>
+        </td>
+      </tr>
+      <tr>
+        <td class="label" i18n="transaction.type">Type</td>
+        <td class="value">{{ confirmedCategoryLabel }}</td>
+      </tr>
+      <tr>
+        <td class="label" i18n="transaction.fee|Transaction fee">Total fee</td>
+        <td class="value"><app-amount *ngIf="confirmedFee; else unavailableFee" [amount]="confirmedFee" [unitStyle]="'color: #ffffff66'"></app-amount><ng-template #unavailableFee>—</ng-template></td>
+      </tr>
+      <tr>
+        <td class="label">Messages</td>
+        <td class="value">{{ confirmed?.incomingMessage ? 1 : 0 }} incoming · {{ confirmed?.outgoingMessages?.length || 0 }} outgoing</td>
+      </tr>
+    </tbody>
+  </table>
+  </ng-template>
+  <ng-template #legacyTooltip>
   <table class="table-fixed">
     <tbody>
       <tr>
@@ -105,4 +149,5 @@
       </tr>
     </tbody>
   </table>
+  </ng-template>
 </div>

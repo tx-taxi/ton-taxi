@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 import { TransactionComponent } from '@components/transaction/transaction.component';
-import { TransactionDetailsComponent } from '@components/transaction/transaction-details/transaction-details.component';
+import { TransactionDetailsModule } from './transaction-details.module';
 import { SharedModule } from '@app/shared/shared.module';
 import { TxBowtieModule } from '@components/tx-bowtie-graph/tx-bowtie.module';
 import { TransactionExtrasModule } from '@components/transaction/transaction-extras.module';
@@ -45,15 +45,15 @@ export class TransactionRoutingModule { }
 @NgModule({
   imports: [
     CommonModule,
+    TransactionComponent,
     TransactionRoutingModule,
     SharedModule,
     GraphsModule,
     TxBowtieModule,
     TransactionExtrasModule,
+    TransactionDetailsModule,
   ],
   declarations: [
-    TransactionComponent,
-    TransactionDetailsComponent,
     AccelerateCheckout,
     AccelerateFeeGraphComponent,
     TransactionRawComponent,
@@ -62,7 +62,7 @@ export class TransactionRoutingModule { }
   ],
   exports: [
     TransactionComponent,
-    TransactionDetailsComponent,
+    TransactionDetailsModule,
     AccelerateCheckout,
     AccelerateFeeGraphComponent,
     CpfpInfoComponent,
@@ -70,7 +70,5 @@ export class TransactionRoutingModule { }
   ]
 })
 export class TransactionModule { }
-
-
 
 

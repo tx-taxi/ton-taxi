@@ -1,10 +1,8 @@
-<div class="container-xl" *ngIf="mempoolBlock$ | async as mempoolBlock">
-
+<div class="container-xl" *ngIf="pending$ | async as pending">
   <div class="title-block">
-    <h1>{{ ordinal$ | async }}</h1>
+    <h1>Pending messages</h1>
     <button [routerLink]="['/' | relativeUrl]" class="btn btn-sm float-end">&#10005;</button>
   </div>
-
   <div class="clearfix"></div>
 
   <div class="box">
@@ -12,48 +10,34 @@
       <div class="col-md">
         <table class="table table-borderless table-striped">
           <tbody>
-            <tr>
-              <td i18n="mempool-block.median-fee">Median fee</td>
-              <td>~<app-fee-rate [fee]="mempoolBlock.medianFee" rounding="1.0-0"></app-fee-rate> <span class="fiat"><app-fiat [value]="mempoolBlock.medianFee * 21000" digitsInfo="1.2-2" i18n-ngbTooltip="Transaction fee tooltip" ngbTooltip="Based on a simple ETH transfer using 21,000 gas" placement="bottom"></app-fiat></span></td>
-            </tr>
-            <tr>
-              <td i18n="mempool-block.fee-span">Fee span</td>
-              <td><span class="yellow-color">
-                <app-fee-rate [fee]="mempoolBlock.feeRange[0]" [showUnit]="false"></app-fee-rate>
-                -
-                <app-fee-rate [fee]="mempoolBlock.feeRange[mempoolBlock.feeRange.length - 1]"></app-fee-rate>
-              </span></td>
-            </tr>
-            <tr>
-              <td i18n="block.total-fees|Total fees in a block">Total fees</td>
-              <td><app-amount [satoshis]="mempoolBlock.totalFees" [digitsInfo]="'1.2-2'" [noFiat]="true"></app-amount> <span class="fiat"><app-fiat [value]="mempoolBlock.totalFees" digitsInfo="1.0-0"></app-fiat></span></td>
-            </tr>
-            <tr>
-              <td i18n="mempool-block.transactions">Transactions</td>
-              <td>{{ mempoolBlock.nTx }}</td>
-            </tr>
-            <tr>
-              <td i18n="mempool-block.size">Size</td>
-              <td>
-                <div class="progress">
-                  <div class="progress-bar progress-mempool {{ (network$ | async) }}" role="progressbar" [ngStyle]="{'width': (mempoolBlock.blockVSize / stateService.blockVSize) * 100 + '%' }"></div>
-                  <div class="progress-text" [innerHTML]="mempoolBlock.blockSize | bytes: 2"></div>
-                </div>
-              </td>
-            </tr>
+            <tr><td>Messages</td><td><span *ngIf="pending.state === 'loading' && pending.totalObserved === null; else messageCount" class="skeleton-loader">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><ng-template #messageCount>{{ pending.totalObserved === null ? 'Unavailable' : (pending.totalObserved | number) }}</ng-template></td></tr>
+            <tr><td>Type</td><td>External incoming</td></tr>
+            <tr><td>Last update</td><td><app-timestamp *ngIf="unixTime(pending.observedAt) as time; else missingTime" [unixTime]="time"></app-timestamp><ng-template #missingTime>—</ng-template></td></tr>
+            <tr><td>Feed</td><td>{{ pending.state === 'ready' ? 'Live' : pending.state === 'loading' ? 'Connecting' : pending.state === 'stale' ? 'Reconnecting' : 'Unavailable' }}</td></tr>
           </tbody>
         </table>
-        <app-fee-distribution-graph *ngIf="webGlEnabled" [transactions]="mempoolBlockTransactions$ | async" [feeRange]="mempoolBlock.isStack ? mempoolBlock.feeRange : []" [vsize]="mempoolBlock.blockVSize" ></app-fee-distribution-graph>
+        <p *ngIf="pending.state === 'stale' || pending.state === 'unavailable'" class="grey-info-text">{{ pending.observedAt ? 'The pending feed is unavailable. Showing the last update.' : 'The pending feed is unavailable.' }}</p>
       </div>
       <div class="col-md chart-container">
         <div class="block-with-filters" *ngIf="webGlEnabled">
-          <app-mempool-block-overview [index]="mempoolBlockIndex" (txPreviewEvent)="setTxPreview($event)" [showFilters]="true"></app-mempool-block-overview>
+          <app-mempool-block-overview [index]="0"
+            [suppliedPendingMessages]="pending.messages"
+            [suppliedLoading]="pending.state === 'loading' && !pending.messages.length"
+            [suppliedError]="pending.state === 'unavailable' || pending.state === 'stale' ? 'Pending feed unavailable' : null"
+          ></app-mempool-block-overview>
         </div>
-        <app-fee-distribution-graph *ngIf="!webGlEnabled" [transactions]="mempoolBlockTransactions$ | async" [feeRange]="mempoolBlock.isStack ? mempoolBlock.feeRange : []" [vsize]="mempoolBlock.blockVSize" ></app-fee-distribution-graph>
+        <p *ngIf="!webGlEnabled" class="grey-info-text">Message map unavailable in this browser</p>
       </div>
     </div>
   </div>
-
   <br>
-
+  <div class="subtitle-block"><div class="title"><h2>Messages</h2></div></div>
+  <ng-container *ngIf="{hash: selectedHash$ | async} as selected">
+    <app-transactions-list *ngIf="pending.messages.length" [nativePendingMessages]="visibleMessages(pending, selected.hash)" [selectedMessageHash]="selected.hash || ''"></app-transactions-list>
+    <div *ngIf="pending.state === 'loading' && !pending.messages.length" class="box"><span class="skeleton-loader"></span></div>
+    <p *ngIf="pending.state === 'ready' && !pending.messages.length" class="grey-info-text">No pending messages</p>
+    <button *ngIf="visibleCount < pending.messages.length" type="button" class="btn btn-primary" (click)="visibleCount = visibleCount + 20">Show more</button>
+    <p *ngIf="pending.truncated" class="grey-info-text mt-2">Latest {{ pending.messages.length | number }} of {{ pending.totalObserved | number }} messages</p>
+    <p *ngIf="selected.hash && !hasMessage(pending, selected.hash) && pending.state !== 'loading'" class="grey-info-text">This message is no longer in the pending list.</p>
+  </ng-container>
 </div>

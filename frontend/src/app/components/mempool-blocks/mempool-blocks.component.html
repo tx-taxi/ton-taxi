@@ -1,50 +1,35 @@
 <ng-container *ngIf="(loadingBlocks$ | async) === false; else loadingBlocks" [class.minimal]="minimal">
-  <div class="mempool-blocks-container" [class.time-ltr]="timeLtr" [style.--block-size]="blockWidth+'px'" *ngIf="(difficultyAdjustments$ | async) as da;">
-    <div class="flashing" *ngIf="(mempoolBlocks$ | async) as mempoolBlocks">
+  <div class="mempool-blocks-container" [class.time-ltr]="timeLtr" [style.--block-size]="blockWidth+'px'">
+    <div class="flashing" *ngIf="(nativePendingMode ? nativePendingBlocks : (mempoolBlocks$ | async)) as mempoolBlocks">
       <ng-template ngFor let-projectedBlock [ngForOf]="mempoolBlocks" let-i="index" [ngForTrackBy]="trackByFn">
-        <div
-          *ngIf="minimal && spotlight > 0 && spotlight === i + 1"
-          class="spotlight-bottom"
-          [style.right]="mempoolBlockStyles[i].right"
-        ></div>
+        <div *ngIf="minimal && spotlight > 0 && spotlight === i + 1" class="spotlight-bottom" [style.right]="mempoolBlockStyles[i].right"></div>
         <div @blockEntryTrigger [@.disabled]="i > 0 || !animateEntry" [attr.data-cy]="'mempool-block-' + i" class="bitcoin-block text-center mempool-block" [class.hide-block]="count && i >= count" id="mempool-block-{{ i }}" [ngStyle]="mempoolBlockStyles[i]" [class.blink-bg]="projectedBlock.blink" [style]="blockTransformation">
-          <a draggable="false" [routerLink]="[getHref(i) | relativeUrl]"
-            [attr.title]="blockValueDetails(projectedBlock.totalFees, projectedBlock.medianFee, projectedBlock.feeRange?.[0], projectedBlock.feeRange?.[projectedBlock.feeRange.length - 1])" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
+          <a draggable="false" [routerLink]="[getHref(i) | relativeUrl]" [attr.title]="nativePendingMode ? pendingTitle : blockValueDetails(projectedBlock.totalFees, projectedBlock.medianFee, projectedBlock.feeRange?.[0], projectedBlock.feeRange?.[projectedBlock.feeRange.length - 1])" class="blockLink" [ngClass]="{'disabled': (this.stateService.blockScrolling$ | async)}">&nbsp;</a>
           <div class="block-body">
             <ng-container *ngIf="!minimal">
               <div [attr.data-cy]="'mempool-block-' + i + '-fees'" class="fees">
-                ~<app-fee-rate [compactBlock]="true" [fee]="projectedBlock.medianFee" unitClass="" rounding="1.0-0"></app-fee-rate>
+                <ng-container *ngIf="nativePendingMode; else legacyFee">Pending</ng-container>
+                <ng-template #legacyFee>~<app-fee-rate [compactBlock]="true" [fee]="projectedBlock.medianFee" unitClass="" rounding="1.0-0"></app-fee-rate></ng-template>
               </div>
               <div [attr.data-cy]="'mempool-block-' + i + '-fee-span'" class="fee-span">
-                <app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[0]" [showUnit]="false" unitClass=""></app-fee-rate>
-                -
-                <app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[projectedBlock.feeRange.length - 1]" unitClass=""></app-fee-rate>
+                <ng-container *ngIf="nativePendingMode; else legacyFeeSpan">External messages</ng-container>
+                <ng-template #legacyFeeSpan><app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[0]" [showUnit]="false" unitClass=""></app-fee-rate> - <app-fee-rate [compactBlock]="true" [fee]="projectedBlock.feeRange[projectedBlock.feeRange.length - 1]" unitClass=""></app-fee-rate></ng-template>
               </div>
-              <div *ngIf="blockDisplayMode === 'fees'; else noMiningInfo" class="block-size">
-                <app-amount [compactBlock]="true" [attr.data-cy]="'mempool-block-' + i + '-total-fees'" [satoshis]="projectedBlock.totalFees" digitsInfo="1.2-3" [noFiat]="true"></app-amount>
+              <div class="block-size">
+                <ng-container *ngIf="nativePendingMode; else legacySize"><span *ngIf="pendingCount !== null; else unknownPending">{{ pendingCount | number }}</span><ng-template #unknownPending>Unavailable</ng-template></ng-container>
+                <ng-template #legacySize><app-amount *ngIf="blockDisplayMode === 'fees'; else noMiningInfo" [compactBlock]="true" [attr.data-cy]="'mempool-block-' + i + '-total-fees'" [satoshis]="projectedBlock.totalFees" digitsInfo="1.2-3" [noFiat]="true"></app-amount><ng-template #noMiningInfo><span [innerHTML]="'&lrm;' + (projectedBlock.blockSize | bytes: 2)"></span></ng-template></ng-template>
               </div>
-              <ng-template #noMiningInfo>
-                <div class="block-size" [innerHTML]="'&lrm;' + (projectedBlock.blockSize | bytes: 2)"></div>
-              </ng-template>
               <div [attr.data-cy]="'mempool-block-' + i + '-transaction-count'" class="transaction-count">
-                <ng-container *ngTemplateOutlet="projectedBlock.nTx === 1 ? transactionsSingular : transactionsPlural; context: {$implicit: projectedBlock.nTx | number}"></ng-container>
-                <ng-template #transactionsSingular let-i i18n="shared.transaction-count.singular">{{ i }} transaction</ng-template>
-                <ng-template #transactionsPlural let-i i18n="shared.transaction-count.plural">{{ i }} transactions</ng-template>
+                <ng-container *ngIf="nativePendingMode; else legacyCount">{{ pendingCount === null ? 'Pending feed' : pendingCount === 1 ? 'message' : 'messages' }}</ng-container>
+                <ng-template #legacyCount><ng-container *ngTemplateOutlet="projectedBlock.nTx === 1 ? transactionsSingular : transactionsPlural; context: {$implicit: projectedBlock.nTx | number}"></ng-container><ng-template #transactionsSingular let-i i18n="shared.transaction-count.singular">{{ i }} transaction</ng-template><ng-template #transactionsPlural let-i i18n="shared.transaction-count.plural">{{ i }} transactions</ng-template></ng-template>
               </div>
-              <div [attr.data-cy]="'mempool-block-' + i + '-time'" class="time-difference" *ngIf="projectedBlock.blockVSize <= stateService.blockVSize; else mergedBlock">
-                <ng-template [ngIf]="network === 'liquid' || network === 'liquidtestnet'" [ngIfElse]="timeDiffMainnet">
-                  <app-time kind="until" [time]="(1 * i) + now + 61000" [fastRender]="false" [fixedRender]="true" [precision]="1" minUnit="minute"></app-time>
-                </ng-template>
-                <ng-template #timeDiffMainnet>
-                  <app-time kind="until" [time]="da.adjustedTimeAvg * (i + 1) + now + da.timeOffset" [fastRender]="false" [fixedRender]="true" [precision]="0" minUnit="second"></app-time>
-                </ng-template>
+              <div [attr.data-cy]="'mempool-block-' + i + '-time'" class="time-difference">
+                <ng-container *ngIf="nativePendingMode; else legacyTime">
+                  <ng-container *ngIf="nativePending.state === 'ready'; else pendingUnavailable"><app-time *ngIf="pendingObservedTime" kind="since" [time]="pendingObservedTime" [fastRender]="true"></app-time></ng-container>
+                  <ng-template #pendingUnavailable>{{ nativePending.state === 'stale' ? 'Last observation' : 'Feed unavailable' }}</ng-template>
+                </ng-container>
+                <ng-template #legacyTime><ng-container *ngIf="projectedBlock.blockVSize <= stateService.blockVSize; else mergedBlock"><ng-container *ngIf="network === 'liquid' || network === 'liquidtestnet'; else timeDiffMainnet"><app-time kind="until" [time]="(1 * i) + now + 61000" [fastRender]="false" [fixedRender]="true" [precision]="1" minUnit="minute"></app-time></ng-container><ng-template #timeDiffMainnet><app-time *ngIf="difficultyAdjustments$ | async as da" kind="until" [time]="da.adjustedTimeAvg * (i + 1) + now + da.timeOffset" [fastRender]="false" [fixedRender]="true" [precision]="0" minUnit="second"></app-time></ng-template></ng-container><ng-template #mergedBlock><b>({{ projectedBlock.blockVSize / stateService.blockVSize | ceil }} blocks)</b></ng-template></ng-template>
               </div>
-              <ng-template #mergedBlock>
-                <div [attr.data-cy]="'mempool-block-' + i + '-blocks'" class="time-difference">
-                  <b>(<ng-container *ngTemplateOutlet="blocksPlural; context: {$implicit: projectedBlock.blockVSize / stateService.blockVSize | ceil }"></ng-container>)</b>
-                  <ng-template #blocksPlural let-i i18n="shared.blocks">{{ i }} <span class="shared-block">blocks</span></ng-template>
-                </div>
-              </ng-template>
             </ng-container>
           </div>
           <span class="animated-border"></span>
@@ -59,9 +44,7 @@
 <ng-template #loadingBlocks>
   <div class="mempool-blocks-container" [class.time-ltr]="timeLtr" [style.--block-size]="blockWidth+'px'">
     <div class="flashing">
-      <ng-template ngFor let-projectedBlock [ngForOf]="mempoolEmptyBlocks" let-i="index" [ngForTrackBy]="trackByFn">
-        <div class="bitcoin-block text-center mempool-block" [class.hide-block]="count && i >= count" id="mempool-block-{{ i }}" [ngStyle]="mempoolEmptyBlockStyles[i]"></div>
-      </ng-template>
+      <ng-template ngFor let-projectedBlock [ngForOf]="mempoolEmptyBlocks" let-i="index" [ngForTrackBy]="trackByFn"><div class="bitcoin-block text-center mempool-block" [class.hide-block]="count && i >= count" id="mempool-block-{{ i }}" [ngStyle]="mempoolEmptyBlockStyles[i]"></div></ng-template>
     </div>
   </div>
 </ng-template>

@@ -1,0 +1,122 @@
+<main class="container-xl pb-5">
+  <div class="d-flex align-items-center justify-content-between mb-4">
+    <h1>{{ title() }}</h1>
+    <span *ngIf="data">{{ list(data).length }} shown</span>
+  </div>
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        routerLink="/jettons"
+        [class.active]="page === 'jettons'"
+        [attr.aria-current]="page === 'jettons' ? 'page' : null"
+        >Jettons</a
+      >
+    </li>
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        routerLink="/collections"
+        [class.active]="page === 'collections'"
+        [attr.aria-current]="page === 'collections' ? 'page' : null"
+        >NFT collections</a
+      >
+    </li>
+  </ul>
+  <div *ngIf="error && !data" class="box" role="alert">
+    {{ error }}
+    <button class="btn btn-sm btn-outline-info" (click)="load()">Retry</button>
+  </div>
+  <div
+    *ngIf="loading && !data"
+    class="box"
+    role="status"
+    aria-label="Loading assets"
+  >
+    <div
+      *ngFor="let row of [0, 1, 2, 3]"
+      class="skeleton-loader mb-3 w-100"
+    ></div>
+  </div>
+  <ng-container *ngIf="data">
+    <p *ngIf="data._meta?.stale" class="badge badge-warning">Updates delayed</p>
+    <div
+      *ngIf="page === 'jettons' && list(data).length"
+      class="box table-responsive"
+    >
+      <table class="table table-borderless table-striped asset-table">
+        <thead>
+          <tr>
+            <th>Jetton</th>
+            <th>On-chain supply</th>
+            <th class="d-none d-md-table-cell">Trust</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of list(data)">
+            <td>
+              <app-ethereum-identity
+                [entity]="catalogIdentity(item)"
+                [link]="'/jetton/' + catalogAddress(item)"
+                [compact]="true"
+                chainName="TON"
+                chainSymbol="GRAM"
+              ></app-ethereum-identity>
+              <small
+                class="d-block d-md-none"
+                [class.text-danger]="item.verification === 'blacklist'"
+                >{{ catalogTrust(item) }}</small
+              >
+            </td>
+            <td>
+              <app-amount
+                [amount]="jettonValue(item.total_supply, item, false)"
+              ></app-amount>
+            </td>
+            <td
+              class="d-none d-md-table-cell"
+              [class.text-danger]="item.verification === 'blacklist'"
+            >
+              {{ catalogTrust(item) }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-ton-nft-grid
+      *ngIf="page === 'collections'"
+      [items]="nftCards(list(data), 'collection')"
+      itemKind="collection"
+    ></app-ton-nft-grid>
+    <p *ngIf="!list(data).length" class="box">
+      {{ page === "jettons" ? "No jettons" : "No NFT collections" }}
+    </p>
+    <div class="feed-state">
+      <p *ngIf="mainError" role="alert">
+        {{ mainError }}
+        <button
+          type="button"
+          class="btn btn-outline-info"
+          (click)="mainError === 'List updated' ? load() : loadMoreMain()"
+        >
+          {{ mainError === "List updated" ? "Refresh" : "Retry" }}
+        </button>
+      </p>
+      <div
+        *ngIf="mainLoading"
+        class="skeleton-loader"
+        role="status"
+        aria-label="Loading more assets"
+      ></div>
+      <button
+        *ngIf="data._paging?.hasMore && !mainError"
+        type="button"
+        class="btn btn-outline-info"
+        [disabled]="mainLoading"
+        (click)="loadMoreMain()"
+      >
+        Load more
+      </button>
+    </div>
+  </ng-container>
+</main>

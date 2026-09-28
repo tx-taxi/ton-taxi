@@ -29,18 +29,19 @@
       [scrollableMempool]="true"
       [deferInitialPageLoad]="deferInitialPageLoad"
       [historicalDetailView]="historicalDetailView"
+      [nativeContext]="nativeContextMode ? nativeContext : null"
       (mempoolOffsetChange)="onMempoolOffsetChange($event)"
     ></app-blockchain>
   </div>
-  <button type="button" class="reset-scroll" [class.hidden]="pageIndex === 0" (click)="resetScroll()"
-    aria-label="Return to the latest Ethereum block" title="Return to latest block">
+  <button *ngIf="!nativeContextMode" type="button" class="reset-scroll" [class.hidden]="pageIndex === 0" (click)="resetScroll()"
+    aria-label="Return to the latest TON block" title="Return to latest block">
     <fa-icon [icon]="['fas', 'circle-left']" [fixedWidth]="true"></fa-icon>
   </button>
 </div>
 
 <ng-container *serverOnly>
   <!-- disgusting hack to apply an initial scroll to server-side rendered blockchain bar -->
-  <img *ngIf="!stateService.isLiquid()" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="pixel" style="visibility: hidden; position: absolute;" onload="(() => { const b = document.getElementById('blockchain-container'); const d = document.getElementById('divider'); if (b && d) { b.scrollLeft = d.getBoundingClientRect().x - (window.innerWidth * (window.innerWidth >= 768 ? 0.5 : 0.95)); }})()">
+  <img *ngIf="!stateService.isLiquid()" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="pixel" style="visibility: hidden; position: absolute;" onload="(() => { const b = document.getElementById('blockchain-container'); const d = document.getElementById('divider'); if (b && d) { b.scrollLeft = d.getBoundingClientRect().x - (window.innerWidth * (window.innerWidth >= 768 ? 0.5 : 0.5)); }})()">
   <img *ngIf="stateService.isLiquid()" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="pixel" style="visibility: hidden; position: absolute;" onload="(() => { const b = document.getElementById('blockchain-container'); const d = document.getElementById('divider'); if (b && d) { b.scrollLeft = d.getBoundingClientRect().x - (window.innerWidth >= 768 ? 420 : (window.innerWidth * 0.5)); }})()">
 </ng-container>
 

@@ -1,12 +1,13 @@
 import { Component, OnInit, Input, ChangeDetectionStrategy, Output, EventEmitter } from '@angular/core';
 import { Transaction } from '@interfaces/electrs.interface';
 import { Acceleration, CpfpInfo } from '@interfaces/node-api.interface';
-import { Pool, TxAuditStatus } from '@components/transaction/transaction.component';
+import { Pool, TxAuditStatus } from '@interfaces/transaction-audit.interface';
 import { Observable } from 'rxjs';
 import { ETA } from '@app/services/eta.service';
 import { MiningStats } from '@app/services/mining.service';
 import { Filter } from '@app/shared/filters.utils';
 import { formatEthereumQuantity } from '@app/shared/ethereum-quantity.utils';
+import { TonTransaction, tonAddress, tonAmount, tonExecution, tonLabel, tonIdentity } from '@app/ton/transaction-view';
 
 @Component({
   selector: 'app-transaction-details',
@@ -16,6 +17,13 @@ import { formatEthereumQuantity } from '@app/shared/ethereum-quantity.utils';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TransactionDetailsComponent implements OnInit {
+  @Input() nativeTransaction: TonTransaction | null = null;
+  @Input() nativeMode = false;
+  tonAddress = tonAddress;
+  tonLabel = tonLabel;
+  tonIdentity = tonIdentity;
+  tonAmount = tonAmount;
+  tonExecution = tonExecution;
   @Input() network: string;
   @Input() tx: Transaction;
   @Input() isLoadingTx: boolean;

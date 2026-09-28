@@ -270,3 +270,8 @@
     }
   }
 }
+.native-summary { overflow-wrap: anywhere; }
+.native-summary td { min-width: 0; white-space: normal; }
+.native-summary app-truncate { display: block; max-width: 100%; white-space: nowrap; }
+
+.native-summary .table { table-layout: fixed; }

@@ -1,409 +1,124 @@
-<div class="container-xl" [class.liquid-address]="network === 'liquid' || network === 'liquidtestnet'">
+<div class="container-xl native-account-page">
   <div class="title-address">
-    <h1 i18n="shared.address">Address</h1>
+    <h1>Account</h1>
     <div class="tx-link">
-      <app-truncate [text]="addressString" [lastChars]="8" [link]="['/address/' | relativeUrl, addressString]">
-        <span class="qrSpan" (mouseover)="showQR = true" (mouseout)="showQR = false" (pointerdown)="showQR = true">
-          <fa-icon [icon]="['fas', 'qrcode']" [fixedWidth]="true" [style.font-size]="isMobile ? '18px' : '12px'"></fa-icon>
-          <div class="qr-wrapper" [hidden]="!showQR">
-            <app-qrcode [size]="200" [data]="addressString"></app-qrcode>
-          </div>
-        </span>
-        <app-clipboard [text]="addressString" [size]="isMobile ? 'large' : 'normal'"></app-clipboard>
+      <app-truncate
+        [text]="addressString"
+        [lastChars]="8"
+        [link]="['/address', addressString]"
+      >
+        <button
+          type="button"
+          class="qrSpan btn btn-link p-0"
+          (click)="showQR = !showQR"
+          [attr.aria-expanded]="showQR"
+          aria-label="Show account QR code"
+        >
+          <fa-icon [icon]="['fas', 'qrcode']" [fixedWidth]="true"></fa-icon>
+          <span class="qr-wrapper" *ngIf="showQR"
+            ><app-qrcode [size]="200" [data]="addressString"></app-qrcode
+          ></span>
+        </button>
+        <app-clipboard [text]="addressString"></app-clipboard>
       </app-truncate>
     </div>
   </div>
-
   <div class="clearfix"></div>
 
-  <ng-template [ngIf]="!isLoadingAddress && !error">
-    <ng-container *ngIf="address?.ethereum as ethereum">
-    <section class="ethereum-address-profile" aria-label="Ethereum address metadata">
-      <app-ethereum-identity
-        [entity]="ethereum.identity"
-        [link]="ethereumAddressTokenLink"
-      ></app-ethereum-identity>
-
-      <div class="ethereum-address-meta">
-        <a *ngIf="ethereum.creatorAddress" class="ethereum-address-meta__item ethereum-address-meta__link" [href]="ethereumAddressLink(ethereum.creatorAddress)">
-          <span>Created by</span>
-          <strong [title]="ethereum.creatorAddress">{{ abbreviateEthereumAddress(ethereum.creatorAddress) }}</strong>
-        </a>
-        <span *ngIf="ethereum.counters.transactions !== undefined" class="ethereum-address-meta__item">
-          <span>Transactions</span>
-          <strong>{{ ethereum.counters.transactions | number }}</strong>
-        </span>
-        <span *ngIf="ethereum.counters.tokenTransfers !== undefined" class="ethereum-address-meta__item">
-          <span>Token transfers</span>
-          <strong>{{ ethereum.counters.tokenTransfers | number }}</strong>
-        </span>
-        <span *ngIf="ethereum.counters.internalTransactions !== undefined" class="ethereum-address-meta__item">
-          <span>Internal calls</span>
-          <strong>{{ ethereum.counters.internalTransactions | number }}</strong>
-        </span>
-        <span *ngIf="ethereum.counters.gasUsed !== undefined" class="ethereum-address-meta__item">
-          <span>Gas used</span>
-          <strong>{{ ethereum.counters.gasUsed | number }}</strong>
-        </span>
-      </div>
-    </section>
-
-    <section *ngIf="ethereum.tokenBalances.length" class="ethereum-address-tokens" aria-labelledby="token-balances">
-      <div class="ethereum-address-tokens__heading">
-        <h2 id="token-balances">Token balances</h2>
-        <span>{{ ethereum.tokenBalances.length }} shown</span>
-      </div>
-      <div class="ethereum-address-tokens__list">
-        <a *ngFor="let balance of ethereum.tokenBalances" class="ethereum-address-token" [href]="ethereumTokenLink(balance.token.address)">
-          <app-ethereum-identity [entity]="balance.token" [compact]="true"></app-ethereum-identity>
-          <strong [title]="formatEthereumTokenAmount(balance.value, balance.token.decimals, 36)">
-            {{ formatEthereumTokenAmount(balance.value, balance.token.decimals) }} {{ balance.token.symbol || 'tokens' }}
-          </strong>
-        </a>
-      </div>
-    </section>
-    </ng-container>
-
-    <div class="box">
-
-      <div class="row">
-        @if (isMobile) {
-          <div class="col-sm">
-            <table class="table table-borderless table-striped address-table">
-              <tbody>
-                <tr><ng-container *ngTemplateOutlet="balanceRow"></ng-container></tr>
-                @if (!address.electrum) {
-                  <tr><ng-container *ngTemplateOutlet="pendingBalanceRow"></ng-container></tr>
-                }
-                @if (!address.electrum) {
-                  <tr><ng-container *ngTemplateOutlet="utxoRow"></ng-container></tr>
-                  <tr><ng-container *ngTemplateOutlet="pendingUtxoRow"></ng-container></tr>
-                }
-                @if (network === 'liquid' || network === 'liquidtestnet') {
-                  <tr><ng-container *ngTemplateOutlet="liquidRow"></ng-container></tr>
-                } @else if (!address.electrum) {
-                  <tr><ng-container *ngTemplateOutlet="volumeRow"></ng-container></tr>
-                }
-                <tr><ng-container *ngTemplateOutlet="typeRow"></ng-container></tr>
-              </tbody>
-            </table>
-          </div>
-        } @else {
-          <div class="col-sm">
-            <table class="table table-borderless dual-col-striped table-fixed address-table">
-              <tbody>
-                <tr>
-                  <ng-container *ngTemplateOutlet="balanceRow"></ng-container>
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  @if (address.electrum) {
-                    <ng-container *ngTemplateOutlet="typeRow"></ng-container>
-                  } @else {
-                    <ng-container *ngTemplateOutlet="pendingBalanceRow"></ng-container>
-                  }
-                </tr>
-                @if (!address.electrum) {
-                <tr>
-                  <ng-container *ngTemplateOutlet="utxoRow"></ng-container>
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  <ng-container *ngTemplateOutlet="pendingUtxoRow"></ng-container>
-                </tr>
-                }
-                <tr>
-                  @if (network === 'liquid' || network === 'liquidtestnet') {
-                    <ng-container *ngTemplateOutlet="liquidRow"></ng-container>
-                  } @else if (!address.electrum) {
-                    <ng-container *ngTemplateOutlet="volumeRow"></ng-container>
-                  } @else {
-                    <ng-container *ngTemplateOutlet="emptyTd"></ng-container>
-                  }                  
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  @if (!address.electrum) {
-                    <ng-container *ngTemplateOutlet="typeRow"></ng-container>
-                  } @else {
-                    <ng-container *ngTemplateOutlet="emptyTd"></ng-container>
-                  }
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        }
-      </div>
+  <div
+    *ngIf="error && !account"
+    class="ethereum-address-history-state"
+    role="alert"
+  >
+    <div>
+      <strong>Account unavailable</strong><span>{{ error }}</span>
     </div>
-
-    <ng-container *ngIf="!address?.electrum && ((addressTypeInfo?.tapscript && addressTypeInfo?.scripts?.size > 0) || taprootPsbtExpanded)">
-      <br>
-      <div class="title-tx">
-        <h2 class="text-start" i18n="address.taproot-tree">Taproot Tree</h2>
-      </div>
-      <div class="box">
-        <div class="row">
-          <div class="col-md">
-            <div *ngIf="taprootPsbtExpanded" class="mb-3">
-              <form *ngIf="psbtForm" [formGroup]="psbtForm" novalidate>
-                <label for="psbtInput" class="form-label mb-1 fw-bold">PSBT</label>
-                <textarea id="psbtInput" class="form-control font-monospace" rows="1" formControlName="psbt" placeholder="Hex or base64 encoded PSBT involving this address" autocomplete="off" spellcheck="false" (input)="submitPsbt()"></textarea>
-                <label for="tapleavesInput" class="form-label mt-2 mb-1 fw-bold">Tapleaves</label>
-                <textarea id="tapleavesInput" class="form-control font-monospace" rows="1" formControlName="tapleaf" placeholder="Hex or base64 encoded, comma separated PSBT_IN_TAP_LEAF_SCRIPT (<control block>:<script><leaf version>)" autocomplete="off" spellcheck="false" (input)="submitPsbt()"></textarea>
-                <label for="taptreeInput" class="form-label mt-2 mb-1 fw-bold">Taptree</label>
-                <textarea id="taptreeInput" class="form-control font-monospace" rows="1" formControlName="taptree" placeholder="Hex or base64 encoded PSBT_OUT_TAP_TREE field" autocomplete="off" spellcheck="false" (input)="submitPsbt()"></textarea>
-                <label *ngIf="!addressTypeInfo?.tapscript" for="internalKeyInput" class="form-label mt-2 mb-1 fw-bold">Internal Key</label>
-                <textarea *ngIf="!addressTypeInfo?.tapscript" id="internalKeyInput" class="form-control font-monospace" rows="1" formControlName="ikey" placeholder="Hex or base64 encoded x-only public key" autocomplete="off" spellcheck="false" (input)="submitPsbt()"></textarea>
-                <div class="text-danger mt-2 small" *ngIf="psbtError">{{ psbtError }}</div>
-              </form>
-            </div>
-            <app-taproot-address-scripts *ngIf="addressTypeInfo?.tapscript && addressTypeInfo?.scripts?.size > 0" [address]="addressTypeInfo.address" [scripts]="addressTypeInfo.scripts" (tapTreeIncomplete)="setTapTreeIncomplete($event)"></app-taproot-address-scripts> 
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="(stateService.backend$ | async) === 'esplora' && address && transactions && transactions.length > 2">
-      <br>
-      <div class="title-tx">
-        <h2 class="text-start" i18n="address.balance-history">Balance History</h2>
-      </div>
-      <div class="box">
-        <div class="widget-toggler" *ngIf="showBalancePeriod()">
-          <a href="" (click)="setBalancePeriod('all')" class="toggler-option"
-            [ngClass]="{'inactive': balancePeriod === 'all'}"><small i18n="all">all</small></a>
-          <span style="color: var(--transparent-fg); font-size: 8px"> | </span>
-          <a href="" (click)="setBalancePeriod('1m')" class="toggler-option"
-            [ngClass]="{'inactive': balancePeriod === '1m'}"><small i18n="recent">recent</small></a>
-        </div>
-        <div class="row">
-          <div class="col-md">
-            <app-address-graph [address]="addressString" [isPubkey]="address?.is_pubkey" [stats]="address.chain_stats" [period]="balancePeriod" left="80" />
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="(stateService.backend$ | async) === 'esplora' && address && utxos && utxos.length > 2">
-      <br>
-      <div class="title-tx">
-        <h2 class="text-start" i18n="address.unspent-outputs">Unspent Outputs</h2>
-      </div>
-      <div class="box">
-        <div class="row">
-          <div class="col-md">
-            <app-utxo-graph [utxos]="utxos" left="80" />
-          </div>
-        </div>
-      </div>
-    </ng-container>
-
-    <br>
-    <div class="title-tx">
-      <h2 class="text-start">
-        <ng-container *ngIf="ethereumHistoryUnavailable">Transaction history</ng-container>
-        <ng-container *ngIf="!ethereumHistoryUnavailable && !isLoadingTransactions && !transactions?.length">No transactions</ng-container>
-        @if (address?.electrum && transactions?.length) {
-          {{ transactions.length | number }} recent transactions
-        } @else {
-          <ng-template i18n="X of X Address Transaction" [ngIf]="transactions?.length === 1">{{ (transactions?.length | number) || '?' }} of {{ mempoolStats.tx_count + chainStats.tx_count | number }} transaction</ng-template>
-          <ng-template i18n="X of X Address Transactions (Plural)" [ngIf]="transactions?.length > 1">{{ (transactions?.length | number) || '?' }} of {{ mempoolStats.tx_count + chainStats.tx_count | number }} transactions</ng-template>
-        }
-      </h2>
-    </div>
-
-    <div *ngIf="ethereumHistoryUnavailable" class="ethereum-address-history-state" role="status">
-      <fa-icon [icon]="['fas', 'info-circle']" [fixedWidth]="true"></fa-icon>
-      <div>
-        <strong>Transaction history is temporarily unavailable</strong>
-        <span>The balance and account type are current, but indexed transaction history is temporarily unavailable.</span>
-        <button type="button" class="ethereum-address-history-state__retry" (click)="retryEthereumHistory()">
-          <fa-icon [icon]="['fas', 'redo-alt']" [fixedWidth]="true"></fa-icon>
-          Retry indexed history
-        </button>
-      </div>
-    </div>
-
-    <app-transactions-list *ngIf="!ethereumHistoryUnavailable" [transactions]="transactions" [showConfirmations]="true" [addresses]="[address.address]" [acceleratedTxids]="acceleratedTxids" (loadMore)="loadMore()"></app-transactions-list>
-
-    <div *ngIf="!ethereumHistoryUnavailable" class="text-center">
-      <ng-template [ngIf]="isLoadingTransactions">
-
-        <ng-container *ngIf="addressLoadingStatus$ as addressLoadingStatus">
-          <div class="header-bg box" style="padding: 12px; margin-bottom: 10px;">
-            <div class="progress progress-dark">
-              <div class="progress-bar progress-light" role="progressbar" [ngStyle]="{'width': addressLoadingStatus + '%' }"></div>
-            </div>
-          </div>
-        </ng-container>
-
-        <div class="header-bg box">
-          <div class="row" style="height: 107px;">
-            <div class="col-sm">
-              <span class="skeleton-loader"></span>
-            </div>
-            <div class="col-sm">
-              <span class="skeleton-loader"></span>
-            </div>
-          </div>
-        </div>
-
-      </ng-template>
-
-      <ng-template [ngIf]="retryLoadMore">
-        <br>
-        <button type="button" class="btn btn-outline-info btn-sm" (click)="loadMore()"><fa-icon [icon]="['fas', 'redo-alt']" [fixedWidth]="true"></fa-icon></button>
-      </ng-template>
-    </div>
-
-  </ng-template>
-
-  <ng-template [ngIf]="isLoadingAddress && !error">
-
-    <div class="box">
-      <div class="row">
-        @if (isMobile) {
-          <div class="col-sm">
-            <table class="table table-borderless table-striped">
-              <tbody>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        } @else {
-          <div class="col-sm">
-            <table class="table table-borderless dual-col-striped table-fixed">
-              <tbody>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-                <tr>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                  <ng-container *ngTemplateOutlet="spacerCell"></ng-container>
-                  <td colspan="2"><span class="skeleton-loader"></span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        }
-      </div>
-    </div>
-
-  </ng-template>
-
-  <ng-template [ngIf]="error">
-    <br>
-      <div class="text-center">
-        <span i18n="address.error.loading-address-data">Error loading address data.</span>
-        <br>
-        <i class="small">({{ error | httpErrorMsg }})</i>
-        <br>
-        @if (!officialMempoolSpace && (error.status === 413 || error.status === 405 || error.status === 504)) {
-        <ng-container i18n="Electrum server limit exceeded error">
-          <br>
-          <i>There are too many transactions on this address, more than your backend can handle. See more on <a href="/docs/faq#address-lookup-issues">setting up a stronger backend</a>.</i>
-          <br><br>
-          Consider viewing this address on another Ethereum explorer instead:
-        </ng-container>
-          <br>
-          <a href="https://eth.blockscout.com/address/{{ addressString }}" target="_blank" rel="noopener noreferrer">View on Blockscout</a>
-        }
-      </div>
-  </ng-template>
-
-</div>
-
-<br>
-
-<ng-template #confidentialTd>
-  <td i18n="shared.confidential">Confidential</td>
-</ng-template>
-
-<ng-template #headerLoader>
-  <div class="header-bg box" style="padding: 10px; margin-bottom: 10px;">
-    <span class="skeleton-loader"></span>
-  </div>
-</ng-template>
-
-<ng-template #spacerCell>
-  <td class="spacer"></td>
-</ng-template>
-
-<ng-template #emptyTd>
-  <td class="spacer"></td>
-  <td class="spacer"></td>
-</ng-template>
-
-<ng-template #balanceRow>
-  <td>{{ address.electrum ? 'Balance' : 'Confirmed balance' }}</td>
-  <td *ngIf="address?.ethereum as ethereum; else standardBalance" class="wrap-cell">
-    {{ formatEthereumTokenAmount(ethereum.balanceWei, '18') }} ETH
-    <span *ngIf="hasEthereumFiatConversion" class="fiat"><app-fiat [value]="chainStats.balance"></app-fiat></span>
-  </td>
-  <ng-template #standardBalance>
-    <td *ngIf="chainStats.funded_txo_sum !== undefined; else confidentialTd" class="wrap-cell"><app-amount [satoshis]="chainStats.balance" [noFiat]="true"></app-amount> <span class="fiat"><app-fiat [value]="chainStats.balance"></app-fiat></span></td>
-  </ng-template>
-</ng-template>
-
-<ng-template #pendingBalanceRow>
-  <td class="fst-italic">{{ address.electrum ? 'Pending balance' : 'Pending' }}</td>
-  <td *ngIf="mempoolStats.funded_txo_sum !== undefined; else confidentialTd" class="fst-italic wrap-cell"><app-amount [satoshis]="mempoolStats.balance" [noFiat]="true" [addPlus]="true"></app-amount> <span class="fiat"><app-fiat [value]="mempoolStats.balance"></app-fiat></span></td>
-</ng-template>
-
-<ng-template #utxoRow>
-  <td i18n="address.confirmed-utxos">Confirmed UTXOs</td>
-  <td class="wrap-cell">{{ chainStats.utxos }}</td>
-</ng-template>
-
-<ng-template #pendingUtxoRow>
-  <td i18n="address.pending-utxos" class="fst-italic">Pending UTXOs</td>
-  <td class="fst-italic wrap-cell">{{ mempoolStats.utxos > 0 ? '+' : ''}}{{ mempoolStats.utxos }}</td>
-</ng-template>
-
-<ng-template #volumeRow>
-  <td i18n="address.total-received">Total received</td>
-  <td *ngIf="chainStats.funded_txo_sum !== undefined; else confidentialTd" class="wrap-cell"><app-amount [satoshis]="chainStats.totalReceived" [noFiat]="true"></app-amount></td>
-</ng-template>
-
-<ng-template #typeRow>
-  <td i18n="address.type">Type</td>
-  <td class="wrap-cell">
-    <span *ngIf="address.electrum; else bitcoinAddressType" class="badge bg-primary">Ethereum account</span>
-    <ng-template #bitcoinAddressType><span placement="bottom" class="badge bg-primary">
-      <app-address-type [address]="addressTypeInfo"></app-address-type>
-    </span></ng-template>
-    <button *ngIf="!address?.electrum && showTaprootPsbtButton()" type="button" class="btn btn-sm taproot-psbt-btn" (click)="taprootPsbtExpanded = !taprootPsbtExpanded" i18n-ngbTooltip="address.taproot-psbt-add-unpublished-spend-paths" ngbTooltip="Add unpublished spending paths">
-      <fa-icon [icon]="['fas', 'code-fork']" [fixedWidth]="true"></fa-icon>
+    <button class="btn btn-sm btn-outline-info ms-auto" (click)="retry.emit()">
+      Retry
     </button>
-    <app-address-labels *ngIf="!addressTypeInfo?.tapscript" [channel]="exampleChannel" [address]="addressTypeInfo" class="ms-1"></app-address-labels>
-  </td>
-</ng-template>
+  </div>
+  <div
+    *ngIf="isLoadingAddress && !account"
+    class="box"
+    role="status"
+    aria-label="Loading account"
+  >
+    <div class="row">
+      <div class="col-sm" *ngFor="let column of [0, 1]">
+        <table class="table table-borderless table-striped address-table">
+          <tbody>
+            <tr *ngFor="let row of [0, 1, 2]">
+              <td><span class="skeleton-loader"></span></td>
+              <td><span class="skeleton-loader"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 
-<ng-template #liquidRow>
-  <ng-container *ngIf="addressInfo && addressInfo.unconfidential">
-    <td i18n="address.unconfidential">Unconfidential</td>
-    <td>
-      <app-truncate [text]="addressInfo.unconfidential" [lastChars]="8" [textAlign]="isMobile ? 'end' : 'start'" [link]="['/address/' | relativeUrl, addressInfo.unconfidential]">
-        <app-clipboard [text]="addressInfo.unconfidential"></app-clipboard>
-      </app-truncate>
-    </td>
+  <ng-container *ngIf="account as view">
+    <section class="ethereum-address-profile" aria-label="TON account identity">
+      <app-ethereum-identity
+        [entity]="view.identity"
+        chainName="TON"
+        chainSymbol="GRAM"
+      ></app-ethereum-identity>
+      <div class="ethereum-address-meta">
+        <span class="badge badge-warning" *ngIf="view.stale"
+          >Updates delayed</span
+        ><a
+          *ngFor="let domain of view.domains"
+          class="ethereum-address-meta__item ethereum-address-meta__link"
+          [routerLink]="['/dns', domain]"
+          ><span>TON DNS</span><strong>{{ domain }}</strong></a
+        >
+      </div>
+    </section>
+    <div class="box">
+      <div class="row">
+        <div class="col-sm">
+          <table class="table table-borderless table-striped address-table">
+            <tbody>
+              <tr>
+                <td>Balance</td>
+                <td class="text-wrap">
+                  <app-amount [amount]="view.balance"></app-amount>
+                </td>
+              </tr>
+              <tr>
+                <td>Status</td>
+                <td>{{ view.status || "Unknown" }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-sm mobile-bottomcol">
+          <table class="table table-borderless table-striped address-table">
+            <tbody>
+              <tr>
+                <td>Last activity</td>
+                <td>
+                  <app-timestamp
+                    *ngIf="view.lastActivity; else unknownActivity"
+                    [unixTime]="view.lastActivity"
+                  ></app-timestamp
+                  ><ng-template #unknownActivity>—</ng-template>
+                </td>
+              </tr>
+              <tr>
+                <td>Contract</td>
+                <td class="text-wrap">
+                  {{
+                    view.interfaces.length ? view.interfaces.join(", ") : "—"
+                  }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <ng-content></ng-content>
   </ng-container>
-</ng-template>
+</div>

@@ -340,3 +340,10 @@ h1 {
   padding-bottom: 0;
   font-size: 0.8rem;
 }
+
+.native-account-page { padding-bottom: 3rem; }
+.native-account-page .box { margin-bottom: 1.5rem; }
+.native-account-page .address-table { margin: 0; table-layout: fixed; }
+.native-account-page .address-table td { overflow-wrap: anywhere; white-space: normal; }
+.native-account-page .address-table td:first-child { width: 34%; }
+.native-account-page .qrSpan { color: var(--link-color); }

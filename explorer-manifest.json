@@ -1,0 +1,336 @@
+{
+  "schemaVersion": 1,
+  "kitVersion": "0.1.0",
+  "kitCommit": "2ffd3bb2c80da32092acb6085accc2e6ae607272",
+  "chain": "ton",
+  "repository": "tx-taxi/ton-taxi",
+  "ancestor": {
+    "repository": "tx-taxi/eth-taxi",
+    "commit": "9327a28da7fcf95828adf51e3b4b3c45658241c1"
+  },
+  "visualReference": {
+    "repository": "tx-taxi/xmr-taxi",
+    "commit": "5b8ede9c71ed18907ce38632bdbd7190bbd5b643"
+  },
+  "status": "release-candidate",
+  "local": {
+    "url": "http://127.0.0.1:4530",
+    "ports": [
+      4530,
+      4531,
+      4532
+    ],
+    "startCommands": [
+      "cd /home/lukee/dev/ton-taxi && TON_API_KEY_FILE=/home/lukee/.config/tx-taxi/ton/tonapi.key TON_STATIC_ROOT=\"$PWD/frontend/dist/mempool/browser\" TON_DATA_DIR=/tmp/tx-taxi-ton-data PORT=4530 node adapter/ton-server.cjs",
+      "cd /home/lukee/dev/ton-router && PORT=4531 HOST=127.0.0.1 TON_NATIVE_ORIGIN=http://127.0.0.1:4530 node dist/index.js",
+      "python3 -m http.server 4532 --bind 127.0.0.1 --directory /home/lukee/dev/ton-taxi/review/ton"
+    ],
+    "stopCommands": [
+      "Ctrl-C in the corresponding foreground terminal; preserve unrelated processes."
+    ],
+    "incrementalCommands": [
+      "cd /home/lukee/dev/ton-taxi && ./review/ton/build-local.sh",
+      "cd /home/lukee/dev/ton-taxi && node hub/build.cjs /home/lukee/dev/ton-router/public/assets/native-strips/ton",
+      "cd /home/lukee/dev/ton-router && npm run build"
+    ],
+    "routerUrl": "http://127.0.0.1:4531",
+    "sessions": {
+      "explorer": "77134",
+      "router": "74626",
+      "comparison": "4617"
+    },
+    "pids": {
+      "explorer": 3537003,
+      "router": 3540218,
+      "comparison": 2948226
+    },
+    "comparisonUrl": "http://127.0.0.1:4532/native-home/"
+  },
+  "capabilities": [
+    {
+      "slot": "dashboard/strip",
+      "meaning": "Original paired dashboard and native strip components, exact confirmed fees, gap counts and mean masterchain interval from elapsed header timestamps / sequence-number distance",
+      "source": "collector and native WS",
+      "units": "GRAM/nanograms, exact integers",
+      "cadence": "Stream-triggered consecutive header batches; native WebSocket updates and dashboard HTTP fallback",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "pending/messages",
+      "meaning": "Provider-observed external-message groups with exact inclusion removal; native pending cube, home map, tooltip, paired summary/map detail and full-width expandable message rows",
+      "source": "Authenticated unfiltered TonAPI pending SSE; finalized-account SSE with exact transaction BOC verification over public lite servers",
+      "units": "Message groups, BOC bytes, raw/normalized/body hashes, native destination and actual observation times",
+      "cadence": "Shared server streams; coalesced publications up to once per second, immediate state changes; no visitor-dependent provider acquisition",
+      "loading": "Original MempoolBlocks and BlockOverviewGraph loading states; native detail skeleton",
+      "failure": "Unavailable without a fabricated zero; confirmed pipeline remains independent",
+      "stale": "Retained observations and original timestamp; source gaps stay uncertain until exact removal or local retirement",
+      "availability": "Implemented locally; 2000 groups/150 public details, 30-second first-seen retention; native map/navigation/update/failure verification in review/ton/detail-speed-layout/"
+    },
+    {
+      "slot": "blocks",
+      "meaning": "Retained BlocksList/Block with cache-first consecutive rows, eight earlier headers per page, exact historical tuples/shards/transactions/BOC",
+      "source": "block/header/shard APIs",
+      "units": "workchain/shard/seqno, exact LT/hashes",
+      "cadence": "on demand",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "transactions/messages/traces",
+      "meaning": "Cross-shard recent transactions, historical execution, messages, action interpretation and full trace",
+      "source": "indexed blockchain/event/trace APIs",
+      "units": "GRAM9decimals; jetton own decimals",
+      "cadence": "on demand; interval snapshot paging",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "account",
+      "meaning": "Balance/state/storage, wallet keys/seqno, traces, token/NFT histories and full inventories, read-only getters",
+      "source": "account/state/getter APIs",
+      "units": "raw/friendly identity, exact balances/LT",
+      "cadence": "on demand; cursor paging",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "jettons",
+      "meaning": "Current balances/supply/holders and metadata; TEP526 scaled UI with unscaled detail",
+      "source": "jetton/indexer/getters",
+      "units": "metadata decimals; exact multiplier/TVM rounding",
+      "cadence": "on demand; pinned holders snapshot",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "NFTs/collections",
+      "meaning": "Media, attributes, sale ownership, membership/trust, exact index, transfer history and full inventory",
+      "source": "NFT/indexer plus get_nft_data/get_collection_data",
+      "units": "256-bit indices retained as strings",
+      "cadence": "on demand; pinned paginated inventory",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "TON contract variants",
+      "meaning": "SBT authority/revocation, subscriptions, multisig signers/threshold/orders, staking and DeFi",
+      "source": "specialized indexed APIs and getters",
+      "units": "native/jetton exact units, explicit status/timestamps",
+      "cadence": "on-demand expandable sections",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "DNS",
+      "meaning": "Names/records/NFT, expiry, auction bids/catalog",
+      "source": "DNS APIs",
+      "units": "GRAM bids, Unix timestamps",
+      "cadence": "on demand; bounded reads",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "staking pools",
+      "meaning": "Pool identity, stake/cycle/APY plus history when available",
+      "source": "staking APIs",
+      "units": "GRAM and percentages",
+      "cadence": "on demand; sampled APY history404",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "extra currencies",
+      "meaning": "Metadata, exact balances and account event history",
+      "source": "extra-currency APIs/account state",
+      "units": "currency-specific decimals or raw units",
+      "cadence": "on demand; paginated history",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "network",
+      "meaning": "Validators/election stakes and full current configuration",
+      "source": "validator/config APIs",
+      "units": "exact config integers and stake",
+      "cadence": "on demand; sampled archival config404",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "search/navigation",
+      "meaning": "Source-first proof, explicit automatic/manual routing, native entities, focused dropdown, cached handoff/two-step logos",
+      "source": "native resolver plus existing isolated router",
+      "units": "validated raw/friendly/hash/tuple/DNS/known URLs",
+      "cadence": "on submit; stale response cancellation",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "secondary surfaces",
+      "meaning": "TON docs/About/legal, canonical metadata/social cards, native/Original themes",
+      "source": "native templates and chain social adapter",
+      "units": "chain identity TON; native currency GRAM",
+      "cadence": "page load and preference changes",
+      "loading": "native skeleton",
+      "failure": "unavailable with retry; existing data retained where refreshable",
+      "stale": "original observation time and delayed status",
+      "availability": "implemented; see review evidence and unresolved fixture coverage"
+    },
+    {
+      "slot": "asset catalogs",
+      "meaning": "Native jetton rows and shared NFT collection grid, cursor/snapshot pagination",
+      "source": "/api/ton/jettons and /api/ton/collections",
+      "availability": "implemented; bounded recorded/live evidence"
+    },
+    {
+      "slot": "market",
+      "meaning": "Existing PriceChart with actual historical currency/range data and venue quotes",
+      "source": "/api/ton/rates/chart and /api/ton/rates/markets",
+      "availability": "implemented; bounded recorded/live evidence"
+    }
+  ],
+  "routes": [
+    "/",
+    "/blocks",
+    "/block/:id",
+    "/txs",
+    "/tx/:id",
+    "/message/:id",
+    "/trace/:id",
+    "/address/:id",
+    "/nft/:id",
+    "/collection/:id",
+    "/jetton/:id",
+    "/validators",
+    "/dns",
+    "/dns/:id",
+    "/staking-pool/:id",
+    "/extra-currency/:id",
+    "/config",
+    "/docs/guide",
+    "/docs/api/rest",
+    "/docs/api/websocket",
+    "/about",
+    "/privacy-policy",
+    "/terms-of-service",
+    "/trademark-policy",
+    "/jettons",
+    "/collections",
+    "/market",
+    "/mempool-block/0"
+  ],
+  "providers": [
+    {
+      "name": "TonAPI",
+      "urls": [
+        "https://tonapi.io",
+        "https://keeper.tonapi.io"
+      ],
+      "independent": false,
+      "scope": "indexed mainnet accounts, archival blocks/transactions, assets, actions/traces, public metadata",
+      "credentials": "optional TON_API_KEY, never bundled",
+      "cadence": "Indexed entity requests share 1100ms request spacing; confirmed block acquisition uses its separate stream pipeline",
+      "deadlines": "12s upstream;25s provider total;28s API aggregate including queue/fallback",
+      "failure": "bounded retries/cooldown; permission failures endpoint-local; stale cache retains observation time"
+    },
+    {
+      "name": "TON pending streams and exact lite inclusion",
+      "urls": [
+        "https://tonapi.io/v2/sse/mempool",
+        "https://tonapi.io/v2/sse/accounts/transactions?accounts=ALL",
+        "https://ton.org/global.config.json"
+      ],
+      "independent": false,
+      "scope": "Provider-observed external messages and exact included input identity, not a complete global pool or validator consensus proof",
+      "credentials": "Server-only TON_API_KEY_FILE or TON_API_KEY for TonAPI streams; public lite reads need no credential",
+      "cadence": "Two shared SSE streams; four verification workers and at most three persistent lite connections",
+      "deadlines": "8-second event deadline including queue, at most three 1.5-second attempts; bounded drained server replacement/cooldown",
+      "failure": "Retain stale observations; 30-second unknown retirement is not confirmation or rejection"
+    }
+  ],
+  "acceptance": [
+    "review/ton/native-home/README.md",
+    "review/ton/native-home",
+    "review/ton/iteration/README.md",
+    "review/ton/iteration",
+    "review/ton/comparison/rework-assets.md",
+    "review/ton/acceptance",
+    "adapter/ton/evidence",
+    "review/ton/reconciliation",
+    "review/ton/pending/README.md",
+    "review/ton/detail-speed-layout/README.md",
+    "review/ton/transaction-table/README.md",
+    "review/ton/pending-map/README.md"
+  ],
+  "unresolved": [
+    "Live indexed-unminted compressed NFT fixture not obtained; controlled resolver behavior verified.",
+    "Populated multisig orders not obtained; real2-of-3 contract verified.",
+    "Sampled officialpool APY history and archivalconfig block30000000 returned404; unavailable states retained.",
+    "Public providers share infrastructure/rate budget; no independent archival/indexing fallback.",
+    "Only English TON content shipped.",
+    "Cold UI collection first page measured23.7s and blocks first page17.2s; public provider capacity remains a limitation.",
+    "Positive extra-currency transfer and nonempty DNS site/storage resolver variants remain unverified; a real wallet DNS resolution and auction catalog were captured.",
+    "Production rollout and public verification in progress; no production success claimed until recorded."
+  ],
+  "productionRequested": true,
+  "workingBranch": "codex/ton-native-explorer",
+  "workingTreeDirty": true,
+  "notApplicable": [
+    "Projected next-masterchain-block fullness/fee-rate/miner attribution is not supplied by the observed pending source; no invented UTXO metrics. Real pending external-message groups are implemented separately.",
+    "Private/off-chain Telegram gifts cannot be recovered from public TON inventory."
+  ],
+  "comparison": {
+    "requestedBy": "User after rejecting the local TON candidate",
+    "report": "review/ton/native-home/README.md",
+    "productImplementationChanged": true,
+    "acceptance": "Original sibling dashboard template hierarchy and exact shared styles restored; custom network/transaction/market route wrappers removed. Screenshot and behavior results are bounded; user design acceptance remains pending.",
+    "visualEvidenceCommit": "371ce4d02",
+    "baselineReport": "review/ton/iteration/README.md"
+  },
+  "lastVerifiedAt": "2026-09-26T23:01:32.181638+00:00",
+  "lastPendingVerifiedAt": "2026-09-27T22:21:42.170596+00:00",
+  "lastDetailContextVerifiedAt": "2026-09-28T01:04:54.477405+00:00",
+  "detailContextReview": {
+    "url": "http://127.0.0.1:4530",
+    "evidence": "review/ton/detail-speed-layout/README.md",
+    "buildHash": "b91966232eef50ad",
+    "localOnly": true,
+    "coldContextMs": 2401,
+    "browserNavigationToContextMs": 5738,
+    "warmContextMs": 18,
+    "recentShardContextMs": 2737
+  },
+  "pendingMapReview": {
+    "url": "http://127.0.0.1:4530/mempool-block/0",
+    "evidence": "review/ton/detail-speed-layout/README.md",
+    "buildHash": "b91966232eef50ad",
+    "localOnly": true
+  },
+  "lastPendingMapVerifiedAt": "2026-09-28T01:02:43.124029+00:00",
+  "releaseWorktree": "/home/lukee/dev/ton-taxi-release"
+}

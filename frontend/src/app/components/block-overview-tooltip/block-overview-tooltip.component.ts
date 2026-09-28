@@ -4,6 +4,9 @@ import { Price } from '@app/services/price.service';
 import { TransactionStripped } from '@interfaces/node-api.interface.js';
 import { Filter, FilterMode, TransactionFlags, toFilters } from '@app/shared/filters.utils';
 import { Block } from '@interfaces/electrs.interface.js';
+import { NativeAmount } from '@app/shared/native-view.types';
+import { ConfirmedTransactionMetadata } from '@components/block-overview-graph/confirmed-transaction';
+import { TonPendingMessage } from '@app/shared/ton-pending.types';
 
 @Component({
   selector: 'app-block-overview-tooltip',
@@ -20,6 +23,8 @@ export class BlockOverviewTooltipComponent implements OnChanges {
   @Input() blockConversion: Price;
   @Input() filterFlags: bigint | null = null;
   @Input() filterMode: FilterMode = 'and';
+  @Input() confirmedMode = false;
+  @Input() pendingMode = false;
 
   txid = '';
   time: number = 0;
@@ -33,6 +38,8 @@ export class BlockOverviewTooltipComponent implements OnChanges {
   timeMode: 'mempool' | 'mined' | 'missed' | 'after' = 'mempool';
   filters: Filter[] = [];
   activeFilters: { [key: string]: boolean } = {};
+  confirmed: ConfirmedTransactionMetadata | null = null;
+  confirmedFee: NativeAmount | null = null;
 
   tooltipPosition: Position = { x: 0, y: 0 };
 
@@ -60,6 +67,14 @@ export class BlockOverviewTooltipComponent implements OnChanges {
     }
 
     if (this.tx && (changes.tx || changes.filterFlags || changes.filterMode)) {
+      this.confirmed = (this.tx as any).confirmed || null;
+      this.confirmedFee = this.confirmed?.totalFeesAtomic == null ? null : {
+        atomic: this.confirmed.totalFeesAtomic,
+        decimals: 9,
+        symbol: 'GRAM',
+        atomicSymbol: 'nanograms',
+        native: true,
+      };
       this.txid = this.tx.txid || '';
       this.time = this.tx.time || 0;
       this.fee = this.tx.fee || 0;
@@ -100,5 +115,27 @@ export class BlockOverviewTooltipComponent implements OnChanges {
 
   getTooltipLeftPosition(): string {
     return window.innerWidth < 392 ? '-50px' : this.tooltipPosition.x + 'px';
+  }
+
+  get hasConfirmedMetadata(): boolean {
+    return this.confirmedMode && this.confirmed !== null;
+  }
+
+  get hasPendingMetadata(): boolean {
+    return this.pendingMode && this.pendingMessage !== null;
+  }
+
+  get pendingMessage(): TonPendingMessage | null {
+    return (this.tx as any)?.pendingMessage || null;
+  }
+
+  get pendingFirstSeen(): number | null {
+    const time = Date.parse(this.pendingMessage?.firstSeenAt || '');
+    return Number.isFinite(time) ? time / 1000 : null;
+  }
+
+  get confirmedCategoryLabel(): string {
+    if (!this.confirmed) return '';
+    return this.confirmed.category === 'nft' ? 'NFT' : this.confirmed.category.charAt(0).toUpperCase() + this.confirmed.category.slice(1);
   }
 }

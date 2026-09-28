@@ -62,10 +62,15 @@
   margin-top: 12px;
 }
 
+:host {
+  // TON's subsecond blocks must settle before the next shared stream batch.
+  --block-slide-duration: 300ms;
+}
+
 .mined-block {
   position: absolute;
   top: 0px;
-  transition: background 2s, left 2s, transform 1s, opacity 1s;
+  transition: background 2s, left var(--block-slide-duration, 2s), transform 1s, opacity 1s;
 }
 
 .mined-block.offscreen {

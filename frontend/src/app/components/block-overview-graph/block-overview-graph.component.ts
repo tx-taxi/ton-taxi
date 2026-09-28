@@ -9,7 +9,7 @@ import { Price } from '@app/services/price.service';
 import { StateService } from '@app/services/state.service';
 import { ThemeService } from '@app/services/theme.service';
 import { Subscription } from 'rxjs';
-import { defaultColorFunction, setOpacity, defaultAuditColors, defaultColors, ageColorFunction, contrastColorFunction, contrastAuditColors, contrastColors, ethereumCategoryColorFunction } from '@components/block-overview-graph/utils';
+import { defaultColorFunction, setOpacity, defaultAuditColors, defaultColors, ageColorFunction, contrastColorFunction, contrastAuditColors, contrastColors, ethereumCategoryColorFunction, confirmedCategoryColorFunction, pendingMessageColorFunction } from '@components/block-overview-graph/utils';
 import { ActiveFilter, FilterMode, GradientMode, toFlags } from '@app/shared/filters.utils';
 import { detectWebGL } from '@app/shared/graphs.utils';
 
@@ -49,6 +49,7 @@ export class BlockOverviewGraphComponent implements AfterViewInit, OnDestroy, On
   @Input() disableSpinner = false;
   @Input() mirrorTxid: string | void;
   @Input() unavailable: boolean = false;
+  @Input() unavailableMessage: string | null = null;
   @Input() auditHighlighting: boolean = false;
   @Input() showFilters: boolean = false;
   @Input() excludeFilters: string[] = [];
@@ -58,6 +59,9 @@ export class BlockOverviewGraphComponent implements AfterViewInit, OnDestroy, On
   @Input() relativeTime: number | null;
   @Input() blockConversion: Price;
   @Input() overrideColors: ((tx: TxView) => Color) | null = null;
+  /** Selects the confirmed-transaction tooltip and native category colors. */
+  @Input() confirmedMode = false;
+  @Input() pendingMode = false;
   @Output() txClickEvent = new EventEmitter<{ tx: TransactionStripped, keyModifier: boolean}>();
   @Output() txHoverEvent = new EventEmitter<string>();
   @Output() readyEvent = new EventEmitter();
@@ -147,13 +151,17 @@ export class BlockOverviewGraphComponent implements AfterViewInit, OnDestroy, On
         this.scene.setOrientation(this.orientation, this.flip);
       }
     }
+    if (changes.blockLimit && this.scene) {
+      this.scene.setBlockLimit(this.blockLimit);
+      this.start();
+    }
     if (changes.mirrorTxid) {
       this.setMirror(this.mirrorTxid);
     }
     if (changes.auditHighlighting) {
       this.setHighlightingEnabled(this.auditHighlighting);
     }
-    if (changes.overrideColor && this.scene) {
+    if ((changes.overrideColors || changes.confirmedMode || changes.pendingMode) && this.scene) {
       this.scene.setColorFunction(this.getFilterColorFunction(0n, this.gradientMode));
     }
     if ((changes.filterFlags || changes.showFilters || changes.filterMode || changes.gradientMode)) {
@@ -651,6 +659,10 @@ export class BlockOverviewGraphComponent implements AfterViewInit, OnDestroy, On
   getColorFunction(): ((tx: TxView) => Color) {
     if (this.overrideColors) {
       return this.overrideColors;
+    } else if (this.pendingMode) {
+      return pendingMessageColorFunction;
+    } else if (this.confirmedMode) {
+      return confirmedCategoryColorFunction;
     } else if (this.filterFlags) {
       return this.getFilterColorFunction(this.filterFlags, this.gradientMode);
     } else if (this.activeFilterFlags) {
@@ -661,6 +673,10 @@ export class BlockOverviewGraphComponent implements AfterViewInit, OnDestroy, On
   }
 
   getFilterColorFunction(flags: bigint, gradient: GradientMode): ((tx: TxView) => Color) {
+    if (this.pendingMode) return pendingMessageColorFunction;
+    if (this.confirmedMode) {
+      return confirmedCategoryColorFunction;
+    }
     return (tx: TxView) => {
       let matches = false;
       switch (this.filterMode) {

@@ -1,41 +1,26 @@
-<div class="fee-estimation-wrapper" *ngIf="$rewardStats | async as rewardStats; else loadingReward">
+<div class="fee-estimation-wrapper" *ngIf="(confirmedMode ? confirmedData : ($rewardStats | async)) as rewardStats; else loadingReward">
   <div class="fee-estimation-container">
-    <div class="item">
-      <h5 class="card-title" ngbTooltip="Priority fees paid to block proposers in the recent block sample" placement="bottom">Proposer rewards</h5>
+    <div class="item" *ngFor="let row of rewardRows(rewardStats); trackBy: trackByIndex">
+      <h5 class="card-title" [ngbTooltip]="row.tooltip" placement="bottom">{{ row.label }}</h5>
       <div class="card-text">
         <div class="fee-text">
-          <app-amount [satoshis]="rewardStats.proposerRewards" digitsInfo="1.2-6" [noFiat]="true" [ignoreViewMode]="true"></app-amount>
+          <ng-container *ngIf="row.belowAtomicUnit; else amountValue">&lt;1 <span>nanogram</span></ng-container>
+          <ng-template #amountValue><app-amount *ngIf="row.amount; else legacyAmount" [amount]="row.amount" [compactBlock]="true" [ignoreViewMode]="true"></app-amount></ng-template>
+          <ng-template #legacyAmount><app-amount [satoshis]="row.value" [digitsInfo]="row.digits" [noFiat]="true" [ignoreViewMode]="true"></app-amount></ng-template>
+          <span *ngIf="row.suffix">{{ row.suffix }}</span>
         </div>
-        <span class="fiat"><app-fiat [value]="rewardStats.proposerRewards" digitsInfo="1.0-0"></app-fiat></span>
-      </div>
-    </div>
-    <div class="item">
-      <h5 class="card-title" ngbTooltip="All execution-layer gas fees in the recent block sample" placement="bottom">Execution fees</h5>
-      <div class="card-text">
-        <div class="fee-text">
-          <app-amount [satoshis]="rewardStats.feePerBlock" digitsInfo="1.2-4" [noFiat]="true" [ignoreViewMode]="true"></app-amount>
-          <span>/block</span>
-        </div>
-        <span class="fiat"><app-fiat [value]="rewardStats.feePerBlock" digitsInfo="1.0-0"></app-fiat></span>
-      </div>
-    </div>
-    <div class="item">
-      <h5 class="card-title" ngbTooltip="Average execution-layer gas fee per transaction in the recent block sample" placement="bottom">Average tx fee</h5>
-      <div class="card-text">
-        <div class="fee-text">
-          <app-amount [satoshis]="rewardStats.feePerTx" digitsInfo="1.4-6" [noFiat]="true" [ignoreViewMode]="true"></app-amount>
-          <span>/tx</span>
-        </div>
-        <span class="fiat"><app-fiat [value]="rewardStats.feePerTx" digitsInfo="1.0-0"></app-fiat></span>
+        <span class="fiat">
+          <ng-container *ngIf="row.belowAtomicUnit; else fiatValue">—</ng-container>
+          <ng-template #fiatValue><app-amount *ngIf="row.amount; else legacyFiat" [amount]="row.amount" displayMode="fiat"></app-amount></ng-template>
+          <ng-template #legacyFiat><app-fiat [value]="row.value" digitsInfo="1.0-0"></app-fiat></ng-template>
+        </span>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #loadingReward>
-  <div class="fee-estimation-container loading-container" aria-label="Loading recent execution rewards">
-    <div class="item"><h5 class="card-title">Proposer rewards</h5><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
-    <div class="item"><h5 class="card-title">Execution fees</h5><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
-    <div class="item"><h5 class="card-title">Average tx fee</h5><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
+  <div class="fee-estimation-container loading-container" [attr.aria-label]="confirmedMode ? 'Loading confirmed transaction fees' : 'Loading recent execution rewards'">
+    <div class="item" *ngFor="let label of labels"><h5 class="card-title">{{ label }}</h5><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
   </div>
 </ng-template>

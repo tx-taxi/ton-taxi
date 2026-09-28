@@ -1,3 +1,4 @@
+import { TonNetworkViewsModule } from '@app/ton/ton-network-views.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
@@ -28,12 +29,11 @@ export class BlockRoutingModule { }
 @NgModule({
   imports: [
     CommonModule,
+    TonNetworkViewsModule,
     BlockRoutingModule,
     SharedModule,
   ],
   declarations: [
-    BlockComponent,
-    BlockTransactionsComponent,
   ]
 })
 export class BlockModule { }

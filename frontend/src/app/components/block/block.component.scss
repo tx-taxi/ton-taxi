@@ -30,6 +30,11 @@
     margin-left: 10px;
   }
 }
+
+.ton-block-details { table-layout: fixed; width: 100%; }
+.ton-block-details td { overflow: hidden; overflow-wrap: anywhere; white-space: normal; vertical-align: top; }
+.ton-block-details td:first-child { width: 38%; white-space: normal; }
+.ton-block-details app-truncate { max-width: 100%; min-width: 0; white-space: nowrap; }
 .table {
   tr td {
     &:last-child {

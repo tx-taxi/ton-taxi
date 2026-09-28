@@ -454,3 +454,14 @@ h2 {
   50% { background-color: #8457bb; box-shadow: #ad7de5 0px 0px 18px -2px;}
   100% { background-color: #653b9c; box-shadow: #ad7de57f 0px 0px 12px -2px; }
 }
+// TON messages and actions supply rows to the native list; only long data needs wrapping.
+.native-transaction td { white-space: normal; overflow-wrap: anywhere; }
+.native-transaction td.amount { white-space: nowrap; }
+.native-transaction app-truncate { display: block; max-width: 100%; white-space: nowrap; }
+.native-action .table, .native-message-details .table { table-layout: fixed; }
+.native-action .table td:first-child { width: 35%; }
+.native-action-links app-truncate { display: block; min-width: 0; max-width: 100%; white-space: nowrap; }
+.native-advanced summary, .native-message-details summary { color: var(--info); cursor: pointer; }
+.native-advanced pre { color: var(--fg); white-space: pre-wrap; overflow-wrap: anywhere; max-height: 28rem; overflow: auto; margin-top: .75rem; }
+.native-transaction .summary .float-start { max-width: 100%; }
+.native-transaction .summary app-truncate { display: block; max-width: 100%; white-space: nowrap; }
