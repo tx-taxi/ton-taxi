@@ -1,0 +1,78 @@
+{
+  "startedAt": "2026-09-28T18:55:02.726Z",
+  "nativePort": 4530,
+  "routerPort": 4851,
+  "fixtureSources": [
+    "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-hub/init-frame.json",
+    "/home/lukee/dev/ton-taxi/review/ton/pending-map/snapshot.json"
+  ],
+  "scope": "Compiled local native and hub; recorded blocks for parity. Split-shard identities and pending counts are controlled variants, not live-chain claims. Transaction lists intentionally unavailable in this bounded content/navigation review.",
+  "stages": [
+    {
+      "label": "pending-keyboard-diagnostic",
+      "passed": false,
+      "error": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'https://ton.tx.taxi/mempool-block/0'\n- 'https://ton.tx.taxi/block/100042474'\n                       ^\n\n    at file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:190:14\n    at async checkpoint (file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:121:106)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:184:38"
+    }
+  ],
+  "pages": [
+    {
+      "width": 1440,
+      "pageErrors": [],
+      "directBefore": {
+        "url": "https://ton.tx.taxi/mempool-block/0",
+        "activeElement": "<body>\n  <app-root ng-version=\"20.3.19\" _nghost-ng-c2867490264=\"\" dir=\"ltr\" class=\"ltr-layout\"><router-outlet _ngcontent-ng-c2867490264=\"\"></router-outlet><app-master-page _nghost-ng-c3979408966=\"\" class=\"ng-star-inserted\"><header _ngcontent-ng-c3979408966=\"\" class=\"sticky-header ng-star-inserted\"><",
+        "pendingPage": true,
+        "pendingArrow": false,
+        "newestHref": "https://ton.tx.taxi/block/100042474",
+        "timeLtr": false
+      },
+      "directAfter": {
+        "url": "https://ton.tx.taxi/mempool-block/0",
+        "activeElement": "<body>\n  <app-root ng-version=\"20.3.19\" _nghost-ng-c2867490264=\"\" dir=\"ltr\" class=\"ltr-layout\"><router-outlet _ngcontent-ng-c2867490264=\"\"></router-outlet><app-master-page _nghost-ng-c3979408966=\"\" class=\"ng-star-inserted\"><header _ngcontent-ng-c3979408966=\"\" class=\"sticky-header ng-star-inserted\"><",
+        "pendingPage": true,
+        "pendingArrow": false,
+        "newestHref": "https://ton.tx.taxi/block/100042474",
+        "timeLtr": false
+      },
+      "clickedBefore": {
+        "url": "https://ton.tx.taxi/mempool-block/0",
+        "activeElement": "<a _ngcontent-ng-c160550921=\"\" draggable=\"false\" class=\"blockLink ng-tns-c160550921-0\" title=\"4 pending external messages · Last updated 2026-09-28T05:15:18.306Z\" href=\"/mempool-block/0\">&nbsp;</a>",
+        "pendingPage": true,
+        "pendingArrow": true,
+        "newestHref": "https://ton.tx.taxi/block/100042474",
+        "timeLtr": false
+      },
+      "clickedAfter": {
+        "url": "https://ton.tx.taxi/block/100042474",
+        "activeElement": "<body>\n  <app-root ng-version=\"20.3.19\" _nghost-ng-c2867490264=\"\" dir=\"ltr\" class=\"ltr-layout\"><router-outlet _ngcontent-ng-c2867490264=\"\"></router-outlet><app-master-page _nghost-ng-c3979408966=\"\" class=\"ng-star-inserted\"><header _ngcontent-ng-c3979408966=\"\" class=\"sticky-header ng-star-inserted\"><",
+        "pendingPage": false,
+        "pendingArrow": false,
+        "newestHref": "https://ton.tx.taxi/block/100042474",
+        "timeLtr": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://ton.tx.taxi/mempool-block/0",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    }
+  ],
+  "redirects": [],
+  "parity": [],
+  "pending": [],
+  "errors": [],
+  "finishedAt": "2026-09-28T18:55:06.847Z",
+  "passed": false
+}

@@ -1,0 +1,590 @@
+{
+  "startedAt": "2026-09-28T19:01:37.733Z",
+  "stage": "native",
+  "expectedExport": "2bc11808b22c347e",
+  "scope": "Real public HTTPS, live APIs and browser redirects; no request/API/WebSocket interception or fixtures. Chromium certificate checks enabled.",
+  "dnsOverride": {
+    "host": "masterchain.ton.tx.taxi",
+    "address": "40.160.19.141",
+    "mechanism": "Chromium host-resolver-rules; HTTPS and certificate validation retained"
+  },
+  "stages": [
+    {
+      "label": "native-desktop",
+      "passed": true,
+      "elapsedMs": 13229
+    },
+    {
+      "label": "native-mobile",
+      "passed": true,
+      "elapsedMs": 3985
+    }
+  ],
+  "pages": [
+    {
+      "label": "native-desktop",
+      "width": 1440,
+      "pageErrors": [],
+      "consoleErrors": [
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Framing 'https://tx.taxi/' violates the following Content Security Policy directive: \"frame-ancestors https://btc.tx.taxi https://eth.tx.taxi https://xmr.tx.taxi https://ltc.tx.taxi https://bch.tx.taxi https://dash.tx.taxi https://ton.tx.taxi https://doge.tx.taxi\". The request has been blocked.\n",
+        "Access to XMLHttpRequest at 'https://tx.taxi/api/v1/health' from origin 'https://masterchain.ton.tx.taxi' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "Failed to load resource: net::ERR_FAILED",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Access to XMLHttpRequest at 'https://tx.taxi/api/v1/chains' from origin 'https://masterchain.ton.tx.taxi' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "Failed to load resource: net::ERR_FAILED",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Access to XMLHttpRequest at 'https://tx.taxi/api/v1/health' from origin 'https://masterchain.ton.tx.taxi' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "Failed to load resource: net::ERR_FAILED"
+      ],
+      "failedRequests": [
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        },
+        {
+          "url": "https://ton.tx.taxi/api/ton/rates",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/api/ton/network-transactions?limit=50",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/api/ton/block/(0%2C8000000000000000%2C100166109)/transactions?limit=50",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        },
+        {
+          "url": "https://ton.tx.taxi/api/ton/network-transactions?limit=50",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "error": "net::ERR_BLOCKED_BY_RESPONSE"
+        },
+        {
+          "url": "https://tx.taxi/api/v1/health",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/api/ton/block/(-1%2C8000000000000000%2C95670435)/shards",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/api/ton/block/(-1%2C8000000000000000%2C95670435)/transactions?limit=50",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        },
+        {
+          "url": "https://tx.taxi/api/v1/chains",
+          "error": "net::ERR_FAILED"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        },
+        {
+          "url": "https://ton.tx.taxi/api/v1/blocks/100166130?workchain=0",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://ton.tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tx.taxi/api/v1/health",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/(0%2C8000000000000000%2C100166109)",
+          "status": 308
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100166109",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95670435)",
+          "status": 308
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/block/95670435",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100160666",
+          "status": 200
+        }
+      ],
+      "tonAssets": [],
+      "baseTls": {
+        "issuer": "WE1",
+        "protocol": "TLS 1.3",
+        "subjectName": "tx.taxi",
+        "validFrom": 1790430736,
+        "validTo": 1798210193
+      },
+      "roots": [
+        {
+          "url": "https://ton.tx.taxi/",
+          "canonical": "https://ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://ton.tx.taxi/block/100166109",
+            "origin": "https://ton.tx.taxi",
+            "workchain": 0,
+            "shard": "8000000000000000",
+            "seqno": "100166109",
+            "id": "(0,8000000000000000,100166109)"
+          },
+          "cubeTexts": [
+            "100166109 1.003 GRAM9 transactionsJust now",
+            "100166108 1.002 GRAM6 transactionsJust now",
+            "100166107 1.007 GRAM18 transactionsJust now",
+            "100166106 1.004 GRAM11 transactionsJust now",
+            "100166105 1.006 GRAM21 transactionsJust now",
+            "100166104 1.007 GRAM21 transactionsJust now",
+            "100166103 1.003 GRAM11 transactionsJust now",
+            "100166102 1.003 GRAM11 transactionsJust now",
+            "100166101Loading",
+            "100166100 1.01 GRAM40 transactionsJust now",
+            "100166099 1.002 GRAM4 transactionsJust now",
+            "100166098 1.032 GRAM24 transactionsJust now",
+            "100166097 1.008 GRAM25 transactionsJust now",
+            "100166096 1.005 GRAM15 transactionsJust now",
+            "100166095 1.004 GRAM12 transactionsJust now",
+            "100166094 1.007 GRAM24 transactionsJust now",
+            "100166093 1.007 GRAM18 transactionsJust now",
+            "100166092 1.023 GRAM23 transactionsJust now",
+            "100166091 1.004 GRAM11 transactionsJust now",
+            "100166090Loading",
+            "100166089Loading",
+            "100166088Loading",
+            "100166087Loading",
+            "100166086Loading",
+            "100166085Loading",
+            "100166084Loading",
+            "100166083Loading",
+            "100166082Loading"
+          ]
+        },
+        {
+          "url": "https://ton.tx.taxi/",
+          "canonical": "https://ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://ton.tx.taxi/block/100166123",
+            "origin": "https://ton.tx.taxi",
+            "workchain": 0,
+            "shard": "8000000000000000",
+            "seqno": "100166123",
+            "id": "(0,8000000000000000,100166123)"
+          },
+          "cubeTexts": [
+            "100166123 1.009 GRAM14 transactionsJust now",
+            "100166122 1.01 GRAM32 transactionsJust now",
+            "100166121 1.01 GRAM24 transactionsJust now",
+            "100166120 1.006 GRAM17 transactionsJust now",
+            "100166119 1.005 GRAM16 transactionsJust now",
+            "100166118 1.005 GRAM16 transactionsJust now",
+            "100166117 1.003 GRAM13 transactionsJust now",
+            "100166116 1.01 GRAM23 transactionsJust now",
+            "100166115 1.003 GRAM10 transactionsJust now",
+            "100166114 1.005 GRAM18 transactionsJust now",
+            "100166113 1.018 GRAM56 transactionsJust now",
+            "100166112 1.002 GRAM6 transactionsJust now",
+            "100166111 1.002 GRAM6 transactionsJust now",
+            "100166110 1.002 GRAM8 transactionsJust now",
+            "100166109 1.003 GRAM9 transactionsJust now",
+            "100166108 1.002 GRAM6 transactionsJust now",
+            "100166107 1.007 GRAM18 transactionsJust now",
+            "100166106 1.004 GRAM11 transactionsJust now",
+            "100166105 1.006 GRAM21 transactionsJust now",
+            "100166104 1.007 GRAM21 transactionsJust now",
+            "100166103 1.003 GRAM11 transactionsJust now",
+            "100166102 1.003 GRAM11 transactionsJust now",
+            "100166101 1.005 GRAM6 transactionsJust now",
+            "100166100 1.01 GRAM40 transactionsJust now",
+            "100166099 1.002 GRAM4 transactionsJust now",
+            "100166098 1.032 GRAM24 transactionsJust now",
+            "100166097 1.008 GRAM25 transactionsJust now",
+            "100166096 1.005 GRAM15 transactionsJust now"
+          ]
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "canonical": "https://masterchain.ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://masterchain.ton.tx.taxi/block/95670435",
+            "origin": "https://masterchain.ton.tx.taxi",
+            "workchain": -1,
+            "shard": "8000000000000000",
+            "seqno": "95670435",
+            "id": "(-1,8000000000000000,95670435)"
+          },
+          "cubeTexts": [
+            "95670435 2.704 GRAM3 transactionsJust now",
+            "95670434 2.709 GRAM3 transactionsJust now",
+            "95670433 2.701 GRAM3 transactionsJust now",
+            "95670432 2.701 GRAM3 transactionsJust now",
+            "95670431 2.705 GRAM3 transactionsJust now",
+            "95670430 2.704 GRAM3 transactionsJust now",
+            "95670429 2.705 GRAM3 transactionsJust now",
+            "95670428 2.705 GRAM3 transactionsJust now",
+            "95670427 2.705 GRAM3 transactionsJust now",
+            "95670426 2.703 GRAM3 transactionsJust now",
+            "95670425 2.703 GRAM3 transactionsJust now",
+            "95670424 2.702 GRAM3 transactionsJust now",
+            "95670423 2.701 GRAM3 transactionsJust now",
+            "95670422 2.705 GRAM3 transactionsJust now",
+            "95670421 2.701 GRAM3 transactionsJust now",
+            "95670420 2.702 GRAM3 transactionsJust now",
+            "95670419 2.709 GRAM3 transactionsJust now",
+            "95670418 4.703 GRAM3 transactionsJust now",
+            "95670417 2.702 GRAM3 transactionsJust now",
+            "95670416 2.701 GRAM3 transactionsJust now",
+            "95670415 2.704 GRAM3 transactionsJust now",
+            "95670414 2.702 GRAM3 transactionsJust now",
+            "95670413 2.703 GRAM3 transactionsJust now",
+            "95670412 2.703 GRAM3 transactionsJust now",
+            "95670411 2.702 GRAM3 transactionsJust now",
+            "95670410 3.704 GRAM3 transactionsJust now",
+            "95670409 2.705 GRAM3 transactionsJust now",
+            "95670408 2.701 GRAM3 transactionsJust now"
+          ]
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "canonical": "https://masterchain.ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://masterchain.ton.tx.taxi/block/95670435",
+            "origin": "https://masterchain.ton.tx.taxi",
+            "workchain": -1,
+            "shard": "8000000000000000",
+            "seqno": "95670435",
+            "id": "(-1,8000000000000000,95670435)"
+          },
+          "cubeTexts": [
+            "95670435 2.704 GRAM3 transactionsJust now",
+            "95670434 2.709 GRAM3 transactionsJust now",
+            "95670433 2.701 GRAM3 transactionsJust now",
+            "95670432 2.701 GRAM3 transactionsJust now",
+            "95670431 2.705 GRAM3 transactionsJust now",
+            "95670430 2.704 GRAM3 transactionsJust now",
+            "95670429 2.705 GRAM3 transactionsJust now",
+            "95670428 2.705 GRAM3 transactionsJust now",
+            "95670427 2.705 GRAM3 transactionsJust now",
+            "95670426 2.703 GRAM3 transactionsJust now",
+            "95670425 2.703 GRAM3 transactionsJust now",
+            "95670424 2.702 GRAM3 transactionsJust now",
+            "95670423 2.701 GRAM3 transactionsJust now",
+            "95670422 2.705 GRAM3 transactionsJust now",
+            "95670421 2.701 GRAM3 transactionsJust now",
+            "95670420 2.702 GRAM3 transactionsJust now",
+            "95670419 2.709 GRAM3 transactionsJust now",
+            "95670418 4.703 GRAM3 transactionsJust now",
+            "95670417 2.702 GRAM3 transactionsJust now",
+            "95670416 2.701 GRAM3 transactionsJust now",
+            "95670415 2.704 GRAM3 transactionsJust now",
+            "95670414 2.702 GRAM3 transactionsJust now",
+            "95670413 2.703 GRAM3 transactionsJust now",
+            "95670412 2.703 GRAM3 transactionsJust now",
+            "95670411 2.702 GRAM3 transactionsJust now",
+            "95670410 3.704 GRAM3 transactionsJust now",
+            "95670409 2.705 GRAM3 transactionsJust now",
+            "95670408 2.701 GRAM3 transactionsJust now"
+          ]
+        },
+        {
+          "url": "https://ton.tx.taxi/",
+          "canonical": "https://ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://ton.tx.taxi/block/100166129",
+            "origin": "https://ton.tx.taxi",
+            "workchain": 0,
+            "shard": "8000000000000000",
+            "seqno": "100166129",
+            "id": "(0,8000000000000000,100166129)"
+          },
+          "cubeTexts": [
+            "100166129 1.007 GRAM16 transactionsJust now",
+            "100166128 1.018 GRAM19 transactionsJust now",
+            "100166127 1.001 GRAM4 transactionsJust now",
+            "100166126 1.003 GRAM10 transactionsJust now",
+            "100166125 1.011 GRAM9 transactionsJust now",
+            "100166124 1.008 GRAM23 transactionsJust now",
+            "100166123 1.009 GRAM14 transactionsJust now",
+            "100166122 1.01 GRAM32 transactionsJust now",
+            "100166121Loading",
+            "100166120 1.006 GRAM17 transactionsJust now",
+            "100166119 1.005 GRAM16 transactionsJust now",
+            "100166118 1.005 GRAM16 transactionsJust now",
+            "100166117 1.003 GRAM13 transactionsJust now",
+            "100166116 1.01 GRAM23 transactionsJust now",
+            "100166115 1.003 GRAM10 transactionsJust now",
+            "100166114 1.005 GRAM18 transactionsJust now",
+            "100166113 1.018 GRAM56 transactionsJust now",
+            "100166112 1.002 GRAM6 transactionsJust now",
+            "100166111 1.002 GRAM6 transactionsJust now",
+            "100166110 1.002 GRAM8 transactionsJust now",
+            "100166109 1.003 GRAM9 transactionsJust now",
+            "100166108 1.002 GRAM6 transactionsJust now",
+            "100166107 1.007 GRAM18 transactionsJust now",
+            "100166106 1.004 GRAM11 transactionsJust now",
+            "100166105 1.006 GRAM21 transactionsJust now",
+            "100166104 1.007 GRAM21 transactionsJust now",
+            "100166103 1.003 GRAM11 transactionsJust now",
+            "100166102 1.003 GRAM11 transactionsJust now"
+          ]
+        }
+      ],
+      "masterTls": {
+        "issuer": "YR2",
+        "protocol": "TLS 1.3",
+        "subjectName": "masterchain.ton.tx.taxi",
+        "validFrom": 1790618494,
+        "validTo": 1798394493
+      }
+    },
+    {
+      "label": "native-mobile",
+      "width": 390,
+      "pageErrors": [],
+      "consoleErrors": [
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Access to XMLHttpRequest at 'https://tx.taxi/api/v1/chains' from origin 'https://masterchain.ton.tx.taxi' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.",
+        "Failed to load resource: net::ERR_FAILED"
+      ],
+      "failedRequests": [
+        {
+          "url": "https://ton.tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        },
+        {
+          "url": "https://tx.taxi/api/v1/chains",
+          "error": "net::ERR_FAILED"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://ton.tx.taxi/block/100160666",
+          "status": 200
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        }
+      ],
+      "tonAssets": [],
+      "roots": [
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "canonical": "https://masterchain.ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://masterchain.ton.tx.taxi/block/95670460",
+            "origin": "https://masterchain.ton.tx.taxi",
+            "workchain": -1,
+            "shard": "8000000000000000",
+            "seqno": "95670460",
+            "id": "(-1,8000000000000000,95670460)"
+          },
+          "cubeTexts": [
+            "95670460 2.706 GRAM3 transactionsJust now",
+            "95670459 2.708 GRAM3 transactionsJust now",
+            "95670458 2.702 GRAM3 transactionsJust now",
+            "95670457 2.702 GRAM3 transactionsJust now",
+            "95670456 2.702 GRAM3 transactionsJust now",
+            "95670455 2.701 GRAM3 transactionsJust now",
+            "95670454 2.703 GRAM3 transactionsJust now",
+            "95670453 2.703 GRAM3 transactionsJust now",
+            "95670452 2.702 GRAM3 transactionsJust now",
+            "95670451 2.702 GRAM3 transactionsJust now",
+            "95670450 2.701 GRAM3 transactionsJust now",
+            "95670449 2.702 GRAM3 transactionsJust now",
+            "95670448 2.703 GRAM3 transactionsJust now",
+            "95670447 2.70 GRAM3 transactionsJust now"
+          ]
+        }
+      ]
+    }
+  ],
+  "blocks": [
+    {
+      "url": "https://ton.tx.taxi/block/100166109",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100166109",
+      "id": "(0,8000000000000000,100166109)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95670435",
+      "origin": "https://masterchain.ton.tx.taxi",
+      "workchain": -1,
+      "shard": "8000000000000000",
+      "seqno": "95670435",
+      "id": "(-1,8000000000000000,95670435)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100166109",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100166109",
+      "id": "(0,8000000000000000,100166109)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95670435",
+      "origin": "https://masterchain.ton.tx.taxi",
+      "workchain": -1,
+      "shard": "8000000000000000",
+      "seqno": "95670435",
+      "id": "(-1,8000000000000000,95670435)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100160666",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100160666",
+      "id": "(0,8000000000000000,100160666)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100160666",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100160666",
+      "id": "(0,8000000000000000,100160666)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95670460",
+      "origin": "https://masterchain.ton.tx.taxi",
+      "workchain": -1,
+      "shard": "8000000000000000",
+      "seqno": "95670460",
+      "id": "(-1,8000000000000000,95670460)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    }
+  ],
+  "redirects": [
+    {
+      "source": "https://ton.tx.taxi/block/(0%2C8000000000000000%2C100166109)",
+      "destination": "https://ton.tx.taxi/block/100166109",
+      "chain": [
+        {
+          "url": "https://ton.tx.taxi/block/(0%2C8000000000000000%2C100166109)",
+          "status": 308,
+          "location": "/block/100166109"
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100166109",
+          "status": 200
+        }
+      ]
+    },
+    {
+      "source": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95670435)",
+      "destination": "https://masterchain.ton.tx.taxi/block/95670435",
+      "chain": [
+        {
+          "url": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95670435)",
+          "status": 308,
+          "location": "https://masterchain.ton.tx.taxi/block/95670435"
+        },
+        {
+          "url": "https://masterchain.ton.tx.taxi/block/95670435",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-09-28T19:01:55.073Z",
+  "passed": true
+}

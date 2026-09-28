@@ -1,4 +1,4 @@
-# TON host views — release candidate, not deployed
+# TON host views — deployed and verified
 
 2026-09-28. Approved behavior: `ton.tx.taxi` opens Basechain; `masterchain.ton.tx.taxi` opens Masterchain. Both domains serve the same native application and collectors. The router continues to advertise one TON explorer and one Basechain hub band. The existing workchain selector navigates between the fixed hosts with the existing transition surface.
 
@@ -12,7 +12,7 @@
 
 ## Source and evidence
 
-Native isolated clone: `/tmp/ton-strip-consistency`, based on `422ad70cf98bf91555fe1a57dc1eff57867b231d`. Cube cleanup commit: `e099973be`. Router isolated clone: `/tmp/ton-strip-consistency-router`, based on `5cdfca21` (previously verified documentation head; network access prevented refreshing it this session). Original checkouts and other agents' changes are untouched.
+Native isolated clone: `/tmp/ton-strip-consistency`, based on `422ad70cf98bf91555fe1a57dc1eff57867b231d`. Cube cleanup commit: `e099973be`. Router isolated clone: `/tmp/ton-strip-consistency-router`, based on `5cdfca21` (remote head rechecked on 2026-09-28). Original checkouts and other agents' changes are untouched.
 
 Checks already passed:
 
@@ -23,12 +23,32 @@ Checks already passed:
 - Router compilation and relevant routing/access suites; its exact final count and controlled handoff/transition evidence are recorded in the router's `review/ton-hosts/`.
 - Syntax and whitespace checks.
 
-These are controlled source checks, not a production or visual acceptance claim. Full frontend build fails at theme generation with `spawnSync /bin/sh EPERM`; local listening also fails with `EPERM`. Coolify/network reads fail with DNS socket permission errors. No DNS, certificate, deployment, new browser screenshots, running review server or regenerated hub bundle is claimed.
+Access was restored on 2026-09-28. Full builds, rebuilt export, actual matched-data native/hub review and public production verification passed. Exact runtime and deployment IDs are in [release.json](../ton-clean-urls/release.json). Native `219d2e7b9` and router `d1967c8` are live. Production evidence and observed limits are in [the browser production review](../ton-clean-urls/browser/production/README.md).
 
-## Finish in an environment with build and network access
+`masterchain.ton.tx.taxi` uses the same app on game-1 (`40.160.19.141`), a user-approved DNS-only A record, and its own valid Let's Encrypt certificate. The main TON hostname stays proxied. Coolify preserved environment variables, volume, health settings and native repository; only the domain list and its generated routing labels changed. Both public host scopes advance live.
+
+## Local review commands
+
+Native (already running, PID 2138693):
+
+```sh
+cd /tmp/ton-strip-consistency
+TON_API_KEY_FILE=/home/lukee/.config/tx-taxi/ton/tonapi.key TON_STATIC_ROOT=/tmp/ton-strip-consistency/frontend/dist/mempool/browser TON_DATA_DIR=/home/lukee/.cache/ton-host-release-review PORT=4530 node adapter/ton-server.cjs
+```
+
+Router (already running, PID 2148959):
+
+```sh
+cd /tmp/ton-strip-consistency-router
+HOST=127.0.0.1 PORT=4851 node dist/index.js
+```
+
+URLs: native `http://127.0.0.1:4530`, hub `http://127.0.0.1:4851`. To stop only these review processes, first confirm ownership with `ss -ltnp '( sport = :4530 or sport = :4851 )'`, then `kill 2138693 2148959`. Ports 4330/4592 and original checkouts belong to other work and were preserved.
+
+## Release procedure used
 
 1. Refresh the approved native/router remote heads and inspect other work before applying the candidate patches. Native repository is `https://github.com/tx-taxi/ton-taxi.git`; do not inherit the historical ETH remote. Do not overwrite another agent's work. The isolated clone origins point at local source checkouts.
-2. Inspect Cloudflare's actual edge certificate coverage. On a full-zone setup Universal SSL alone covers only the apex and first-level subdomains; this nested host needs appropriate existing or additional coverage. Preserve the Cloudflare proxy. Do not silently use DNS-only or purchase a certificate product. Reference: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/
+2. Inspect Cloudflare's actual edge certificate coverage. On a full-zone setup Universal SSL alone covers only the apex and first-level subdomains; this nested host needs appropriate existing or additional coverage. The user explicitly approved DNS-only for this nested host; retain the main host proxy. Do not silently purchase a certificate product. Reference: https://developers.cloudflare.com/ssl/edge-certificates/universal-ssl/limitations/
 3. Point the new hostname at the existing TON origin and add `https://masterchain.ton.tx.taxi` to the same Coolify application, preserving `https://ton.tx.taxi`, `/data/ton`, current environment and health settings. Last verified app: `hnovtmaezijzd4lf7lpnczef`, game-1 `40.160.19.141`, container port 8080, `/healthz`. Verify the current configuration before changing it. Check edge and origin TLS, exact Host forwarding, cache behavior and WebSocket upgrades. Both hosts must work before publishing selector/router links.
 4. Build and export the exact native component sources:
 
@@ -42,8 +62,8 @@ These are controlled source checks, not a production or visual acceptance claim.
    node hub/build.cjs /tmp/ton-host-native-export
    ```
 
-   Generate a content-hashed TON export from `strip.js`, `strip.css` and `feed.js`; copy the complete export into the router's `public/assets/native-strips/ton/<hash>/`. Update only the existing `ton-native-strip` loader in `public/assets/hub-strips.js`; preserve immutable old versions. Verify every provenance source hash. The current old `d967359b7d302529` bundle does **not** contain this cube cleanup.
+   Generate a content-hashed TON export from `strip.js`, `strip.css` and `feed.js`; copy the complete export into the router's `public/assets/native-strips/ton/<hash>/`. Update only the existing `ton-native-strip` loader in `public/assets/hub-strips.js`; preserve immutable old versions. Verify every provenance source hash. This release uses `2bc11808b22c347e`; old immutable exports remain preserved.
 5. Build the router. Use controlled matched block/pending snapshots for native-versus-hub desktop/mobile screenshots at 1440 and 390 px, and inspect both. Verify both TON host roots, old numeric URLs, full tuples, typed/pasted search, root/hub logo clicks, host selector, Original/Taxi themes, stale/disconnected data and two simultaneous live sockets. A Basechain hub snapshot must be rejected by a Masterchain viewer. Confirm one hub band/dropdown entry and correct hover/entity destinations.
 6. Deploy the verified native and corresponding hub export/router release within the existing user authorization, then check public HTTPS, API workchain identities, live block progression, search and transitions. Record exact runtime revisions, evidence and host certificate status in explorer-kit. Do not advance approved revision locks before those checks pass.
 
-Explorer-kit changes are supplied separately as `/tmp/ton-host-explorer-kit.patch` because the kit is read-only in this session.
+Explorer-kit records the implemented host/URL contract, final source/export paths, the explicit DNS-only exception and bounded production evidence. Its unrelated dirty work is preserved.

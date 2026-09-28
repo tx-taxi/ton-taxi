@@ -1,0 +1,127 @@
+{
+  "startedAt": "2026-09-28T19:03:21.842Z",
+  "stage": "integration",
+  "expectedExport": "2bc11808b22c347e",
+  "scope": "Real public HTTPS, live APIs and browser redirects; no request/API/WebSocket interception or fixtures. Chromium certificate checks enabled.",
+  "dnsOverride": {
+    "host": "masterchain.ton.tx.taxi",
+    "address": "40.160.19.141",
+    "mechanism": "Chromium host-resolver-rules; HTTPS and certificate validation retained"
+  },
+  "stages": [
+    {
+      "label": "master-router-integration",
+      "passed": true,
+      "elapsedMs": 3991
+    }
+  ],
+  "pages": [
+    {
+      "label": "master-router-integration",
+      "width": 1440,
+      "pageErrors": [],
+      "consoleErrors": [
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked.",
+        "Connecting to 'https://tx.taxi/cdn-cgi/rum?' violates the following Content Security Policy directive: \"default-src 'none'\". Note that 'connect-src' was not explicitly set, so 'default-src' is used as a fallback. The action has been blocked."
+      ],
+      "failedRequests": [
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "csp"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/hub-handoff",
+          "status": 200
+        }
+      ],
+      "tonAssets": [],
+      "roots": [
+        {
+          "url": "https://masterchain.ton.tx.taxi/",
+          "canonical": "https://masterchain.ton.tx.taxi/",
+          "visibleBlock": {
+            "url": "https://masterchain.ton.tx.taxi/block/95670672",
+            "origin": "https://masterchain.ton.tx.taxi",
+            "workchain": -1,
+            "shard": "8000000000000000",
+            "seqno": "95670672",
+            "id": "(-1,8000000000000000,95670672)"
+          },
+          "cubeTexts": [
+            "95670672 2.703 GRAM3 transactionsJust now",
+            "95670671 2.707 GRAM3 transactionsJust now",
+            "95670670 2.704 GRAM3 transactionsJust now",
+            "95670669 2.704 GRAM3 transactionsJust now",
+            "95670668 3.705 GRAM3 transactionsJust now",
+            "95670667 2.702 GRAM3 transactionsJust now",
+            "95670666 2.701 GRAM3 transactionsJust now",
+            "95670665 2.704 GRAM3 transactionsJust now",
+            "95670664 2.70 GRAM3 transactionsJust now",
+            "95670663 1.70 GRAM3 transactionsJust now",
+            "95670662 2.70 GRAM3 transactionsJust now",
+            "95670661 3.705 GRAM3 transactionsJust now",
+            "95670660 2.703 GRAM3 transactionsJust now",
+            "95670659 2.739 GRAM3 transactionsJust now",
+            "95670658 2.795 GRAM3 transactionsJust now",
+            "95670657 2.705 GRAM3 transactionsJust now",
+            "95670656 1.70 GRAM3 transactionsJust now",
+            "95670655 3.706 GRAM3 transactionsJust now",
+            "95670654 2.717 GRAM3 transactionsJust now",
+            "95670653 2.713 GRAM3 transactionsJust now",
+            "95670652 2.71 GRAM3 transactionsJust now",
+            "95670651 1.70 GRAM3 transactionsJust now",
+            "95670650 2.702 GRAM3 transactionsJust now",
+            "95670649 3.702 GRAM3 transactionsJust now",
+            "95670648 2.706 GRAM3 transactionsJust now",
+            "95670647 2.703 GRAM3 transactionsJust now",
+            "95670646 2.701 GRAM3 transactionsJust now",
+            "95670645 2.702 GRAM3 transactionsJust now"
+          ]
+        }
+      ],
+      "routerApis": [
+        {
+          "path": "/api/v1/chains",
+          "status": 200,
+          "type": "cors"
+        },
+        {
+          "path": "/api/v1/health",
+          "status": 200,
+          "type": "cors"
+        }
+      ],
+      "handoffReplies": [
+        {
+          "origin": "https://tx.taxi",
+          "chainId": "ton",
+          "noncePresent": true,
+          "snapshotPresent": false
+        }
+      ],
+      "typedSearchDestination": "https://masterchain.ton.tx.taxi/block/95670672",
+      "integrationConsoleErrors": []
+    }
+  ],
+  "blocks": [
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95670672",
+      "origin": "https://masterchain.ton.tx.taxi",
+      "workchain": -1,
+      "shard": "8000000000000000",
+      "seqno": "95670672",
+      "id": "(-1,8000000000000000,95670672)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    }
+  ],
+  "redirects": [],
+  "finishedAt": "2026-09-28T19:03:25.949Z",
+  "passed": true
+}

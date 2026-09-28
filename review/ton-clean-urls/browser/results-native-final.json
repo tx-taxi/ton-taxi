@@ -1,0 +1,238 @@
+{
+  "startedAt": "2026-09-28T18:57:26.287Z",
+  "nativePort": 4530,
+  "routerPort": 4851,
+  "fixtureSources": [
+    "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-hub/init-frame.json",
+    "/home/lukee/dev/ton-taxi/review/ton/pending-map/snapshot.json"
+  ],
+  "scope": "Compiled local native and hub; recorded blocks for parity. Split-shard identities and pending counts are controlled variants, not live-chain claims. Transaction lists intentionally unavailable in this bounded content/navigation review.",
+  "stages": [
+    {
+      "label": "native-clean-navigation-1440",
+      "passed": true,
+      "elapsedMs": 13284
+    },
+    {
+      "label": "native-clean-navigation-390",
+      "passed": true,
+      "elapsedMs": 12618
+    },
+    {
+      "label": "canonical-host-hydration-and-locale",
+      "passed": true,
+      "elapsedMs": 4418
+    }
+  ],
+  "pages": [
+    {
+      "width": 1440,
+      "pageErrors": [],
+      "oldTupleDestination": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "pendingArrowBeforeKey": 1,
+      "keyboardDestination": "https://ton.tx.taxi/block/100042474"
+    },
+    {
+      "width": 390,
+      "pageErrors": [],
+      "oldTupleDestination": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "pendingArrowBeforeKey": 1,
+      "keyboardDestination": "https://ton.tx.taxi/block/100042474"
+    },
+    {
+      "width": 1440,
+      "pageErrors": [],
+      "homeCanonicalAfterCrossHost": "https://ton.tx.taxi/",
+      "localeBody": "Unavailable\nUnavailable\nUnavailable\nUnavailable\nUnavailable\nUnavailable\n \n100042474\n \n \n1.01 GRAM\n12 transactions\nJust now\n \n100042473\n \n \n1.001 GRAM\n6 transactions\nJust now\n \n100042472\n \n \n1.002 GRAM\n7 transactions\nJust now\n \n100042471\n \n \n1.005 GRAM\n21 transactions\nJust now\n \n100042470\n \n \n1.002 GRAM\n11 transactions\nJust now\n \n100042469\n \n \n1.019 GRAM\n43 transactions\nJust now\n \n100042468\n \n \n1.00 GRAM\n0 transactions\nJust now\nBlock\n100042474\n✕\nBlock ID\t\n(0,400000000000000\n0,100042474)\n(0,4000000000000000,100042474)\n\nTimestamp\t‎2026-09-27 22:15:02\nWorkchain\t0\nShard\t4000000000000000\nTransactions\t12\nCollected fees\t1.010456926 GRAM\nBlock transactions are temporarily unavailable\n\n\nRoot hash\t\nc2fe0a8cf60739b4ee50f2bc56ccb5254df798760cdcf1c731e9\n2411ef18968d\nc2fe0a8cf60739b4ee50f2bc56ccb5254df798760cdcf1c731e92411ef18968d\n\nFile hash\t\n26ec6c005627ebd67885cfef6a4f5d83b7dd981ff9737ff0eac0\nd8c36fdc7303\n26ec6c005627ebd67885cfef6a4f5d83b7dd981ff9737ff0eac0d8c36fdc7303\n\nLogical time\t106387386000000 – 106387386000017\nPrevious blocks\t\n(0,4000000000000000,10\n0042473)\n(0,4000000000000000,100042473)\n\nBOC\tDownload BOC\nAdvanced block data\nDetails\nTransactions\nBlock transactions are temporarily unavailable\n\n\n\n\n\nEnglish\nAUD\nCAD\nCHF\nEUR\nGBP\nJPY\nUSD\nUTC-7 - Mountain Standard Time (MST)\nUTC - Greenwich Mean Time (GMT)\n────\nUTC-12 - Anywhere on Earth (AoE)\nUTC-11 - Samoa Standard Time (SST)\nUTC-10 - Hawaii Standard Time (HST)\nUTC-9 - Alaska Standard Time (AKST)\nUTC-8 - Pacific Standard Time (PST)\nUTC-6 - Central Standard Time (CST)\nUTC-5 - Eastern Standard Time (EST)\nUTC-4 - Atlantic Standard Time (AST)\nUTC-3 - Argentina Time (ART)\nUTC-2 - Fernando de Noronha Time (FNT)\nUTC-1 - Azores Time (AZOT)\nUTC+1 - Central European Time (CET)\nUTC+2 - Eastern European Time (EET)\nUTC+3 - Moscow Standard Time (MSK)\nUTC+4 - Armenia Time (AMT)\nUTC+5 - Pakistan Standard Time (PKT)\nUTC+6 - Xinjiang Time (XJT)\nUTC+7 - Indochina Time (ICT)\nUTC+8 - Hong Kong Time (HKT)\nUTC+9 - Japan Standard Time (JST)\nUTC+10 - Australian Eastern Standard Time (AEST)\nUTC+11 - Norfolk Time (NFT)\nUTC+12 - New Zealand Standard Time (NZST)\nUTC+13 - Tonga Time (TOT)\nUTC+14 - Line Islands Time (LINT)\nGRAM\nnanograms\nFiat\nton.tx.taxi\nMempool Original\n\nTON blocks, transactions, and accounts\n\nExplore\n\nDashboard\n\nRecent Blocks\n\nRecent Transactions\n\nJettons\n\nNFT Collections\n\nMarkets\n\nValidators\n\nTON DNS\n\nNetwork Configuration\n\nTON\n\nWhat is TON?\n\nBlocks\n\nTransactions\n\nMessages and fees\n\nton.tx.taxi\n\nAbout\n\nTelegram Channel\n\nContact Us\n\nAGPLv3\n\nLegal\n\nTerms of Service\n\nPrivacy Policy\n\nThird-party Licenses\n\nMade with 🕵️ by u.software",
+      "localeUrl": "https://ton.tx.taxi/en/block/100042474?shard=4000000000000000&showDetails=true",
+      "localePreviousUrl": "https://ton.tx.taxi/en/block/100042473?shard=4000000000000000"
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100042474?shard=4000000000000000",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/mempool-block/0",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100042474?shard=4000000000000000",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/mempool-block/0",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/95511690?workchain=-1",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/en/block/100042474?shard=4000000000000000&showDetails=true",
+      "localPort": 4530,
+      "status": 200
+    }
+  ],
+  "redirects": [
+    {
+      "source": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true",
+      "status": 308,
+      "location": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "destinationHydration": "separate mapped browser navigation"
+    },
+    {
+      "source": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true",
+      "status": 308,
+      "location": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true",
+      "destinationHydration": "separate mapped browser navigation"
+    },
+    {
+      "source": "https://ton.tx.taxi/en/block/(0%2C4000000000000000%2C100042474)?showDetails=true",
+      "status": 308,
+      "location": "/en/block/100042474?shard=4000000000000000&showDetails=true",
+      "destinationHydration": "separate mapped browser navigation"
+    }
+  ],
+  "parity": [],
+  "pending": [],
+  "errors": [],
+  "finishedAt": "2026-09-28T18:57:56.733Z",
+  "passed": true
+}

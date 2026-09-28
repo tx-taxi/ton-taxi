@@ -1,0 +1,74 @@
+{
+  "checkedAt": "2026-09-28T19:02:03.204Z",
+  "verification": "actual public WSS, certificate validation enabled, no fixtures",
+  "result": [
+    {
+      "host": "ton.tx.taxi",
+      "dnsOverride": null,
+      "frames": [
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:01:31.190Z",
+          "head": 100166091,
+          "count": 32,
+          "consecutive": true
+        },
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:01:33.374Z",
+          "head": 100166097,
+          "count": 32,
+          "consecutive": true
+        },
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:01:33.374Z",
+          "head": 100166097,
+          "count": 32,
+          "consecutive": true
+        }
+      ],
+      "advanced": true
+    },
+    {
+      "host": "masterchain.ton.tx.taxi",
+      "dnsOverride": "public DNS answer 40.160.19.141 (system cached prior NXDOMAIN)",
+      "frames": [
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:02:00.526Z",
+          "head": 95670476,
+          "count": 32,
+          "consecutive": true
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:02:00.526Z",
+          "head": 95670476,
+          "count": 32,
+          "consecutive": true
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T19:02:03.021Z",
+          "head": 95670483,
+          "count": 32,
+          "consecutive": true
+        }
+      ],
+      "advanced": true
+    }
+  ]
+}

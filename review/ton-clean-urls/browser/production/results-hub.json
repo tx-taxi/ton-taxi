@@ -1,0 +1,172 @@
+{
+  "startedAt": "2026-09-28T19:02:32.175Z",
+  "stage": "hub",
+  "expectedExport": "2bc11808b22c347e",
+  "scope": "Real public HTTPS, live APIs and browser redirects; no request/API/WebSocket interception or fixtures. Chromium certificate checks enabled.",
+  "dnsOverride": {
+    "host": "masterchain.ton.tx.taxi",
+    "address": "40.160.19.141",
+    "mechanism": "Chromium host-resolver-rules; HTTPS and certificate validation retained"
+  },
+  "stages": [
+    {
+      "label": "hub-1440",
+      "passed": true,
+      "elapsedMs": 6084
+    },
+    {
+      "label": "hub-390",
+      "passed": false,
+      "error": "page.waitForURL: Timeout 25000ms exceeded.\n=========================== logs ===========================\nwaiting for navigation to \"https://ton.tx.taxi/block/100166269\" until \"domcontentloaded\"\n  navigated to \"https://ton.tx.taxi/block/100166268\"\n============================================================\n    at detail (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:40:38)\n    at clickBlock (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:55:96)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:108:14\n    at async withPage (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:78:7)\n    at async checkpoint (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:80:66)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/production.mjs:101:53"
+    }
+  ],
+  "pages": [
+    {
+      "label": "hub-1440",
+      "width": 1440,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/hash700.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/kupool.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/lsoftwaredmcc.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100166253",
+          "status": 200
+        }
+      ],
+      "tonAssets": [
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/feed.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.css",
+          "status": 200
+        }
+      ],
+      "pendingText": " \n \n \nPending\n16 messages\nJust now",
+      "cubeTexts": [
+        "100166253 1.007 GRAM12 transactionsJust now",
+        "100166252 1.017 GRAM22 transactionsJust now",
+        "100166251 1.001 GRAM3 transactionsJust now",
+        "100166250 1.01 GRAM10 transactionsJust now",
+        "100166249 1.005 GRAM18 transactionsJust now",
+        "100166248 1.014 GRAM38 transactionsJust now",
+        "100166247 1.003 GRAM8 transactionsJust now",
+        "100166246 1.004 GRAM12 transactionsJust now"
+      ],
+      "clickedDestination": "https://ton.tx.taxi/block/100166253"
+    },
+    {
+      "label": "hub-390",
+      "width": 390,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/kupool.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/hash700.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/lsoftwaredmcc.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://dash.tx.taxi/resources/mining-pools/discus-fish.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://dash.tx.taxi/resources/mining-pools/antminer.svg",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "url": "https://dash.tx.taxi/resources/mining-pools/viabtc.svg",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100166268",
+          "status": 200
+        }
+      ],
+      "tonAssets": [
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/feed.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.css",
+          "status": 200
+        }
+      ],
+      "pendingText": " \n \n \nPending\n17 messages\nJust now",
+      "cubeTexts": [
+        "100166264 1.004 GRAM13 transactionsJust now",
+        "100166263 1.001 GRAM2 transactionsJust now",
+        "100166262 1.014 GRAM28 transactionsJust now",
+        "100166261 1.001 GRAM4 transactionsJust now",
+        "100166260 1.029 GRAM33 transactionsJust now",
+        "100166259 1.013 GRAM28 transactionsJust now",
+        "100166258 1.004 GRAM9 transactionsJust now",
+        "100166257 1.01 GRAM27 transactionsJust now"
+      ],
+      "failedUrl": "https://ton.tx.taxi/block/100166268"
+    }
+  ],
+  "blocks": [
+    {
+      "url": "https://ton.tx.taxi/block/100166253",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100166253",
+      "id": "(0,8000000000000000,100166253)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    }
+  ],
+  "redirects": [],
+  "finishedAt": "2026-09-28T19:03:06.954Z",
+  "passed": false
+}

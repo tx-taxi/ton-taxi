@@ -1,4 +1,4 @@
-# Clean TON block URLs — candidate, not deployed
+# Clean TON block URLs — deployed and verified
 
 User follow-up, 2026-09-28: replace visible encoded block tuples with normal `/block/<height>` paths. Implemented on the isolated hostname candidate based on native `ca3e6b1ca` and router `3e87c235`, preserving original checkouts.
 
@@ -31,4 +31,8 @@ node frontend/src/app/ton/chain-selection.test.mjs
 node frontend/node_modules/@angular/compiler-cli/bundles/src/bin/ngc.js --noEmit -p frontend/tsconfig.app.json
 ```
 
-The same [release instructions](../ton-hosts/README.md#finish-in-an-environment-with-build-and-network-access) still apply. Full build, rebuilt native hub export, browser navigation/visual review, actual DNS/TLS and deployment are unfinished because this session denies the necessary build processes, local listening and external network access. Neither a deployment nor a running review URL is claimed. The shared native export must be rebuilt before the hub can use these links; do not hand-edit the old generated strip. Explorer-kit is supplied as a separate patch without changing its approved revision lock.
+The release is deployed and production verified. Native runtime is `219d2e7b9eb2aa07f153cdfe9f6f0e522735c68b`; router runtime is `d1967c835f43e816d2124c94f93b1fea374bc4b7`; its native export is `2bc11808b22c347e`. Both host roots, clean URLs, actual browser legacy redirects, typed Masterchain search and cross-origin cached handoff passed. Public WebSockets advanced with 32 consecutive, non-stale headers for both host views. All five public export files match the reviewed output exactly. The Masterchain host has its own valid Let's Encrypt certificate and is DNS-only by explicit user choice; the main TON hostname remains proxied.
+
+The full frontend/export/router builds and matched-data desktop/mobile review passed. The browser review found and fixed locale-prefix hydration and initial pending-selection reset bugs before release. See [browser review](browser/README.md), [production review](browser/production/README.md), [live public streams](production-websockets.json) and [exact release record](release.json). Controlled fixtures and public observations are distinguished in those reports.
+
+Local reviews remain running: native `http://127.0.0.1:4530`, router `http://127.0.0.1:4851`. Commands and release details are in [the host review](../ton-hosts/README.md). Original working trees and unrelated agents' changes were preserved.

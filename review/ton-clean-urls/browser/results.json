@@ -1,0 +1,891 @@
+{
+  "startedAt": "2026-09-28T18:48:53.687Z",
+  "nativePort": 4530,
+  "routerPort": 4851,
+  "fixtureSources": [
+    "/home/lukee/dev/ton-taxi/review/ton/accuracy-audit/basechain-hub/init-frame.json",
+    "/home/lukee/dev/ton-taxi/review/ton/pending-map/snapshot.json"
+  ],
+  "scope": "Compiled local native and hub; recorded blocks for parity. Split-shard identities and pending counts are controlled variants, not live-chain claims. Transaction lists intentionally unavailable in this bounded content/navigation review.",
+  "stages": [
+    {
+      "label": "native-hub-recorded-parity-1440",
+      "passed": false,
+      "error": "locator.waitFor: Error: strict mode violation: locator('app-blockchain').locator('.mempool-block').getByText('Unavailable') resolved to 2 elements:\n    1) <div _ngcontent-ng-c160550921=\"\" data-cy=\"mempool-block-0-transaction-count\" class=\"transaction-count ng-tns-c160550921-0 ng-star-inserted\">…</div> aka getByText('Unavailable', { exact: true })\n    2) <div _ngcontent-ng-c160550921=\"\" data-cy=\"mempool-block-0-time\" class=\"time-difference ng-tns-c160550921-0 ng-star-inserted\">…</div> aka getByText('Feed unavailable', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for locator('app-blockchain').locator('.mempool-block').getByText('Unavailable') to be visible\u001b[22m\n\n    at /tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:132:95\n    at async checkpoint (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:110:68)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:114:64"
+    },
+    {
+      "label": "native-hub-recorded-parity-390",
+      "passed": true,
+      "elapsedMs": 6932
+    },
+    {
+      "label": "native-clean-navigation-1440",
+      "passed": false,
+      "error": "page.goto: net::ERR_NAME_NOT_RESOLVED at https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true\nCall log:\n\u001b[2m  - navigating to \"https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at /tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:166:18\n    at async checkpoint (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:110:68)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:147:33"
+    },
+    {
+      "label": "native-clean-navigation-390",
+      "passed": false,
+      "error": "page.goto: net::ERR_NAME_NOT_RESOLVED at https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true\nCall log:\n\u001b[2m  - navigating to \"https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true\", waiting until \"domcontentloaded\"\u001b[22m\n\n    at /tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:166:18\n    at async checkpoint (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:110:68)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:147:33"
+    },
+    {
+      "label": "canonical-host-hydration-and-locale",
+      "passed": false,
+      "error": "locator.waitFor: Timeout 8000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('app-block h1') to be visible\u001b[22m\n\n    at /tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:179:141\n    at async checkpoint (/tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:110:68)\n    at async file:///tmp/ton-strip-consistency/review/ton-clean-urls/browser/review.mjs:173:3"
+    }
+  ],
+  "pages": [
+    {
+      "width": 1440,
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "pageErrors": []
+    },
+    {
+      "width": 1440,
+      "pageErrors": []
+    },
+    {
+      "width": 390,
+      "pageErrors": []
+    },
+    {
+      "width": 1440,
+      "pageErrors": [],
+      "homeCanonicalAfterCrossHost": "https://ton.tx.taxi/"
+    }
+  ],
+  "requests": [
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100042474",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100042474?shard=4000000000000000",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true",
+      "localPort": 4530,
+      "status": 308,
+      "location": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true"
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://masterchain.ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://tx.taxi/hub-handoff",
+      "localPort": 4851,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/100042474?shard=4000000000000000",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/block/(-1%2C8000000000000000%2C95511690)?showDetails=true",
+      "localPort": 4530,
+      "status": 308,
+      "location": "https://masterchain.ton.tx.taxi/block/95511690?showDetails=true"
+    },
+    {
+      "url": "https://ton.tx.taxi/block/95511690?workchain=-1",
+      "localPort": 4530,
+      "status": 200
+    },
+    {
+      "url": "https://ton.tx.taxi/en/block/(0%2C4000000000000000%2C100042474)?showDetails=true",
+      "localPort": 4530,
+      "status": 308,
+      "location": "/en/block/100042474?shard=4000000000000000&showDetails=true"
+    }
+  ],
+  "parity": [
+    {
+      "width": 1440,
+      "target": "native",
+      "blocks": [
+        {
+          "text": "100042474 1.01 GRAM12 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042474",
+          "title": "Fees collected: 1.010456926 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 760,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042473 1.001 GRAM6 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042473",
+          "title": "Fees collected: 1.001406971 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 915,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042472 1.002 GRAM7 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042472",
+          "title": "Fees collected: 1.002413706 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1070,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042471 1.005 GRAM21 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042471",
+          "title": "Fees collected: 1.004717344 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1225,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042470 1.002 GRAM11 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042470",
+          "title": "Fees collected: 1.002230624 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1380,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042469 1.019 GRAM43 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042469",
+          "title": "Fees collected: 1.019366034 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1535,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042468 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042468",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1690,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042467 1.018 GRAM32 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042467",
+          "title": "Fees collected: 1.01782003 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1845,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042466 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042466",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2000,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042465 1.007 GRAM12 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042465",
+          "title": "Fees collected: 1.007047523 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2155,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042464 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042464",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2310,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042463 1.008 GRAM5 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042463",
+          "title": "Fees collected: 1.008281176 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2465,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042462 1.015 GRAM31 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042462",
+          "title": "Fees collected: 1.015242055 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2620,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042461 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042461",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2775,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042460 1.004 GRAM6 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042460",
+          "title": "Fees collected: 1.003747159 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2930,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042459 1.003 GRAM10 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042459",
+          "title": "Fees collected: 1.002974731 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3085,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042458 1.003 GRAM5 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042458",
+          "title": "Fees collected: 1.002803899 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3240,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042457 1.001 GRAM5 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042457",
+          "title": "Fees collected: 1.001048878 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3395,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042456 1.006 GRAM9 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042456",
+          "title": "Fees collected: 1.005835545 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3550,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042455 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042455",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3705,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042454 1.004 GRAM20 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042454",
+          "title": "Fees collected: 1.003538616 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 3860,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042453 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042453",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4015,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042452 1.018 GRAM59 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042452",
+          "title": "Fees collected: 1.018151924 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4170,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042451 1.003 GRAM5 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042451",
+          "title": "Fees collected: 1.002825292 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4325,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042450 1.003 GRAM6 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042450",
+          "title": "Fees collected: 1.003243039 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4480,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042449 1.008 GRAM13 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042449",
+          "title": "Fees collected: 1.008481067 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4635,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042448 1.001 GRAM2 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042448",
+          "title": "Fees collected: 1.00056361 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4790,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042447 1.001 GRAM2 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042447",
+          "title": "Fees collected: 1.000671205 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 4945,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        }
+      ],
+      "pending": [
+        {
+          "text": "Pending4 messagesJust now",
+          "title": "4 pending external messages · Last updated 2026-09-28T05:15:18.306Z"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "target": "native",
+      "blocks": [
+        {
+          "text": "100042474 1.01 GRAM12 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042474",
+          "title": "Fees collected: 1.010456926 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 235,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042473 1.001 GRAM6 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042473",
+          "title": "Fees collected: 1.001406971 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 390,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042472 1.002 GRAM7 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042472",
+          "title": "Fees collected: 1.002413706 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 545,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042471 1.005 GRAM21 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042471",
+          "title": "Fees collected: 1.004717344 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 700,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042470 1.002 GRAM11 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042470",
+          "title": "Fees collected: 1.002230624 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 855,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042469 1.019 GRAM43 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042469",
+          "title": "Fees collected: 1.019366034 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1010,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042468 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042468",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1165,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042467 1.018 GRAM32 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042467",
+          "title": "Fees collected: 1.01782003 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1320,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042466 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042466",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1475,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042465 1.007 GRAM12 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042465",
+          "title": "Fees collected: 1.007047523 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1630,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042464 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042464",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1785,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042463 1.008 GRAM5 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042463",
+          "title": "Fees collected: 1.008281176 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1940,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042462 1.015 GRAM31 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042462",
+          "title": "Fees collected: 1.015242055 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2095,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042461 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042461",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 2250,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        }
+      ],
+      "pending": [
+        {
+          "text": "Pending4 messagesJust now",
+          "title": "4 pending external messages · Last updated 2026-09-28T05:15:18.306Z"
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "target": "hub",
+      "blocks": [
+        {
+          "text": "100042474 1.01 GRAM12 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042474",
+          "title": "Fees collected: 1.010456926 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 235,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042473 1.001 GRAM6 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042473",
+          "title": "Fees collected: 1.001406971 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 390,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042472 1.002 GRAM7 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042472",
+          "title": "Fees collected: 1.002413706 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 545,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042471 1.005 GRAM21 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042471",
+          "title": "Fees collected: 1.004717344 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 700,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042470 1.002 GRAM11 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042470",
+          "title": "Fees collected: 1.002230624 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 855,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042469 1.019 GRAM43 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042469",
+          "title": "Fees collected: 1.019366034 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1010,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042468 1.00 GRAM0 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042468",
+          "title": "Fees collected: 1 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1165,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        },
+        {
+          "text": "100042467 1.018 GRAM32 transactionsJust now",
+          "href": "https://ton.tx.taxi/block/100042467",
+          "title": "Fees collected: 1.01782003 GRAM. Includes block creation and imported fees.",
+          "width": 125,
+          "height": 125,
+          "x": 1320,
+          "y": 75,
+          "font": "system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", \"Noto Sans\", \"Liberation Sans\", Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\", \"Noto Color Emoji\"",
+          "background": "rgba(0, 0, 0, 0) repeating-linear-gradient(rgb(25, 54, 70), rgb(25, 54, 70) 0%, rgb(8, 126, 175) 0%, rgb(0, 152, 234) 100%) repeat scroll 0% 0% / auto padding-box border-box",
+          "color": "rgb(255, 255, 255)"
+        }
+      ],
+      "pending": [
+        {
+          "text": "Pending4 messagesJust now",
+          "title": "4 pending external messages · Last updated 2026-09-28T05:15:18.306Z"
+        }
+      ],
+      "clickedDestination": "https://ton.tx.taxi/block/100042474"
+    }
+  ],
+  "pending": [
+    {
+      "target": "native",
+      "count": 23,
+      "state": "ready",
+      "value": " \n \n \nPending\n23 messages\nJust now"
+    },
+    {
+      "target": "native",
+      "count": 1,
+      "state": "ready",
+      "value": " \n \n \nPending\n1 message\nJust now"
+    },
+    {
+      "target": "native",
+      "count": 0,
+      "state": "ready",
+      "value": " \n \n \nPending\n0 messages\nJust now"
+    }
+  ],
+  "errors": [],
+  "finishedAt": "2026-09-28T18:49:32.282Z",
+  "passed": false
+}

@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-09-28T18:53:47.482Z",
+  "verification": "actual live local collector, two host defaults, no fixtures",
+  "result": [
+    {
+      "host": "ton.tx.taxi",
+      "elapsedMs": 962,
+      "frames": [
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:44.358Z",
+          "head": 100164928,
+          "blockCount": 32
+        },
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:44.358Z"
+        },
+        {
+          "workchain": 0,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:46.559Z",
+          "head": 100164933,
+          "blockCount": 32
+        }
+      ],
+      "advanced": true
+    },
+    {
+      "host": "masterchain.ton.tx.taxi",
+      "elapsedMs": 1882,
+      "frames": [
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:45.272Z",
+          "head": 95669268,
+          "blockCount": 32
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:45.272Z"
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:45.272Z",
+          "head": 95669268,
+          "blockCount": 32
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:45.272Z"
+        },
+        {
+          "workchain": -1,
+          "shard": "8000000000000000",
+          "stale": false,
+          "observedAt": "2026-09-28T18:53:47.479Z",
+          "head": 95669274,
+          "blockCount": 32
+        }
+      ],
+      "advanced": true
+    }
+  ]
+}

@@ -1,0 +1,83 @@
+{
+  "verifiedAt": "2026-09-28T19:06:35.376113+00:00",
+  "native": {
+    "repository": "tx-taxi/ton-taxi",
+    "commit": "219d2e7b9eb2aa07f153cdfe9f6f0e522735c68b",
+    "deployment": "dnowpo6fiae0ippmvvsoijv2",
+    "finishedAt": "2026-09-28T19:00:04Z",
+    "hosts": [
+      "https://ton.tx.taxi",
+      "https://masterchain.ton.tx.taxi"
+    ]
+  },
+  "router": {
+    "repository": "tx-taxi/router",
+    "commit": "d1967c835f43e816d2124c94f93b1fea374bc4b7",
+    "deployment": "f5j3sjoizx1yvwkg2l2fblpn",
+    "finishedAt": "2026-09-28T19:02:05Z",
+    "export": "2bc11808b22c347e"
+  },
+  "dns": {
+    "masterchain.ton.tx.taxi": {
+      "type": "A",
+      "address": "40.160.19.141",
+      "proxied": false,
+      "userApproved": true
+    },
+    "ton.tx.taxi": {
+      "proxied": true
+    }
+  },
+  "certificate": {
+    "subject": [
+      [
+        [
+          "commonName",
+          "masterchain.ton.tx.taxi"
+        ]
+      ]
+    ],
+    "issuer": [
+      [
+        [
+          "countryName",
+          "US"
+        ]
+      ],
+      [
+        [
+          "organizationName",
+          "Let's Encrypt"
+        ]
+      ],
+      [
+        [
+          "commonName",
+          "YR2"
+        ]
+      ]
+    ],
+    "notBefore": "Sep 28 18:01:34 2026 GMT",
+    "notAfter": "Dec 27 18:01:33 2026 GMT",
+    "subjectAltName": [
+      [
+        "DNS",
+        "masterchain.ton.tx.taxi"
+      ]
+    ]
+  },
+  "verified": [
+    "matching-data native/hub screenshots at 1440 and 390 px visually inspected",
+    "actual public HTTPS roots, block identities, clean URLs and real browser 308 redirects",
+    "public Masterchain router CORS, handoff message and typed search",
+    "both public WSS scopes advanced with 32 consecutive non-stale headers",
+    "47 export source hashes and all five public export outputs verified",
+    "isolated local pending ready/zero/unavailable/stale variants",
+    "production desktop/mobile hub clicks match selected anchor and native API identity"
+  ],
+  "notes": [
+    "New Masterchain DNS was verified using public Cloudflare DNS. Browser/WSS used that address because the workstation resolver retained the earlier NXDOMAIN; HTTPS certificate validation remained enabled.",
+    "Initial native browser run preceded router deployment, so its router CORS/frame errors were closed in the post-router integration pass. Existing Cloudflare RUM requests on the restricted handoff document remain blocked by its CSP; functional handoff succeeds.",
+    "Coolify router deployment verified healthy on first healthcheck and current application logs show repeated /healthz 200. Its summary status reported running:unhealthy; this conflicts with live/container rollout evidence and is recorded rather than hidden."
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "startedAt": "2026-09-28T19:04:34.151Z",
+  "stage": "hub",
+  "expectedExport": "2bc11808b22c347e",
+  "scope": "Real public HTTPS, live APIs and browser redirects; no request/API/WebSocket interception or fixtures. Chromium certificate checks enabled.",
+  "dnsOverride": {
+    "host": "masterchain.ton.tx.taxi",
+    "address": "40.160.19.141",
+    "mechanism": "Chromium host-resolver-rules; HTTPS and certificate validation retained"
+  },
+  "stages": [
+    {
+      "label": "hub-390",
+      "passed": true,
+      "elapsedMs": 4227
+    }
+  ],
+  "pages": [
+    {
+      "label": "hub-390",
+      "width": 390,
+      "pageErrors": [],
+      "consoleErrors": [],
+      "failedRequests": [
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/lsoftwaredmcc.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/kupool.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://ltc.tx.taxi/resources/mining-pools/hash700.svg",
+          "error": "net::ERR_BLOCKED_BY_ORB"
+        },
+        {
+          "url": "https://tx.taxi/cdn-cgi/rum?",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "documents": [
+        {
+          "url": "https://tx.taxi/",
+          "status": 200
+        },
+        {
+          "url": "https://ton.tx.taxi/block/100166558",
+          "status": 200
+        }
+      ],
+      "tonAssets": [
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/feed.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.js",
+          "status": 200
+        },
+        {
+          "url": "https://tx.taxi/assets/native-strips/ton/2bc11808b22c347e/strip.css",
+          "status": 200
+        }
+      ],
+      "blockClicks": [
+        {
+          "href": "https://ton.tx.taxi/block/100166558",
+          "requestedBeforeAction": "https://ton.tx.taxi/block/100166558"
+        }
+      ],
+      "pendingText": " \n \n \nPending\n39 messages\nLast observation",
+      "cubeTexts": [
+        "100166558 1.004 GRAM16 transactionsJust now",
+        "100166557 1.007 GRAM11 transactionsJust now",
+        "100166556 1.009 GRAM22 transactionsJust now",
+        "100166555 1.012 GRAM23 transactionsJust now",
+        "100166554 1.004 GRAM13 transactionsJust now",
+        "100166553 1.01 GRAM21 transactionsJust now",
+        "100166552 1.005 GRAM13 transactionsJust now",
+        "100166551 1.001 GRAM2 transactionsJust now"
+      ],
+      "clickedDestination": "https://ton.tx.taxi/block/100166558"
+    }
+  ],
+  "blocks": [
+    {
+      "url": "https://ton.tx.taxi/block/100166558",
+      "origin": "https://ton.tx.taxi",
+      "workchain": 0,
+      "shard": "8000000000000000",
+      "seqno": "100166558",
+      "id": "(0,8000000000000000,100166558)",
+      "apiStatus": 200,
+      "visibleIdentityMatches": true
+    }
+  ],
+  "redirects": [],
+  "finishedAt": "2026-09-28T19:04:38.497Z",
+  "passed": true
+}
