@@ -1,9 +1,10 @@
 /** Chain-owned native explorer transport; snapshot age and stream liveness are distinct. */
 export function startFeed({onSnapshot,onStatus,signal}) {
- const endpoint=(['localhost','127.0.0.1'].includes(location.hostname)?'ws://127.0.0.1:4530':'wss://ton.tx.taxi')+'/api/v1/ws';
+ const endpoint=(['localhost','127.0.0.1'].includes(location.hostname)?'ws://127.0.0.1:4530':'wss://ton.tx.taxi')+'/api/v1/ws?workchain=0';
  let socket,retry,watchdog,initial,lastMessage=0,lastData=0,attempt=0,stopped=false,haveData=false,pending;
  const status=(state,error)=>onStatus?.({state,updatedAt:lastData||null,error});
- const block=value=>value && typeof value==='object' && Number.isSafeInteger(value.height) && typeof value.id==='string';
+ const lineage=value=>typeof value?.id==='string' ? value.id.match(/^\(0,([a-f0-9]{16}),\d+\)$/i)?.[1].toLowerCase() : undefined;
+ const block=value=>!!lineage(value) && Number.isSafeInteger(value.height) && String(value.height)===String(value.ton?.seqno) && String(value.ton?.workchain_id)==='0' && String(value.ton?.shard).toLowerCase()===lineage(value);
  function connect(){
   if(stopped)return;
   status(haveData?'stale':'loading');
@@ -17,7 +18,7 @@ export function startFeed({onSnapshot,onStatus,signal}) {
    if(!data || typeof data!=='object' || Array.isArray(data))return;
    lastMessage=Date.now();
    const snapshot={};
-   if(Array.isArray(data.blocks) && data.blocks.every(block))snapshot.blocks=[...data.blocks].sort((a,b)=>b.height-a.height).slice(0,8);
+   if(Array.isArray(data.blocks) && data.blocks.length && data.blocks.every(value=>block(value) && lineage(value)===lineage(data.blocks[0])))snapshot.blocks=[...data.blocks].sort((a,b)=>b.height-a.height).slice(0,8);
    else if(block(data.block))snapshot.block=data.block;
    if(Array.isArray(data['mempool-blocks']))snapshot.mempoolBlocks=data['mempool-blocks'];
    if(data.da && typeof data.da==='object')snapshot.difficultyAdjustment=data.da;

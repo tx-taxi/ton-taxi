@@ -1,6 +1,6 @@
 import { readTonPending } from '@app/shared/ton-pending-state';
 /** Conservative, one-shot warm strip hydration. Live websocket initialization remains authoritative. */
-export function readHubSnapshot(value: unknown, chainId: string, now = Date.now()): any | null {
+export function readHubSnapshot(value: unknown, chainId: string, now = Date.now(), selection: { workchain: number; shard?: string } = { workchain: 0 }): any | null {
   try {
     if (!value || typeof value !== 'object') return null;
     const envelope = value as any;
@@ -14,10 +14,20 @@ export function readHubSnapshot(value: unknown, chainId: string, now = Date.now(
       || !Array.isArray(snapshot.mempoolBlocks) || snapshot.mempoolBlocks.length > 8) return null;
     if (chainId === 'ton') {
       if (snapshot.mempoolBlocks.length !== 0) return null;
+      let shardIdentity: string | undefined;
       for (let i = 0; i < snapshot.blocks.length; i++) {
         const block = snapshot.blocks[i];
-        const id = typeof block?.id === 'string' && block.id.match(/^\(-1,8000000000000000,(\d+)\)$/);
-        if (!id || !Number.isSafeInteger(block.height) || block.height < 0 || String(block.height) !== id[1]
+        const id = typeof block?.id === 'string' && block.id.match(/^\((0|-1),([a-f0-9]{16}),(\d+)\)$/i);
+        const identity = id && `${id[1]},${id[2].toLowerCase()}`;
+        if (!id || Number(id[1]) !== selection.workchain
+          || (selection.shard && id[2].toLowerCase() !== selection.shard.toLowerCase())
+          || (Number(id[1]) === -1 && id[2].toLowerCase() !== '8000000000000000')
+          || (shardIdentity && identity !== shardIdentity)
+          || String(block.ton?.workchain_id) !== id[1]
+          || String(block.ton?.shard).toLowerCase() !== id[2].toLowerCase()
+          || String(block.ton?.seqno) !== id[3]) return null;
+        shardIdentity = identity;
+        if (!id || !Number.isSafeInteger(block.height) || block.height < 0 || String(block.height) !== id[3]
           || !Number.isSafeInteger(block.timestamp) || block.timestamp <= 0
           || !Number.isSafeInteger(block.tx_count) || block.tx_count < 0
           || block.size !== 0 || block.weight !== 0
