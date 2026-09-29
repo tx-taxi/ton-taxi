@@ -1,0 +1,33 @@
+{
+  "verifiedAt": "2026-09-28T23:59:08.648812+00:00",
+  "native": {
+    "commit": "e8e526c7b3a5af5f9e622f3736012095ceb803c2",
+    "deployment": "v0enhmisfwwbazqrrl7mhowq",
+    "finishedAt": "2026-09-28T23:57:40Z",
+    "hosts": [
+      "https://ton.tx.taxi",
+      "https://masterchain.ton.tx.taxi"
+    ]
+  },
+  "router": {
+    "commit": "7e71430ca3b9bb91294ed80afcd3188745192d84",
+    "deployment": "8yhk1epxzs866awup2twhi3p",
+    "finishedAt": "2026-09-28T23:55:32Z",
+    "host": "https://tx.taxi",
+    "nativeExport": "dfb4847143f44835"
+  },
+  "verification": {
+    "searchBrowserContexts": 6,
+    "detailBrowserContexts": 4,
+    "viewports": [
+      1440,
+      390
+    ],
+    "sourceHashes": 47,
+    "realScopedRedirects": [
+      "https://ton.tx.taxi/block/100207828",
+      "https://masterchain.ton.tx.taxi/block/95711146"
+    ]
+  },
+  "scope": "Reviewed hub + TON/Masterchain search hierarchy, additional option badge, removed duplicate selector, compact block ID and fee label; other native frontends unchanged."
+}

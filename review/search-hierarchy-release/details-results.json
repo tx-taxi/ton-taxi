@@ -1,0 +1,53 @@
+{
+  "at": "2026-09-28T23:58:14.755Z",
+  "pages": [
+    {
+      "host": "ton.tx.taxi",
+      "width": 1440,
+      "id": "100207828",
+      "transactions": "0",
+      "feesAndRewards": "1 GRAM",
+      "clipboard": "100207828",
+      "removedSelector": true,
+      "screenshot": "ton-block-1440.png",
+      "errors": [],
+      "passed": true
+    },
+    {
+      "host": "masterchain.ton.tx.taxi",
+      "width": 1440,
+      "id": "95711146",
+      "transactions": "3",
+      "feesAndRewards": "2.700431833 GRAM",
+      "clipboard": "95711146",
+      "removedSelector": true,
+      "screenshot": "master-block-1440.png",
+      "errors": [],
+      "passed": true
+    },
+    {
+      "host": "ton.tx.taxi",
+      "width": 390,
+      "id": "100207828",
+      "transactions": "0",
+      "feesAndRewards": "1 GRAM",
+      "clipboard": "100207828",
+      "removedSelector": true,
+      "screenshot": "ton-block-390.png",
+      "errors": [],
+      "passed": true
+    },
+    {
+      "host": "masterchain.ton.tx.taxi",
+      "width": 390,
+      "id": "95711146",
+      "transactions": "3",
+      "feesAndRewards": "2.700431833 GRAM",
+      "clipboard": "95711146",
+      "removedSelector": true,
+      "screenshot": "master-block-390.png",
+      "errors": [],
+      "passed": true
+    }
+  ]
+}
