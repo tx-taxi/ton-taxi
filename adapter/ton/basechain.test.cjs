@@ -95,3 +95,20 @@ test('a shard with a failed fetch resumes automatically after a split and merge'
   assert.equal(root.historyGaps.at(-1).reason,'shard-lineage-changed');
  }finally{await h.stop();}
 });
+
+test('anchored recovery progresses when newer same-second headers occupy the index page',async()=>{
+ const h=await harness([ROOT]);try{
+  const indexed=Array.from({length:64},(_,i)=>raw(header(ROOT,3001+i)));
+  h.master.index.list=async options=>selectConsecutive(indexed,options.afterBlock,options.limit,{workchain:'0',shard:ROOT,target:options.target});
+  const target=header(ROOT,3062);
+  h.master.basechain.acceptMaster({shard_refs:[target]});
+  await h.master.basechain.refresh();
+  const d=h.master.dashboard();
+  assert.equal(d.head.seqno,target.seqno);
+  assert.equal(d.stale,false);
+  assert.equal(d.blocks.length,32);
+  assert.ok(d.blocks.every((block,i)=>!i||d.blocks[i-1].height===block.height+1));
+  assert.ok(d.blocks.every(block=>block.height<=Number(target.seqno)));
+  assert.equal(d.historyGaps.at(-1).reason,'retention-window-exceeded');
+ }finally{await h.stop();}
+});

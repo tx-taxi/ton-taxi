@@ -3,7 +3,10 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const { matchingTransactionFees } = require("./block-transaction-fees.cjs");
 const HISTORY_LIMIT = 2048;
-const RECOVERY_WINDOW = 64;
+// The index returns at most 64 timestamp-sorted rows. Some can be newer
+// than the authenticated shard target in that same second; requiring all
+// 64 would stall recovery. Keep one complete native 32-block strip instead.
+const RECOVERY_WINDOW = 32;
 const HISTORY_GAP_LIMIT = 32;
 const blockId = (b) => `(${b.workchain_id},${b.shard},${b.seqno})`;
 const canonicalBlock = (id) =>
