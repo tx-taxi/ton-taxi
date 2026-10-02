@@ -29,6 +29,9 @@ class BasechainCollector {
         state.active = false;
         state.collector.stopped = true;
         clearTimeout(state.collector.retry);
+        // A cancelled retry is no longer scheduled work. Leaving its handle
+        // here makes acceptHead suppress every event after this shard returns.
+        state.collector.retry = null;
       }
     }
     for (const ref of refs) {

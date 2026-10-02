@@ -67,3 +67,31 @@ test('root-shard reactivation after merge replaces only its window and records t
   assert.equal(d.history.length,6);assert.equal(d.historyGaps[0].reason,'shard-lineage-changed');assert.equal(d.historyGaps[0].fromSeqno,'101');assert.equal(d.historyGaps[0].toSeqno,'199');
  }finally{await h.stop();}
 });
+
+test('a shard with a failed fetch resumes automatically after a split and merge',async()=>{
+ const h=await harness([ROOT]);try{
+  const root=h.master.basechain.shards.get(ROOT).collector;
+  const hydrate=h.master.economics.hydrate;
+  h.master.economics.hydrate=async blocks=>{
+   if(blocks.some(block=>block.shard===ROOT))throw Error('Controlled block data outage');
+   return hydrate(blocks);
+  };
+  const next=header(ROOT,101);h.rows.get(ROOT).push(next);
+  h.master.basechain.acceptMaster({shard_refs:[next]});await h.master.basechain.refresh();
+  assert.equal(root.blocks[0].seqno,'100');
+  assert.equal(root.lastError,'Controlled block data outage');
+  h.master.economics.hydrate=hydrate;
+  h.rows.set(LEFT,[header(LEFT,150)]);h.rows.set(RIGHT,[header(RIGHT,150)]);
+  h.master.basechain.acceptMaster({shard_refs:[h.rows.get(LEFT)[0],h.rows.get(RIGHT)[0]]});await h.master.basechain.refresh();
+  const merged=[200,201,202].map(seq=>header(ROOT,seq));
+  merged[0].after_merge=true;merged[0].prev_refs=[`(0,${LEFT},199)`,`(0,${RIGHT},199)`];h.rows.set(ROOT,merged);
+  h.master.basechain.acceptMaster({shard_refs:[merged.at(-1)]});
+  // Only incoming masterchain notifications drive recovery. A visitor calling
+  // refresh() here would conceal the production failure being exercised.
+  const deadline=Date.now()+2000;
+  while(root.blocks[0]?.seqno!=='202'&&Date.now()<deadline)await new Promise(resolve=>setTimeout(resolve,20));
+  assert.deepEqual(root.dashboard().blocks.map(block=>block.height),[202,201,200]);
+  assert.equal(root.dashboard().stale,false);
+  assert.equal(root.historyGaps.at(-1).reason,'shard-lineage-changed');
+ }finally{await h.stop();}
+});
