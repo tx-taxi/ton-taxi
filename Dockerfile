@@ -1,4 +1,4 @@
-FROM node:24-bookworm-slim AS frontend-builder
+FROM node:26-bookworm-slim AS frontend-builder
 
 WORKDIR /app/frontend
 RUN apt-get update \
@@ -10,7 +10,7 @@ COPY frontend ./
 COPY frontend/mempool-frontend-config.ton.json ./mempool-frontend-config.json
 RUN SKIP_SYNC=1 npm run build
 
-FROM node:24-bookworm-slim
+FROM node:26-bookworm-slim
 
 WORKDIR /app
 RUN apt-get update \
