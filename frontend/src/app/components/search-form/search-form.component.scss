@@ -363,6 +363,20 @@ input[aria-invalid='true'] {
   white-space: normal;
 }
 
+.search-routing-hint {
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.3;
+
+  code {
+    color: inherit;
+    font-family: monospace;
+    font-size: inherit;
+    white-space: normal;
+  }
+}
+
 // BEGIN SHARED DESTINATION HIERARCHY
 .search-chain-target-label {
   max-width: 120px;

@@ -4,14 +4,12 @@ import { Router, ActivatedRoute, NavigationEnd } from '@angular/router';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs';
 import { StateService } from '@app/services/state.service';
-import { tonBlockIdentityFromUrl, tonBlockUrl } from '@app/ton/chain-selection';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OpenGraphService {
   network = '';
-  private readonly origin = typeof window !== 'undefined' && window.location.hostname === 'masterchain.ton.tx.taxi' ? 'https://masterchain.ton.tx.taxi' : 'https://ton.tx.taxi';
   defaultImageUrl = '';
   previewLoadingEvents = {}; // pending count per event type
   previewLoadingCount = 0; // number of unique events pending
@@ -24,7 +22,7 @@ export class OpenGraphService {
     private router: Router,
     private activatedRoute: ActivatedRoute,
   ) {
-    this.defaultImageUrl = this.origin + '/og.png?v=1';
+    this.defaultImageUrl = 'https://tx.taxi/assets/screenshots/hub-c0f1a521a7ad.jpg';
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(() => this.activatedRoute),
@@ -54,15 +52,29 @@ export class OpenGraphService {
   }
 
   clearOgImage() {
-    const entity = this.router.url.split('?')[0].match(/^\/(tx|block|address|jetton|nft|collection|message|trace)\/([^/]+)$/);
-    const block = tonBlockIdentityFromUrl(new URL(this.router.url, this.origin).href);
-    const image = block ? `${new URL(tonBlockUrl(block)).origin}/og/block/${encodeURIComponent(block.id)}.png?v=4`
-      : entity ? `${this.origin}/og/${entity[1]}/${entity[2]}.png?v=4` : this.defaultImageUrl;
+    // The generated route catalog retains the approved full-page capture after hydration.
+    try {
+      const data = JSON.parse(document.getElementById('native-seo-data')?.textContent || '{}');
+      if (data.preview) {
+        this.metaService.updateTag({property: 'og:image', content: data.preview.url});
+        this.metaService.updateTag({name: 'twitter:image', content: data.preview.url});
+        this.metaService.updateTag({property: 'og:image:type', content: 'image/jpeg'});
+        this.metaService.updateTag({property: 'og:image:width', content: String(data.preview.width)});
+        this.metaService.updateTag({property: 'og:image:height', content: String(data.preview.height)});
+        this.metaService.updateTag({property: 'og:image:alt', content: data.preview.alt});
+        this.metaService.updateTag({name: 'twitter:image:alt', content: data.preview.alt});
+        return;
+      }
+    } catch { /* Development shells can omit the generated route catalog. */ }
+
+    const image = this.defaultImageUrl;
     this.metaService.updateTag({ property: 'og:image', content: image });
     this.metaService.updateTag({ name: 'twitter:image', content: image });
-    this.metaService.updateTag({ property: 'og:image:type', content: 'image/png' });
-    this.metaService.updateTag({ property: 'og:image:width', content: '1200' });
-    this.metaService.updateTag({ property: 'og:image:height', content: '630' });
+    this.metaService.updateTag({ property: 'og:image:type', content: 'image/jpeg' });
+    this.metaService.updateTag({ property: 'og:image:width', content: '1440' });
+    this.metaService.updateTag({ property: 'og:image:height', content: '2611' });
+    this.metaService.updateTag({ property: 'og:image:alt', content: 'The tx.taxi hub showing its native blockchain explorer strips and external explorer blocks.' });
+    this.metaService.updateTag({ name: 'twitter:image:alt', content: 'The tx.taxi hub showing its native blockchain explorer strips and external explorer blocks.' });
   }
 
   setManualOgImage(_imageFilename) {

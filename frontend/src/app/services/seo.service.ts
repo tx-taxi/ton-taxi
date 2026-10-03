@@ -28,12 +28,13 @@ export class SeoService {
 
     try {
       const canonicalUrl = new URL(this.canonicalLink?.href || '');
-      this.baseDomain = canonicalUrl?.host;
+      if (['ton.tx.taxi', 'masterchain.ton.tx.taxi'].includes(canonicalUrl.host)) this.baseDomain = canonicalUrl.host;
     } catch (e) {
       // leave as default
     }
     if (typeof window !== 'undefined' && ['ton.tx.taxi', 'masterchain.ton.tx.taxi'].includes(window.location.hostname)) {
       this.baseDomain = this.baseTitle = window.location.hostname;
+      if (this.baseDomain === 'masterchain.ton.tx.taxi') this.baseDescription = 'Explore TON masterchain blocks, transactions and network activity.';
     }
 
     this.stateService.networkChanged$.subscribe((network) => this.network = network);
@@ -49,10 +50,42 @@ export class SeoService {
     ).subscribe((data) => {
       this.clearSoft404();
       this.updateCanonical(this.router.url);
+      const page = this.nativePage();
+      if (page && page.path !== '/') { this.setTitle(page.title); this.setDescription(page.description); }
     });
   }
 
+  private nativeSeoData(): { pages: {path: string; title: string; description: string}[]; aliases: Record<string, string> } {
+    try { return JSON.parse(document.getElementById('native-seo-data')?.textContent || '{}'); }
+    catch { return { pages: [], aliases: {} }; }
+  }
+
+  private nativePage(path = this.router.url): {path: string; title: string; description: string} | undefined {
+    const data = this.nativeSeoData();
+    const pathname = new URL(path, 'https://' + this.baseDomain).pathname.replace(/\/$/, '') || '/';
+    const canonicalPath = data.aliases?.[pathname] || pathname;
+    const page = data.pages?.find(page => page.path === canonicalPath);
+    return page?.path === '/' && this.baseDomain === 'masterchain.ton.tx.taxi' ? {...page, description: this.baseDescription} : page;
+  }
+
+  private updateDiscoveryLinks(canonical: string): void {
+    const page = this.nativePage();
+    const head = document.head;
+    for (const [rel, type, href] of [
+      ['alternate', 'text/markdown', canonical + (page?.path === '/' ? 'index' : '') + '.md'],
+      ['describedby', 'text/plain', 'https://' + this.baseDomain + '/llms.txt'],
+    ]) {
+      const existing = head.querySelector<HTMLLinkElement>('link[rel="' + rel + '"][type="' + type + '"]');
+      if (rel === 'alternate' && !page) { existing?.remove(); continue; }
+      const link = existing || document.createElement('link');
+      link.rel = rel; link.type = type; link.href = href;
+      if (!existing) head.appendChild(link);
+    }
+  }
+
   setTitle(newTitle: string): void {
+    const native = this.nativePage();
+    if (native && native.path !== '/') newTitle = native.title;
     const fullTitle = newTitle + ' - ' + this.getTitle();
     this.titleService.setTitle(fullTitle);
     this.metaService.updateTag({ property: 'og:title', content: fullTitle});
@@ -77,6 +110,7 @@ export class SeoService {
   }
 
   setDescription(newDescription: string): void {
+    newDescription = this.nativePage()?.description || newDescription;
     this.metaService.updateTag({ name: 'description', content: newDescription});
     this.metaService.updateTag({ name: 'twitter:description', content: newDescription});
     this.metaService.updateTag({ property: 'og:description', content: newDescription});
@@ -91,8 +125,16 @@ export class SeoService {
   updateCanonical(path) {
     const requestedUrl = new URL(path, 'https://' + this.baseDomain);
     const block = tonBlockIdentityFromUrl(requestedUrl.href);
-    const canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + requestedUrl.pathname;
-    this.canonicalLink.setAttribute('href', canonicalUrl);
+    const native = this.nativePage(path);
+    const canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + (native?.path || requestedUrl.pathname);
+    this.canonicalLink?.setAttribute('href', canonicalUrl);
+    this.updateDiscoveryLinks(canonicalUrl);
+    const pageSchema = document.getElementById('native-page-schema');
+    const schemaPage = this.nativePage(path);
+    if (pageSchema) {
+      if (schemaPage) pageSchema.textContent = JSON.stringify({'@context': 'https://schema.org', '@type': schemaPage.path.startsWith('/docs/') ? 'TechArticle' : 'WebPage', name: schemaPage.title, description: schemaPage.description, url: canonicalUrl});
+      else pageSchema.remove();
+    }
     this.metaService.updateTag({ property: 'og:url', content: canonicalUrl });
   }
 

@@ -5,6 +5,7 @@ const fs = require("node:fs/promises");
 const path = require("node:path");
 const { WebSocketServer } = require("ws");
 const social = require("./ton-social.cjs");
+const crawlPages = require("./ton/crawl-pages.cjs");
 const { Provider } = require("./ton/provider.cjs");
 const { Collector } = require("./ton/collector.cjs");
 const { PendingCollector } = require("./ton/pending.cjs");
@@ -75,19 +76,7 @@ const server = http.createServer(async (req, res) => {
       return json(res, { error: "Method not allowed" }, 405);
     const site = tonSite(req.headers.host);
     const url = new URL(req.url, site.origin);
-    // Crawl endpoints use the existing allowlisted host identity for this shared runtime.
-    if (url.pathname === '/sitemap.xml' || url.pathname === '/robots.txt') {
-      const sitemap = url.pathname === '/sitemap.xml';
-      const body = sitemap
-        ? `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>${site.origin}/</loc></url>\n</urlset>\n`
-        : `User-agent: *\nAllow: /\n\nSitemap: ${site.origin}/sitemap.xml\n`;
-      res.writeHead(200, {
-        'Content-Type': sitemap ? 'application/xml; charset=utf-8' : 'text/plain; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-        'X-Content-Type-Options': 'nosniff',
-      });
-      return res.end(req.method === 'HEAD' ? undefined : body);
-    }
+    if (await crawlPages.respond(req, res, url, site, root, social)) return;
     if (
       url.pathname === "/og.png" ||
       /^\/og\/(tx|block|address|nft|collection|jetton|trace|message)\/[^/]+\.png$/.test(

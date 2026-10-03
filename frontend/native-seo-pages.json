@@ -1,0 +1,165 @@
+{
+  "chain": "TON",
+  "host": "ton.tx.taxi",
+  "origin": "https://ton.tx.taxi",
+  "explorerTitle": "TON Explorer",
+  "pages": [
+    {
+      "path": "/",
+      "title": "TON Explorer",
+      "description": "Explore TON blocks, transactions, accounts, jettons and NFTs.",
+      "template": "src/app/dashboard/dashboard.component.html",
+      "kind": "live"
+    },
+    {
+      "path": "/about",
+      "title": "About ton.tx.taxi",
+      "description": "About the TON explorer in the tx.taxi family.",
+      "template": "src/app/components/about/about.component.html",
+      "kind": "info"
+    },
+    {
+      "path": "/terms-of-service",
+      "title": "Terms of Service",
+      "description": "Service terms, public-data limitations and open-source attribution.",
+      "template": "src/app/components/terms-of-service/terms-of-service.component.html",
+      "kind": "info"
+    },
+    {
+      "path": "/privacy-policy",
+      "title": "Privacy Policy",
+      "description": "Public explorer requests, local preferences and privacy limits.",
+      "template": "src/app/components/privacy-policy/privacy-policy.component.html",
+      "kind": "info"
+    },
+    {
+      "path": "/trademark-policy",
+      "title": "Brand attribution",
+      "description": "Independent explorer branding, upstream attribution and third-party marks.",
+      "template": "src/app/components/trademark-policy/trademark-policy.component.html",
+      "kind": "info"
+    },
+    {
+      "path": "/docs/faq",
+      "title": "TON Guide",
+      "description": "Explore TON transactions, messages, wallets, jettons, NFTs and validators.",
+      "template": "src/app/docs/api-docs/ton-docs-data.ts",
+      "kind": "docs",
+      "data": "tonGuideData"
+    },
+    {
+      "path": "/docs/api/rest",
+      "title": "REST API",
+      "description": "TON REST API reference for blocks, transactions, messages, accounts, jettons and NFTs.",
+      "template": "src/app/docs/api-docs/ton-docs-data.ts",
+      "kind": "docs",
+      "data": "tonRestData"
+    },
+    {
+      "path": "/docs/api/websocket",
+      "title": "WebSocket API",
+      "description": "TON WebSocket API reference for live basechain and masterchain blocks.",
+      "template": "src/app/docs/api-docs/ton-docs-data.ts",
+      "kind": "docs",
+      "data": "tonWebsocketData"
+    },
+    {
+      "path": "/blocks",
+      "title": "Blocks",
+      "description": "Explore TON basechain blocks, masterchain blocks and shard references.",
+      "template": "src/app/components/blocks-list/blocks-list.component.html",
+      "kind": "live",
+      "context": {}
+    },
+    {
+      "path": "/txs",
+      "title": "Transactions",
+      "description": "Explore recent TON transactions across masterchain and shards.",
+      "template": "src/app/components/recent-transactions-list/recent-transactions-list.component.html",
+      "kind": "live",
+      "context": {}
+    },
+    {
+      "path": "/market",
+      "title": "Market",
+      "description": "Explore GRAM price history and market quotes.",
+      "template": "src/app/components/price-chart/price-chart.component.html",
+      "kind": "live",
+      "context": {
+        "marketPage": true
+      }
+    },
+    {
+      "path": "/jettons",
+      "title": "Jettons",
+      "description": "Browse indexed TON jettons, supply and metadata.",
+      "template": "src/app/ton/ton-asset-catalog.component.html",
+      "kind": "live",
+      "context": {
+        "page": "jettons"
+      }
+    },
+    {
+      "path": "/collections",
+      "title": "NFT collections",
+      "description": "Browse TON NFT collections and their items.",
+      "template": "src/app/ton/ton-asset-catalog.component.html",
+      "kind": "live",
+      "context": {
+        "page": "collections"
+      }
+    },
+    {
+      "path": "/validators",
+      "title": "Validators",
+      "description": "Explore TON validators and network configuration.",
+      "template": "src/app/ton/ton-page.component.html",
+      "kind": "live",
+      "context": {
+        "page": "validators"
+      }
+    },
+    {
+      "path": "/dns",
+      "title": "DNS auctions",
+      "description": "Explore TON domains, ownership, expiration and auction bids.",
+      "template": "src/app/ton/ton-page.component.html",
+      "kind": "live",
+      "context": {
+        "page": "dns-auctions"
+      }
+    },
+    {
+      "path": "/config",
+      "title": "Network configuration",
+      "description": "Explore TON network configuration parameters.",
+      "template": "src/app/ton/ton-page.component.html",
+      "kind": "live",
+      "context": {
+        "page": "config"
+      }
+    },
+    {
+      "path": "/mempool-block/0",
+      "title": "Pending messages",
+      "description": "Inspect observed TON external incoming pending messages.",
+      "template": "src/app/components/mempool-block/mempool-block.component.html",
+      "kind": "live",
+      "context": {}
+    }
+  ],
+  "aliases": {
+    "/docs": "/docs/faq",
+    "/docs/api": "/docs/api/rest",
+    "/docs/api/electrs": "/docs/faq",
+    "/api": "/docs/faq",
+    "/production": "/validators"
+  },
+  "limits": "tx.taxi displays public TON data. Confirmation of one transaction does not establish completion of a multi-contract trace. Token and NFT names do not replace contract identity. The explorer does not sign transactions or hold private keys.",
+  "preview": {
+    "url": "https://tx.taxi/assets/screenshots/hub-c0f1a521a7ad.jpg",
+    "width": 1440,
+    "height": 2611,
+    "alt": "The tx.taxi hub showing its native blockchain explorer strips and external explorer blocks."
+  }
+}

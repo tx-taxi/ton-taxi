@@ -6,6 +6,7 @@ const fs = require("node:fs/promises"),
   parse5 = require("parse5");
 const { tonSite } = require("./ton/block-selection.cjs");
 const { blockRouteIdentity, blockUrl } = require("./ton/block-route.cjs");
+const PAGE_CAPTURE = Object.freeze({url:"https://tx.taxi/assets/screenshots/hub-c0f1a521a7ad.jpg",width:1440,height:2611,alt:"The tx.taxi hub showing its native blockchain explorer strips and external explorer blocks."});
 const cache = new Map(),
   pending = new Map();
 let active = 0;
@@ -214,18 +215,23 @@ async function metadata(pathname, api, provider, collector, host) {
     title: short(title, 240),
     description: short(description, 300),
     canonical,
-    image: entity
-      ? `${entity.kind === "block" ? new URL(canonical).origin : origin}/og/${entity.kind}/${encodeURIComponent(entity.id)}.png${entity.kind === "block" ? "?v=4" : ""}`
-      : `${origin}/og.png?v=1`,
+    image: PAGE_CAPTURE.url,
     line1,
     line2,
     summary,
     type,
   };
 }
-async function inject(html, pathname, api, provider, collector, host) {
+async function inject(html, pathname, api, provider, collector, host, staticPage) {
   const meta = await metadata(pathname, api, provider, collector, host),
     document = parse5.parse(html);
+  if (staticPage) {
+    const site = tonSite(host);
+    meta.title = staticPage.path === '/' ? `${site.host} - TON Explorer` : `${staticPage.title} - ${site.host} - TON Explorer`;
+    meta.description = staticPage.path === "/" && site.workchain === -1 ? "Explore TON masterchain blocks, transactions and network activity." : staticPage.description;
+    meta.canonical = site.origin + staticPage.path;
+    if (staticPage.preview) meta.image = staticPage.preview.url;
+  }
   let head;
   function find(n) {
     if (n.tagName === "head") head = n;
@@ -274,14 +280,38 @@ async function inject(html, pathname, api, provider, collector, host) {
     "og:description": meta.description,
     "og:url": meta.canonical,
     "og:image": meta.image,
-    "og:image:width": "1200",
-    "og:image:height": "630",
+    "og:image:type": "image/jpeg",
+    "og:image:width": String(staticPage?.preview?.width || PAGE_CAPTURE.width),
+    "og:image:height": String(staticPage?.preview?.height || PAGE_CAPTURE.height),
     "og:type": "website",
   }))
     set("meta", (n) => attr(n, "property") === key, {
       property: key,
       content: value,
     });
+  const capture = staticPage?.preview || PAGE_CAPTURE;
+  set("meta", (n) => attr(n,"property") === "og:image:alt", {property:"og:image:alt",content:capture.alt});
+  set("meta", (n) => attr(n,"name") === "twitter:image:alt", {name:"twitter:image:alt",content:capture.alt});
+  if (!staticPage) {
+    head.childNodes = head.childNodes.filter(node => !(node.tagName === "link" && attr(node,"rel") === "alternate" && attr(node,"type") === "text/markdown"));
+    const schema = {"@context":"https://schema.org","@type":"WebPage",name:meta.title,description:meta.description,url:meta.canonical};
+    set("script", (n) => attr(n,"id") === "native-page-schema", {id:"native-page-schema",type:"application/ld+json"},JSON.stringify(schema).replace(/</g,"\\u003c"));
+    if (pathname !== "/") {
+      const fragment = parse5.parseFragment(`<main class="container-xl" data-native-seo><h1>${escape(meta.title)}</h1><p>${escape(meta.description)}</p></main>`);
+      function body(node) { if (node.tagName === "app-root") {node.childNodes=fragment.childNodes;for(const child of node.childNodes)child.parentNode=node;} else for(const child of node.childNodes || []) body(child); }
+      body(document);
+    }
+  }
+  if (staticPage) {
+    const origin = tonSite(host).origin;
+    if (staticPage.preview) {
+      set("meta", (n) => attr(n,"property") === "og:image:alt", {property:"og:image:alt",content:staticPage.preview.alt});
+      set("meta", (n) => attr(n,"name") === "twitter:image:alt", {name:"twitter:image:alt",content:staticPage.preview.alt});
+    }
+    set("link", (n) => attr(n,"rel") === "alternate" && attr(n,"type") === "text/markdown", {rel:"alternate",type:"text/markdown",href:origin + (staticPage.path === "/"?"/index":staticPage.path) + ".md"});
+    set("link", (n) => attr(n,"rel") === "describedby", {rel:"describedby",type:"text/plain",href:origin + "/llms.txt"});
+    set("script", (n) => attr(n,"id") === "native-page-schema", {id:"native-page-schema",type:"application/ld+json"}, JSON.stringify({"@context":"https://schema.org","@type":staticPage.kind === "docs"?"TechArticle":"WebPage",name:meta.title,description:meta.description,url:meta.canonical}));
+  }
   return parse5.serialize(document);
 }
 async function image(pathname, api, provider, collector, root, host) {
