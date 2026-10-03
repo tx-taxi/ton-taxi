@@ -43,6 +43,7 @@ interface SearchTarget {
 export class SearchFormComponent implements OnInit {
   @Input() hamburgerOpen = false;
   readonly sourceChainId = 'ton';
+  readonly routerHubUrl = this.explorerRegistry.hubUrl;
   readonly defaultChainIconUrl = 'https://tx.taxi/assets/chains/ton.png';
   readonly defaultChainIconAlt = 'TON explorer';
   readonly defaultChainAccent = '#0098ea';
@@ -509,6 +510,18 @@ export class SearchFormComponent implements OnInit {
     });
   }
 
+  private assignDestination(value: string): void {
+    let lightning = false;
+    try {
+      const url = new URL(value);
+      lightning = this.explorers.some(explorer => explorer.chainId === 'bitcoin' && explorer.destinations?.some(destination =>
+        destination.destinationId === 'lightning' && new URL(destination.origin).origin === url.origin));
+    } catch { /* Only registry-owned destinations can animate into Lightning. */ }
+    const transition = (window as Window & { txTaxiLightningNavigate?: (url: string) => Promise<void> }).txTaxiLightningNavigate;
+    if (lightning && transition) { void transition(value); return; }
+    window.location.assign(value);
+  }
+
   private searchTarget(target: SearchTarget, searchText: string): void {
     if (target.kind === 'explorer' && !target.destinationId && target.chainId === this.sourceChainId && (!target.origin || this.isSourceOrigin(target.origin))) {
       this.searchSourceChain(searchText);
@@ -526,7 +539,7 @@ export class SearchFormComponent implements OnInit {
         else this.router.navigateByUrl(url.pathname + url.search + url.hash);
         this.isSearching=false; return;
       }
-      window.location.assign(target.directUrl);
+      this.assignDestination(this.explorerRegistry.navigationUrl(target.directUrl));
       return;
     }
 

@@ -50,11 +50,11 @@
                 </span>
               </button>
               <span class="search-chain-actions">
-                <a class="search-chain-new-tab" href="https://tx.taxi/" target="_blank" rel="noopener noreferrer"
+                <a class="search-chain-new-tab" [href]="routerHubUrl" target="_blank" rel="noopener noreferrer"
                   aria-label="Open tx.taxi in a new tab" title="Open tx.taxi in a new tab">
                   <fa-icon [icon]="['fas', 'external-link-alt']" aria-hidden="true"></fa-icon>
                 </a>
-                <a class="search-chain-switch" href="https://tx.taxi/">View Hub</a>
+                <a class="search-chain-switch" [href]="routerHubUrl">View Hub</a>
               </span>
               <span class="search-chain-host search-routing-hint">Or go straight to <code>tx.taxi/[your search]</code></span>
             </div>

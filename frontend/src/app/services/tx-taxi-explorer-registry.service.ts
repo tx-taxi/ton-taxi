@@ -16,12 +16,17 @@ interface RouterExplorerDestination {
   name: string;
   origin: string;
   default?: boolean;
-  search: { resolvePath: string; params?: Record<string, string> };
+  icon?: RouterBrandAsset;
+  searchPlaceholder?: string;
+  reviewOrigin?: string;
+  search: { kind?: 'chain' | 'lightning'; resolvePath: string; params?: Record<string, string> };
 }
 
 interface RouterExplorerSite {
   origin: string;
   host: string;
+  aliasOrigins?: string[];
+  localReviewOrigin?: string;
   searchPlaceholder?: string;
   switcherLogo?: RouterBrandAsset;
   destinations?: RouterExplorerDestination[];
@@ -65,7 +70,7 @@ interface RouterSearchOption {
   name: string;
   symbol: string;
   category: string;
-  objectType: 'address' | 'tx' | 'block';
+  objectType: 'address' | 'tx' | 'block' | 'node' | 'channel';
   confidence: 'strong' | 'weak' | 'fallback';
   confirmed: boolean;
   firstParty: boolean;
@@ -134,6 +139,22 @@ export class TxTaxiExplorerRegistryService {
   readonly thirdPartyExplorers$: Observable<TxTaxiThirdPartyExplorer[]>;
 
   private readonly routerOrigin: string;
+  get hubUrl(): string { return this.routerOrigin + '/'; }
+
+  navigationUrl(value: string): string {
+    if (this.routerOrigin !== 'http://127.0.0.1:4582') return value;
+    try {
+      const url = new URL(value);
+      const destination = this.chains.find(chain => chain.id === 'bitcoin')?.site?.destinations?.find(item => item.id === 'lightning' && item.origin === 'https://lightning.btc.tx.taxi' && item.reviewOrigin === 'http://127.0.0.1:4581');
+      return destination && url.origin === destination.origin && !url.username && !url.password
+        ? destination.reviewOrigin + url.pathname + url.search + url.hash : value;
+    } catch { return value; }
+  }
+
+  destinationSearchUrl(chainId: string, destinationId: string, value: string): string | undefined {
+    return this.chains.find(chain => chain.id === chainId)?.site?.destinations?.some(item => item.id === destinationId)
+      ? this.chainSearchUrl(chainId, value, destinationId) : undefined;
+  }
   private chains: RouterChain[] = [];
 
   constructor(
@@ -143,7 +164,7 @@ export class TxTaxiExplorerRegistryService {
     this.routerOrigin = (this.stateService.env.TX_TAXI_ROUTER_URL || 'https://tx.taxi').replace(/\/$/, '');
     const registry$ = this.http.get<RouterChainsResponse>(`${this.routerOrigin}/api/v1/chains`).pipe(tap(response => this.chains = response.chains), shareReplay(1));
     this.thirdPartyExplorers$ = registry$.pipe(
-      map(response => response.chains.sort((a,b)=>a.displayOrder-b.displayOrder).flatMap(chain =>
+      map(response => [...response.chains].sort((a,b)=>a.displayOrder-b.displayOrder).flatMap(chain =>
         (chain.explorers || []).filter(explorer => { const url=new URL(explorer.baseUrl); return url.protocol==='https:' && !url.username && !url.password && url.hostname!=='tx.taxi' && !url.hostname.endsWith('.tx.taxi'); }).map(explorer => ({
           id:chain.id+':'+explorer.id, chainId:chain.id, name:explorer.name, origin:explorer.baseUrl,
           host:new URL(explorer.baseUrl).host, accentColor:chain.brand.accentColor, iconUrl:this.absoluteRouterUrl(chain.brand.icon.url),
@@ -191,12 +212,13 @@ export class TxTaxiExplorerRegistryService {
           return {
             ...candidate,
             ...(destination ? { destinationId: destination.id, destinationName: destination.name, destinationDefault: Boolean(destination.default), host: new URL(destination.origin).host } : {}),
-            iconUrl: this.absoluteRouterUrl(candidate.iconUrl),
+            ...(candidate.directUrl ? { directUrl: this.navigationUrl(candidate.directUrl) } : {}),
+            iconUrl: this.absoluteRouterUrl(destination?.icon?.url || candidate.iconUrl),
           };
         }),
         ...(response.resolvedChainId ? { resolvedChainId: response.resolvedChainId } : {}),
         ...(response.resolvedDestinationId ? { resolvedDestinationId: response.resolvedDestinationId } : {}),
-        ...(response.redirectUrl ? { redirectUrl: response.redirectUrl } : {}),
+        ...(response.redirectUrl ? { redirectUrl: this.navigationUrl(response.redirectUrl) } : {}),
         elapsedMs: response.elapsedMs,
       })),
       catchError(() => of(undefined)),
@@ -212,7 +234,7 @@ export class TxTaxiExplorerRegistryService {
   }
 
   private toExplorers(chains: RouterChain[], healthSnapshots: RouterHealthSnapshot[]): TxTaxiExplorer[] {
-    return chains
+    return [...chains]
       .sort((left, right) => left.displayOrder - right.displayOrder)
       .map((chain) => {
         const site = chain.site!;
@@ -238,15 +260,24 @@ export class TxTaxiExplorerRegistryService {
           statusLabel: status === 'live' ? 'Live' : status === 'unavailable' ? 'Unavailable' : 'Checking',
           statusTitle: status === 'live' ? `Live${latency}` : status === 'unavailable' ? 'Unavailable' : 'Status is being checked',
         };
-        explorer.destinations = (site.destinations || []).map(destination => ({
+        explorer.destinations = (site.destinations || []).filter(destination => {
+          try {
+            const url = new URL(destination.origin);
+            return url.protocol === 'https:' && !url.username && !url.password && url.origin === destination.origin
+              && [site.origin, ...(site.aliasOrigins || [])].includes(url.origin);
+          } catch { return false; }
+        }).map(destination => ({
           ...explorer,
           id: `${chain.id}:${destination.id}`,
           destinationId: destination.id,
           name: destination.name,
-          origin: destination.origin,
+          origin: this.navigationUrl(destination.origin),
           host: new URL(destination.origin).host,
           default: destination.default,
-          searchPlaceholder: `Search ${chain.name} · ${destination.name}`,
+          searchPlaceholder: destination.searchPlaceholder || `Search ${chain.name} · ${destination.name}`,
+          iconUrl: destination.icon ? this.absoluteRouterUrl(destination.icon.url) : explorer.iconUrl,
+          iconAlt: destination.icon?.alt || explorer.iconAlt,
+          ...(destination.search.kind === 'lightning' ? { status: 'checking' as const, statusLabel: 'Checking', statusTitle: 'Lightning status is checked independently of Bitcoin' } : {}),
         }));
         return explorer;
       });
