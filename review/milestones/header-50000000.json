@@ -1,0 +1,81 @@
+{
+  "tx_quantity": "19",
+  "value_flow": {
+    "from_prev_blk": {
+      "grams": "852036345567671649",
+      "other": [
+        {
+          "id": "239",
+          "value": "2242713"
+        }
+      ]
+    },
+    "to_next_blk": {
+      "grams": "852036352706460251",
+      "other": [
+        {
+          "id": "239",
+          "value": "2242713"
+        }
+      ]
+    },
+    "imported": {
+      "grams": "26653887804",
+      "other": []
+    },
+    "exported": {
+      "grams": "19442252257",
+      "other": []
+    },
+    "fees_collected": {
+      "grams": "322846945",
+      "other": []
+    },
+    "fees_imported": {
+      "grams": "0",
+      "other": []
+    },
+    "recovered": {
+      "grams": "0",
+      "other": []
+    },
+    "created": {
+      "grams": "250000000",
+      "other": []
+    },
+    "minted": {
+      "grams": "0",
+      "other": []
+    }
+  },
+  "workchain_id": "0",
+  "shard": "6000000000000000",
+  "seqno": "50000000",
+  "root_hash": "7ecabfc265b86c3e1e9d217ddc6008ca04a9fbe673cc17ca13cce1d04692c4b7",
+  "file_hash": "97bd51f7f1b3f9d96f0a3526271388c6370f7fb5b4af36ee65f3c2f27205d20d",
+  "global_id": "-239",
+  "version": "0",
+  "after_merge": false,
+  "before_split": false,
+  "after_split": false,
+  "want_split": false,
+  "want_merge": false,
+  "key_block": false,
+  "gen_utime": "1739624950",
+  "start_lt": "54003041000000",
+  "end_lt": "54003041000007",
+  "vert_seqno": "1",
+  "gen_catchain_seqno": "662159",
+  "min_ref_mc_seqno": "44969677",
+  "prev_key_block_seqno": "44963391",
+  "gen_software_version": "9",
+  "gen_software_capabilities": "494",
+  "master_ref": "(-1,8000000000000000,44969677)",
+  "prev_refs": [
+    "(0,6000000000000000,49999999)"
+  ],
+  "in_msg_descr_length": "19",
+  "out_msg_descr_length": "21",
+  "rand_seed": "e318f9006a4b6c8fc73611ed10003a10abd313fcff193a1071c6f1946842711c",
+  "created_by": "9d25a3bb5d1f444aad714f919d6d2cb2642db3f9c4ef4cc9bd754003177d8793"
+}

@@ -11,12 +11,14 @@ const { PendingCollector } = require("./ton/pending.cjs");
 const { PendingInclusions } = require("./ton/pending-inclusions.cjs");
 const { tonApiKey } = require("./ton/credentials.cjs");
 const { api } = require("./ton/api.cjs");
+const { MilestoneHistory } = require("./ton/milestone-history.cjs");
 const { blockSelection, tonSite } = require("./ton/block-selection.cjs");
 const { blockRouteIdentity, blockUrl } = require("./ton/block-route.cjs");
 const provider = new Provider(),
   collector = new Collector(provider, { basechain: true, onUpdate: () => broadcastSelected(selection => snapshot(selection)) }),
   sockets = new Set();
 const pendingKey = tonApiKey();
+const milestoneHistory = new MilestoneHistory(provider);
 const pending = new PendingCollector({key: pendingKey, onUpdate: value => {
   // Pending traffic cannot postpone the browser's view of a stalled head.
   // This is the original block observation time, never the pending receipt time.
@@ -102,6 +104,10 @@ const server = http.createServer(async (req, res) => {
         basechain: collector.basechain?.health?.(),
         pending: {...pending.health(), inclusions: inclusions.health()},
       });
+    }
+    if (/^\/api\/v1\/milestones\/\d+$/.test(url.pathname)) {
+      const selection = blockSelection(url.searchParams);
+      return json(res, [await milestoneHistory.get(Number(url.pathname.split('/').pop()), selection.workchain)]);
     }
     if (url.pathname === "/api/ton/pending") return json(res, pending.snapshot());
     if (url.pathname.startsWith("/api/ton/")) {
