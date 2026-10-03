@@ -51,6 +51,10 @@ function identity(pathname) {
     return null;
   }
 }
+function isIndexableEntity(pathname) {
+  const route = new URL(pathname, "https://ton.tx.taxi").pathname;
+  return Boolean(identity(route) || /^\/(dns|staking-pool|extra-currency)\/[^/]+\/?$/.test(route));
+}
 async function metadata(pathname, api, provider, collector, host) {
   const site = tonSite(host);
   const origin = site.origin;
@@ -262,6 +266,7 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
       node.childNodes = [{ nodeName: "#text", value: text, parentNode: node }];
   };
   set("title", () => true, {}, meta.title);
+  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:staticPage || isIndexableEntity(pathname) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
     id: "canonical",
     rel: "canonical",
@@ -363,4 +368,4 @@ async function image(pathname, api, provider, collector, root, host) {
   pending.set(key, task);
   return task;
 }
-module.exports = { metadata, inject, image };
+module.exports = { metadata, inject, image, isIndexableEntity };

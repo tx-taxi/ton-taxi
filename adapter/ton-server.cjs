@@ -214,6 +214,8 @@ const server = http.createServer(async (req, res) => {
         ? "no-cache"
         : "public, max-age=300",
       "X-Content-Type-Options": "nosniff",
+      ...(filename.endsWith("index.html") && !social.isIndexableEntity(url.pathname)
+        ? {"X-Robots-Tag":"noindex, follow"} : {}),
     });
     res.end(req.method === "HEAD" ? undefined : body);
   } catch (error) {
