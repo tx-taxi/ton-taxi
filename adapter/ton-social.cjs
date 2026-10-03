@@ -265,6 +265,29 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     if (text !== undefined)
       node.childNodes = [{ nodeName: "#text", value: text, parentNode: node }];
   };
+  // The shared build shell describes the base host; native site identities follow tonSite.
+  const siteSchema = head.childNodes.find(node => node.tagName === "script" && attr(node,"id") === "jsonld-site");
+  if (siteSchema) {
+    try {
+      const schema = JSON.parse(siteSchema.childNodes.map(node => node.value || "").join(""));
+      const site = tonSite(host);
+      function rewriteSiteIdentity(value) {
+        if (!value || typeof value !== "object") return;
+        const types = Array.isArray(value["@type"]) ? value["@type"] : [value["@type"]];
+        if (types.some(type => type === "WebSite" || type === "WebApplication")) {
+          value.url = site.origin + "/";
+          value.name = site.host;
+          if (typeof value["@id"] === "string") {
+            const id = new URL(value["@id"], site.origin);
+            value["@id"] = site.origin + id.pathname + id.search + id.hash;
+          }
+        }
+        for (const child of Object.values(value)) if (child && typeof child === "object") rewriteSiteIdentity(child);
+      }
+      rewriteSiteIdentity(schema);
+      set("script", node => attr(node,"id") === "jsonld-site", {}, JSON.stringify(schema).replace(/</g,"\\u003c"));
+    } catch {}
+  }
   set("title", () => true, {}, meta.title);
   set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:staticPage || isIndexableEntity(pathname) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
