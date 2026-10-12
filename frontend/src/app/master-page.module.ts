@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { MasterPageComponent } from '@components/master-page/master-page.component';
 import { SharedModule } from '@app/shared/shared.module';
+import { UswapPromotionComponent } from '@app/shared/components/uswap-promotion/uswap-promotion.component';
 
 import { StartComponent } from '@components/start/start.component';
 import { PushTransactionComponent } from '@components/push-transaction/push-transaction.component';
@@ -73,6 +74,7 @@ export class MasterPageRoutingModule { }
     CommonModule,
     MasterPageRoutingModule,
     SharedModule,
+    UswapPromotionComponent,
     TonPageComponent,
     TonAssetCatalogComponent,
     PriceChartModule,
