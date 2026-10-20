@@ -233,7 +233,7 @@ const server = http.createServer(async (req, res) => {
     );
   }
 });
-const wss = new WebSocketServer({ noServer: true, maxPayload: 8192 });
+const wss = new WebSocketServer(require('./ton/websocket-options.cjs'));
 server.on("upgrade", (req, socket, head) => {
   if (req.url?.split("?")[0] !== "/api/v1/ws") {
     socket.destroy();
