@@ -185,6 +185,7 @@ const server = http.createServer(async (req, res) => {
       filename = path.join(root, "index.html");
     }
     let body = await fs.readFile(filename);
+    const pageResponse = {};
     if (filename.endsWith("index.html"))
       body = Buffer.from(
         await social.inject(
@@ -194,6 +195,8 @@ const server = http.createServer(async (req, res) => {
           provider,
           collector,
           site.host,
+          undefined,
+          pageResponse,
         ),
       );
     const types = {
@@ -207,7 +210,8 @@ const server = http.createServer(async (req, res) => {
       ".ico": "image/x-icon",
       ".woff2": "font/woff2",
     };
-    res.writeHead(200, {
+    res.writeHead(pageResponse.status || 200, {
+      ...(pageResponse.status === 503 ? {"Retry-After": "60"} : {}),
       "Content-Type":
         types[path.extname(filename)] || "application/octet-stream",
       "Cache-Control": filename.endsWith(".html")

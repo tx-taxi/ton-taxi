@@ -135,6 +135,8 @@ async function metadata(pathname, api, provider, collector, host) {
     summary = detail;
     type = "TON / " + label;
   }
+  let status = 200;
+  const facts = [];
   if (entity) {
     const { kind, id } = entity;
     const label = {
@@ -158,7 +160,7 @@ async function metadata(pathname, api, provider, collector, host) {
       const data = await Promise.race([
         provider.context.run({ deadline: Date.now() + 4000 }, () =>
           api(
-            new URL(origin + "/api/ton/" + kind + "/" + encodeURIComponent(id)),
+            new URL(origin + "/api/ton/" + kind + "/" + encodeURIComponent(id) + (kind === "tx" ? "?include=core" : "")),
             provider,
             collector,
           ),
@@ -179,7 +181,29 @@ async function metadata(pathname, api, provider, collector, host) {
           }${fees !== null ? " · " + fees + " GRAM fees" : ""}`,
           60,
         );
-        description = `TON transaction ${id}. ${summary}`;
+        description = `TON ${kind === "message" ? "message" : "transaction"} ${id}. ${summary}`;
+        const add = (label, value, href) => { if (value !== undefined && value !== null && value !== "") facts.push({label, value: String(value), href}); };
+        if (data.hash) add("Transaction", data.hash, "/tx/" + encodeURIComponent(data.hash));
+        if (typeof data.success === "boolean") add("Status", data.success ? "Confirmed" : "Failed");
+        if (data.utime && Number.isFinite(Number(data.utime))) add("Timestamp", new Date(Number(data.utime) * 1000).toISOString());
+        const account = data.account?.address;
+        if (account) add("Account", account, "/address/" + encodeURIComponent(account));
+        if (data.lt) add("Logical time", data.lt);
+        if (fees !== null) add("Fee", fees + " GRAM");
+        if (data.block) {
+          const destination = new URL(blockUrl(data.block));
+          add("Block", data.block.match(/,(\d+)\)$/)?.[1] || data.block, destination.href);
+        }
+        const incoming = data.in_msg;
+        if (incoming?.hash) add("Incoming message", incoming.hash, "/message/" + encodeURIComponent(incoming.hash));
+        for (const [label, field] of [["From", "source"], ["To", "destination"]]) {
+          const address = incoming?.[field]?.address;
+          if (address) add(label, address, "/address/" + encodeURIComponent(address));
+        }
+        const value = incoming?.value === undefined ? null : amount(incoming.value);
+        if (value !== null) add("Incoming value", value + " GRAM");
+        if (Array.isArray(data.out_msgs)) add("Outgoing messages", data.out_msgs.length);
+
       } else if (kind === "block") {
         line2 = "#" + data.seqno;
         summary = short(
@@ -210,7 +234,10 @@ async function metadata(pathname, api, provider, collector, host) {
           180,
         )}`;
       }
-    } catch {
+    } catch (error) {
+      status = error.status === 404 || error.status === 400 ? 404 : 503;
+      description = status === 404 ? `TON ${label.toLowerCase()} not found.` : "TON data temporarily unavailable. Please retry.";
+      summary = description;
     } finally {
       clearTimeout(timer);
     }
@@ -224,11 +251,14 @@ async function metadata(pathname, api, provider, collector, host) {
     line2,
     summary,
     type,
+    status,
+    facts,
   };
 }
-async function inject(html, pathname, api, provider, collector, host, staticPage) {
+async function inject(html, pathname, api, provider, collector, host, staticPage, response = {}) {
   const meta = await metadata(pathname, api, provider, collector, host),
     document = parse5.parse(html);
+  response.status = meta.status;
   if (staticPage) {
     const site = tonSite(host);
     meta.title = staticPage.path === '/' ? `${site.host} - TON Explorer` : `${staticPage.title} - ${site.host} - TON Explorer`;
@@ -289,7 +319,7 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     } catch {}
   }
   set("title", () => true, {}, meta.title);
-  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:staticPage || isIndexableEntity(pathname) ? "index, follow" : "noindex, follow"});
+  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
     id: "canonical",
     rel: "canonical",
@@ -325,7 +355,8 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     const schema = {"@context":"https://schema.org","@type":"WebPage",name:meta.title,description:meta.description,url:meta.canonical};
     set("script", (n) => attr(n,"id") === "native-page-schema", {id:"native-page-schema",type:"application/ld+json"},JSON.stringify(schema).replace(/</g,"\\u003c"));
     if (pathname !== "/") {
-      const fragment = parse5.parseFragment(`<main class="container-xl" data-native-seo><h1>${escape(meta.title)}</h1><p>${escape(meta.description)}</p></main>`);
+      const details = meta.facts.length ? `<table class="table table-striped"><tbody>${meta.facts.map(fact => `<tr><th scope="row">${escape(fact.label)}</th><td style="overflow-wrap:anywhere">${fact.href ? `<a href="${escape(fact.href)}">${escape(fact.value)}</a>` : escape(fact.value)}</td></tr>`).join("")}</tbody></table>` : "";
+      const fragment = parse5.parseFragment(`<main class="container-xl" data-native-seo><h1>${escape(meta.title)}</h1><p>${escape(meta.description)}</p>${details}</main>`);
       function body(node) { if (node.tagName === "app-root") {node.childNodes=fragment.childNodes;for(const child of node.childNodes)child.parentNode=node;} else for(const child of node.childNodes || []) body(child); }
       body(document);
     }
