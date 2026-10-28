@@ -137,6 +137,7 @@ async function metadata(pathname, api, provider, collector, host) {
   }
   let status = 200;
   const facts = [];
+  const add = (label, value, href) => { if (value !== undefined && value !== null && value !== "") facts.push({label, value: String(value), href}); };
   if (entity) {
     const { kind, id } = entity;
     const label = {
@@ -157,7 +158,7 @@ async function metadata(pathname, api, provider, collector, host) {
     type = "TON / " + label;
     let timer;
     try {
-      const data = await Promise.race([
+      let data = await Promise.race([
         provider.context.run({ deadline: Date.now() + 4000 }, () =>
           api(
             new URL(origin + "/api/ton/" + kind + "/" + encodeURIComponent(id) + (kind === "tx" ? "?include=core" : "")),
@@ -169,7 +170,15 @@ async function metadata(pathname, api, provider, collector, host) {
           timer = setTimeout(() => reject(new Error("timeout")), 4000);
         }),
       ]);
-      if (kind === "tx" || kind === "message") {
+      if (kind === "trace") {
+        for (const child of (data.children || []).slice(0, 8)) {
+          const hash = child.transaction?.hash;
+          if (hash) add("Next transaction", hash, "/tx/" + encodeURIComponent(hash));
+        }
+        data = data.transaction;
+        if (!data?.hash) throw new Error("Trace transaction unavailable");
+      }
+      if (kind === "tx" || kind === "message" || kind === "trace") {
         const fees = amount(data.total_fees);
         summary = short(
           `${
@@ -181,8 +190,7 @@ async function metadata(pathname, api, provider, collector, host) {
           }${fees !== null ? " · " + fees + " GRAM fees" : ""}`,
           60,
         );
-        description = `TON ${kind === "message" ? "message" : "transaction"} ${id}. ${summary}`;
-        const add = (label, value, href) => { if (value !== undefined && value !== null && value !== "") facts.push({label, value: String(value), href}); };
+        description = `TON ${kind === "message" ? "message" : kind === "trace" ? "trace" : "transaction"} ${id}. ${summary}`;
         if (data.hash) add("Transaction", data.hash, "/tx/" + encodeURIComponent(data.hash));
         if (typeof data.success === "boolean") add("Status", data.success ? "Confirmed" : "Failed");
         if (data.utime && Number.isFinite(Number(data.utime))) add("Timestamp", new Date(Number(data.utime) * 1000).toISOString());
@@ -213,6 +221,14 @@ async function metadata(pathname, api, provider, collector, host) {
           60,
         );
         description = `TON block ${data.seqno}. ${summary}`;
+        add("Block", data.seqno);
+        add("Workchain", data.workchain_id);
+        add("Shard", data.shard);
+        add("Transactions", data.tx_quantity);
+        const fees = amount(data.value_flow?.fees_collected?.grams);
+        if (fees !== null) add("Collected fees", fees + " GRAM");
+        if (data.gen_utime && Number.isFinite(Number(data.gen_utime))) add("Timestamp", new Date(Number(data.gen_utime) * 1000).toISOString());
+        add("Root hash", data.root_hash);
       } else if (kind === "address") {
         line2 = short(data.name || abbrev(id), 18);
         summary = short(
@@ -222,6 +238,12 @@ async function metadata(pathname, api, provider, collector, host) {
           60,
         );
         description = `TON account ${data.name || id}. ${summary}`;
+        add("Account", data.address || id);
+        add("Name", data.name);
+        const balance = amount(data.balance);
+        if (balance !== null) add("Balance", balance + " GRAM");
+        add("Status", data.status);
+        if (Array.isArray(data.interfaces)) add("Interfaces", data.interfaces.join(", "));
       } else if (["nft", "collection", "jetton"].includes(kind)) {
         const name = data.metadata?.name || data.name;
         line2 = short(name || abbrev(id), 18);
@@ -233,8 +255,16 @@ async function metadata(pathname, api, provider, collector, host) {
           data.metadata?.description || data.description || "",
           180,
         )}`;
+        add("Name", name);
+        add("Address", data.address || id, "/address/" + encodeURIComponent(data.address || id));
+        const owner = data.owner?.address;
+        if (owner) add("Owner", owner, "/address/" + encodeURIComponent(owner));
+        if (data.collection?.address) add("Collection", data.collection.name || data.collection.address, "/collection/" + encodeURIComponent(data.collection.address));
+        add("Index", data.index);
+        if (Array.isArray(data.approved_by)) add("Approved by", data.approved_by.join(", "));
       }
     } catch (error) {
+      facts.length = 0;
       status = error.status === 404 || error.status === 400 ? 404 : 503;
       description = status === 404 ? `TON ${label.toLowerCase()} not found.` : "TON data temporarily unavailable. Please retry.";
       summary = description;

@@ -21,4 +21,6 @@ test('entity documents use core facts without optional lookups and distinguish r
  const message={...tx, in_msg: {hash: 'e75d33427b6913d7488c0b8305e20f5278aec8b768b69e115b4f2a198fc5fc4d'}};
  const msgBody=await social.inject(html,'/message/'+message.in_msg.hash,async()=>message,provider,{},'ton.tx.taxi');
  assert.match(msgBody,new RegExp('href="/tx/'+message.hash+'"'));assert.match(msgBody,/TON message/);
+ const traceBody=await social.inject(html,'/trace/'+tx.hash,async()=>({transaction:tx,children:[{transaction:{hash:'b'.repeat(64)}}]}),provider,{},'ton.tx.taxi');
+ assert.match(traceBody,/TON trace/);assert.match(traceBody,/0.000230802 GRAM/);assert.match(traceBody,new RegExp('href="/tx/'+'b'.repeat(64)+'"'));
 });
