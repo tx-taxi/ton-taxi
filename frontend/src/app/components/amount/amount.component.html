@@ -6,7 +6,7 @@
   @if ((viewAmountMode$ | async) === 'btc' || (viewAmountMode$ | async) === 'fiat' || ignoreViewMode) {
     {{ compactBlockAmount(satoshis) }} <span class="symbol" [style]="unitStyle">GRAM</span>
   } @else {
-    {{ compactBlockAmount(satoshis, true) }} <span class="symbol" [style]="unitStyle">nanograms</span>
+    {{ compactBlockAmount(satoshis, true) }} <span class="symbol" [style]="unitStyle" i18n="@@ton.amount.nanograms">nanograms</span>
   }
 } @else {
 <ng-container *ngIf="!noFiat && ignoreViewMode === false && (viewAmountMode$ | async) === 'fiat' && (conversions$ | async) as conversions; else viewFiatVin">
@@ -43,9 +43,7 @@
       } @else { 
         &lrm;{{ addPlus && satoshis >= 0 ? '+' : '' }}{{ satoshis | amountShortener : (satoshis < 1000 && satoshis > -1000 ? 0 : 1) : undefined : true }}
       }
-      <span class="symbol" [style]="unitStyle">
-        nanograms
-      </span>
+      <span class="symbol" [style]="unitStyle" i18n="@@ton.amount.nanograms">nanograms</span>
     }
   </ng-template>
 </ng-template>

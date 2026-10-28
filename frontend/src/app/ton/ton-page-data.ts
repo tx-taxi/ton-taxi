@@ -210,7 +210,7 @@ export class TonPageData implements OnInit, OnDestroy {
     const query = args.map(value => 'args=' + encodeURIComponent(value)).join('&');
     this.requests.add(this.get<any>(this.endpoint() + '/methods/' + encodeURIComponent(this.getterName) + (query ? '?' + query : '')).subscribe({next: value => {this.getterResult = value; this.getterLoading = false;}, error: () => {this.getterError = $localize`:@@ton.extra.method-failed:Unable to run method`; this.getterLoading = false;}}));
   }
-  fieldLabel(value: string): string { return value.replace(/_/g, ' '); }
+  fieldLabel(value: string): string { return actionFieldLabel(value, this.locale, value.replace(/_/g, ' ')); }
   phaseValue(key: string, value: any): string { return ['gas_fees','total_fwd_fees','total_action_fees','storage_fees_collected','storage_fees_due','credit','msg_fees','fwd_fees'].includes(key) && /^-?\d+$/.test(String(value)) ? this.amount(value) + ' GRAM' : this.text(value); }
   messageTotal(tx: any, incoming: boolean): string {
     const messages = incoming ? (tx.in_msg ? [tx.in_msg] : []) : tx.out_msgs || [];

@@ -8,11 +8,11 @@
 >
   <table *ngIf="hasPendingMetadata; else transactionTooltip" class="table-fixed">
     <tbody>
-      <tr><td class="label">Message</td><td class="value"><a [routerLink]="['/mempool-block/0' | relativeUrl]" [fragment]="pendingMessage.normalizedHash">{{ pendingMessage.normalizedHash | shortenString : 16 }}</a></td></tr>
-      <tr><td class="label">Destination</td><td class="value"><a [routerLink]="['/address' | relativeUrl, pendingMessage.destination]">{{ pendingMessage.destination | shortenString : 16 }}</a></td></tr>
-      <tr><td class="label">First seen</td><td class="value"><i><app-time kind="since" [time]="pendingFirstSeen" [fastRender]="true"></app-time></i></td></tr>
-      <tr><td class="label">Message size</td><td class="value">{{ pendingMessage.bocBytes | number }} bytes</td></tr>
-      <tr><td class="label">Status</td><td class="value"><span class="badge bg-secondary">Pending</span></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.message">Message</td><td class="value"><a [routerLink]="['/mempool-block/0' | relativeUrl]" [fragment]="pendingMessage.normalizedHash">{{ pendingMessage.normalizedHash | shortenString : 16 }}</a></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.destination">Destination</td><td class="value"><a [routerLink]="['/address' | relativeUrl, pendingMessage.destination]">{{ pendingMessage.destination | shortenString : 16 }}</a></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.first-seen">First seen</td><td class="value"><i><app-time kind="since" [time]="pendingFirstSeen" [fastRender]="true"></app-time></i></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.message-size">Message size</td><td class="value"><span i18n="@@ton.tooltip.bytes">{{ pendingMessage.bocBytes | number }} bytes</span></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.status">Status</td><td class="value"><span class="badge bg-secondary" i18n="@@ton.pending.title">Pending</span></td></tr>
     </tbody>
   </table>
   <ng-template #transactionTooltip>
@@ -43,8 +43,8 @@
         <td class="value"><app-amount *ngIf="confirmedFee; else unavailableFee" [amount]="confirmedFee" [unitStyle]="'color: #ffffff66'"></app-amount><ng-template #unavailableFee>—</ng-template></td>
       </tr>
       <tr>
-        <td class="label">Messages</td>
-        <td class="value">{{ confirmed?.incomingMessage ? 1 : 0 }} incoming · {{ confirmed?.outgoingMessages?.length || 0 }} outgoing</td>
+        <td class="label" i18n="@@ton.tooltip.messages">Messages</td>
+        <td class="value"><span i18n="@@ton.tooltip.incoming">{{ confirmed?.incomingMessage ? 1 : 0 }} incoming</span> · <span i18n="@@ton.tooltip.outgoing">{{ confirmed?.outgoingMessages?.length || 0 }} outgoing</span></td>
       </tr>
     </tbody>
   </table>

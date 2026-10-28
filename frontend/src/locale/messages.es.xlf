@@ -12040,6 +12040,29 @@
       <trans-unit id="ton.amount.stale-price" datatype="html"><source>Last available price</source><target>Último precio disponible</target></trans-unit>
       <trans-unit id="ton.amount.price-as-of" datatype="html"><source>Price as of <x id="time"/></source><target>Precio a fecha de <x id="time"/></target></trans-unit>
       <trans-unit id="ton.amount.stale-price-as-of" datatype="html"><source>Last available price as of <x id="time"/></source><target>Último precio disponible a fecha de <x id="time"/></target></trans-unit>
+      <trans-unit id="81b97b8ea996ad1e4f9fca8415021850214884b1" datatype="html"><source>Status</source><target>Estado</target></trans-unit>
+      <trans-unit id="b7ebd62926b7f199db09a6185c5caf793cd35770" datatype="html"><source>Successful</source><target>Exitosa</target></trans-unit>
+      <trans-unit id="ecc3694da313ec05f82bea58d596c4d8e9f935e1" datatype="html"><source>Total fee</source><target>Comisión total</target></trans-unit>
+      <trans-unit id="6d1c8856044cc923fc70f32cb4be360d200cfa82" datatype="html"><source>1 new transaction</source><target>1 transacción nueva</target></trans-unit>
+      <trans-unit id="a5c3bb57620832141bf6c51d7344e69af366c7e8" datatype="html"><source><x id="INTERPOLATION"/> new transactions</source><target><x id="INTERPOLATION"/> transacciones nuevas</target></trans-unit>
+      <trans-unit id="487bebf9352332c5e7f5bd00a78371cacff0fd95" datatype="html"><source>Pause/Resume</source><target>Pausar/Reanudar</target></trans-unit>
+      <trans-unit id="88f27d579752fd40ef53cfff5e936c293ca19221" datatype="html"><source>Pause/Resume</source><target>Pausar/Reanudar</target></trans-unit>
+      <trans-unit id="recent-transactions-title" datatype="html"><source>Recent Transactions</source><target>Transacciones recientes</target></trans-unit>
+      <trans-unit id="ton.tooltip.message" datatype="html"><source>Message</source><target>Mensaje</target></trans-unit>
+      <trans-unit id="ton.tooltip.destination" datatype="html"><source>Destination</source><target>Destino</target></trans-unit>
+      <trans-unit id="ton.tooltip.first-seen" datatype="html"><source>First seen</source><target>Visto por primera vez</target></trans-unit>
+      <trans-unit id="ton.tooltip.message-size" datatype="html"><source>Message size</source><target>Tamaño del mensaje</target></trans-unit>
+      <trans-unit id="ton.tooltip.bytes" datatype="html"><source><x id="INTERPOLATION"/> bytes</source><target><x id="INTERPOLATION"/> bytes</target></trans-unit>
+      <trans-unit id="ton.tooltip.status" datatype="html"><source>Status</source><target>Estado</target></trans-unit>
+      <trans-unit id="ton.tooltip.messages" datatype="html"><source>Messages</source><target>Mensajes</target></trans-unit>
+      <trans-unit id="ton.tooltip.incoming" datatype="html"><source><x id="INTERPOLATION"/> incoming</source><target><x id="INTERPOLATION"/> entrantes</target></trans-unit>
+      <trans-unit id="ton.tooltip.outgoing" datatype="html"><source><x id="INTERPOLATION"/> outgoing</source><target><x id="INTERPOLATION"/> salientes</target></trans-unit>
+      <trans-unit id="ton.tooltip.transfer" datatype="html"><source>Transfer</source><target>Transferencia</target></trans-unit>
+      <trans-unit id="ton.tooltip.contract" datatype="html"><source>Contract</source><target>Contrato</target></trans-unit>
+      <trans-unit id="ton.tooltip.other" datatype="html"><source>Other</source><target>Otro</target></trans-unit>
+      <trans-unit id="ton.amount.nanograms" datatype="html"><source>nanograms</source><target>nanogramos</target></trans-unit>
+      <trans-unit id="ton.amount.raw-units" datatype="html"><source>raw units</source><target>unidades sin procesar</target></trans-unit>
+      <trans-unit id="ton.amount.atomic-units" datatype="html"><source>atomic units</source><target>unidades atómicas</target></trans-unit>
     </body>
   </file>
 </xliff>

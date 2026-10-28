@@ -136,6 +136,13 @@ export class BlockOverviewTooltipComponent implements OnChanges {
 
   get confirmedCategoryLabel(): string {
     if (!this.confirmed) return '';
-    return this.confirmed.category === 'nft' ? 'NFT' : this.confirmed.category.charAt(0).toUpperCase() + this.confirmed.category.slice(1);
+    const labels = {
+      transfer: $localize`:@@ton.tooltip.transfer:Transfer`,
+      jetton: 'Jetton',
+      nft: 'NFT',
+      contract: $localize`:@@ton.tooltip.contract:Contract`,
+      other: $localize`:@@ton.tooltip.other:Other`,
+    };
+    return labels[this.confirmed.category] || this.confirmed.category.charAt(0).toUpperCase() + this.confirmed.category.slice(1);
   }
 }

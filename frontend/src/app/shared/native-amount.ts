@@ -55,8 +55,13 @@ export function displayNativeAmount(amount: NativeAmount, mode: 'btc'|'sats'|'fi
   const exact = exactUnits(amount.atomic, amount.decimals, true, locale);
   const unavailable = { value: '—', unit: '', title: $localize`:@@ton.amount.unavailable:Amount unavailable`, stale: false };
   if (exact === null) return unavailable;
-  const title = `${exact} ${amount.symbol} · ${exactUnits(amount.atomic, 0, true, locale)} ${amount.atomicSymbol || 'atomic units'}`;
-  if (amount.native && mode === 'sats') return { value: exactUnits(amount.atomic, 0, true, locale), unit: amount.atomicSymbol || 'atomic units', title, stale: false };
+  const atomicUnit = amount.atomicSymbol === 'nanograms'
+    ? $localize`:@@ton.amount.nanograms:nanograms`
+    : amount.atomicSymbol === 'raw units'
+    ? $localize`:@@ton.amount.raw-units:raw units`
+    : amount.atomicSymbol || $localize`:@@ton.amount.atomic-units:atomic units`;
+  const title = `${exact} ${amount.symbol} · ${exactUnits(amount.atomic, 0, true, locale)} ${atomicUnit}`;
+  if (amount.native && mode === 'sats') return { value: exactUnits(amount.atomic, 0, true, locale), unit: atomicUnit, title, stale: false };
   const quote = amount.quote === undefined ? fallback : amount.quote;
   if (mode === 'fiat' && (amount.native || quote)) {
     if (!quote || quote.currency.toUpperCase() !== currency.toUpperCase()) return { value: '—', unit: '', title: `${title} · ${$localize`:@@ton.amount.price-unavailable:${currency}:currency: price unavailable`}`, stale: false };
