@@ -39,15 +39,18 @@ export class FeesBoxComponent implements OnInit, OnDestroy, OnChanges {
   get feeRows(): { amount?: NativeAmount; rate?: number; belowAtomicUnit?: boolean; tooltip: string }[] {
     if (this.confirmedMode) {
       const fees = this.confirmedFees;
-      const sample = `${fees?.count ?? 0} confirmed transactions across the network with reported fees${this.confirmedSource?.masterSeqno ? ` confirmed by masterchain block #${this.confirmedSource.masterSeqno}` : ''}${this.confirmedSource?.partial ? ' (partial sample)' : ''}.`;
-      const descriptions = ['Lowest observed transaction fee.', 'Middle observed transaction fee, rounded down to a whole nanogram when necessary.', 'Average observed transaction fee, rounded down to a whole nanogram when necessary.', 'Highest observed transaction fee.'];
+      const sampleCount = $localize`:@@ton.dash.fee-sample:${fees?.count ?? 0}:count: confirmed transactions across the network with reported fees`;
+      const master = this.confirmedSource?.masterSeqno ? $localize`:@@ton.dash.outcome-master: confirmed by masterchain block #${this.confirmedSource.masterSeqno}:seqno:` : '';
+      const partial = this.confirmedSource?.partial ? $localize`:@@ton.dash.outcome-partial: (partial sample)` : '';
+      const sample = `${sampleCount}${master}${partial}.`;
+      const descriptions = [$localize`:@@ton.dash.fee-min-description:Lowest observed transaction fee.`, $localize`:@@ton.dash.fee-median-description:Middle observed transaction fee, rounded down to a whole nanogram when necessary.`, $localize`:@@ton.dash.fee-mean-description:Average observed transaction fee, rounded down to a whole nanogram when necessary.`, $localize`:@@ton.dash.fee-max-description:Highest observed transaction fee.`];
       return [fees?.min, fees?.median, fees?.mean, fees?.max].map((atomic, index) => {
         const ratio = index === 1 ? fees?.medianExact : index === 2 ? fees?.meanExact : null;
         const fractional = ratio && ratio.remainder !== '0';
         return {
           amount: { atomic, decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true },
           belowAtomicUnit: atomic === '0' && fractional,
-          tooltip: `${descriptions[index]}${fractional ? ` Exact result: ${atomic} + ${ratio.remainder}/${ratio.denominator} nanograms.` : ''} ${sample}`,
+          tooltip: `${descriptions[index]}${fractional ? $localize`:@@ton.dash.fee-exact: Exact result: ${atomic}:atomic: + ${ratio.remainder}:remainder:/${ratio.denominator}:denominator: nanograms.` : ''} ${sample}`,
         };
       });
     }

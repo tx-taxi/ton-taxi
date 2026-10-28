@@ -5,7 +5,7 @@
   <div *ngIf="widget">
     <div class="pool-distribution" *ngIf="(pricesObservable$ | async) as stats; else loadingStats">
       <div class="item">
-        <h5 class="card-title">{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</h5>
+        <h5 class="card-title"><ng-container *ngIf="nativeMode; else bitcoinPriceWidget" i18n="@@ton.market.price">{{ nativePrices?.assetSymbol || 'GRAM' }} price</ng-container><ng-template #bitcoinPriceWidget>Bitcoin Price</ng-template></h5>
         <p class="card-text">
           <ng-container *ngIf="nativeMode; else bitcoinWidgetPrice">{{ stats.latestPrice == null ? '—' : (stats.latestPrice | currency:currency:'symbol':'1.2-6') }}</ng-container><ng-template #bitcoinWidgetPrice><app-fiat [value]="100_000_000"></app-fiat></ng-template>
         </p>
@@ -21,12 +21,12 @@
 
   <div class="card-header mb-0 mb-md-4" [style]="widget ? 'display:none' : ''">
     <div class="d-flex d-md-block align-items-baseline">
-      <span>{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</span>
-      <button class="btn p-0 ps-2" style="margin: 0 0 4px 0px" (click)="onSaveChart()" aria-label="Download price chart" [disabled]="!chartInstance || nativeLoading || (nativeMode && !nativePrices?.points?.length)">
+      <span><ng-container *ngIf="nativeMode; else bitcoinPriceHeader" i18n="@@ton.market.price">{{ nativePrices?.assetSymbol || 'GRAM' }} price</ng-container><ng-template #bitcoinPriceHeader>Bitcoin Price</ng-template></span>
+      <button class="btn p-0 ps-2" style="margin: 0 0 4px 0px" (click)="onSaveChart()" aria-label="Download price chart" i18n-aria-label="@@ton.market.download-chart" [disabled]="!chartInstance || nativeLoading || (nativeMode && !nativePrices?.points?.length)">
         <fa-icon [icon]="['fas', 'download']" [fixedWidth]="true"></fa-icon>
       </button>
     </div>  
-    <span *ngIf="nativeMode && nativePrices?.stale" class="badge bg-warning text-dark native-chart-stale">Updates delayed</span>
+    <span *ngIf="nativeMode && nativePrices?.stale" class="badge bg-warning text-dark native-chart-stale" i18n="@@ton.04fd92b96a03">Updates delayed</span>
 
     <form [formGroup]="radioGroupForm" class="formRadioGroup" *ngIf="pricesObservable$ | async">
       <div class="btn-group" name="radioBasic">
@@ -65,14 +65,14 @@
 </div>
 
 <section *ngIf="marketPage" class="container-xl native-market-quotes">
-  <div class="title-block"><h2>Market quotes</h2><span *ngIf="marketQuotesStale" class="badge bg-warning text-dark">Updates delayed</span></div>
-  <div class="box"><table *ngIf="marketQuotes.length" class="table table-borderless table-striped"><thead><tr><th>Market</th><th class="text-end">USD price</th><th>Updated</th></tr></thead><tbody><tr *ngFor="let quote of marketQuotes"><td>{{ quote.market }}</td><td class="text-end">{{ quote.usd_price | currency:'USD':'symbol':'1.2-6' }}</td><td><app-timestamp *ngIf="marketTimestamp(quote.last_date_update) as date; else noMarketDate" [unixTime]="date" [customFormat]="'yyyy-MM-dd HH:mm:ss'" [hideTimeSince]="true"></app-timestamp><ng-template #noMarketDate>—</ng-template></td></tr></tbody></table><div *ngIf="marketQuotesLoading && !marketQuotes.length" class="skeleton-loader"></div><p *ngIf="marketQuotesError" role="alert">{{ marketQuotesError }}</p><p *ngIf="!marketQuotesLoading && !marketQuotes.length && !marketQuotesError">No market quotes available</p></div>
+  <div class="title-block"><h2 i18n="@@ton.market.quotes">Market quotes</h2><span *ngIf="marketQuotesStale" class="badge bg-warning text-dark" i18n="@@ton.04fd92b96a03">Updates delayed</span></div>
+  <div class="box"><table *ngIf="marketQuotes.length" class="table table-borderless table-striped"><thead><tr><th i18n="@@ton.market.market">Market</th><th class="text-end" i18n="@@ton.market.usd-price">USD price</th><th i18n="@@ton.market.updated">Updated</th></tr></thead><tbody><tr *ngFor="let quote of marketQuotes"><td>{{ quote.market }}</td><td class="text-end">{{ quote.usd_price | currency:'USD':'symbol':'1.2-6' }}</td><td><app-timestamp *ngIf="marketTimestamp(quote.last_date_update) as date; else noMarketDate" [unixTime]="date" [customFormat]="'yyyy-MM-dd HH:mm:ss'" [hideTimeSince]="true"></app-timestamp><ng-template #noMarketDate>—</ng-template></td></tr></tbody></table><div *ngIf="marketQuotesLoading && !marketQuotes.length" class="skeleton-loader"></div><p *ngIf="marketQuotesError" role="alert">{{ marketQuotesError }}</p><p *ngIf="!marketQuotesLoading && !marketQuotes.length && !marketQuotesError" i18n="@@ton.market.no-quotes">No market quotes available</p></div>
 </section>
 
 <ng-template #loadingStats>
   <div class="pool-distribution">
     <div class="item">
-      <h5 class="card-title">{{ nativeMode ? (nativePrices?.assetSymbol || 'GRAM') + ' price' : 'Bitcoin Price' }}</h5>
+      <h5 class="card-title"><ng-container *ngIf="nativeMode; else bitcoinPriceLoading" i18n="@@ton.market.price">{{ nativePrices?.assetSymbol || 'GRAM' }} price</ng-container><ng-template #bitcoinPriceLoading>Bitcoin Price</ng-template></h5>
       <p class="card-text">
         <span class="skeleton-loader skeleton-loader-big"></span>
       </p>

@@ -64,6 +64,7 @@ export class DifficultyComponent implements OnInit {
   readonly tonNetworkTitle = $localize`:@@ton.dash.ton-network:TON Network`;
   readonly tonEconomicsTitle = $localize`:@@ton.dash.ton-economics:TON Economics`;
   readonly economicsLabel = $localize`:@@ton.dash.economics:economics`;
+  tonSecondsTitle(seconds: number): string { return $localize`:@@ton.dash.seconds-title:${seconds}:count: seconds`; }
   get latestTonBlockLabel(): string { return this.tonNetwork?.label === 'Basechain' ? $localize`:@@ton.dash.latest-base:Latest basechain block` : $localize`:@@ton.dash.latest-master:Latest masterchain block`; }
 
   get isConfirmed(): boolean { return this.confirmedMode || !!this.tonNetwork; }
@@ -76,13 +77,17 @@ export class DifficultyComponent implements OnInit {
     const filled = successRate === null ? null : Math.round(NETWORK_BAR_WIDTH * successRate / 100);
     const unknown = this.confirmedData?.status.unknown ?? 0;
     const sample = this.confirmedData?.source;
+    const outcomeSummary = known ? $localize`:@@ton.dash.outcome-summary:${successful}:successful: successful of ${known}:known: transactions with a reported outcome` : '';
+    const unknownSummary = unknown ? $localize`:@@ton.dash.outcome-unknown:; ${unknown}:unknown: outcomes unavailable` : '';
+    const masterSummary = sample?.masterSeqno ? $localize`:@@ton.dash.outcome-master: confirmed by masterchain block #${sample.masterSeqno}:seqno:` : '';
+    const partialSummary = sample?.partial ? $localize`:@@ton.dash.outcome-partial: (partial sample)` : '';
     return {
       latestBlockHeight: this.tonNetwork.seqno,
       observedBlockTime: this.tonInterval,
       metric: successRate,
       metricLabel: $localize`:@@ton.dash.successful:Successful transactions`,
-      barLabel: 'Successful transactions in the confirmed sample',
-      barTooltip: known ? `${successful} successful of ${known} transactions with a reported outcome${unknown ? `; ${unknown} outcomes unavailable` : ''}${sample?.masterSeqno ? ` confirmed by masterchain block #${sample.masterSeqno}` : ''}${sample?.partial ? ' (partial sample)' : ''}.` : 'No transaction outcomes are available for this confirmed sample.',
+      barLabel: $localize`:@@ton.dash.outcome-label:Successful transactions in the confirmed sample`,
+      barTooltip: known ? `${outcomeSummary}${unknownSummary}${masterSummary}${partialSummary}.` : $localize`:@@ton.dash.outcome-empty:No transaction outcomes are available for this confirmed sample.`,
       shapes: filled === null ? [] : [
         ...(filled > 0 ? [{ x: 0, y: 0, w: filled, h: 9, status: 'mined' as const }] : []),
         ...(filled < NETWORK_BAR_WIDTH ? [{ x: filled, y: 0, w: NETWORK_BAR_WIDTH - filled, h: 9, status: 'remaining' as const }] : []),

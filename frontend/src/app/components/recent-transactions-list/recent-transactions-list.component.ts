@@ -18,6 +18,7 @@ import { NativeAmount } from '@app/shared/native-view.types';
   providers: [TonTransactionsData],
 })
 export class RecentTransactionsList implements OnInit, OnDestroy {
+  readonly failedTransactionLabel = $localize`:@@ton.more.failed-transaction:Failed transaction`;
   @Input() widget: boolean = false;
   /** Native account/message-chain rows; bypasses the mempool stream and gas/vsize assumptions. */
   private suppliedTransactions: any[] | null = null;

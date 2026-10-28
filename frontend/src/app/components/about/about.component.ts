@@ -12,7 +12,7 @@ export class AboutComponent implements OnInit {
   constructor(private seoService: SeoService) {}
 
   ngOnInit(): void {
-    this.seoService.setTitle('About ton.tx.taxi');
-    this.seoService.setDescription('Learn about ton.tx.taxi, its TON blocks, accounts and collectibles, open-source lineage, and operator contact details.');
+    this.seoService.setTitle($localize`:@@ton.about.meta.title:About ton.tx.taxi`);
+    this.seoService.setDescription($localize`:@@ton.about.meta.description:Learn about ton.tx.taxi, its TON blocks, accounts and collectibles, open-source lineage, and operator contact details.`);
   }
 }

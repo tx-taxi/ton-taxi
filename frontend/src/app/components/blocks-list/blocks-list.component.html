@@ -125,7 +125,7 @@
       (pageChange)="pageChange(page)" [boundaryLinks]="true" [ellipses]="false">
     </ngb-pagination>
 
-    <div *ngIf="nativeRoute && tonData.hasMoreBlocks" class="pagination-container float-end mt-2"><button type="button" class="btn btn-primary" [disabled]="tonData.loadingMoreBlocks" (click)="tonData.loadMoreBlocks()">{{ tonData.loadingMoreBlocks ? 'Loading…' : 'Load earlier blocks' }}</button></div>
+    <div *ngIf="nativeRoute && tonData.hasMoreBlocks" class="pagination-container float-end mt-2"><button type="button" class="btn btn-primary" [disabled]="tonData.loadingMoreBlocks" (click)="tonData.loadMoreBlocks()"><span *ngIf="tonData.loadingMoreBlocks" i18n="@@ton.more.loading-ellipsis">Loading…</span><span *ngIf="!tonData.loadingMoreBlocks" i18n="@@ton.more.earlier-blocks">Load earlier blocks</span></button></div>
     <div *ngIf="nativeRoute && tonData.blocksError" class="alert alert-mempool" role="alert">{{ tonData.blocksError }}</div>
     <ng-template [ngIf]="!widget">
       <div class="clearfix"></div>

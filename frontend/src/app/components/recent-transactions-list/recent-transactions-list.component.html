@@ -40,7 +40,7 @@
     <tbody data-cy="transactions-list" *ngIf="(nativeMode ? rows : (transactions$ | async)) as transactions; else skeleton">
       <tr *ngFor="let transaction of transactions; trackBy: trackByTxid">
         <td class="table-cell-txid">
-          <a [class.text-danger]="nativeMode && transaction.success === false" [title]="nativeMode && transaction.success === false ? 'Failed transaction' : ''" [routerLink]="['/tx' | relativeUrl, (transaction.hash || transaction.txid)]">
+          <a [class.text-danger]="nativeMode && transaction.success === false" [title]="nativeMode && transaction.success === false ? failedTransactionLabel : ''" [routerLink]="['/tx' | relativeUrl, (transaction.hash || transaction.txid)]">
             <app-truncate [text]="transaction.hash || transaction.txid" [lastChars]="5"></app-truncate>
           </a>
         </td>
@@ -71,5 +71,5 @@
       </tbody>
     </ng-template>
   </table>
-  <div class="d-flex justify-content-center gap-2 my-4" *ngIf="nativeRoute && native.data"><button class="btn btn-primary" *ngIf="native.data._paging?.hasMore" [disabled]="native.mainLoading" (click)="native.loadMoreMain()">{{ native.mainLoading ? 'Loading…' : 'Load more' }}</button><button class="btn btn-outline-primary" (click)="native.load()">Latest</button></div><div class="alert alert-mempool" *ngIf="nativeRoute && native.mainError">{{ native.mainError }}</div>
+  <div class="d-flex justify-content-center gap-2 my-4" *ngIf="nativeRoute && native.data"><button class="btn btn-primary" *ngIf="native.data._paging?.hasMore" [disabled]="native.mainLoading" (click)="native.loadMoreMain()"><span *ngIf="native.mainLoading" i18n="@@ton.more.loading-ellipsis">Loading…</span><span *ngIf="!native.mainLoading" i18n="@@ton.dfe60ca92e8c">Load more</span></button><button class="btn btn-outline-primary" (click)="native.load()" i18n="@@ton.more.latest">Latest</button></div><div class="alert alert-mempool" *ngIf="nativeRoute && native.mainError">{{ native.mainError }}</div>
 </div>

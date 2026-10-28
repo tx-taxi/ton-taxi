@@ -39,20 +39,23 @@ export class RewardStatsComponent implements OnInit {
   }
 
   get labels(): string[] {
-    return this.confirmedMode ? ['Total fees', 'Compute fees', 'Average tx fee'] : ['Proposer rewards', 'Execution fees', 'Average tx fee'];
+    return this.confirmedMode ? [$localize`:@@ton.dash.total-fees:Total fees`, $localize`:@@ton.dash.compute-fees:Compute fees`, $localize`:@@ton.dash.average-tx-fee:Average tx fee`] : ['Proposer rewards', 'Execution fees', 'Average tx fee'];
   }
 
   rewardRows(stats: EthereumRewardStats | ConfirmedDashboardData): { label: string; tooltip: string; amount?: NativeAmount; value?: number; belowAtomicUnit?: boolean; suffix: string; digits: string }[] {
     if (this.confirmedMode) {
       const data = stats as ConfirmedDashboardData;
-      const sample = `${data.source.returned} confirmed transactions${data.source.masterSeqno ? ` confirmed by masterchain block #${data.source.masterSeqno}` : ''}${data.source.partial ? ' (partial sample)' : ''}.`;
+      const sampleCount = $localize`:@@ton.dash.confirmed-sample:${data.source.returned}:count: confirmed transactions`;
+      const master = data.source.masterSeqno ? $localize`:@@ton.dash.outcome-master: confirmed by masterchain block #${data.source.masterSeqno}:seqno:` : '';
+      const partial = data.source.partial ? $localize`:@@ton.dash.outcome-partial: (partial sample)` : '';
+      const sample = `${sampleCount}${master}${partial}.`;
       const amounts = [data.fees.count ? data.fees.sum : null, data.phaseFees.compute.sum, data.fees.mean];
-      const descriptions = [`Total reported transaction fees (${data.fees.count} known).`, `Compute-phase gas fees (${data.phaseFees.compute.count} known).`, `Average reported fee across ${data.fees.count} transactions, rounded down to a whole nanogram when necessary.`];
+      const descriptions = [$localize`:@@ton.dash.fees-total-description:Total reported transaction fees (${data.fees.count}:count: known).`, $localize`:@@ton.dash.fees-compute-description:Compute-phase gas fees (${data.phaseFees.compute.count}:count: known).`, $localize`:@@ton.dash.fees-average-description:Average reported fee across ${data.fees.count}:count: transactions, rounded down to a whole nanogram when necessary.`];
       return amounts.map((atomic, index) => {
         const ratio = index === 2 ? data.fees.meanExact : null;
         const fractional = ratio && ratio.remainder !== '0';
         return {
-          label: this.labels[index], tooltip: `${descriptions[index]}${fractional ? ` Exact result: ${atomic} + ${ratio.remainder}/${ratio.denominator} nanograms.` : ''} ${sample}`,
+          label: this.labels[index], tooltip: `${descriptions[index]}${fractional ? $localize`:@@ton.dash.fee-exact: Exact result: ${atomic}:atomic: + ${ratio.remainder}:remainder:/${ratio.denominator}:denominator: nanograms.` : ''} ${sample}`,
           amount: { atomic, decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true },
           belowAtomicUnit: atomic === '0' && fractional,
           suffix: index === 2 ? '/tx' : '', digits: '1.2-6',

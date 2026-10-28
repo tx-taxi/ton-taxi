@@ -39,6 +39,9 @@ const root = path.resolve(
   process.env.TON_STATIC_ROOT ||
     path.join(__dirname, "../frontend/dist/mempool/browser"),
 );
+// A locale URL is real only when its frontend has actually been built.  /tx is
+// an entity route, not a locale, even though it has two letters.
+const isLocalePrefix = value => value !== 'tx' && (value === 'bqi' || /^[a-z]{2}(?:[-_][a-z0-9]{2,8})*$/i.test(value));
 const port = Number(process.env.PORT || 4530);
 function json(res, data, status = 200) {
   res.writeHead(status, {
@@ -153,6 +156,15 @@ const server = http.createServer(async (req, res) => {
       return json(res, snapshot(blockSelection(url.searchParams, site.workchain)));
     if (url.pathname.startsWith("/api/"))
       return json(res, { error: "Not found" }, 404);
+    const localePrefix = url.pathname.split('/')[1];
+    if (isLocalePrefix(localePrefix)) {
+      let localeIndex;
+      try { localeIndex = await fs.stat(path.join(root, localePrefix, 'index.html')); } catch {}
+      if (!localeIndex?.isFile()) {
+        res.writeHead(404, {"Content-Type": "text/plain; charset=utf-8", "Cache-Control": "no-store", "X-Robots-Tag": "noindex, follow"});
+        return res.end(req.method === 'HEAD' ? undefined : 'Not found');
+      }
+    }
     const blockPath = /^((?:\/[a-z]{2}(?:-[A-Z]{2})?)?)\/block\/([^/]+)\/?$/.exec(url.pathname);
     if (blockPath) {
       const id = decodeURIComponent(blockPath[2]);
@@ -177,12 +189,12 @@ const server = http.createServer(async (req, res) => {
     } catch {}
     if (!stat?.isFile()) {
       const entityRoute =
-        /^\/(?:es\/)?(?:dns|staking-pool|extra-currency|address|tx|block|nft|collection|jetton|trace|message)\/[^/]+\/?$/.test(
+        /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?(?:dns|staking-pool|extra-currency|address|tx|block|nft|collection|jetton|trace|message)\/[^/]+\/?$/.test(
           url.pathname,
         );
       if (path.extname(url.pathname) && !entityRoute)
         return json(res, { error: "Not found" }, 404);
-      filename = path.join(root, /^\/es(?:\/|$)/.test(url.pathname) ? "es/index.html" : "index.html");
+      filename = path.join(root, isLocalePrefix(localePrefix) ? `${localePrefix}/index.html` : "index.html");
     }
     let body = await fs.readFile(filename);
     const pageResponse = {};

@@ -12063,6 +12063,48 @@
       <trans-unit id="ton.amount.nanograms" datatype="html"><source>nanograms</source><target>nanogramos</target></trans-unit>
       <trans-unit id="ton.amount.raw-units" datatype="html"><source>raw units</source><target>unidades sin procesar</target></trans-unit>
       <trans-unit id="ton.amount.atomic-units" datatype="html"><source>atomic units</source><target>unidades atómicas</target></trans-unit>
+      <trans-unit id="ton.more.failed-transaction" datatype="html"><source>Failed transaction</source><target>Transacción fallida</target></trans-unit>
+      <trans-unit id="ton.more.loading-ellipsis" datatype="html"><source>Loading…</source><target>Cargando…</target></trans-unit>
+      <trans-unit id="ton.more.latest" datatype="html"><source>Latest</source><target>Más recientes</target></trans-unit>
+      <trans-unit id="ton.more.earlier-blocks" datatype="html"><source>Load earlier blocks</source><target>Cargar bloques anteriores</target></trans-unit>
+      <trans-unit id="ton.market.history-unavailable" datatype="html"><source>Price history temporarily unavailable</source><target>Historial de precios temporalmente no disponible</target></trans-unit>
+      <trans-unit id="ton.market.quotes-unavailable" datatype="html"><source>Market quotes temporarily unavailable</source><target>Cotizaciones temporalmente no disponibles</target></trans-unit>
+      <trans-unit id="ton.market.loading-history" datatype="html"><source>Loading price history</source><target>Cargando historial de precios</target></trans-unit>
+      <trans-unit id="ton.market.no-history" datatype="html"><source>No price history available</source><target>No hay historial de precios disponible</target></trans-unit>
+      <trans-unit id="ton.market.price" datatype="html"><source><x id="INTERPOLATION"/> price</source><target>Precio de <x id="INTERPOLATION"/></target></trans-unit>
+      <trans-unit id="ton.market.download-chart" datatype="html"><source>Download price chart</source><target>Descargar gráfico de precios</target></trans-unit>
+      <trans-unit id="ton.market.quotes" datatype="html"><source>Market quotes</source><target>Cotizaciones de mercado</target></trans-unit>
+      <trans-unit id="ton.market.market" datatype="html"><source>Market</source><target>Mercado</target></trans-unit>
+      <trans-unit id="ton.market.usd-price" datatype="html"><source>USD price</source><target>Precio en USD</target></trans-unit>
+      <trans-unit id="ton.market.updated" datatype="html"><source>Updated</source><target>Actualizado</target></trans-unit>
+      <trans-unit id="ton.market.no-quotes" datatype="html"><source>No market quotes available</source><target>No hay cotizaciones de mercado disponibles</target></trans-unit>
+      <trans-unit id="ton.dash.seconds-title" datatype="html"><source><x id="count"/> seconds</source><target><x id="count"/> segundos</target></trans-unit>
+      <trans-unit id="ton.dash.outcome-summary" datatype="html"><source><x id="successful"/> successful of <x id="known"/> transactions with a reported outcome</source><target><x id="successful"/> exitosas de <x id="known"/> transacciones con resultado informado</target></trans-unit>
+      <trans-unit id="ton.dash.outcome-unknown" datatype="html"><source>; <x id="unknown"/> outcomes unavailable</source><target>; <x id="unknown"/> resultados no disponibles</target></trans-unit>
+      <trans-unit id="ton.dash.outcome-master" datatype="html"><source> confirmed by masterchain block #<x id="seqno"/></source><target> confirmadas por el bloque de masterchain n.º <x id="seqno"/></target></trans-unit>
+      <trans-unit id="ton.dash.outcome-partial" datatype="html"><source> (partial sample)</source><target> (muestra parcial)</target></trans-unit>
+      <trans-unit id="ton.dash.outcome-label" datatype="html"><source>Successful transactions in the confirmed sample</source><target>Transacciones exitosas en la muestra confirmada</target></trans-unit>
+      <trans-unit id="ton.dash.outcome-empty" datatype="html"><source>No transaction outcomes are available for this confirmed sample.</source><target>No hay resultados de transacciones disponibles para esta muestra confirmada.</target></trans-unit>
+      <trans-unit id="ton.about.meta.title" datatype="html"><source>About ton.tx.taxi</source><target>Acerca de ton.tx.taxi</target></trans-unit>
+      <trans-unit id="ton.about.meta.description" datatype="html"><source>Learn about ton.tx.taxi, its TON blocks, accounts and collectibles, open-source lineage, and operator contact details.</source><target>Conoce ton.tx.taxi, sus bloques, cuentas y coleccionables de TON, su origen de código abierto y los datos de contacto del operador.</target></trans-unit>
+      <trans-unit id="ton.about.attribution-1" datatype="html"><source>This explorer builds on the</source><target>Este explorador se basa en el</target></trans-unit>
+      <trans-unit id="ton.about.attribution-2" datatype="html"><source>See</source><target>Consulta</target></trans-unit>
+      <trans-unit id="ton.about.attribution-3" datatype="html"><source>third-party attribution</source><target>la atribución de terceros</target></trans-unit>
+      <trans-unit id="ton.about.attribution-4" datatype="html"><source>and contact the maintainer for source and license information.</source><target>y contacta al responsable para obtener información sobre el código fuente y las licencias.</target></trans-unit>
+      <trans-unit id="ton.amount.nanogram" datatype="html"><source>nanogram</source><target>nanogramo</target></trans-unit>
+      <trans-unit id="ton.dash.total-fees" datatype="html"><source>Total fees</source><target>Comisiones totales</target></trans-unit>
+      <trans-unit id="ton.dash.compute-fees" datatype="html"><source>Compute fees</source><target>Comisiones de cómputo</target></trans-unit>
+      <trans-unit id="ton.dash.average-tx-fee" datatype="html"><source>Average tx fee</source><target>Comisión media por transacción</target></trans-unit>
+      <trans-unit id="ton.dash.confirmed-sample" datatype="html"><source><x id="count"/> confirmed transactions</source><target><x id="count"/> transacciones confirmadas</target></trans-unit>
+      <trans-unit id="ton.dash.fee-sample" datatype="html"><source><x id="count"/> confirmed transactions across the network with reported fees</source><target><x id="count"/> transacciones confirmadas en la red con comisiones informadas</target></trans-unit>
+      <trans-unit id="ton.dash.fees-total-description" datatype="html"><source>Total reported transaction fees (<x id="count"/> known).</source><target>Comisiones totales de transacciones informadas (<x id="count"/> conocidas).</target></trans-unit>
+      <trans-unit id="ton.dash.fees-compute-description" datatype="html"><source>Compute-phase gas fees (<x id="count"/> known).</source><target>Comisiones de gas de la fase de cómputo (<x id="count"/> conocidas).</target></trans-unit>
+      <trans-unit id="ton.dash.fees-average-description" datatype="html"><source>Average reported fee across <x id="count"/> transactions, rounded down to a whole nanogram when necessary.</source><target>Comisión media informada para <x id="count"/> transacciones, redondeada hacia abajo a un nanogramo entero cuando sea necesario.</target></trans-unit>
+      <trans-unit id="ton.dash.fee-min-description" datatype="html"><source>Lowest observed transaction fee.</source><target>Comisión de transacción observada más baja.</target></trans-unit>
+      <trans-unit id="ton.dash.fee-median-description" datatype="html"><source>Middle observed transaction fee, rounded down to a whole nanogram when necessary.</source><target>Mediana de las comisiones de transacción observadas, redondeada hacia abajo a un nanogramo entero cuando sea necesario.</target></trans-unit>
+      <trans-unit id="ton.dash.fee-mean-description" datatype="html"><source>Average observed transaction fee, rounded down to a whole nanogram when necessary.</source><target>Comisión media de transacción observada, redondeada hacia abajo a un nanogramo entero cuando sea necesario.</target></trans-unit>
+      <trans-unit id="ton.dash.fee-max-description" datatype="html"><source>Highest observed transaction fee.</source><target>Comisión de transacción observada más alta.</target></trans-unit>
+      <trans-unit id="ton.dash.fee-exact" datatype="html"><source> Exact result: <x id="atomic"/> + <x id="remainder"/>/<x id="denominator"/> nanograms.</source><target> Resultado exacto: <x id="atomic"/> + <x id="remainder"/>/<x id="denominator"/> nanogramos.</target></trans-unit>
     </body>
   </file>
 </xliff>

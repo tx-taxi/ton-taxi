@@ -204,7 +204,7 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
     this.nativeLoading = true; this.nativeError = '';
     this.tonMarketService.prices(this.currency, this.currentTimespan).subscribe({
       next: response => { this.nativePrices = { points: response.points || [], currency: response.currency, assetSymbol: response.assetSymbol, observedAt: response._meta?.observedAt, stale: response._meta?.stale === true }; this.nativeLoading = false; this.updateNativeSeries(); },
-      error: () => { this.nativeLoading = false; this.nativeError = 'Price history temporarily unavailable'; if (this.nativePrices) this.nativePrices = {...this.nativePrices, stale: true}; this.updateNativeSeries(); },
+      error: () => { this.nativeLoading = false; this.nativeError = $localize`:@@ton.market.history-unavailable:Price history temporarily unavailable`; if (this.nativePrices) this.nativePrices = {...this.nativePrices, stale: true}; this.updateNativeSeries(); },
     });
   }
 
@@ -212,7 +212,7 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
     this.marketQuotesLoading = true; this.marketQuotesError = '';
     this.tonMarketService.quotes().subscribe({
       next: response => { this.marketQuotes = response.markets || []; this.marketQuotesStale = response._meta?.stale === true; this.marketQuotesLoading = false; this.cdr.markForCheck(); },
-      error: () => { this.marketQuotesError = 'Market quotes temporarily unavailable'; this.marketQuotesLoading = false; this.marketQuotesStale = this.marketQuotesStale || this.marketQuotes.length > 0; this.cdr.markForCheck(); },
+      error: () => { this.marketQuotesError = $localize`:@@ton.market.quotes-unavailable:Market quotes temporarily unavailable`; this.marketQuotesLoading = false; this.marketQuotesStale = this.marketQuotesStale || this.marketQuotes.length > 0; this.cdr.markForCheck(); },
     });
   }
 
@@ -248,7 +248,7 @@ export class PriceChartComponent implements OnInit, OnChanges, OnDestroy {
           color: 'grey',
           fontSize: 15
         },
-        text: this.nativeMode ? (this.nativeLoading ? 'Loading price history' : this.nativeError || 'No price history available') : $localize`:@@23555386d8af1ff73f297e89dd4af3f4689fb9dd:Indexing blocks`,
+        text: this.nativeMode ? (this.nativeLoading ? $localize`:@@ton.market.loading-history:Loading price history` : this.nativeError || $localize`:@@ton.market.no-history:No price history available`) : $localize`:@@23555386d8af1ff73f297e89dd4af3f4689fb9dd:Indexing blocks`,
         left: 'center',
         top: 'center'
       };
