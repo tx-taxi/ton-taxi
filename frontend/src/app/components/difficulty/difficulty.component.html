@@ -2,7 +2,7 @@
 <div *ngIf="showTitle && mode === 'rewards'" class="main-title">{{ isConfirmed ? tonEconomicsTitle : 'Recent execution rewards' }}</div>
 <div class="card-wrapper">
   <div class="card">
-    <div class="widget-toggler" role="group" [attr.aria-label]="isConfirmed ? 'TON network dashboard panel' : 'Ethereum network dashboard panel'">
+    <div class="widget-toggler" role="group" [attr.aria-label]="isConfirmed ? tonDashboardLabel : 'Ethereum network dashboard panel'">
       <a href="" (click)="setMode('network')" class="toggler-option"
         [ngClass]="{'inactive': mode === 'network'}" [attr.aria-pressed]="mode === 'network'"><small i18n="@@ton.dash.network">network</small></a>
       <span aria-hidden="true"> | </span>

@@ -12033,6 +12033,13 @@
       <trans-unit id="ton.status.nonexist" datatype="html"><source>nonexist</source><target>inexistente</target></trans-unit>
       <trans-unit id="ton.a11y.return-latest-ton" datatype="html"><source>Return to the latest TON block</source><target>Volver al bloque de TON más reciente</target></trans-unit>
       <trans-unit id="ton.a11y.return-latest" datatype="html"><source>Return to latest block</source><target>Volver al bloque más reciente</target></trans-unit>
+      <trans-unit id="ton.dash.network-panel" datatype="html"><source>TON network dashboard panel</source><target>Panel de la red TON</target></trans-unit>
+      <trans-unit id="ton.amount.unavailable" datatype="html"><source>Amount unavailable</source><target>Importe no disponible</target></trans-unit>
+      <trans-unit id="ton.amount.price-unavailable" datatype="html"><source><x id="currency"/> price unavailable</source><target>Precio en <x id="currency"/> no disponible</target></trans-unit>
+      <trans-unit id="ton.amount.price" datatype="html"><source>Price</source><target>Precio</target></trans-unit>
+      <trans-unit id="ton.amount.stale-price" datatype="html"><source>Last available price</source><target>Último precio disponible</target></trans-unit>
+      <trans-unit id="ton.amount.price-as-of" datatype="html"><source>Price as of <x id="time"/></source><target>Precio a fecha de <x id="time"/></target></trans-unit>
+      <trans-unit id="ton.amount.stale-price-as-of" datatype="html"><source>Last available price as of <x id="time"/></source><target>Último precio disponible a fecha de <x id="time"/></target></trans-unit>
     </body>
   </file>
 </xliff>

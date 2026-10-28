@@ -60,6 +60,7 @@ export class DifficultyComponent implements OnInit {
     return samples.length ? samples.reduce((sum, value) => sum + value, 0) / samples.length : null;
   }
 
+  readonly tonDashboardLabel = $localize`:@@ton.dash.network-panel:TON network dashboard panel`;
   readonly tonNetworkTitle = $localize`:@@ton.dash.ton-network:TON Network`;
   readonly tonEconomicsTitle = $localize`:@@ton.dash.ton-economics:TON Economics`;
   readonly economicsLabel = $localize`:@@ton.dash.economics:economics`;

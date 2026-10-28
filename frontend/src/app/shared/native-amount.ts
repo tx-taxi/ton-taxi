@@ -1,3 +1,4 @@
+import '@angular/localize/init';
 import type { NativeAmount, NativeQuote } from './native-view.types';
 
 export interface AmountDisplay { value: string; unit: string; title: string; stale: boolean; }
@@ -52,15 +53,18 @@ function fiatValue(atomic: string, decimals: number, quote: NativeQuote, locale:
 
 export function displayNativeAmount(amount: NativeAmount, mode: 'btc'|'sats'|'fiat', currency: string, fallback?: NativeQuote | null, locale = 'en-US'): AmountDisplay {
   const exact = exactUnits(amount.atomic, amount.decimals, true, locale);
-  const unavailable = { value: '—', unit: '', title: 'Amount unavailable', stale: false };
+  const unavailable = { value: '—', unit: '', title: $localize`:@@ton.amount.unavailable:Amount unavailable`, stale: false };
   if (exact === null) return unavailable;
   const title = `${exact} ${amount.symbol} · ${exactUnits(amount.atomic, 0, true, locale)} ${amount.atomicSymbol || 'atomic units'}`;
   if (amount.native && mode === 'sats') return { value: exactUnits(amount.atomic, 0, true, locale), unit: amount.atomicSymbol || 'atomic units', title, stale: false };
   const quote = amount.quote === undefined ? fallback : amount.quote;
   if (mode === 'fiat' && (amount.native || quote)) {
-    if (!quote || quote.currency.toUpperCase() !== currency.toUpperCase()) return { value: '—', unit: '', title: `${title} · ${currency} price unavailable`, stale: false };
+    if (!quote || quote.currency.toUpperCase() !== currency.toUpperCase()) return { value: '—', unit: '', title: `${title} · ${$localize`:@@ton.amount.price-unavailable:${currency}:currency: price unavailable`}`, stale: false };
     const value = fiatValue(amount.atomic, amount.decimals, quote, locale);
-    return { value: value ?? '—', unit: '', title: `${title} · ${quote.stale ? 'Last available price' : 'Price'}${quote.observedAt ? ' as of ' + quote.observedAt : ''}`, stale: !!quote.stale };
+    const priceLabel = quote.stale
+      ? quote.observedAt ? $localize`:@@ton.amount.stale-price-as-of:Last available price as of ${quote.observedAt}:time:` : $localize`:@@ton.amount.stale-price:Last available price`
+      : quote.observedAt ? $localize`:@@ton.amount.price-as-of:Price as of ${quote.observedAt}:time:` : $localize`:@@ton.amount.price:Price`;
+    return { value: value ?? '—', unit: '', title: `${title} · ${priceLabel}`, stale: !!quote.stale };
   }
   return { value: exact, unit: amount.symbol, title, stale: false };
 }
