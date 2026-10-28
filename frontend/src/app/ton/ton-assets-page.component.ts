@@ -31,12 +31,12 @@ import { NativeNftCard, TonNftGridComponent } from './ton-nft-grid.component';
 })
 export class TonAssetsPageComponent extends TonPageComponent {
   readonly accountTabs = [
-    { id: 'events', label: 'History' },
-    { id: 'activity', label: 'Transactions' },
-    { id: 'traces', label: 'Traces' },
-    { id: 'jettons', label: 'Jettons' },
-    { id: 'nfts', label: 'NFTs' },
-    { id: 'contract', label: 'Contract' },
+    { id: 'events', label: $localize`:@@ton.tab.history:History` },
+    { id: 'activity', label: $localize`:@@ton.tab.transactions:Transactions` },
+    { id: 'traces', label: $localize`:@@ton.tab.traces:Traces` },
+    { id: 'jettons', label: $localize`:@@ton.tab.jettons:Jettons` },
+    { id: 'nfts', label: $localize`:@@ton.tab.nfts:NFTs` },
+    { id: 'contract', label: $localize`:@@ton.tab.contract:Contract` },
   ];
   private summaryData: unknown;
   private accountModel: NativeAccountView | null = null;
@@ -130,7 +130,7 @@ export class TonAssetsPageComponent extends TonPageComponent {
       },
       error: (e) => {
         feed.error =
-          e.status === 400 ? 'Invalid jetton' : 'Temporarily unavailable';
+          e.status === 400 ? $localize`:@@ton.extra.invalid-jetton:Invalid jetton` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`;
         feed.loading = false;
         this.cdr.markForCheck();
       },
@@ -229,8 +229,8 @@ export class TonAssetsPageComponent extends TonPageComponent {
         : String(value),
       decimals: known ? Number(decimals) : 0,
       symbol: known
-        ? jetton?.symbol || jetton?.metadata?.symbol || 'tokens'
-        : 'raw units',
+        ? jetton?.symbol || jetton?.metadata?.symbol || $localize`:@@ton.more.tokens:tokens`
+        : $localize`:@@ton.more.raw-units:raw units`,
       assetId: jetton?.address || jetton?.metadata?.address,
     };
   }
@@ -239,7 +239,7 @@ export class TonAssetsPageComponent extends TonPageComponent {
     return {
       atomic: value == null ? null : String(value),
       decimals: decimals == null ? 0 : Number(decimals),
-      symbol: decimals == null ? 'raw units' : metadata?.symbol || 'units',
+      symbol: decimals == null ? $localize`:@@ton.more.raw-units:raw units` : metadata?.symbol || $localize`:@@ton.more.units:units`,
       assetId: String(metadata?.id ?? ''),
     };
   }
@@ -251,7 +251,7 @@ export class TonAssetsPageComponent extends TonPageComponent {
       atomic: price.value,
       decimals: price.decimals == null ? 0 : Number(price.decimals),
       symbol:
-        price.decimals == null ? 'raw units' : price.token_name || 'tokens',
+        price.decimals == null ? $localize`:@@ton.more.raw-units:raw units` : price.token_name || $localize`:@@ton.more.tokens:tokens`,
     };
   }
   get accountView(): NativeAccountView | null {
@@ -293,7 +293,7 @@ export class TonAssetsPageComponent extends TonPageComponent {
       name:
         data.metadata?.name ||
         data.name ||
-        (this.page === 'jetton' ? 'Unnamed jetton' : this.name(data)),
+        (this.page === 'jetton' ? $localize`:@@ton.more.unnamed-jetton:Unnamed jetton` : this.name(data)),
       symbol: data.metadata?.symbol,
       iconUrl: this.media(data) || this.safeUrl(data.preview),
       description: data.metadata?.description,

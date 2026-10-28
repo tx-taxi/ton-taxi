@@ -39,7 +39,10 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   tonLabel = tonLabel;
   tonIdentity = tonIdentity;
   tonAmount = tonAmount;
-  tonExecution = tonExecution;
+  tonExecution(tx: TonTransaction): string {
+    return tx.success === true ? $localize`:@@ton.detail.successful:Successful`
+      : tx.success === false ? $localize`:@@ton.detail.failed:Failed` : $localize`:@@ton.detail.unknown:Unknown`;
+  }
   tonMessages = tonMessages;
   publicDetails = publicDetails;
   readableField = readableField;
@@ -47,7 +50,14 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   tonActionFields = tonActionFields;
   get nativeMode(): boolean { return this.nativeTransactions !== null || this.nativeEvents !== null || this.nativePendingMessages !== null; }
   messageAmount(message: TonMessage) { return tonAmount(message.value); }
-  messageKind(message: TonMessage): string { return message.msg_type === 'ext_in_msg' ? 'External incoming' : message.msg_type === 'ext_out_msg' ? 'External outgoing' : message.msg_type === 'int_msg' ? 'Internal message' : 'Message'; }
+  readonly successfulLabel = $localize`:@@ton.detail.successful:Successful`;
+  readonly failedLabel = $localize`:@@ton.detail.failed:Failed`;
+  readonly externalIncomingLabel = $localize`:@@ton.detail.external-incoming:External incoming`;
+  messageKind(message: TonMessage): string {
+    return message.msg_type === 'ext_in_msg' ? this.externalIncomingLabel
+      : message.msg_type === 'ext_out_msg' ? $localize`:@@ton.detail.external-outgoing:External outgoing`
+      : message.msg_type === 'int_msg' ? $localize`:@@ton.detail.internal-message:Internal message` : $localize`:@@ton.detail.message:Message`;
+  }
   actionHash(value: any): string { return typeof value === 'string' ? value : value?.hash || ''; }
   private suppliedTxSource: TonTransaction[] | null = null;
   private suppliedEventSource: TonEvent[] | null = null;

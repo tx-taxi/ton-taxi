@@ -9,7 +9,7 @@
       </span>
     </span>
     <div class="container-buttons">
-      <span *ngIf="data?._meta?.stale || data?.stale" class="badge bg-warning text-dark">Updates delayed</span>
+      <span *ngIf="data?._meta?.stale || data?.stale" class="badge bg-warning text-dark" i18n="@@ton.04fd92b96a03">Updates delayed</span>
     </div>
   </div>
   <div class="clearfix"></div>
@@ -26,12 +26,12 @@
   <ng-container *ngIf="data && !loading">
     <ng-container *ngIf="page === 'tx' || page === 'message'">
       <p *ngIf="page === 'message'" class="mt-3">
-        Transaction <app-truncate [text]="data.hash" [lastChars]="8" [link]="['/tx', data.hash]"></app-truncate>
-        <span *ngIf="!selectedMessageFound()" class="grey-info-text"> · Message details unavailable</span>
+        <span i18n="@@ton.1a7b7c1b33d1">Transaction</span> <app-truncate [text]="data.hash" [lastChars]="8" [link]="['/tx', data.hash]"></app-truncate>
+        <span *ngIf="!selectedMessageFound()" class="grey-info-text"> · <span i18n="@@ton.more.message-unavailable">Message details unavailable</span></span>
       </p>
       <br>
       <div class="subtitle-block">
-        <div class="title"><h2 id="state" class="anchor">State</h2></div>
+        <div class="title"><h2 id="state" class="anchor" i18n="@@ton.more.state">State</h2></div>
       </div>
       <span id="messages" class="anchor"></span>
       <app-transactions-list
@@ -41,87 +41,87 @@
       ></app-transactions-list>
 
       <br>
-      <div class="title text-start"><h2 id="execution" class="anchor">Details</h2></div>
+      <div class="title text-start"><h2 id="execution" class="anchor" i18n="@@ton.dc3decbb9384">Details</h2></div>
       <div class="box ethereum-details">
         <div class="row">
           <div class="col-sm">
             <table class="table table-borderless table-striped"><tbody>
-              <tr><td>Transaction type</td><td>{{ data.transaction_type || '—' }}</td></tr>
-              <tr><td>Aborted</td><td>{{ data.aborted === true ? 'Yes' : data.aborted === false ? 'No' : 'Unknown' }}</td></tr>
-              <tr><td>Destroyed</td><td>{{ data.destroyed === true ? 'Yes' : data.destroyed === false ? 'No' : 'Unknown' }}</td></tr>
+              <tr><td i18n="@@ton.more.tx-type">Transaction type</td><td>{{ data.transaction_type || '—' }}</td></tr>
+              <tr><td i18n="@@ton.more.aborted">Aborted</td><td><ng-container [ngSwitch]="data.aborted"><span *ngSwitchCase="true" i18n="@@ton.more.yes">Yes</span><span *ngSwitchCase="false" i18n="@@ton.more.no">No</span><span *ngSwitchDefault i18n="@@ton.bc7819b34ff8">Unknown</span></ng-container></td></tr>
+              <tr><td i18n="@@ton.more.destroyed">Destroyed</td><td><ng-container [ngSwitch]="data.destroyed"><span *ngSwitchCase="true" i18n="@@ton.more.yes">Yes</span><span *ngSwitchCase="false" i18n="@@ton.more.no">No</span><span *ngSwitchDefault i18n="@@ton.bc7819b34ff8">Unknown</span></ng-container></td></tr>
             </tbody></table>
           </div>
           <div class="col-sm">
             <table class="table table-borderless table-striped"><tbody>
-              <tr><td>Previous transaction</td><td><app-truncate *ngIf="data.prev_trans_hash; else unknown" [text]="data.prev_trans_hash" [lastChars]="8" [link]="['/tx',data.prev_trans_hash]"></app-truncate></td></tr>
-              <tr><td>Previous logical time</td><td>{{ data.prev_trans_lt || '—' }}</td></tr>
-              <tr><td>State update</td><td><details *ngIf="data.state_update_old || data.state_update_new; else unknown"><summary>State hashes</summary><div *ngIf="data.state_update_old">Before <app-truncate [text]="data.state_update_old" [lastChars]="8"><app-clipboard [text]="data.state_update_old"></app-clipboard></app-truncate></div><div *ngIf="data.state_update_new">After <app-truncate [text]="data.state_update_new" [lastChars]="8"><app-clipboard [text]="data.state_update_new"></app-clipboard></app-truncate></div></details></td></tr>
+              <tr><td i18n="@@ton.more.previous-tx">Previous transaction</td><td><app-truncate *ngIf="data.prev_trans_hash; else unknown" [text]="data.prev_trans_hash" [lastChars]="8" [link]="['/tx',data.prev_trans_hash]"></app-truncate></td></tr>
+              <tr><td i18n="@@ton.more.previous-lt">Previous logical time</td><td>{{ data.prev_trans_lt || '—' }}</td></tr>
+              <tr><td i18n="@@ton.more.state-update">State update</td><td><details *ngIf="data.state_update_old || data.state_update_new; else unknown"><summary i18n="@@ton.more.state-hashes">State hashes</summary><div *ngIf="data.state_update_old"> <span i18n="@@ton.more.before">Before</span> <app-truncate [text]="data.state_update_old" [lastChars]="8"><app-clipboard [text]="data.state_update_old"></app-clipboard></app-truncate></div><div *ngIf="data.state_update_new"> <span i18n="@@ton.more.after">After</span> <app-truncate [text]="data.state_update_new" [lastChars]="8"><app-clipboard [text]="data.state_update_new"></app-clipboard></app-truncate></div></details></td></tr>
             </tbody></table>
           </div>
         </div>
         <details *ngFor="let phase of phases" class="transaction-phase mt-3">
-          <summary>{{ fieldLabel(phase).replace(' phase','') | titlecase }} phase</summary>
+          <summary>{{ phaseName(phase) }}</summary>
           <ng-container *ngIf="data[phase]; else notApplicable">
             <table *ngIf="typeofValue(data[phase]) === 'object'; else scalarPhase" class="table table-borderless table-striped"><tbody>
               <tr *ngFor="let field of phaseFields(data[phase])"><td>{{ field.label | titlecase }}</td><td><app-amount *ngIf="field.amount; else phaseText" [amount]="field.amount"></app-amount><ng-template #phaseText>{{ text(field.value) }}</ng-template></td></tr>
             </tbody></table>
             <ng-template #scalarPhase><p>{{ text(data[phase]) }}</p></ng-template>
           </ng-container>
-          <ng-template #notApplicable><p class="grey-info-text">Not applicable</p></ng-template>
+          <ng-template #notApplicable><p class="grey-info-text" i18n="@@ton.more.not-applicable">Not applicable</p></ng-template>
         </details>
-        <details class="mt-3"><summary>Transaction details</summary><pre>{{ publicDetails(data) | json }}</pre></details>
+        <details class="mt-3"><summary i18n="@@ton.more.tx-details">Transaction details</summary><pre>{{ publicDetails(data) | json }}</pre></details>
       </div>
 
       <ng-container *ngIf="data.event || relatedLoading.event || relatedErrors.event">
         <br>
-        <div class="subtitle-block"><div class="title"><h2 id="actions" class="anchor">Actions</h2></div></div>
+        <div class="subtitle-block"><div class="title"><h2 id="actions" class="anchor" i18n="@@ton.more.actions">Actions</h2></div></div>
         <app-transactions-list *ngIf="data.event" [nativeEvents]="[data.event]"></app-transactions-list>
-        <div *ngIf="relatedLoading.event" class="box" aria-label="Loading actions"><span class="skeleton-loader"></span></div>
-        <p *ngIf="relatedErrors.event" class="grey-info-text">Actions unavailable <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('event')">Retry</button></p>
+        <div *ngIf="relatedLoading.event" class="box" aria-label="Loading actions" i18n-aria-label="@@ton.more.loading-actions"><span class="skeleton-loader"></span></div>
+        <p *ngIf="relatedErrors.event" class="grey-info-text"> <span i18n="@@ton.more.actions-unavailable">Actions unavailable</span> <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('event')" i18n="@@ton.9f5cd8a2e880">Retry</button></p>
       </ng-container>
       <ng-container *ngIf="data.trace || relatedLoading.trace || relatedErrors.trace">
         <br>
-        <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor">Related transactions</h2></div></div>
+        <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor" i18n="@@ton.more.related">Related transactions</h2></div></div>
         <ng-container *ngIf="data.trace"><ng-container *ngTemplateOutlet="relatedTransactions; context: {$implicit:data.trace}"></ng-container></ng-container>
-        <div *ngIf="relatedLoading.trace" class="box" aria-label="Loading related transactions"><span class="skeleton-loader"></span></div>
-        <p *ngIf="relatedErrors.trace" class="grey-info-text">Related transactions unavailable <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('trace')">Retry</button></p>
+        <div *ngIf="relatedLoading.trace" class="box" aria-label="Loading related transactions" i18n-aria-label="@@ton.more.loading-related"><span class="skeleton-loader"></span></div>
+        <p *ngIf="relatedErrors.trace" class="grey-info-text"> <span i18n="@@ton.more.related-unavailable">Related transactions unavailable</span> <button type="button" class="btn btn-sm btn-outline-info" (click)="loadTransactionRelated('trace')" i18n="@@ton.9f5cd8a2e880">Retry</button></p>
       </ng-container>
     </ng-container>
 
     <ng-container *ngIf="page === 'trace'">
       <br>
-      <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor">Related transactions</h2></div></div>
+      <div class="subtitle-block"><div class="title"><h2 id="trace" class="anchor" i18n="@@ton.more.related">Related transactions</h2></div></div>
       <ng-container *ngTemplateOutlet="relatedTransactions; context: {$implicit:data}"></ng-container>
     </ng-container>
   </ng-container>
 
   <ng-container *ngIf="loading && !data && !error">
     <br>
-    <div class="title"><h2>State</h2></div>
+    <div class="title"><h2 i18n="@@ton.more.state">State</h2></div>
     <div class="box"><div class="row"><div class="col-sm" *ngFor="let column of [0,1]">
       <table class="table table-borderless table-striped"><tbody><tr><td><span class="skeleton-loader"></span></td></tr></tbody></table>
     </div></div></div>
     <br>
-    <div class="title"><h2>Details</h2></div>
+    <div class="title"><h2 i18n="@@ton.dc3decbb9384">Details</h2></div>
     <div class="box"><div class="row"><div class="col-sm" *ngFor="let column of [0,1]">
       <table class="table table-borderless table-striped"><tbody><tr *ngFor="let row of skeletonRows"><td><span class="skeleton-loader"></span></td><td><span class="skeleton-loader"></span></td></tr></tbody></table>
     </div></div></div>
   </ng-container>
 
   <div *ngIf="error && !data" class="alert alert-mempool" role="alert">
-    {{ error }} <button type="button" class="btn btn-sm btn-outline-info" (click)="load()">Retry</button>
+    {{ error }} <button type="button" class="btn btn-sm btn-outline-info" (click)="load()" i18n="@@ton.9f5cd8a2e880">Retry</button>
   </div>
 </div>
 
 <ng-template #relatedTransactions let-trace>
-  <p *ngIf="!traceRows(trace).length" class="grey-info-text">Trace transactions unavailable</p>
+  <p *ngIf="!traceRows(trace).length" class="grey-info-text" i18n="@@ton.more.trace-unavailable">Trace transactions unavailable</p>
   <ng-container *ngFor="let step of traceRows(trace); let index = index">
     <p class="mb-2 mt-3">
-      Step {{ index + 1 }}
-      <ng-container *ngIf="step.parent"> · From transaction <app-truncate [text]="step.parent" [lastChars]="8" [link]="['/tx',step.parent]"></app-truncate><a *ngIf="step.message" [routerLink]="['/message',step.message]"> via message</a></ng-container>
+      <span i18n="@@ton.more.step">Step</span> {{ index + 1 }}
+      <ng-container *ngIf="step.parent"> · <span i18n="@@ton.more.from-transaction">From transaction</span> <app-truncate [text]="step.parent" [lastChars]="8" [link]="['/tx',step.parent]"></app-truncate><a *ngIf="step.message" [routerLink]="['/message',step.message]"> <span i18n="@@ton.more.via-message">via message</span></a></ng-container>
     </p>
     <app-transactions-list [nativeTransactions]="[step.transaction]" [nativeCompact]="true"></app-transactions-list>
   </ng-container>
-  <details class="box"><summary>Trace details</summary><pre>{{ publicDetails(trace) | json }}</pre></details>
+  <details class="box"><summary i18n="@@ton.more.trace-details">Trace details</summary><pre>{{ publicDetails(trace) | json }}</pre></details>
 </ng-template>
 <ng-template #unknown><span class="grey-info-text">—</span></ng-template>

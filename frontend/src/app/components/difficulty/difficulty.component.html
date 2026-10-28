@@ -1,13 +1,13 @@
-<div *ngIf="showTitle && mode === 'network'" class="main-title">{{ isConfirmed ? 'TON Network' : 'Ethereum Network' }}</div>
-<div *ngIf="showTitle && mode === 'rewards'" class="main-title">{{ isConfirmed ? 'TON Economics' : 'Recent execution rewards' }}</div>
+<div *ngIf="showTitle && mode === 'network'" class="main-title">{{ isConfirmed ? tonNetworkTitle : 'Ethereum Network' }}</div>
+<div *ngIf="showTitle && mode === 'rewards'" class="main-title">{{ isConfirmed ? tonEconomicsTitle : 'Recent execution rewards' }}</div>
 <div class="card-wrapper">
   <div class="card">
     <div class="widget-toggler" role="group" [attr.aria-label]="isConfirmed ? 'TON network dashboard panel' : 'Ethereum network dashboard panel'">
       <a href="" (click)="setMode('network')" class="toggler-option"
-        [ngClass]="{'inactive': mode === 'network'}" [attr.aria-pressed]="mode === 'network'"><small>network</small></a>
+        [ngClass]="{'inactive': mode === 'network'}" [attr.aria-pressed]="mode === 'network'"><small i18n="@@ton.dash.network">network</small></a>
       <span aria-hidden="true"> | </span>
       <a href="" (click)="setMode('rewards')" class="toggler-option"
-        [ngClass]="{'inactive': mode === 'rewards'}" [attr.aria-pressed]="mode === 'rewards'"><small>{{ isConfirmed ? 'economics' : 'rewards' }}</small></a>
+        [ngClass]="{'inactive': mode === 'rewards'}" [attr.aria-pressed]="mode === 'rewards'"><small>{{ isConfirmed ? economicsLabel : 'rewards' }}</small></a>
     </div>
     <div *ngIf="mode === 'network'; else rewards" class="card-body more-padding">
       <div class="difficulty-adjustment-container" *ngIf="(isConfirmed ? suppliedNetwork : (networkStats$ | async)) as network; else loadingNetwork">
@@ -26,17 +26,17 @@
               class="rect {{rect.status}}"
             ></rect>
           </svg>
-          <ng-template #unavailableOutcomes><span class="symbol" [ngbTooltip]="network.barTooltip">Success rate unavailable</span></ng-template>
+          <ng-template #unavailableOutcomes><span class="symbol" [ngbTooltip]="network.barTooltip" i18n="@@ton.dash.success-unavailable">Success rate unavailable</span></ng-template>
         </div>
         <div class="difficulty-stats">
           <div class="item">
             <div class="card-text">
               <ng-container *ngIf="network.observedBlockTime !== null; else unavailable">
-                <ng-container *ngIf="isConfirmed && network.observedBlockTime < 1; else wholeSeconds"><span [title]="network.observedBlockTime + ' seconds'">{{ network.observedBlockTime < 0.001 ? '&lt;0.001' : '~' + (network.observedBlockTime | number:'1.1-3') }} seconds</span></ng-container>
+                <ng-container *ngIf="isConfirmed && network.observedBlockTime < 1; else wholeSeconds"><span [title]="network.observedBlockTime + ' seconds'">{{ network.observedBlockTime < 0.001 ? '&lt;0.001' : '~' + (network.observedBlockTime | number:'1.1-3') }} <ng-container i18n="@@ton.dash.seconds">seconds</ng-container></span></ng-container>
                 <ng-template #wholeSeconds>~<app-time [time]="network.observedBlockTime" [fractionDigits]="1"></app-time></ng-template>
               </ng-container>
             </div>
-            <div class="symbol">Observed block time</div>
+            <div class="symbol" i18n="@@ton.dash.observed-time">Observed block time</div>
           </div>
           <div class="item">
             <div class="card-text bigger">
@@ -46,7 +46,7 @@
           </div>
           <div class="item">
             <div class="card-text">#{{ network.latestBlockHeight ?? '—' }}</div>
-            <div class="symbol">{{ isConfirmed ? 'Latest ' + (tonNetwork?.label || 'Masterchain').toLowerCase() + ' block' : 'Latest block' }}</div>
+            <div class="symbol">{{ isConfirmed ? latestTonBlockLabel : 'Latest block' }}</div>
           </div>
         </div>
       </div>

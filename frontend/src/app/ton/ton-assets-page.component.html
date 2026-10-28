@@ -8,7 +8,7 @@
 >
   <ng-container *ngIf="data">
     <section *ngIf="extraCurrencies().length" class="box mb-4">
-      <div class="card-header"><h2>Extra currencies</h2></div>
+      <div class="card-header"><h2 i18n="@@ton.cf81e848d0ed">Extra currencies</h2></div>
       <ng-container
         *ngTemplateOutlet="
           extraCurrencyTable;
@@ -25,10 +25,7 @@
           loadFeed('currency-' + (currency.preview?.id ?? currency.id))
       "
     >
-      <summary>
-        {{ currency.preview?.symbol || (currency.preview?.id ?? currency.id) }}
-        history
-      </summary>
+      <summary i18n="@@ton.more.currency-history">{{ currency.preview?.symbol || (currency.preview?.id ?? currency.id) }} history</summary>
       <ng-container
         *ngTemplateOutlet="
           events;
@@ -68,7 +65,7 @@
     </ul>
     <div [ngbNavOutlet]="accountNav"></div>
     <details class="box mt-4">
-      <summary>Account details</summary>
+      <summary i18n="@@ton.e68d6d1e1cf2">Account details</summary>
       <pre>{{ data | json }}</pre>
     </details>
   </ng-container>
@@ -95,20 +92,20 @@
   <ng-container *ngIf="activeTab === 'jettons'">
     <div class="row mb-3">
       <label class="col-sm"
-        >Find jetton<input
+        ><span i18n="@@ton.extra.find-jetton">Find jetton</span><input
           type="search"
           class="form-control"
-          placeholder="Name, symbol or address"
+          placeholder="Name, symbol or address" i18n-placeholder="@@ton.extra.placeholder-asset"
           [value]="tokenFilter"
           (input)="tokenFilter = $any($event.target).value" /></label
       ><label class="col-sm"
-        >Sort<select
+        ><span i18n="@@ton.extra.sort">Sort</span><select
           class="form-control"
           [value]="tokenSort"
           (change)="tokenSort = $any($event.target).value"
         >
-          <option value="name">Name</option>
-          <option value="balance">Balance</option>
+          <option value="name" i18n="@@ton.709a23220f2c">Name</option>
+          <option value="balance" i18n="@@ton.90eef613042c">Balance</option>
         </select></label
       >
     </div>
@@ -117,7 +114,7 @@
         <thead>
           <tr>
             <th>Jetton</th>
-            <th>Balance</th>
+            <th i18n="@@ton.90eef613042c">Balance</th>
           </tr>
         </thead>
         <tbody>
@@ -126,7 +123,7 @@
               tokenFilter && !filteredTokens().length && !feeds.jettons?.loading
             "
           >
-            <td colspan="2">No matching jettons</td>
+            <td colspan="2" i18n="@@ton.248cdfdd8b09">No matching jettons</td>
           </tr>
           <tr *ngFor="let holding of filteredTokens()">
             <td>
@@ -141,7 +138,7 @@
                 type="button"
                 class="btn btn-link btn-sm d-block p-0 mt-1"
                 (click)="selectJetton(holding.jetton.address)"
-              >
+               i18n="@@ton.81c0d915fa6d">
                 Activity
               </button>
             </td>
@@ -169,7 +166,7 @@
       *ngTemplateOutlet="feedState; context: { $implicit: 'jettons' }"
     ></ng-container>
     <section id="account-jetton-activity" class="mt-4">
-      <h2>Jetton activity</h2>
+      <h2 i18n="@@ton.2b67881ce25a">Jetton activity</h2>
       <label class="d-block"
         >Jetton
         <select
@@ -177,7 +174,7 @@
           [value]="selectedJetton"
           (change)="selectJetton($any($event.target).value)"
         >
-          <option value="">All jettons</option>
+          <option value="" i18n="@@ton.cd7586c09d04">All jettons</option>
           <option
             *ngFor="let holding of feeds.jettons?.items"
             [value]="holding.jetton.address"
@@ -195,7 +192,7 @@
         type="button"
         class="btn btn-outline-info"
         (click)="selectJetton(selectedJetton)"
-      >
+       i18n="@@ton.d85460ddaf8e">
         Load activity
       </button>
       <app-transactions-list
@@ -211,8 +208,8 @@
       <table class="table table-borderless table-striped">
         <thead>
           <tr>
-            <th>Trace</th>
-            <th>Logical time</th>
+            <th i18n="@@ton.2f38169a712e">Trace</th>
+            <th i18n="@@ton.dd3c47b1ddf9">Logical time</th>
           </tr>
         </thead>
         <tbody>
@@ -237,12 +234,12 @@
   <ng-container *ngIf="activeTab === 'nfts'">
     <div class="row mb-3">
       <label class="col-sm"
-        >Collection<select
+        ><span i18n="@@ton.extra.collection">Collection</span><select
           class="form-control"
           [value]="nftFilter"
           (change)="filterNfts($any($event.target).value)"
         >
-          <option value="">All collections</option>
+          <option value="" i18n="@@ton.1e8c09c8a3d6">All collections</option>
           <option
             *ngFor="let collection of nftCollections"
             [value]="collection.address"
@@ -255,21 +252,20 @@
         (submit)="$event.preventDefault(); filterNfts(nftFilterInput)"
         class="col-sm"
       >
-        <label for="collection-address">Collection address</label>
+        <label for="collection-address" i18n="@@ton.70d50f44e69a">Collection address</label>
         <div class="input-group">
           <input
             id="collection-address"
             class="form-control"
             [value]="nftFilterInput"
             (input)="nftFilterInput = $any($event.target).value"
-            placeholder="Collection address"
-          /><button type="submit" class="btn btn-outline-info">Apply</button
-          ><button
+            placeholder="Collection address" i18n-placeholder="@@ton.extra.placeholder-collection"
+          /><button type="submit" class="btn btn-outline-info" i18n="@@ton.cfea419c3b4e">Apply</button><button
             *ngIf="nftFilter"
             type="button"
             class="btn btn-outline-info"
             (click)="filterNfts('')"
-          >
+           i18n="@@ton.719ea396ad92">
             Clear
           </button>
         </div>
@@ -292,7 +288,7 @@
           loadFeed('nft-history')
       "
     >
-      <summary>NFT activity</summary>
+      <summary i18n="@@ton.b2b0c71e9b84">NFT activity</summary>
       <app-transactions-list
         [nativeEvents]="assetEvents(feeds['nft-history']?.items)"
       ></app-transactions-list>
@@ -309,21 +305,19 @@
         data.get_methods?.includes('get_public_key')
       "
     >
-      <h2>Wallet</h2>
+      <h2 i18n="@@ton.b60862f4855a">Wallet</h2>
       <table class="table table-borderless table-striped">
         <tbody>
           <ng-container *ngFor="let method of ['seqno', 'get_public_key']">
             <tr *ngIf="data.get_methods.includes(method)">
               <td>
-                {{
-                  method === "seqno" ? "Sequence number" : "Public key (hex)"
-                }}
+                <span *ngIf="method === 'seqno'" i18n="@@ton.c143ebd22f47">Sequence number</span><span *ngIf="method !== 'seqno'" i18n="@@ton.more.public-key">Public key (hex)</span>
               </td>
               <td>
                 <span
                   *ngIf="resourceLoading['methods/' + method]"
                   class="skeleton-loader"
-                  aria-label="Loading"
+                  aria-label="Loading" i18n-aria-label="@@ton.extra.loading"
                 ></span>
                 <ng-container
                   *ngIf="walletGetter(method) as value; else unavailableGetter"
@@ -335,15 +329,14 @@
                 ></ng-container>
                 <ng-template #unavailableGetter
                   ><span *ngIf="!resourceLoading['methods/' + method]"
-                    >Unavailable</span
-                  ></ng-template
+                     i18n="@@ton.2c9c1f79142d">Unavailable</span></ng-template
                 >
                 <button
                   *ngIf="resourceErrors['methods/' + method]"
                   type="button"
                   class="btn btn-sm btn-outline-info"
                   (click)="loadResource('methods/' + method)"
-                >
+                 i18n="@@ton.9f5cd8a2e880">
                   Retry
                 </button>
               </td>
@@ -353,7 +346,7 @@
       </table>
     </section>
     <section class="box mb-3">
-      <h2>Contract state</h2>
+      <h2 i18n="@@ton.5230bb7b0eec">Contract state</h2>
       <table class="table table-borderless table-striped">
         <tbody>
           <ng-container *ngFor="let entry of entries(data.state)"
@@ -392,7 +385,7 @@
             ></ng-container
           >
           <tr *ngIf="data.state?.last_transaction_hash">
-            <td>Last transaction</td>
+            <td i18n="@@ton.8148f977f98c">Last transaction</td>
             <td>
               <app-truncate
                 [text]="data.state.last_transaction_hash"
@@ -405,24 +398,24 @@
             </td>
           </tr>
           <tr *ngIf="data.state?.last_transaction_lt">
-            <td>Last transaction logical time</td>
+            <td i18n="@@ton.9f7a5125e18f">Last transaction logical time</td>
             <td>{{ data.state.last_transaction_lt }}</td>
           </tr>
           <ng-container *ngIf="data.state?.storage as storage">
             <tr>
-              <td>Storage cells</td>
+              <td i18n="@@ton.944f188b6856">Storage cells</td>
               <td>{{ storage.used_cells ?? "—" }}</td>
             </tr>
             <tr>
-              <td>Storage bits</td>
+              <td i18n="@@ton.bcfb4b9c4322">Storage bits</td>
               <td>{{ storage.used_bits ?? "—" }}</td>
             </tr>
             <tr>
-              <td>Public storage cells</td>
+              <td i18n="@@ton.b7c8c8186e4d">Public storage cells</td>
               <td>{{ storage.used_public_cells ?? "—" }}</td>
             </tr>
             <tr>
-              <td>Storage last paid</td>
+              <td i18n="@@ton.b381354ddb70">Storage last paid</td>
               <td>
                 <app-timestamp
                   *ngIf="storage.last_paid; else noStoragePayment"
@@ -432,7 +425,7 @@
               </td>
             </tr>
             <tr>
-              <td>Storage payment due</td>
+              <td i18n="@@ton.57f66d393870">Storage payment due</td>
               <td>
                 <app-amount
                   [amount]="nativeAmount(storage.due_payment)"
@@ -443,39 +436,36 @@
         </tbody>
       </table>
       <details *ngIf="data.state">
-        <summary>Code and data</summary>
+        <summary i18n="@@ton.83627c1bf4f7">Code and data</summary>
         <pre>{{ data.state | json }}</pre>
       </details>
-      <span *ngIf="data.stateUnavailable">State unavailable</span>
+      <span *ngIf="data.stateUnavailable" i18n="@@ton.0054eca09fce">State unavailable</span>
     </section>
     <section class="box mb-3" *ngIf="data.get_methods?.length">
-      <h2>Read contract</h2>
-      <label for="ton-method">Method</label
-      ><select
+      <h2 i18n="@@ton.150402cea1ca">Read contract</h2>
+      <label for="ton-method" i18n="@@ton.88306943fea7">Method</label><select
         id="ton-method"
         class="form-control"
         [value]="getterName"
         (change)="getterName = $any($event.target).value"
       >
-        <option value="">Select method</option>
+        <option value="" i18n="@@ton.dc59e8357c44">Select method</option>
         <option *ngFor="let method of data.get_methods" [value]="method">
           {{ method }}
         </option></select
-      ><label for="ton-args">Arguments</label
-      ><input
+      ><label for="ton-args" i18n="@@ton.cbb9fa252e60">Arguments</label><input
         id="ton-args"
         class="form-control"
         [value]="getterArgs"
         (input)="getterArgs = $any($event.target).value"
-        placeholder="Comma-separated arguments"
+        placeholder="Comma-separated arguments" i18n-placeholder="@@ton.extra.placeholder-arguments"
       /><button
         type="button"
         class="btn btn-outline-info mt-2"
         [disabled]="!getterName || getterLoading"
         (click)="runGetter()"
-      >
-        Read</button
-      ><span *ngIf="getterError">{{ getterError }}</span>
+       i18n="@@ton.852b438f91ad">
+        Read</button><span *ngIf="getterError">{{ getterError }}</span>
       <pre *ngIf="getterResult">{{ getterResult | json }}</pre>
     </section>
     <details
@@ -493,33 +483,25 @@
       (toggle)="$any($event.target).open && loadResource(resource)"
     >
       <summary>
-        {{
-          resource === "dns-expiring"
-            ? "Expiring domains"
-            : resource === "defi"
-            ? "DeFi"
-            : resource === "inspect"
-            ? "Contract inspection"
-            : (resource | titlecase)
-        }}
+        <ng-container [ngSwitch]="resource"><span *ngSwitchCase="'dns-expiring'" i18n="@@ton.more.expiring-domains">Expiring domains</span><span *ngSwitchCase="'defi'">DeFi</span><span *ngSwitchCase="'inspect'" i18n="@@ton.more.contract-inspection">Contract inspection</span><span *ngSwitchCase="'staking'" i18n="@@ton.more.staking">Staking</span><span *ngSwitchCase="'multisigs'" i18n="@@ton.more.multisigs">Multisigs</span><span *ngSwitchCase="'subscriptions'" i18n="@@ton.more.subscriptions">Subscriptions</span><span *ngSwitchDefault>{{ resource | titlecase }}</span></ng-container>
       </summary>
       <div *ngIf="resourceLoading[resource]" class="skeleton-loader"></div>
       <ng-container *ngIf="resources[resource] as result" [ngSwitch]="resource">
         <ng-container *ngSwitchCase="'dns-expiring'"
-          ><p *ngIf="!result.items?.length">No expiring domains</p>
+          ><p *ngIf="!result.items?.length" i18n="@@ton.57b0bfcef217">No expiring domains</p>
           <table
             class="table table-borderless table-striped"
             *ngFor="let domain of result.items"
           >
             <tbody>
               <tr>
-                <td>Domain</td>
+                <td i18n="@@ton.9b10914d8b0a">Domain</td>
                 <td>
                   <a [routerLink]="['/dns', domain.name]">{{ domain.name }}</a>
                 </td>
               </tr>
               <tr>
-                <td>Expires</td>
+                <td i18n="@@ton.a99be3da0c9d">Expires</td>
                 <td>
                   <app-timestamp
                     [unixTime]="asNumber(domain.expiring_at)"
@@ -539,14 +521,14 @@
             </tbody>
           </table></ng-container
         ><ng-container *ngSwitchCase="'staking'"
-          ><p *ngIf="!result.pools?.length">No staking positions</p>
+          ><p *ngIf="!result.pools?.length" i18n="@@ton.accf2130918b">No staking positions</p>
           <table
             class="table table-borderless table-striped resource-record"
             *ngFor="let pool of result.pools"
           >
             <tbody>
               <tr>
-                <td>Pool</td>
+                <td i18n="@@ton.extra.pool">Pool</td>
                 <td>
                   <a [routerLink]="['/staking-pool', pool.pool]">{{
                     pool.pool
@@ -554,13 +536,13 @@
                 </td>
               </tr>
               <tr>
-                <td>Staked</td>
+                <td i18n="@@ton.ca37c7aa9669">Staked</td>
                 <td>
                   <app-amount [amount]="nativeAmount(pool.amount)"></app-amount>
                 </td>
               </tr>
               <tr>
-                <td>Pending deposit</td>
+                <td i18n="@@ton.5e5539912558">Pending deposit</td>
                 <td>
                   <app-amount
                     [amount]="nativeAmount(pool.pending_deposit)"
@@ -568,7 +550,7 @@
                 </td>
               </tr>
               <tr>
-                <td>Pending withdrawal</td>
+                <td i18n="@@ton.714dee1179fd">Pending withdrawal</td>
                 <td>
                   <app-amount
                     [amount]="nativeAmount(pool.pending_withdraw)"
@@ -576,7 +558,7 @@
                 </td>
               </tr>
               <tr>
-                <td>Ready to withdraw</td>
+                <td i18n="@@ton.61b152c1d581">Ready to withdraw</td>
                 <td>
                   <app-amount
                     [amount]="nativeAmount(pool.ready_withdraw)"
@@ -586,14 +568,14 @@
             </tbody></table
         ></ng-container>
         <ng-container *ngSwitchCase="'subscriptions'"
-          ><p *ngIf="!result.subscriptions?.length">No subscriptions</p>
+          ><p *ngIf="!result.subscriptions?.length" i18n="@@ton.6ddd0036004d">No subscriptions</p>
           <table
             class="table table-borderless table-striped resource-record"
             *ngFor="let subscription of result.subscriptions"
           >
             <tbody>
               <tr>
-                <td>Subscription</td>
+                <td i18n="@@ton.8fde48f31aff">Subscription</td>
                 <td>
                   {{
                     subscription.metadata?.name || subscription.subscription_id
@@ -601,11 +583,11 @@
                 </td>
               </tr>
               <tr>
-                <td>Status</td>
+                <td i18n="@@ton.bae7d5be7082">Status</td>
                 <td>{{ subscription.status }}</td>
               </tr>
               <tr>
-                <td>Payment</td>
+                <td i18n="@@ton.b41a92bed032">Payment</td>
                 <td>
                   <app-amount
                     *ngIf="
@@ -618,11 +600,11 @@
                 </td>
               </tr>
               <tr>
-                <td>Period</td>
-                <td>{{ subscription.period }} seconds</td>
+                <td i18n="@@ton.170a28a9db6d">Period</td>
+                <td>{{ subscription.period }} <span i18n="@@ton.more.seconds">seconds</span></td>
               </tr>
               <tr>
-                <td>Scheduled charge</td>
+                <td i18n="@@ton.4bdbaabecf05">Scheduled charge</td>
                 <td>
                   <app-timestamp
                     [unixTime]="asNumber(subscription.next_charge_at)"
@@ -630,7 +612,7 @@
                 </td>
               </tr>
               <tr>
-                <td>Wallet</td>
+                <td i18n="@@ton.b60862f4855a">Wallet</td>
                 <td>
                   <app-ethereum-identity
                     [entity]="nativeIdentity(subscription.wallet)"
@@ -643,7 +625,7 @@
               </tr>
               <ng-container *ngIf="subscription.beneficiary"
                 ><tr>
-                  <td>Beneficiary</td>
+                  <td i18n="@@ton.3f327acd783e">Beneficiary</td>
                   <td>
                     <app-ethereum-identity
                       [entity]="nativeIdentity(subscription.beneficiary)"
@@ -659,7 +641,7 @@
             </tbody></table
         ></ng-container>
         <ng-container *ngSwitchCase="'multisigs'"
-          ><p *ngIf="!result.multisigs?.length">No multisigs</p>
+          ><p *ngIf="!result.multisigs?.length" i18n="@@ton.04ad08c2fb36">No multisigs</p>
           <section
             class="resource-record"
             *ngFor="let multisig of result.multisigs"
@@ -667,7 +649,7 @@
             <table class="table table-borderless table-striped">
               <tbody>
                 <tr>
-                  <td>Multisig</td>
+                  <td i18n="@@ton.more.multisig">Multisig</td>
                   <td>
                     <app-ethereum-identity
                       [entity]="nativeIdentity(multisig.address)"
@@ -679,17 +661,17 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Threshold</td>
+                  <td i18n="@@ton.c51f7b72279e">Threshold</td>
                   <td>
                     {{ multisig.threshold }} of {{ multisig.signers?.length }}
                   </td>
                 </tr>
                 <tr>
-                  <td>Sequence number</td>
+                  <td i18n="@@ton.c143ebd22f47">Sequence number</td>
                   <td>{{ multisig.seqno }}</td>
                 </tr>
                 <tr>
-                  <td>Signers</td>
+                  <td i18n="@@ton.e01e922d6a64">Signers</td>
                   <td>
                     <app-ethereum-identity
                       *ngFor="let signer of multisig.signers"
@@ -702,7 +684,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Proposers</td>
+                  <td i18n="@@ton.cf04b6aee397">Proposers</td>
                   <td>
                     <app-ethereum-identity
                       *ngFor="let proposer of multisig.proposers"
@@ -716,15 +698,15 @@
                 </tr>
               </tbody>
             </table>
-            <h3 class="mt-3">Orders</h3>
-            <p *ngIf="!multisig.orders?.length">No orders</p>
+            <h3 class="mt-3" i18n="@@ton.cded093321dd">Orders</h3>
+            <p *ngIf="!multisig.orders?.length" i18n="@@ton.62e70d7b484a">No orders</p>
             <table
               class="table table-borderless table-striped resource-record"
               *ngFor="let order of multisig.orders"
             >
               <tbody>
                 <tr>
-                  <td>Order</td>
+                  <td i18n="@@ton.1d75774c0f96">Order</td>
                   <td>
                     <app-ethereum-identity
                       [entity]="nativeIdentity(order.address)"
@@ -736,21 +718,17 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Approvals</td>
+                  <td i18n="@@ton.deb9d03cf06d">Approvals</td>
                   <td>{{ order.approvals_num }} / {{ order.threshold }}</td>
                 </tr>
                 <tr>
-                  <td>Execution</td>
+                  <td i18n="@@ton.6d525b71568c">Execution</td>
                   <td>
-                    {{
-                      order.sent_for_execution
-                        ? "Sent for execution"
-                        : "Awaiting execution"
-                    }}
+                    <span *ngIf="order.sent_for_execution" i18n="@@ton.more.sent-execution">Sent for execution</span><span *ngIf="!order.sent_for_execution" i18n="@@ton.more.awaiting-execution">Awaiting execution</span>
                   </td>
                 </tr>
                 <tr>
-                  <td>Expires</td>
+                  <td i18n="@@ton.a99be3da0c9d">Expires</td>
                   <td>
                     <app-timestamp
                       [unixTime]="asNumber(order.expiration_date)"
@@ -758,7 +736,7 @@
                   </td>
                 </tr>
                 <tr>
-                  <td>Signed by</td>
+                  <td i18n="@@ton.ddfd835b2d65">Signed by</td>
                   <td>
                     <app-ethereum-identity
                       *ngFor="let signer of order.signed_by"
@@ -774,22 +752,22 @@
             </table></section
         ></ng-container>
         <ng-container *ngSwitchCase="'defi'"
-          ><p *ngIf="!result.assets?.length">No DeFi positions</p>
+          ><p *ngIf="!result.assets?.length" i18n="@@ton.b94053695be5">No DeFi positions</p>
           <table
             class="table table-borderless table-striped resource-record"
             *ngFor="let asset of result.assets"
           >
             <tbody>
               <tr>
-                <td>Protocol</td>
+                <td i18n="@@ton.1ed77c3f7ffc">Protocol</td>
                 <td>{{ asset.defi_provider?.name }}</td>
               </tr>
               <tr>
-                <td>Position</td>
+                <td i18n="@@ton.cf1c85adba54">Position</td>
                 <td>{{ fieldLabel(asset.type) | titlecase }}</td>
               </tr>
               <tr>
-                <td>Amount</td>
+                <td i18n="@@ton.43dc8532f7e5">Amount</td>
                 <td>
                   <app-amount
                     [amount]="
@@ -815,7 +793,7 @@
                 </tr></ng-container
               ><ng-container *ngIf="asset.pool_address"
                 ><tr>
-                  <td>Pool</td>
+                  <td i18n="@@ton.extra.pool">Pool</td>
                   <td>
                     <app-ethereum-identity
                       [entity]="nativeIdentity(asset.pool_address)"
@@ -843,15 +821,15 @@
           </table></ng-container
         >
         <details>
-          <summary>Details</summary>
+          <summary i18n="@@ton.dc3decbb9384">Details</summary>
           <pre>{{ result | json }}</pre>
         </details> </ng-container
       ><span *ngIf="resourceErrors[resource]"
-        >Temporarily unavailable
+        ><span i18n="@@ton.extra.temporarily-unavailable">Temporarily unavailable</span>
         <button
           class="btn btn-sm btn-outline-info"
           (click)="loadResource(resource)"
-        >
+         i18n="@@ton.9f5cd8a2e880">
           Retry
         </button></span
       >
@@ -884,7 +862,7 @@
       referrerpolicy="no-referrer"
       (load)="imageLoaded($event)"
       (error)="hideImage($event)"
-    /><ng-template #noMedia><span>No image</span></ng-template>
+    /><ng-template #noMedia><span i18n="@@ton.fc5e5bdcd5f6">No image</span></ng-template>
   </div>
   <div asset-links *ngIf="data">
     <a
@@ -892,14 +870,14 @@
       [href]="safeUrl(data.metadata.external_url)"
       target="_blank"
       rel="noopener noreferrer"
-      >Website ↗</a
+       i18n="@@ton.extra.website">Website ↗</a
     ><a
       class="ms-3"
       *ngIf="safeUrl(data.metadata?.animation_url)"
       [href]="safeUrl(data.metadata.animation_url)"
       target="_blank"
       rel="noopener noreferrer"
-      >Open animation ↗</a
+       i18n="@@ton.extra.open-animation">Open animation ↗</a
     >
   </div>
   <ng-container *ngIf="data">
@@ -913,13 +891,13 @@
         ></ng-container
       ></ng-container>
       <section class="token-transfers">
-        <h2>Holders</h2>
+        <h2 i18n="@@ton.65e14a168f40">Holders</h2>
         <div class="box table-responsive">
           <table class="table table-borderless table-striped asset-table">
             <thead>
               <tr>
-                <th>Account</th>
-                <th>Balance</th>
+                <th i18n="@@ton.85dfa32c97d8">Account</th>
+                <th i18n="@@ton.90eef613042c">Balance</th>
               </tr>
             </thead>
             <tbody>
@@ -957,14 +935,14 @@
         ></ng-container>
       </section>
       <details class="box">
-        <summary>Metadata</summary>
+        <summary i18n="@@ton.extra.metadata">Metadata</summary>
         <pre>{{ data.metadata | json }}</pre>
       </details>
     </ng-container>
     <ng-container *ngIf="page === 'nft' || page === 'collection'">
       <section *ngIf="data.interfaces?.includes('sbt')" class="box mb-4">
-        <h2>Soulbound details</h2>
-        <p>Non-transferable</p>
+        <h2 i18n="@@ton.2fd4388f4074">Soulbound details</h2>
+        <p i18n="@@ton.cad5c587ae9e">Non-transferable</p>
         <div *ngIf="resourceLoading.sbt" class="skeleton-loader"></div>
         <table
           *ngIf="resources.sbt as sbt"
@@ -972,7 +950,7 @@
         >
           <tbody>
             <tr>
-              <td>Authority</td>
+              <td i18n="@@ton.97a9869cf89f">Authority</td>
               <td>
                 <app-ethereum-identity
                   *ngIf="sbt.authority; else unknownAuthority"
@@ -982,19 +960,13 @@
                   chainName="TON"
                   chainSymbol="GRAM"
                 ></app-ethereum-identity
-                ><ng-template #unknownAuthority>Unknown</ng-template>
+                ><ng-template #unknownAuthority i18n="@@ton.bc7819b34ff8">Unknown</ng-template>
               </td>
             </tr>
             <tr>
-              <td>Revocation</td>
+              <td i18n="@@ton.6f6bf2c2a092">Revocation</td>
               <td>
-                {{
-                  sbt.revokedAt === "0" || sbt.revokedAt === 0
-                    ? "Not revoked"
-                    : sbt.revokedAt
-                    ? "Revoked"
-                    : "Unknown"
-                }}<span *ngIf="sbt.revokedAt && sbt.revokedAt !== '0'">
+                {{ revocationStatus(sbt.revokedAt) }}<span *ngIf="sbt.revokedAt && sbt.revokedAt !== '0'">
                   ·
                   <app-timestamp
                     [unixTime]="asNumber(sbt.revokedAt)"
@@ -1005,21 +977,21 @@
           </tbody>
         </table>
         <p *ngIf="resourceErrors.sbt">
-          Temporarily unavailable
+          <span i18n="@@ton.extra.temporarily-unavailable">Temporarily unavailable</span>
           <button
             class="btn btn-sm btn-outline-info"
             (click)="loadResource('sbt')"
-          >
+           i18n="@@ton.9f5cd8a2e880">
             Retry
           </button>
         </p>
       </section>
       <section *ngIf="data.sale" class="box mb-4">
-        <h2>For sale</h2>
+        <h2 i18n="@@ton.8c2e0e1d55b8">For sale</h2>
         <table class="table table-borderless table-striped">
           <tbody>
             <tr>
-              <td>Price</td>
+              <td i18n="@@ton.3e8248e32edf">Price</td>
               <td>
                 <app-amount
                   *ngIf="saleValue(data.sale) as amount; else unavailablePrice"
@@ -1029,7 +1001,7 @@
               </td>
             </tr>
             <tr>
-              <td>Seller</td>
+              <td i18n="@@ton.ec3ef051d5a8">Seller</td>
               <td>
                 <app-ethereum-identity
                   *ngIf="address(data.sale.owner)"
@@ -1043,14 +1015,14 @@
             </tr>
             <ng-container *ngIf="data.sale.market"
               ><tr>
-                <td>Marketplace</td>
+                <td i18n="@@ton.983095c0ea49">Marketplace</td>
                 <td>
                   {{ data.sale.market.name || address(data.sale.market) }}
                 </td>
               </tr></ng-container
             ><ng-container *ngIf="data.sale.address"
               ><tr>
-                <td>Sale contract</td>
+                <td i18n="@@ton.7c30af7662a7">Sale contract</td>
                 <td>
                   <app-ethereum-identity
                     [entity]="nativeIdentity(data.sale.address)"
@@ -1065,7 +1037,7 @@
         </table>
       </section>
       <section *ngIf="data.metadata?.attributes?.length" class="box mb-4">
-        <div class="card-header"><h2>Attributes</h2></div>
+        <div class="card-header"><h2 i18n="@@ton.a6652617f2c7">Attributes</h2></div>
         <div class="table-responsive">
           <table class="table table-striped">
             <tbody>
@@ -1080,7 +1052,7 @@
         </div>
       </section>
       <section *ngIf="data.royalty_params?.decoded" class="box mb-4">
-        <h2>Royalties</h2>
+        <h2 i18n="@@ton.d93cab6203fc">Royalties</h2>
         <table class="table table-borderless table-striped">
           <tbody>
             <ng-container
@@ -1106,11 +1078,11 @@
         </table>
       </section>
       <details class="box mb-4">
-        <summary>Metadata</summary>
+        <summary i18n="@@ton.extra.metadata">Metadata</summary>
         <pre>{{ data.metadata | json }}</pre>
       </details>
       <ng-container *ngIf="page === 'collection'"
-        ><h2>Items</h2>
+        ><h2 i18n="@@ton.44d25b5d1b6d">Items</h2>
         <ng-container
           *ngTemplateOutlet="
             nftGrid;
@@ -1123,9 +1095,7 @@
       ></ng-container>
       <ng-container *ngIf="page === 'nft'"
         ><h2>
-          {{
-            data.interfaces?.includes("sbt") ? "History" : "Transfer history"
-          }}
+          <span *ngIf="data.interfaces?.includes('sbt')" i18n="@@ton.tab.history">History</span><span *ngIf="!data.interfaces?.includes('sbt')" i18n="@@ton.more.transfer-history">Transfer history</span>
         </h2>
         <ng-container
           *ngTemplateOutlet="
@@ -1140,13 +1110,7 @@
     </ng-container>
     <details class="box">
       <summary>
-        {{
-          page === "nft"
-            ? "NFT details"
-            : page === "collection"
-            ? "Collection details"
-            : "Jetton details"
-        }}
+        <span *ngIf="page === 'nft'" i18n="@@ton.more.nft-details">NFT details</span><span *ngIf="page === 'collection'" i18n="@@ton.more.collection-details">Collection details</span><span *ngIf="page !== 'nft' && page !== 'collection'" i18n="@@ton.more.jetton-details">Jetton details</span>
       </summary>
       <pre>{{ data | json }}</pre>
     </details>
@@ -1161,7 +1125,7 @@
   ></app-transactions-list
   ><ng-container *ngFor="let event of items"
     ><details class="box mb-3" *ngIf="otherActions(event).length">
-      <summary>Other actions ({{ otherActions(event).length }})</summary>
+      <summary><span i18n="@@ton.more.other-actions">Other actions</span> ({{ otherActions(event).length }})</summary>
       <app-transactions-list
         *ngIf="otherActions(event).length"
         [nativeEvents]="assetOtherEvents(event)"
@@ -1169,23 +1133,15 @@
 ></ng-template>
 <ng-template #feedState let-name
   ><div class="feed-state" *ngIf="feeds[name] as feed">
-    <span *ngIf="feed.stale" class="badge badge-warning">Updates delayed</span>
+    <span *ngIf="feed.stale" class="badge badge-warning" i18n="@@ton.04fd92b96a03">Updates delayed</span>
     <div
       *ngIf="feed.loading"
       class="skeleton-loader"
       role="status"
-      aria-label="Loading"
+      aria-label="Loading" i18n-aria-label="@@ton.extra.loading"
     ></div>
     <p *ngIf="!feed.loading && !feed.error && !feed.items.length">
-      {{
-        name === "nfts" || name === "items"
-          ? "No NFTs"
-          : name === "jettons"
-          ? "No jettons"
-          : name === "shards"
-          ? "No shards"
-          : "No activity"
-      }}
+      {{ emptyFeedMessage(name) }}
     </p>
     <p *ngIf="feed.error">
       {{ feed.error }}
@@ -1194,7 +1150,7 @@
         class="btn btn-sm btn-outline-info"
         (click)="loadFeed(name, !feed.restart && feed.items.length > 0)"
       >
-        {{ feed.restart ? "Refresh" : "Retry" }}
+        {{ feedActionMessage(feed.restart) }}
       </button>
     </p>
     <button
@@ -1203,7 +1159,7 @@
       class="btn btn-outline-info"
       [disabled]="feed.loading"
       (click)="loadFeed(name, true)"
-    >
+     i18n="@@ton.dfe60ca92e8c">
       Load more
     </button>
   </div></ng-template
@@ -1214,10 +1170,10 @@
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>Currency ID</th>
-          <th>Symbol</th>
-          <th>Balance</th>
-          <th>Raw units</th>
+          <th i18n="@@ton.7dd81ae810f8">Currency ID</th>
+          <th i18n="@@ton.3f84ef531f9d">Symbol</th>
+          <th i18n="@@ton.90eef613042c">Balance</th>
+          <th i18n="@@ton.eb245d4de947">Raw units</th>
         </tr>
       </thead>
       <tbody>
@@ -1243,11 +1199,11 @@
 
 <ng-template #scaledAmountDetails let-value let-jetton="jetton"
   ><details class="scaled-amount-details">
-    <summary>Amount details</summary>
+    <summary i18n="@@ton.f071978a7faf">Amount details</summary>
     <table class="table table-borderless table-striped">
       <tbody>
         <tr>
-          <td>On-chain amount</td>
+          <td i18n="@@ton.e370bf59e3f5">On-chain amount</td>
           <td>
             <app-amount
               [amount]="jettonValue(value, jetton, false)"
@@ -1255,11 +1211,11 @@
           </td>
         </tr>
         <tr>
-          <td>Raw units</td>
+          <td i18n="@@ton.eb245d4de947">Raw units</td>
           <td>{{ value }}</td>
         </tr>
         <tr>
-          <td>Display multiplier</td>
+          <td i18n="@@ton.e0dd792dae13">Display multiplier</td>
           <td>
             {{ jetton.scaled_ui.numerator }} /
             {{ jetton.scaled_ui.denominator }}

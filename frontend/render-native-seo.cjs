@@ -11,7 +11,10 @@ const read = filename => fs.readFileSync(path.join(__dirname, filename), 'utf8')
 const documentFor = html => domino.createDocument(html);
 function intro() {
   return read('src/app/shared/components/tx-taxi-docs-intro/tx-taxi-docs-intro.component.html')
-    .replace(/{{\s*chainName\s*}}/g, config.chain).replace(/{{\s*context\s*}}/g, 'explorer');
+    .replace(/{{\s*chainName\s*}}/g, config.chain)
+    .replace(/{{\s*localizedContext\s*}}/g, 'documentation')
+    .replace(/{{\s*isSpanish\s*\?\s*'Abrir tx\.taxi'\s*:\s*'Open tx\.taxi'\s*}}/g, 'Open tx.taxi')
+    .replace(/{{\s*isSpanish\s*\?\s*'Explorar'\s*:\s*'Explore'\s*}}/g, 'Explore');
 }
 function templateContent(page) {
   const document = documentFor('<body>' + read(page.template).replace(/<app-tx-taxi-docs-intro\b[^>]*><\/app-tx-taxi-docs-intro>/g, intro()) + '</body>');

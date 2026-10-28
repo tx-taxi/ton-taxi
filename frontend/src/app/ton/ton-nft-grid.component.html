@@ -10,7 +10,7 @@
         class="skeleton-loader media-skeleton"
         aria-hidden="true"
       ></div>
-      <span *ngIf="!item.image" class="no-image">No image</span>
+      <span *ngIf="!item.image" class="no-image" i18n="@@ton.fc5e5bdcd5f6">No image</span>
       <img
         *ngIf="item.image"
         [src]="item.image"
@@ -25,9 +25,9 @@
       <strong>{{ item.name }}</strong>
       <small *ngIf="item.collectionLabel">{{ item.collectionLabel }}</small>
       <small *ngIf="item.sale"
-        >For sale · <app-amount [amount]="item.sale"></app-amount
+        ><span i18n="@@ton.extra.for-sale">For sale</span> · <app-amount [amount]="item.sale"></app-amount
       ></small>
-      <small *ngIf="item.flagged" class="text-danger">Flagged</small>
+      <small *ngIf="item.flagged" class="text-danger" i18n="@@ton.f8db8a172be6">Flagged</small>
     </div>
   </a>
 </div>

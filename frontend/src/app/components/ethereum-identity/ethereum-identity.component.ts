@@ -38,6 +38,12 @@ export class EthereumIdentityComponent implements OnChanges {
     this.imageFailed = true;
   }
 
+  get localizedLink(): string | null {
+    if (!this.link) return null;
+    return typeof window !== 'undefined' && /^\/es(?:\/|$)/.test(window.location.pathname) && /^\/(?!\/)/.test(this.link) && !/^\/es(?:\/|$)/.test(this.link)
+      ? `/es${this.link}` : this.link;
+  }
+
   get iconUrl(): string | null {
     const iconUrl = this.entity?.iconUrl?.trim();
     if (!iconUrl) return null;

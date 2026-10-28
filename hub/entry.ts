@@ -10,7 +10,8 @@ import {faExchangeAlt,faInfoCircle} from '@fortawesome/free-solid-svg-icons';
 import {NgbTooltipModule,NgbTooltipConfig,NgbHighlight} from '@ng-bootstrap/ng-bootstrap';
 import {Router} from '@angular/router';
 import {StateService,CacheService,StorageService,ThemeService,EtaService,nativeDestination} from './facade';
-import {TonBlockLinkDirective} from '@app/ton/ton-block-link.directive';
+import {TonBlockLinkDirective,TON_HUB_MODE} from '@app/ton/ton-block-link.directive';
+import {preferredTonHubUrl} from '@app/ton/hub-navigation';
 import {readTonPending} from '@app/shared/ton-pending-state';
 import {BlockchainComponent} from '@app/components/blockchain/blockchain.component';
 import {BlockchainBlocksComponent} from '@app/components/blockchain-blocks/blockchain-blocks.component';
@@ -47,9 +48,9 @@ class Root { private offset=0; empty=false; statusDescription='Loading block dat
 @Directive({selector:'img[src]',standalone:false})
 class NativeImage { constructor(private element:ElementRef,@Inject(DESTINATION) private destination:string){const descriptor=Object.getOwnPropertyDescriptor(HTMLImageElement.prototype,'src');Object.defineProperty(element.nativeElement,'src',{configurable:true,get(){return descriptor.get.call(this);},set(value:string){if(value.startsWith('/resources/'))value=value.endsWith('/default.svg')?new URL('./default.svg',import.meta.url).href:destination+value;descriptor.set.call(this,value);}});}  @Input() set src(value:string){this.element.nativeElement.src=value.startsWith('/resources/')?this.destination+value:value;} }
 
-@NgModule({imports:[CommonModule,BrowserAnimationsModule,FontAwesomeModule,NgbTooltipModule,NgbHighlight,TonBlockLinkDirective],declarations:[Root,NativeConnectionStatus,NativeLink,NativeImage,BlockchainComponent,BlockchainBlocksComponent,MempoolBlocksComponent,AmountComponent,TimeComponent,MiningPoolComponent,FeeRateComponent,FeeRoundingPipe,RelativeUrlPipe,BytesPipe,CeilPipe,FiatCurrencyPipe,AmountShortenerPipe,AccelerationSparklesComponent],providers:[DatePipe,DecimalPipe,TimeService,FeeRoundingPipe,RelativeUrlPipe,StateService,CacheService,StorageService,ThemeService,EtaService,{provide:Location,useValue:{path:()=>''}},{provide:Router,useFactory:(origin:string)=>({
- navigateByUrl:(route:string)=>{const url=new URL(route,origin);if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(nativeDestination(origin,url.pathname+url.search+url.hash));},
- navigate:(parts:any[],extras:any={})=>{const url=new URL(parts.join('/').replace(/\/+/g,'/'),origin);for(const [key,value] of Object.entries(extras.queryParams||{}))if(value!=null)url.searchParams.set(key,String(value));if(extras.fragment)url.hash=extras.fragment;if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(nativeDestination(origin,url.pathname+url.search+url.hash));}
+@NgModule({imports:[CommonModule,BrowserAnimationsModule,FontAwesomeModule,NgbTooltipModule,NgbHighlight,TonBlockLinkDirective],declarations:[Root,NativeConnectionStatus,NativeLink,NativeImage,BlockchainComponent,BlockchainBlocksComponent,MempoolBlocksComponent,AmountComponent,TimeComponent,MiningPoolComponent,FeeRateComponent,FeeRoundingPipe,RelativeUrlPipe,BytesPipe,CeilPipe,FiatCurrencyPipe,AmountShortenerPipe,AccelerationSparklesComponent],providers:[DatePipe,DecimalPipe,TimeService,FeeRoundingPipe,RelativeUrlPipe,StateService,CacheService,StorageService,ThemeService,EtaService,{provide:TON_HUB_MODE,useValue:true},{provide:Location,useValue:{path:()=>''}},{provide:Router,useFactory:(origin:string)=>({
+ navigateByUrl:(route:string)=>{const url=new URL(route,origin);if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(preferredTonHubUrl(nativeDestination(origin,url.pathname+url.search+url.hash)));},
+ navigate:(parts:any[],extras:any={})=>{const url=new URL(parts.join('/').replace(/\/+/g,'/'),origin);for(const [key,value] of Object.entries(extras.queryParams||{}))if(value!=null)url.searchParams.set(key,String(value));if(extras.fragment)url.hash=extras.fragment;if(/^\/(block|mempool-block|tx|address|docs|mining)\//.test(url.pathname))location.assign(preferredTonHubUrl(nativeDestination(origin,url.pathname+url.search+url.hash)));}
  }),deps:[DESTINATION]}]})
 class StripModule {}
 export async function mount(host:HTMLElement, options:any={}) {

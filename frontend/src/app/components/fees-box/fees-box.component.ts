@@ -33,7 +33,7 @@ export class FeesBoxComponent implements OnInit, OnDestroy, OnChanges {
   ) { }
 
   get labels(): string[] {
-    return this.confirmedMode ? ['Minimum', 'Median', 'Average', 'Maximum'] : ['No Priority', 'Low Priority', 'Medium Priority', 'High Priority'];
+    return this.confirmedMode ? [$localize`:@@ton.dash.minimum:Minimum`, $localize`:@@ton.dash.median:Median`, $localize`:@@ton.dash.average:Average`, $localize`:@@ton.dash.maximum:Maximum`] : ['No Priority', 'Low Priority', 'Medium Priority', 'High Priority'];
   }
 
   get feeRows(): { amount?: NativeAmount; rate?: number; belowAtomicUnit?: boolean; tooltip: string }[] {

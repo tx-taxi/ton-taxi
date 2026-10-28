@@ -177,12 +177,12 @@ const server = http.createServer(async (req, res) => {
     } catch {}
     if (!stat?.isFile()) {
       const entityRoute =
-        /^\/(?:dns|staking-pool|extra-currency|address|tx|block|nft|collection|jetton|trace|message)\/[^/]+\/?$/.test(
+        /^\/(?:es\/)?(?:dns|staking-pool|extra-currency|address|tx|block|nft|collection|jetton|trace|message)\/[^/]+\/?$/.test(
           url.pathname,
         );
       if (path.extname(url.pathname) && !entityRoute)
         return json(res, { error: "Not found" }, 404);
-      filename = path.join(root, "index.html");
+      filename = path.join(root, /^\/es(?:\/|$)/.test(url.pathname) ? "es/index.html" : "index.html");
     }
     let body = await fs.readFile(filename);
     const pageResponse = {};
@@ -218,7 +218,7 @@ const server = http.createServer(async (req, res) => {
         ? "no-cache"
         : "public, max-age=300",
       "X-Content-Type-Options": "nosniff",
-      ...(filename.endsWith("index.html") && !social.isIndexableEntity(url.pathname)
+      ...(filename.endsWith("index.html") && (/^\/es(?:\/|$)/.test(url.pathname) || !social.isIndexableEntity(url.pathname))
         ? {"X-Robots-Tag":"noindex, follow"} : {}),
     });
     res.end(req.method === "HEAD" ? undefined : body);

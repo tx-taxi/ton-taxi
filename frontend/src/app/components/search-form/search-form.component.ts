@@ -1,3 +1,6 @@
+import { LanguageService } from '@app/services/language.service';
+import { readSharedPreference } from '@app/services/shared-preferences';
+import { localizedNativeUrl, refreshLocalizedCapabilities } from '@app/services/localized-native-url';
 import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { tonBlockIdentityFromUrl } from '@app/ton/chain-selection';
@@ -41,6 +44,25 @@ interface SearchTarget {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchFormComponent implements OnInit {
+  readonly chooseChainLabel = $localize`:@@ton.search.choose:Choose search chain`;
+  readonly registryUnavailableLabel = $localize`:@@ton.search.registry-unavailable:Explorer registry unavailable`;
+  readonly loadingExplorersLabel = $localize`:@@ton.search.loading:Loading explorers`;
+  readonly additionalExplorersLabel = $localize`:@@ton.search.additional-explorers:additional explorers`;
+  readonly openLabel = $localize`:@@ton.search.open:Open`;
+  readonly inNewTabLabel = $localize`:@@ton.search.new-tab:in a new tab`;
+  readonly switchToLabel = $localize`:@@ton.search.switch-to:Switch to`;
+  readonly showLabel = $localize`:@@ton.search.show:Show`;
+  readonly hideLabel = $localize`:@@ton.search.hide:Hide`;
+  readonly foundLabel = $localize`:@@ton.search.found:Found`;
+  readonly possibleLabel = $localize`:@@ton.search.possible:Possible`;
+  readonly searchLabel = $localize`:@@ton.search.search:Search`;
+  additionalOptionLabel(explorer: any, count: number): string {
+    const expanded = this.additionalExplorersExpanded(explorer);
+    if (this.languageService.getLanguage() === 'es') {
+      return (expanded ? this.hideLabel : this.showLabel) + ' ' + count + ' ' + (count === 1 ? 'opción adicional para' : 'opciones adicionales para') + ' ' + explorer.name;
+    }
+    return (expanded ? 'Hide ' : 'Show ') + count + ' additional ' + explorer.name + (count === 1 ? ' option' : ' options');
+  }
   @Input() hamburgerOpen = false;
   readonly sourceChainId = 'ton';
   readonly routerHubUrl = this.explorerRegistry.hubUrl;
@@ -143,12 +165,25 @@ export class SearchFormComponent implements OnInit {
     private relativeUrlPipe: RelativeUrlPipe,
     private elementRef: ElementRef,
     private explorerRegistry: TxTaxiExplorerRegistryService,
+    private languageService: LanguageService,
     private tonSelection: TonChainSelectionService,
   ) {
     this.explorers$ = this.explorerRegistry.explorers$;
   }
 
+  private refreshLocales = (): void => {
+    void refreshLocalizedCapabilities(this.explorerRegistry.hubUrl).then(() => this.cdr.markForCheck());
+  };
+
+  ngOnDestroy(): void {
+    if (typeof window !== 'undefined') window.removeEventListener('focus', this.refreshLocales);
+  }
+
   ngOnInit(): void {
+    if (typeof window !== 'undefined') {
+      this.refreshLocales();
+      window.addEventListener('focus', this.refreshLocales);
+    }
     this.env = this.stateService.env;
     this.thirdPartyExplorers$ = this.explorerRegistry.thirdPartyExplorers$;
     this.stateService.networkChanged$.subscribe((network) => {
@@ -510,7 +545,16 @@ export class SearchFormComponent implements OnInit {
     });
   }
 
+  localizedExplorerUrl(value: string): string {
+    if (typeof document === 'undefined') return value;
+    const preference = readSharedPreference('txtaxi_language');
+    const explicit = document.location.pathname.match(/^\/(ar|ca|cs|da|de|en(?:-US)?|es|fa|fi|fr|he|hi|hr|hu|it|ja|ka|ko|lt|mk|nb|ne|nl|pl|pt|ro|ru|sl|sv|th|tr|uk|vi|zh)(?:\/|$)/i)?.[1].toLowerCase();
+    const language = explicit ? (explicit.startsWith('en') ? 'en' : explicit) : preference || this.languageService.getLanguage();
+    return localizedNativeUrl(value, language);
+  }
+
   private assignDestination(value: string, destinationHint?: Pick<SearchTarget, 'chainId' | 'destinationId'>): void {
+    value = this.localizedExplorerUrl(value);
     let lightning = false;
     try {
       const url = new URL(value);
@@ -539,7 +583,12 @@ export class SearchFormComponent implements OnInit {
         const url = new URL(target.directUrl);
         const block = tonBlockIdentityFromUrl(url.href);
         if (block) navigateTonBlock(this.router, block);
-        else this.router.navigateByUrl(url.pathname + url.search + url.hash);
+        else {
+          // The Angular router is mounted beneath the current locale base;
+          // pasted localized URLs must not add a second language segment.
+          const path = url.pathname.replace(/^\/(?:es|en(?:-US)?)(?=\/|$)/i, '') || '/';
+          this.router.navigateByUrl(path + url.search + url.hash);
+        }
         this.isSearching=false; return;
       }
       this.assignDestination(this.explorerRegistry.navigationUrl(target.directUrl), target);

@@ -13,8 +13,8 @@ import { LanguageService } from '@app/services/language.service';
 })
 export class LanguageSelectorComponent implements OnInit {
   languageForm: UntypedFormGroup;
-  // TON-specific content has not yet been translated. Offer only shipped content.
-  languages = languages.filter(language => language.code === 'en');
+  // Spanish is partially translated and remains excluded from search indexing.
+  languages = languages.filter(language => ['en', 'es'].includes(language.code));
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -24,15 +24,14 @@ export class LanguageSelectorComponent implements OnInit {
 
   ngOnInit() {
     this.languageForm = this.formBuilder.group({
-      language: ['en']
+      language: [this.languageService.getLanguage()]
     });
-    this.languageForm.get('language').setValue('en');
   }
 
   changeLanguage() {
     const newLang = this.languageForm.get('language').value;
     this.languageService.setLanguage(newLang);
     const rawUrlPath = this.languageService.stripLanguageFromUrl(null);
-    this.document.location.href = (newLang !== 'en' ? `/${newLang}` : '') + rawUrlPath;
+    this.document.location.href = ((newLang !== 'en' ? `/${newLang}` : '') + rawUrlPath || '/') + this.document.location.search + this.document.location.hash;
   }
 }

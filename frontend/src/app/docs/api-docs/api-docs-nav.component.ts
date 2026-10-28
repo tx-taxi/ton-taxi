@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, LOCALE_ID, OnInit, Output } from '@angular/core';
 import {
   TonDocItem,
   tonGuideData,
   tonRestData,
   tonWebsocketData,
 } from '@app/docs/api-docs/ton-docs-data';
+import { translateTonDocs } from '@app/docs/api-docs/ton-docs-es';
 
 @Component({
   selector: 'app-api-docs-nav',
@@ -18,12 +19,16 @@ export class ApiDocsNavComponent implements OnInit {
 
   tabData: TonDocItem[] = [];
 
+  constructor(@Inject(LOCALE_ID) private locale: string) {}
+
+  get isSpanish(): boolean { return this.locale.toLowerCase().startsWith('es'); }
+
   ngOnInit(): void {
-    this.tabData = this.whichTab === 'rest'
+    this.tabData = translateTonDocs(this.whichTab === 'rest'
       ? tonRestData
       : this.whichTab === 'websocket'
         ? tonWebsocketData
-        : tonGuideData;
+        : tonGuideData, this.locale);
   }
 
   navLinkClick(event: Event, fragment: string): void {

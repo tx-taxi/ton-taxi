@@ -6,16 +6,16 @@
     aria-live="polite"
   >
     <span class="token-state__spinner" aria-hidden="true"></span
-    ><span>Loading asset data…</span>
+    ><span i18n="@@ton.more.loading-asset">Loading asset data…</span>
   </div>
   <section
     *ngIf="!isLoading && errorMessage && !asset"
     class="token-state token-state--error"
     role="alert"
   >
-    <h1>Asset unavailable</h1>
+    <h1 i18n="@@ton.more.asset-unavailable">Asset unavailable</h1>
     <p>{{ errorMessage }}</p>
-    <button class="btn btn-primary" (click)="retry.emit()">Try again</button>
+    <button class="btn btn-primary" (click)="retry.emit()" i18n="@@ton.more.try-again">Try again</button>
   </section>
   <ng-container *ngIf="asset as token">
     <header class="token-header">
@@ -37,16 +37,14 @@
           <span *ngIf="token.symbol" class="token-symbol">{{
             token.symbol
           }}</span
-          ><span class="token-type">{{
-            token.kind === "nft" ? "NFT" : (token.kind | titlecase)
-          }}</span
-          ><span *ngIf="token.soulbound" class="token-type">Soulbound</span
-          ><span *ngIf="token.stale" class="badge badge-warning"
+          ><span class="token-type" [ngSwitch]="token.kind"><ng-container *ngSwitchCase="'nft'">NFT</ng-container><ng-container *ngSwitchCase="'jetton'">Jetton</ng-container><ng-container *ngSwitchCase="'collection'" i18n="@@ton.extra.collection">Collection</ng-container><ng-container *ngSwitchDefault>{{ token.kind | titlecase }}</ng-container></span
+          ><span *ngIf="token.soulbound" class="token-type" i18n="@@ton.more.soulbound">Soulbound</span
+          ><span *ngIf="token.stale" class="badge badge-warning" i18n="@@ton.04fd92b96a03"
             >Updates delayed</span
           >
         </div>
         <div class="token-contract">
-          <span class="token-contract__label">Contract</span
+          <span class="token-contract__label" i18n="@@ton.tab.contract">Contract</span
           ><app-truncate
             [text]="token.address"
             [lastChars]="8"
@@ -59,27 +57,25 @@
     <section
       *ngIf="token.kind === 'jetton'"
       class="token-metrics"
-      aria-label="Jetton metrics"
+      aria-label="Jetton metrics" i18n-aria-label="@@ton.more.jetton-metrics"
     >
       <div class="token-metric" *ngIf="token.supply">
-        <span class="token-metric__label">Total supply</span
+        <span class="token-metric__label" i18n="@@ton.more.total-supply">Total supply</span
         ><strong class="token-metric__amount"
           ><app-amount [amount]="token.supply"></app-amount
         ></strong>
       </div>
       <div class="token-metric">
-        <span class="token-metric__label">Holders</span
+        <span class="token-metric__label" i18n="@@ton.65e14a168f40">Holders</span
         ><strong>{{ token.holders ?? "—" }}</strong>
       </div>
       <div class="token-metric">
-        <span class="token-metric__label">Decimals</span
+        <span class="token-metric__label" i18n="@@ton.2a4e3cb3c61a">Decimals</span
         ><strong>{{ token.decimals ?? "—" }}</strong>
       </div>
       <div class="token-metric">
-        <span class="token-metric__label">Mintable</span
-        ><strong>{{
-          token.mintable == null ? "Unknown" : token.mintable ? "Yes" : "No"
-        }}</strong>
+        <span class="token-metric__label" i18n="@@ton.more.mintable">Mintable</span
+        ><strong><span *ngIf="token.mintable == null" i18n="@@ton.bc7819b34ff8">Unknown</span><span *ngIf="token.mintable === true" i18n="@@ton.more.yes">Yes</span><span *ngIf="token.mintable === false" i18n="@@ton.more.no">No</span></strong>
       </div>
     </section>
     <div [class.nft-media-layout]="token.kind !== 'jetton'">
@@ -92,7 +88,7 @@
           <table class="table table-borderless table-striped token-summary">
             <tbody>
               <tr *ngIf="token.collection">
-                <td>Collection</td>
+                <td i18n="@@ton.extra.collection">Collection</td>
                 <td>
                   <app-ethereum-identity
                     [entity]="token.collection"
@@ -104,7 +100,7 @@
                 </td>
               </tr>
               <tr *ngIf="token.owner">
-                <td>Owner</td>
+                <td i18n="@@ton.89ff31225c5f">Owner</td>
                 <td>
                   <app-ethereum-identity
                     [entity]="token.owner"
@@ -116,7 +112,7 @@
                 </td>
               </tr>
               <tr *ngIf="token.admin">
-                <td>Admin</td>
+                <td i18n="@@ton.more.admin">Admin</td>
                 <td>
                   <app-ethereum-identity
                     [entity]="token.admin"
@@ -128,25 +124,25 @@
                 </td>
               </tr>
               <tr *ngIf="token.index != null">
-                <td>Index</td>
+                <td i18n="@@ton.more.index">Index</td>
                 <td>{{ token.index }}</td>
               </tr>
               <tr *ngIf="token.nextIndex != null">
-                <td>Next item index</td>
+                <td i18n="@@ton.more.next-index">Next item index</td>
                 <td>{{ token.nextIndex }}</td>
               </tr>
               <tr *ngIf="token.membership">
-                <td>Collection membership</td>
-                <td>{{ token.membership }}</td>
+                <td i18n="@@ton.more.membership">Collection membership</td>
+                <td [ngSwitch]="token.membership"><span *ngSwitchCase="'Verified'" i18n="@@ton.more.verified">Verified</span><span *ngSwitchCase="'Unverified'" i18n="@@ton.more.unverified">Unverified</span><span *ngSwitchCase="'Unknown'" i18n="@@ton.bc7819b34ff8">Unknown</span><span *ngSwitchDefault>{{ token.membership }}</span></td>
               </tr>
               <tr>
-                <td>Trust</td>
+                <td i18n="@@ton.33a579ffc0dc">Trust</td>
                 <td [class.text-danger]="token.trust === 'Flagged'">
-                  {{ token.trust }}
+                  <ng-container [ngSwitch]="token.trust"><span *ngSwitchCase="'Recognized'" i18n="@@ton.trust.recognized">Recognized</span><span *ngSwitchCase="'Flagged'" i18n="@@ton.trust.flagged">Flagged</span><span *ngSwitchCase="'Unclassified'" i18n="@@ton.trust.unclassified">Unclassified</span><span *ngSwitchDefault>{{ token.trust }}</span></ng-container>
                 </td>
               </tr>
               <tr *ngIf="token.approvedBy.length">
-                <td>Recognized by</td>
+                <td i18n="@@ton.more.recognized-by">Recognized by</td>
                 <td>{{ token.approvedBy.join(", ") }}</td>
               </tr>
             </tbody>

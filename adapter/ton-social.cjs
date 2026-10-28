@@ -349,7 +349,7 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     } catch {}
   }
   set("title", () => true, {}, meta.title);
-  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
+  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && !/^\/es(?:\/|$)/.test(pathname) && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
     id: "canonical",
     rel: "canonical",

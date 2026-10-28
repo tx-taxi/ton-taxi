@@ -140,7 +140,7 @@
                   <ng-template #defaultOutput>
                     <span *ngIf="vin.lazy" class="skeleton-loader"></span>
                     @if (vin.prevout?.scriptpubkey_type === 'ethereum-address') {
-                      <span class="grey-info-text">From</span>
+                      <span class="grey-info-text" i18n="@@ton.detail.from">From</span>
                     } @else {
                       <app-amount [blockConversion]="tx.price" *ngIf="vin.prevout" [satoshis]="vin.prevout.value"></app-amount>
                     }
@@ -525,7 +525,7 @@
                         </td>
                       </tr>
                       <tr *ngIf="vout.scriptpubkey_type">
-                        <td i18n="transactions-list.vout.scriptpubkey-type">Type</td>
+                        <td i18n="transactions-list.vout.scriptpubkey-type" i18n="@@ton.detail.type">Type</td>
                         <td style="text-align: left;">{{ vout.scriptpubkey_type.toUpperCase() }}</td>
                       </tr>
                     </tbody>
@@ -648,7 +648,7 @@
     <tr>
       <td class="arrow-td"><fa-icon [icon]="['fas','arrow-alt-circle-right']" [fixedWidth]="true" class="grey"></fa-icon></td>
       <td class="address-cell"><app-ethereum-identity [entity]="tonIdentity(message.destination)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+message.destination"></app-ethereum-identity></td>
-      <td class="text-end nowrap amount"><span class="grey-info-text">To</span></td>
+      <td class="text-end nowrap amount"><span class="grey-info-text" i18n="@@ton.detail.to">To</span></td>
     </tr>
     <tr><td colspan="3"><ng-container *ngTemplateOutlet="messageDetails; context: {$implicit:message, pending:true}"></ng-container></td></tr>
   </ng-container>
@@ -657,21 +657,21 @@
       <tr [class.selected-message]="message.hash === selectedMessageHash" [class.highlight]="message.hash === selectedMessageHash">
         <td class="arrow-td"><fa-icon [icon]="['fas','arrow-alt-circle-right']" [fixedWidth]="true" class="grey"></fa-icon></td>
         <td class="address-cell"><app-ethereum-identity *ngIf="tonAddress(message.source); else externalMessage" [entity]="tonIdentity(message.source)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.source)"></app-ethereum-identity></td>
-        <td class="text-end nowrap amount"><span class="grey-info-text">From</span></td>
+        <td class="text-end nowrap amount"><span class="grey-info-text" i18n="@@ton.detail.from">From</span></td>
       </tr>
       <tr><td colspan="3"><ng-container *ngTemplateOutlet="messageDetails; context: {$implicit:message, incoming:true}"></ng-container></td></tr>
     </ng-container>
-    <ng-template #noIncoming><tr><td colspan="3" class="grey-info-text">No incoming message</td></tr></ng-template>
+    <ng-template #noIncoming><tr><td colspan="3" class="grey-info-text" i18n="@@ton.detail.no-incoming">No incoming message</td></tr></ng-template>
   </ng-container>
   <ng-container *ngIf="row.nativeEvent as event">
     <tr *ngFor="let action of event.actions"><td colspan="3" class="native-action">
-      <h6>{{ actionTitle(action) }} <span *ngIf="action.status" class="badge" [class.bg-danger]="action.status === 'failed'" [class.bg-success]="action.status === 'ok'">{{ action.status === 'failed' ? 'Failed' : action.status === 'ok' ? 'Successful' : action.status }}</span></h6>
+      <h6>{{ actionTitle(action) }} <span *ngIf="action.status" class="badge" [class.bg-danger]="action.status === 'failed'" [class.bg-success]="action.status === 'ok'">{{ action.status === 'failed' ? failedLabel : action.status === 'ok' ? successfulLabel : action.status }}</span></h6>
       <table class="table table-borderless table-striped table-sm"><tbody>
         <tr *ngFor="let field of tonActionFields(action)"><td>{{ field.label | titlecase }}</td><td><app-amount *ngIf="field.amount; else actionText" [amount]="field.amount"></app-amount><ng-template #actionText><app-ethereum-identity *ngIf="field.identity; else actionRoute" [entity]="field.identity" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="field.route?.join('/')"></app-ethereum-identity><ng-template #actionRoute><app-truncate *ngIf="field.route; else plainField" [text]="field.text" [lastChars]="8" [link]="field.route"></app-truncate><ng-template #plainField>{{ field.text }}</ng-template></ng-template></ng-template><span *ngIf="field.flagged" class="text-danger"> · Flagged</span></td></tr>
       </tbody></table>
       <div class="native-action-links"><app-truncate *ngFor="let hash of action.base_transactions" [text]="actionHash(hash)" [lastChars]="8" [link]="['/tx',actionHash(hash)]"></app-truncate></div>
     </td></tr>
-    <tr *ngIf="!event.actions?.length"><td colspan="3" class="grey-info-text">No decoded actions</td></tr>
+    <tr *ngIf="!event.actions?.length"><td colspan="3" class="grey-info-text" i18n="@@ton.detail.no-actions">No decoded actions</td></tr>
   </ng-container>
 </ng-template>
 
@@ -679,12 +679,12 @@
   <ng-container *ngFor="let message of transaction?.out_msgs">
     <tr [class.selected-message]="message.hash === selectedMessageHash" [class.highlight]="message.hash === selectedMessageHash">
       <td class="address-cell"><app-ethereum-identity *ngIf="tonAddress(message.destination); else externalMessage" [entity]="tonIdentity(message.destination)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.destination)"></app-ethereum-identity></td>
-      <td class="text-end nowrap amount"><app-amount *ngIf="messageAmount(message) as value; else noMessageValue" [amount]="value"></app-amount><ng-template #noMessageValue><span class="grey-info-text">{{ message.msg_type === 'int_msg' ? 'Value unavailable' : 'No native value' }}</span></ng-template></td>
+      <td class="text-end nowrap amount"><app-amount *ngIf="messageAmount(message) as value; else noMessageValue" [amount]="value"></app-amount><ng-template #noMessageValue><span class="grey-info-text"><ng-container *ngIf="message.msg_type === 'int_msg'; else noNativeValue" i18n="@@ton.detail.value-unavailable">Value unavailable</ng-container><ng-template #noNativeValue i18n="@@ton.detail.no-native-value">No native value</ng-template></span></ng-template></td>
       <td class="arrow-td"><fa-icon [icon]="['fas','arrow-alt-circle-right']" [fixedWidth]="true" class="grey"></fa-icon></td>
     </tr>
     <tr><td colspan="3"><ng-container *ngTemplateOutlet="messageDetails; context: {$implicit:message, incoming:false}"></ng-container></td></tr>
   </ng-container>
-  <tr *ngIf="!transaction?.out_msgs?.length"><td colspan="3" class="grey-info-text">No outgoing messages</td></tr>
+  <tr *ngIf="!transaction?.out_msgs?.length"><td colspan="3" class="grey-info-text" i18n="@@ton.detail.no-outgoing">No outgoing messages</td></tr>
 </ng-template>
 
 <ng-template #nativeSummary let-row>
@@ -697,31 +697,31 @@
     <div class="clearfix"></div>
   </ng-container>
   <ng-container *ngIf="row.nativeEvent as event">
-    <span *ngIf="event.in_progress" class="badge bg-secondary">In progress</span><span *ngIf="event.is_scam" class="badge bg-danger">Flagged activity</span>
-    <details class="native-advanced"><summary>Event details</summary><pre>{{ publicDetails(event) | json }}</pre></details>
+    <span *ngIf="event.in_progress" class="badge bg-secondary" i18n="@@ton.detail.in-progress">In progress</span><span *ngIf="event.is_scam" class="badge bg-danger" i18n="@@ton.detail.flagged-activity">Flagged activity</span>
+    <details class="native-advanced"><summary i18n="@@ton.detail.event-details">Event details</summary><pre>{{ publicDetails(event) | json }}</pre></details>
   </ng-container>
 </ng-template>
 
 <ng-template #messageDetails let-message let-incoming="incoming" let-pending="pending">
   <details class="native-message-details" [open]="message.hash === selectedMessageHash || (pending && message.normalizedHash === selectedMessageHash)">
-    <summary>{{ pending ? 'Pending message' : incoming ? 'Incoming message' : 'Outgoing message' }}<span *ngIf="message.decoded_op_name || message.op_code"> · {{ message.decoded_op_name || message.op_code }}</span><span *ngIf="message.bounced" class="badge bg-warning text-dark ms-2">Bounced</span><span *ngIf="message.hash === selectedMessageHash || (pending && message.normalizedHash === selectedMessageHash)" class="badge bg-info ms-2">Selected message</span></summary>
+    <summary><ng-container *ngIf="pending; else confirmedMessage" i18n="@@ton.detail.pending-message">Pending message</ng-container><ng-template #confirmedMessage><ng-container *ngIf="incoming; else outgoingMessage" i18n="@@ton.detail.incoming-message">Incoming message</ng-container><ng-template #outgoingMessage i18n="@@ton.detail.outgoing-message">Outgoing message</ng-template></ng-template><span *ngIf="message.decoded_op_name || message.op_code"> · {{ message.decoded_op_name || message.op_code }}</span><span *ngIf="message.bounced" class="badge bg-warning text-dark ms-2" i18n="@@ton.detail.bounced">Bounced</span><span *ngIf="message.hash === selectedMessageHash || (pending && message.normalizedHash === selectedMessageHash)" class="badge bg-info ms-2" i18n="@@ton.detail.selected-message">Selected message</span></summary>
     <table class="table table-borderless table-striped table-sm details-container"><tbody>
-      <tr><td>Type</td><td>{{ pending ? 'External incoming' : messageKind(message) }}</td></tr>
-      <tr><td>From</td><td><app-ethereum-identity *ngIf="tonAddress(message.source); else externalMessage" [entity]="tonIdentity(message.source)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.source)"></app-ethereum-identity></td></tr>
-      <tr><td>To</td><td><app-ethereum-identity *ngIf="tonAddress(message.destination); else externalMessage" [entity]="tonIdentity(message.destination)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.destination)"></app-ethereum-identity></td></tr>
-      <tr *ngIf="!pending"><td>Value</td><td><app-amount *ngIf="messageAmount(message) as value; else noMessageValue" [amount]="value"></app-amount><ng-template #noMessageValue>{{ message.msg_type === 'int_msg' ? 'Value unavailable' : 'No native value' }}</ng-template></td></tr>
+      <tr><td i18n="@@ton.detail.type">Type</td><td>{{ pending ? externalIncomingLabel : messageKind(message) }}</td></tr>
+      <tr><td i18n="@@ton.detail.from">From</td><td><app-ethereum-identity *ngIf="tonAddress(message.source); else externalMessage" [entity]="tonIdentity(message.source)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.source)"></app-ethereum-identity></td></tr>
+      <tr><td i18n="@@ton.detail.to">To</td><td><app-ethereum-identity *ngIf="tonAddress(message.destination); else externalMessage" [entity]="tonIdentity(message.destination)" [compact]="true" chainName="TON" chainSymbol="GRAM" [link]="'/address/'+tonAddress(message.destination)"></app-ethereum-identity></td></tr>
+      <tr *ngIf="!pending"><td i18n="@@ton.detail.value">Value</td><td><app-amount *ngIf="messageAmount(message) as value; else noMessageValue" [amount]="value"></app-amount><ng-template #noMessageValue><ng-container *ngIf="message.msg_type === 'int_msg'; else noNativeValue" i18n="@@ton.detail.value-unavailable">Value unavailable</ng-container><ng-template #noNativeValue i18n="@@ton.detail.no-native-value">No native value</ng-template></ng-template></td></tr>
       <tr *ngFor="let extra of message.value_extra"><td><a [routerLink]="['/extra-currency',extra.preview?.id ?? extra.id]">{{ extra.preview?.symbol || extra.preview?.id || extra.id }}</a></td><td><app-amount *ngIf="tonAmount(extra.amount ?? extra.value,extra.preview?.decimals ?? 0,extra.preview?.symbol || 'raw units',false) as amount" [amount]="amount"></app-amount></td></tr>
-      <tr *ngIf="message.hash"><td>Hash</td><td><app-truncate [text]="message.hash" [lastChars]="8" [link]="pending ? null : ['/message',message.hash]"><app-clipboard [text]="message.hash"></app-clipboard></app-truncate></td></tr>
+      <tr *ngIf="message.hash"><td i18n="@@ton.detail.hash">Hash</td><td><app-truncate [text]="message.hash" [lastChars]="8" [link]="pending ? null : ['/message',message.hash]"><app-clipboard [text]="message.hash"></app-clipboard></app-truncate></td></tr>
       <ng-container *ngIf="pending">
-        <tr *ngIf="message.normalizedHash !== message.hash"><td>Normalized hash</td><td><app-truncate [text]="message.normalizedHash" [lastChars]="8"><app-clipboard [text]="message.normalizedHash"></app-clipboard></app-truncate></td></tr>
-        <tr><td>Body hash</td><td><app-truncate [text]="message.bodyHash" [lastChars]="8"><app-clipboard [text]="message.bodyHash"></app-clipboard></app-truncate></td></tr>
-        <tr><td>Message size</td><td>{{ message.bocBytes | number }} bytes</td></tr>
-        <tr><td>First seen</td><td><app-timestamp [unixTime]="pendingTime(message.firstSeenAt)"></app-timestamp></td></tr>
-        <tr><td>Last seen</td><td><app-timestamp [unixTime]="pendingTime(message.lastSeenAt)"></app-timestamp></td></tr>
+        <tr *ngIf="message.normalizedHash !== message.hash"><td i18n="@@ton.detail.normalized-hash">Normalized hash</td><td><app-truncate [text]="message.normalizedHash" [lastChars]="8"><app-clipboard [text]="message.normalizedHash"></app-clipboard></app-truncate></td></tr>
+        <tr><td i18n="@@ton.detail.body-hash">Body hash</td><td><app-truncate [text]="message.bodyHash" [lastChars]="8"><app-clipboard [text]="message.bodyHash"></app-clipboard></app-truncate></td></tr>
+        <tr><td i18n="@@ton.detail.message-size">Message size</td><td>{{ message.bocBytes | number }} bytes</td></tr>
+        <tr><td i18n="@@ton.detail.first-seen">First seen</td><td><app-timestamp [unixTime]="pendingTime(message.firstSeenAt)"></app-timestamp></td></tr>
+        <tr><td i18n="@@ton.detail.last-seen">Last seen</td><td><app-timestamp [unixTime]="pendingTime(message.lastSeenAt)"></app-timestamp></td></tr>
       </ng-container>
     </tbody></table>
-    <details class="native-advanced"><summary>Message details</summary><pre>{{ publicDetails(message) | json }}</pre></details>
+    <details class="native-advanced"><summary i18n="@@ton.detail.message-details">Message details</summary><pre>{{ publicDetails(message) | json }}</pre></details>
   </details>
 </ng-template>
-<ng-template #externalMessage><span>External</span></ng-template>
+<ng-template #externalMessage><span i18n="@@ton.detail.external">External</span></ng-template>
 <ng-template #nativeMissing><span class="grey-info-text">—</span></ng-template>

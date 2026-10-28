@@ -1403,7 +1403,7 @@
       </trans-unit>
       <trans-unit id="cb1b52c13b95fa29ea4044f2bbe0ac623b890c80" datatype="html">
         <source>Fee</source>
-        <target>Tasa</target>
+        <target>Comisión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/acceleration-timeline/acceleration-timeline-tooltip.component.html</context>
           <context context-type="linenumber">23</context>
@@ -1450,7 +1450,7 @@
       </trans-unit>
       <trans-unit id="3e322ffba6477484e0dd2e65650fdd70322ea6d0" datatype="html">
         <source>Fee rate</source>
-        <target>Tasa de intercambio</target>
+        <target>Tasa de comisión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/acceleration-timeline/acceleration-timeline-tooltip.component.html</context>
           <context context-type="linenumber">36</context>
@@ -4593,7 +4593,7 @@
       </trans-unit>
       <trans-unit id="86d26b45470e43b409e589517922276109138e87" datatype="html">
         <source>Transaction Fees</source>
-        <target>Tasa de Transacción</target>
+        <target>Comisiones de transacción</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/components/custom-dashboard/custom-dashboard.component.html</context>
           <context context-type="linenumber">8</context>
@@ -10965,7 +10965,7 @@
       </trans-unit>
       <trans-unit id="2da938f28079d0d1ba372c5290b1bb1c18cf077c" datatype="html">
         <source>fee</source>
-        <target>tasa</target>
+        <target>comisión</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/components/address-type/address-type.component.html</context>
           <context context-type="linenumber">3</context>
@@ -11476,7 +11476,7 @@
       </trans-unit>
       <trans-unit id="2799825781368047816" datatype="html">
         <source>Transaction fee</source>
-        <target>Tasa de transacción</target>
+        <target>Comisión de transacción</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/pipes/scriptpubkey-type-pipe/scriptpubkey-type.pipe.ts</context>
           <context context-type="linenumber">12</context>
@@ -11490,6 +11490,496 @@
           <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ton.c2ba4283527d" datatype="html"><source>ADNL address</source><target>Dirección ADNL</target></trans-unit>
+      <trans-unit id="ton.2b258ba10b85" datatype="html"><source>APY history</source><target>Historial de rendimiento</target></trans-unit>
+      <trans-unit id="ton.85dfa32c97d8" datatype="html"><source>Account</source><target>Cuenta</target></trans-unit>
+      <trans-unit id="ton.e68d6d1e1cf2" datatype="html"><source>Account details</source><target>Detalles de la cuenta</target></trans-unit>
+      <trans-unit id="ton.81c0d915fa6d" datatype="html"><source>Activity</source><target>Actividad</target></trans-unit>
+      <trans-unit id="ton.1e8c09c8a3d6" datatype="html"><source>All collections</source><target>Todas las colecciones</target></trans-unit>
+      <trans-unit id="ton.cd7586c09d04" datatype="html"><source>All jettons</source><target>Todos los jettons</target></trans-unit>
+      <trans-unit id="ton.43dc8532f7e5" datatype="html"><source>Amount</source><target>Cantidad</target></trans-unit>
+      <trans-unit id="ton.f071978a7faf" datatype="html"><source>Amount details</source><target>Detalles de la cantidad</target></trans-unit>
+      <trans-unit id="ton.cfea419c3b4e" datatype="html"><source>Apply</source><target>Aplicar</target></trans-unit>
+      <trans-unit id="ton.deb9d03cf06d" datatype="html"><source>Approvals</source><target>Aprobaciones</target></trans-unit>
+      <trans-unit id="ton.cbb9fa252e60" datatype="html"><source>Arguments</source><target>Argumentos</target></trans-unit>
+      <trans-unit id="ton.a6652617f2c7" datatype="html"><source>Attributes</source><target>Atributos</target></trans-unit>
+      <trans-unit id="ton.97a9869cf89f" datatype="html"><source>Authority</source><target>Autoridad</target></trans-unit>
+      <trans-unit id="ton.90eef613042c" datatype="html"><source>Balance</source><target>Saldo</target></trans-unit>
+      <trans-unit id="ton.3f327acd783e" datatype="html"><source>Beneficiary</source><target>Beneficiario</target></trans-unit>
+      <trans-unit id="ton.3e82fd56953a" datatype="html"><source>Bidder</source><target>Pujador</target></trans-unit>
+      <trans-unit id="ton.43136fbc06cb" datatype="html"><source>Bids</source><target>Pujas</target></trans-unit>
+      <trans-unit id="ton.719ea396ad92" datatype="html"><source>Clear</source><target>Limpiar</target></trans-unit>
+      <trans-unit id="ton.83627c1bf4f7" datatype="html"><source>Code and data</source><target>Código y datos</target></trans-unit>
+      <trans-unit id="ton.70d50f44e69a" datatype="html"><source>Collection address</source><target>Dirección de la colección</target></trans-unit>
+      <trans-unit id="ton.5230bb7b0eec" datatype="html"><source>Contract state</source><target>Estado del contrato</target></trans-unit>
+      <trans-unit id="ton.7dd81ae810f8" datatype="html"><source>Currency ID</source><target>ID de moneda</target></trans-unit>
+      <trans-unit id="ton.edc2e9466a8e" datatype="html"><source>Cycle end</source><target>Fin del ciclo</target></trans-unit>
+      <trans-unit id="ton.75478cd96ba4" datatype="html"><source>Cycle start</source><target>Inicio del ciclo</target></trans-unit>
+      <trans-unit id="ton.019ce476e2cd" datatype="html"><source>DNS records</source><target>Registros DNS</target></trans-unit>
+      <trans-unit id="ton.2a4e3cb3c61a" datatype="html"><source>Decimals</source><target>Decimales</target></trans-unit>
+      <trans-unit id="ton.dc3decbb9384" datatype="html"><source>Details</source><target>Detalles</target></trans-unit>
+      <trans-unit id="ton.e0dd792dae13" datatype="html"><source>Display multiplier</source><target>Multiplicador de visualización</target></trans-unit>
+      <trans-unit id="ton.9b10914d8b0a" datatype="html"><source>Domain</source><target>Dominio</target></trans-unit>
+      <trans-unit id="ton.b21b2ce45f21" datatype="html"><source>Domain type</source><target>Tipo de dominio</target></trans-unit>
+      <trans-unit id="ton.217da2dcefee" datatype="html"><source>Election</source><target>Elección</target></trans-unit>
+      <trans-unit id="ton.cd990de40f66" datatype="html"><source>Election close</source><target>Fin de la elección</target></trans-unit>
+      <trans-unit id="ton.6d525b71568c" datatype="html"><source>Execution</source><target>Ejecución</target></trans-unit>
+      <trans-unit id="ton.a99be3da0c9d" datatype="html"><source>Expires</source><target>Caduca</target></trans-unit>
+      <trans-unit id="ton.cf81e848d0ed" datatype="html"><source>Extra currencies</source><target>Monedas adicionales</target></trans-unit>
+      <trans-unit id="ton.f8db8a172be6" datatype="html"><source>Flagged</source><target>Marcado</target></trans-unit>
+      <trans-unit id="ton.8c2e0e1d55b8" datatype="html"><source>For sale</source><target>En venta</target></trans-unit>
+      <trans-unit id="ton.65e14a168f40" datatype="html"><source>Holders</source><target>Titulares</target></trans-unit>
+      <trans-unit id="ton.44d25b5d1b6d" datatype="html"><source>Items</source><target>Elementos</target></trans-unit>
+      <trans-unit id="ton.2b67881ce25a" datatype="html"><source>Jetton activity</source><target>Actividad de jettons</target></trans-unit>
+      <trans-unit id="ton.8148f977f98c" datatype="html"><source>Last transaction</source><target>Última transacción</target></trans-unit>
+      <trans-unit id="ton.9f7a5125e18f" datatype="html"><source>Last transaction logical time</source><target>Tiempo lógico de la última transacción</target></trans-unit>
+      <trans-unit id="ton.01ce707e2f41" datatype="html"><source>Liquid staking jetton</source><target>Jetton de staking líquido</target></trans-unit>
+      <trans-unit id="ton.d85460ddaf8e" datatype="html"><source>Load activity</source><target>Cargar actividad</target></trans-unit>
+      <trans-unit id="ton.dfe60ca92e8c" datatype="html"><source>Load more</source><target>Cargar más</target></trans-unit>
+      <trans-unit id="ton.dd3c47b1ddf9" datatype="html"><source>Logical time</source><target>Tiempo lógico</target></trans-unit>
+      <trans-unit id="ton.983095c0ea49" datatype="html"><source>Marketplace</source><target>Mercado</target></trans-unit>
+      <trans-unit id="ton.88306943fea7" datatype="html"><source>Method</source><target>Método</target></trans-unit>
+      <trans-unit id="ton.a7f544fdb06d" datatype="html"><source>Minimum stake</source><target>Participación mínima</target></trans-unit>
+      <trans-unit id="ton.b2b0c71e9b84" datatype="html"><source>NFT activity</source><target>Actividad de NFT</target></trans-unit>
+      <trans-unit id="ton.1a1196248ac7" datatype="html"><source>NFT collections</source><target>Colecciones de NFT</target></trans-unit>
+      <trans-unit id="ton.709a23220f2c" datatype="html"><source>Name</source><target>Nombre</target></trans-unit>
+      <trans-unit id="ton.b73b53a8bc26" datatype="html"><source>Next resolver</source><target>Siguiente resolvedor</target></trans-unit>
+      <trans-unit id="ton.b94053695be5" datatype="html"><source>No DeFi positions</source><target>No hay posiciones DeFi</target></trans-unit>
+      <trans-unit id="ton.881cc9bbd7eb" datatype="html"><source>No auctions</source><target>No hay subastas</target></trans-unit>
+      <trans-unit id="ton.57b0bfcef217" datatype="html"><source>No expiring domains</source><target>No hay dominios próximos a caducar</target></trans-unit>
+      <trans-unit id="ton.fc5e5bdcd5f6" datatype="html"><source>No image</source><target>Sin imagen</target></trans-unit>
+      <trans-unit id="ton.248cdfdd8b09" datatype="html"><source>No matching jettons</source><target>No se encontraron jettons</target></trans-unit>
+      <trans-unit id="ton.04ad08c2fb36" datatype="html"><source>No multisigs</source><target>No hay multifirmas</target></trans-unit>
+      <trans-unit id="ton.62e70d7b484a" datatype="html"><source>No orders</source><target>No hay órdenes</target></trans-unit>
+      <trans-unit id="ton.accf2130918b" datatype="html"><source>No staking positions</source><target>No hay posiciones de staking</target></trans-unit>
+      <trans-unit id="ton.6ddd0036004d" datatype="html"><source>No subscriptions</source><target>No hay suscripciones</target></trans-unit>
+      <trans-unit id="ton.1abeb8757a1a" datatype="html"><source>Nominator stake</source><target>Participación de los nominadores</target></trans-unit>
+      <trans-unit id="ton.b6c6faf2bc74" datatype="html"><source>Nominators</source><target>Nominadores</target></trans-unit>
+      <trans-unit id="ton.cad5c587ae9e" datatype="html"><source>Non-transferable</source><target>No transferible</target></trans-unit>
+      <trans-unit id="ton.e370bf59e3f5" datatype="html"><source>On-chain amount</source><target>Cantidad en cadena</target></trans-unit>
+      <trans-unit id="ton.e89a111b7754" datatype="html"><source>On-chain supply</source><target>Suministro en cadena</target></trans-unit>
+      <trans-unit id="ton.1d75774c0f96" datatype="html"><source>Order</source><target>Orden</target></trans-unit>
+      <trans-unit id="ton.cded093321dd" datatype="html"><source>Orders</source><target>Órdenes</target></trans-unit>
+      <trans-unit id="ton.89ff31225c5f" datatype="html"><source>Owner</source><target>Propietario</target></trans-unit>
+      <trans-unit id="ton.b41a92bed032" datatype="html"><source>Payment</source><target>Pago</target></trans-unit>
+      <trans-unit id="ton.5e5539912558" datatype="html"><source>Pending deposit</source><target>Depósito pendiente</target></trans-unit>
+      <trans-unit id="ton.714dee1179fd" datatype="html"><source>Pending withdrawal</source><target>Retiro pendiente</target></trans-unit>
+      <trans-unit id="ton.170a28a9db6d" datatype="html"><source>Period</source><target>Período</target></trans-unit>
+      <trans-unit id="ton.8d97b591fd55" datatype="html"><source>Pool type</source><target>Tipo de grupo</target></trans-unit>
+      <trans-unit id="ton.cf1c85adba54" datatype="html"><source>Position</source><target>Posición</target></trans-unit>
+      <trans-unit id="ton.3e8248e32edf" datatype="html"><source>Price</source><target>Precio</target></trans-unit>
+      <trans-unit id="ton.cf04b6aee397" datatype="html"><source>Proposers</source><target>Proponentes</target></trans-unit>
+      <trans-unit id="ton.1ed77c3f7ffc" datatype="html"><source>Protocol</source><target>Protocolo</target></trans-unit>
+      <trans-unit id="ton.b7c8c8186e4d" datatype="html"><source>Public storage cells</source><target>Celdas de almacenamiento público</target></trans-unit>
+      <trans-unit id="ton.3c6de25c4d7d" datatype="html"><source>Raw configuration</source><target>Configuración sin procesar</target></trans-unit>
+      <trans-unit id="ton.eb245d4de947" datatype="html"><source>Raw units</source><target>Unidades sin procesar</target></trans-unit>
+      <trans-unit id="ton.852b438f91ad" datatype="html"><source>Read</source><target>Consultar</target></trans-unit>
+      <trans-unit id="ton.150402cea1ca" datatype="html"><source>Read contract</source><target>Consultar contrato</target></trans-unit>
+      <trans-unit id="ton.61b152c1d581" datatype="html"><source>Ready to withdraw</source><target>Disponible para retirar</target></trans-unit>
+      <trans-unit id="ton.9f5cd8a2e880" datatype="html"><source>Retry</source><target>Reintentar</target></trans-unit>
+      <trans-unit id="ton.6f6bf2c2a092" datatype="html"><source>Revocation</source><target>Revocación</target></trans-unit>
+      <trans-unit id="ton.d93cab6203fc" datatype="html"><source>Royalties</source><target>Regalías</target></trans-unit>
+      <trans-unit id="ton.7c30af7662a7" datatype="html"><source>Sale contract</source><target>Contrato de venta</target></trans-unit>
+      <trans-unit id="ton.4bdbaabecf05" datatype="html"><source>Scheduled charge</source><target>Cobro programado</target></trans-unit>
+      <trans-unit id="ton.dc59e8357c44" datatype="html"><source>Select method</source><target>Seleccionar método</target></trans-unit>
+      <trans-unit id="ton.ec3ef051d5a8" datatype="html"><source>Seller</source><target>Vendedor</target></trans-unit>
+      <trans-unit id="ton.c143ebd22f47" datatype="html"><source>Sequence number</source><target>Número de secuencia</target></trans-unit>
+      <trans-unit id="ton.ddfd835b2d65" datatype="html"><source>Signed by</source><target>Firmado por</target></trans-unit>
+      <trans-unit id="ton.e01e922d6a64" datatype="html"><source>Signers</source><target>Firmantes</target></trans-unit>
+      <trans-unit id="ton.5cae88ddf533" datatype="html"><source>Sites</source><target>Sitios</target></trans-unit>
+      <trans-unit id="ton.2fd4388f4074" datatype="html"><source>Soulbound details</source><target>Detalles de token intransferible</target></trans-unit>
+      <trans-unit id="ton.78d7103a319e" datatype="html"><source>Stake</source><target>Participación</target></trans-unit>
+      <trans-unit id="ton.ca37c7aa9669" datatype="html"><source>Staked</source><target>En staking</target></trans-unit>
+      <trans-unit id="ton.0054eca09fce" datatype="html"><source>State unavailable</source><target>Estado no disponible</target></trans-unit>
+      <trans-unit id="ton.bae7d5be7082" datatype="html"><source>Status</source><target>Estado</target></trans-unit>
+      <trans-unit id="ton.9e092dda4f0e" datatype="html"><source>Storage</source><target>Almacenamiento</target></trans-unit>
+      <trans-unit id="ton.bcfb4b9c4322" datatype="html"><source>Storage bits</source><target>Bits de almacenamiento</target></trans-unit>
+      <trans-unit id="ton.944f188b6856" datatype="html"><source>Storage cells</source><target>Celdas de almacenamiento</target></trans-unit>
+      <trans-unit id="ton.b381354ddb70" datatype="html"><source>Storage last paid</source><target>Último pago de almacenamiento</target></trans-unit>
+      <trans-unit id="ton.57f66d393870" datatype="html"><source>Storage payment due</source><target>Pago de almacenamiento pendiente</target></trans-unit>
+      <trans-unit id="ton.8fde48f31aff" datatype="html"><source>Subscription</source><target>Suscripción</target></trans-unit>
+      <trans-unit id="ton.3f84ef531f9d" datatype="html"><source>Symbol</source><target>Símbolo</target></trans-unit>
+      <trans-unit id="ton.c51f7b72279e" datatype="html"><source>Threshold</source><target>Umbral</target></trans-unit>
+      <trans-unit id="ton.6c82e6dd8680" datatype="html"><source>Time</source><target>Hora</target></trans-unit>
+      <trans-unit id="ton.5cd6978d6354" datatype="html"><source>Total stake</source><target>Participación total</target></trans-unit>
+      <trans-unit id="ton.83323d9d227a" datatype="html"><source>Total staked</source><target>Total en staking</target></trans-unit>
+      <trans-unit id="ton.2f38169a712e" datatype="html"><source>Trace</source><target>Traza</target></trans-unit>
+      <trans-unit id="ton.1a7b7c1b33d1" datatype="html"><source>Transaction</source><target>Transacción</target></trans-unit>
+      <trans-unit id="ton.33a579ffc0dc" datatype="html"><source>Trust</source><target>Confianza</target></trans-unit>
+      <trans-unit id="ton.2c9c1f79142d" datatype="html"><source>Unavailable</source><target>No disponible</target></trans-unit>
+      <trans-unit id="ton.bc7819b34ff8" datatype="html"><source>Unknown</source><target>Desconocido</target></trans-unit>
+      <trans-unit id="ton.04fd92b96a03" datatype="html"><source>Updates delayed</source><target>Actualizaciones retrasadas</target></trans-unit>
+      <trans-unit id="ton.6e5b7a609804" datatype="html"><source>Validator</source><target>Validador</target></trans-unit>
+      <trans-unit id="ton.bffffde265e6" datatype="html"><source>Validator stake</source><target>Participación del validador</target></trans-unit>
+      <trans-unit id="ton.03128bed9062" datatype="html"><source>Verification</source><target>Verificación</target></trans-unit>
+      <trans-unit id="ton.b60862f4855a" datatype="html"><source>Wallet</source><target>Cartera</target></trans-unit>
+      <trans-unit id="ton.trust.recognized" datatype="html"><source>Recognized</source><target>Reconocido</target></trans-unit>
+      <trans-unit id="ton.trust.flagged" datatype="html"><source>Flagged</source><target>Marcado</target></trans-unit>
+      <trans-unit id="ton.trust.unclassified" datatype="html"><source>Unclassified</source><target>Sin clasificar</target></trans-unit>
+      <trans-unit id="ton.tab.history" datatype="html"><source>History</source><target>Historial</target></trans-unit>
+      <trans-unit id="ton.tab.transactions" datatype="html"><source>Transactions</source><target>Transacciones</target></trans-unit>
+      <trans-unit id="ton.tab.traces" datatype="html"><source>Traces</source><target>Trazas</target></trans-unit>
+      <trans-unit id="ton.tab.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit id="ton.tab.nfts" datatype="html"><source>NFTs</source><target>NFTs</target></trans-unit>
+      <trans-unit id="ton.tab.contract" datatype="html"><source>Contract</source><target>Contrato</target></trans-unit>
+      <trans-unit id="ton.catalog.shown" datatype="html"><source><x id="INTERPOLATION" equiv-text="{{ list(data).length }}"/> shown</source><target><x id="INTERPOLATION" equiv-text="{{ list(data).length }}"/> mostrados</target></trans-unit>
+      <trans-unit id="ton.about.ec4a2956ddc7" datatype="html"><source>About ton.tx.taxi</source><target>Acerca de ton.tx.taxi</target></trans-unit>
+      <trans-unit id="ton.about.9a8ff6902dd0" datatype="html"><source>The TON explorer in the tx.taxi family.</source><target>El explorador de TON de la familia tx.taxi.</target></trans-unit>
+      <trans-unit id="ton.about.a2df9750b2c2" datatype="html"><source>TON documentation</source><target>Documentación de TON</target></trans-unit>
+      <trans-unit id="ton.about.230181c155ba" datatype="html"><source>Contact the maintainer</source><target>Contactar con el responsable</target></trans-unit>
+      <trans-unit id="ton.about.388d2614631e" datatype="html"><source>Explore TON blocks, messages, transactions, accounts, jettons, and NFTs in the familiar tx.taxi interface.</source><target>Explora bloques, mensajes, transacciones, cuentas, jettons y NFT de TON en la interfaz familiar de tx.taxi.</target></trans-unit>
+      <trans-unit id="ton.about.ad19fa3c31c0" datatype="html"><source>Follow the whole transaction</source><target>Sigue toda la transacción</target></trans-unit>
+      <trans-unit id="ton.about.f9ea762c9354" datatype="html"><source>TON activity can span several contracts and messages. Follow each step, inspect its status and fees, and open the full transaction details.</source><target>La actividad en TON puede abarcar varios contratos y mensajes. Sigue cada paso, consulta su estado y sus comisiones, y abre los detalles completos de la transacción.</target></trans-unit>
+      <trans-unit id="ton.about.adf55a81efdb" datatype="html"><source>See what a wallet holds</source><target>Consulta los activos de una cartera</target></trans-unit>
+      <trans-unit id="ton.about.7d71c42ecb5f" datatype="html"><source>Browse jettons and collectibles, including on-chain Telegram gifts, usernames, numbers, and TON domains. Open an item for ownership, collection, attributes, and transfer history.</source><target>Explora jettons y coleccionables, incluidos regalos de Telegram, nombres de usuario, números y dominios TON en cadena. Abre un elemento para consultar su propietario, colección, atributos e historial de transferencias.</target></trans-unit>
+      <trans-unit id="ton.about.e54c7055d701" datatype="html"><source>Built on open source</source><target>Basado en código abierto</target></trans-unit>
+      <trans-unit id="ton.about.29d606cfd689" datatype="html"><source>One search across chains.</source><target>Una búsqueda entre cadenas.</target></trans-unit>
+      <trans-unit id="ton.about.8dc06a59d879" datatype="html"><source>Paste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.</source><target>Pega una transacción, bloque o dirección en tx.taxi. Abre una coincidencia confirmada, elige entre las redes posibles o ve directamente al explorador de tu cadena.</target></trans-unit>
+      <trans-unit id="ton.title.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit id="ton.title.collections" datatype="html"><source>NFT collections</source><target>Colecciones de NFT</target></trans-unit>
+      <trans-unit id="ton.title.dashboard" datatype="html"><source>TON Explorer</source><target>Explorador de TON</target></trans-unit>
+      <trans-unit id="ton.title.blocks" datatype="html"><source>Blocks</source><target>Bloques</target></trans-unit>
+      <trans-unit id="ton.title.block" datatype="html"><source>Block</source><target>Bloque</target></trans-unit>
+      <trans-unit id="ton.title.tx" datatype="html"><source>Transaction</source><target>Transacción</target></trans-unit>
+      <trans-unit id="ton.title.address" datatype="html"><source>Account</source><target>Cuenta</target></trans-unit>
+      <trans-unit id="ton.title.nft" datatype="html"><source>NFT</source><target>NFT</target></trans-unit>
+      <trans-unit id="ton.title.collection" datatype="html"><source>Collection</source><target>Colección</target></trans-unit>
+      <trans-unit id="ton.title.jetton" datatype="html"><source>Jetton</source><target>Jetton</target></trans-unit>
+      <trans-unit id="ton.title.validators" datatype="html"><source>Validators</source><target>Validadores</target></trans-unit>
+      <trans-unit id="ton.title.transactions" datatype="html"><source>Transactions</source><target>Transacciones</target></trans-unit>
+      <trans-unit id="ton.title.message" datatype="html"><source>Message</source><target>Mensaje</target></trans-unit>
+      <trans-unit id="ton.title.trace" datatype="html"><source>Trace</source><target>Traza</target></trans-unit>
+      <trans-unit id="ton.title.not-found" datatype="html"><source>Page not found</source><target>Página no encontrada</target></trans-unit>
+      <trans-unit id="ton.title.dns" datatype="html"><source>TON DNS</source><target>DNS de TON</target></trans-unit>
+      <trans-unit id="ton.title.dns-auctions" datatype="html"><source>DNS auctions</source><target>Subastas de DNS</target></trans-unit>
+      <trans-unit id="ton.title.staking-pool" datatype="html"><source>Staking pool</source><target>Grupo de staking</target></trans-unit>
+      <trans-unit id="ton.title.extra-currency" datatype="html"><source>Extra currency</source><target>Moneda adicional</target></trans-unit>
+      <trans-unit id="ton.title.config" datatype="html"><source>Network configuration</source><target>Configuración de la red</target></trans-unit>
+      <trans-unit id="ton.extra.find-jetton" datatype="html"><source>Find jetton</source><target>Buscar jetton</target></trans-unit>
+      <trans-unit id="ton.extra.sort" datatype="html"><source>Sort</source><target>Ordenar</target></trans-unit>
+      <trans-unit id="ton.extra.collection" datatype="html"><source>Collection</source><target>Colección</target></trans-unit>
+      <trans-unit id="ton.extra.metadata" datatype="html"><source>Metadata</source><target>Metadatos</target></trans-unit>
+      <trans-unit id="ton.extra.website" datatype="html"><source>Website ↗</source><target>Sitio web ↗</target></trans-unit>
+      <trans-unit id="ton.extra.open-animation" datatype="html"><source>Open animation ↗</source><target>Abrir animación ↗</target></trans-unit>
+      <trans-unit id="ton.extra.pool" datatype="html"><source>Pool</source><target>Grupo</target></trans-unit>
+      <trans-unit id="ton.extra.temporarily-unavailable" datatype="html"><source>Temporarily unavailable</source><target>No disponible temporalmente</target></trans-unit>
+      <trans-unit id="ton.extra.records-unavailable" datatype="html"><source>Records unavailable</source><target>Registros no disponibles</target></trans-unit>
+      <trans-unit id="ton.extra.placeholder-asset" datatype="html"><source>Name, symbol or address</source><target>Nombre, símbolo o dirección</target></trans-unit>
+      <trans-unit id="ton.extra.placeholder-collection" datatype="html"><source>Collection address</source><target>Dirección de la colección</target></trans-unit>
+      <trans-unit id="ton.extra.placeholder-arguments" datatype="html"><source>Comma-separated arguments</source><target>Argumentos separados por comas</target></trans-unit>
+      <trans-unit id="ton.extra.loading" datatype="html"><source>Loading</source><target>Cargando</target></trans-unit>
+      <trans-unit id="ton.extra.loading-assets" datatype="html"><source>Loading assets</source><target>Cargando activos</target></trans-unit>
+      <trans-unit id="ton.extra.loading-more-assets" datatype="html"><source>Loading more assets</source><target>Cargando más activos</target></trans-unit>
+      <trans-unit id="ton.extra.empty-nfts" datatype="html"><source>No NFTs</source><target>No hay NFT</target></trans-unit>
+      <trans-unit id="ton.extra.empty-jettons" datatype="html"><source>No jettons</source><target>No hay jettons</target></trans-unit>
+      <trans-unit id="ton.extra.empty-shards" datatype="html"><source>No shards</source><target>No hay fragmentos</target></trans-unit>
+      <trans-unit id="ton.extra.empty-activity" datatype="html"><source>No activity</source><target>Sin actividad</target></trans-unit>
+      <trans-unit id="ton.extra.refresh" datatype="html"><source>Refresh</source><target>Actualizar</target></trans-unit>
+      <trans-unit id="ton.extra.not-found" datatype="html"><source>Not found</source><target>No encontrado</target></trans-unit>
+      <trans-unit id="ton.extra.page-not-found" datatype="html"><source>Page not found</source><target>Página no encontrada</target></trans-unit>
+      <trans-unit id="ton.extra.list-updated" datatype="html"><source>List updated</source><target>Lista actualizada</target></trans-unit>
+      <trans-unit id="ton.extra.invalid-filter" datatype="html"><source>Invalid filter</source><target>Filtro no válido</target></trans-unit>
+      <trans-unit id="ton.extra.invalid-jetton" datatype="html"><source>Invalid jetton</source><target>Jetton no válido</target></trans-unit>
+      <trans-unit id="ton.extra.bad-arguments" datatype="html"><source>Enter comma-separated arguments or a JSON array of strings</source><target>Introduce argumentos separados por comas o un array JSON de cadenas</target></trans-unit>
+      <trans-unit id="ton.extra.method-failed" datatype="html"><source>Unable to run method</source><target>No se pudo ejecutar el método</target></trans-unit>
+      <trans-unit id="ton.extra.revoked" datatype="html"><source>Revoked</source><target>Revocado</target></trans-unit>
+      <trans-unit id="ton.extra.not-revoked" datatype="html"><source>Not revoked</source><target>No revocado</target></trans-unit>
+      <trans-unit id="ton.extra.unknown" datatype="html"><source>Unknown</source><target>Desconocido</target></trans-unit>
+      <trans-unit id="ton.extra.for-sale" datatype="html"><source>For sale</source><target>En venta</target></trans-unit>
+      <trans-unit id="ton.footer.tagline" datatype="html"><source>TON blocks, transactions, and accounts</source><target>Bloques, transacciones y cuentas de TON</target></trans-unit>
+      <trans-unit id="ton.footer.explore" datatype="html"><source>Explore</source><target>Explorar</target></trans-unit>
+      <trans-unit id="ton.footer.dashboard" datatype="html"><source>Dashboard</source><target>Panel</target></trans-unit>
+      <trans-unit id="ton.footer.recent-blocks" datatype="html"><source>Recent Blocks</source><target>Bloques recientes</target></trans-unit>
+      <trans-unit id="ton.footer.recent-txs" datatype="html"><source>Recent Transactions</source><target>Transacciones recientes</target></trans-unit>
+      <trans-unit id="ton.footer.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit id="ton.footer.nfts" datatype="html"><source>NFT Collections</source><target>Colecciones NFT</target></trans-unit>
+      <trans-unit id="ton.footer.markets" datatype="html"><source>Markets</source><target>Mercados</target></trans-unit>
+      <trans-unit id="ton.footer.validators" datatype="html"><source>Validators</source><target>Validadores</target></trans-unit>
+      <trans-unit id="ton.footer.dns" datatype="html"><source>TON DNS</source><target>TON DNS</target></trans-unit>
+      <trans-unit id="ton.footer.network-config" datatype="html"><source>Network Configuration</source><target>Configuración de la red</target></trans-unit>
+      <trans-unit id="ton.footer.what-ton" datatype="html"><source>What is TON?</source><target>¿Qué es TON?</target></trans-unit>
+      <trans-unit id="ton.footer.blocks" datatype="html"><source>Blocks</source><target>Bloques</target></trans-unit>
+      <trans-unit id="ton.footer.transactions" datatype="html"><source>Transactions</source><target>Transacciones</target></trans-unit>
+      <trans-unit id="ton.footer.messages-fees" datatype="html"><source>Messages and fees</source><target>Mensajes y comisiones</target></trans-unit>
+      <trans-unit id="ton.footer.about" datatype="html"><source>About</source><target>Acerca de</target></trans-unit>
+      <trans-unit id="ton.footer.source" datatype="html"><source>Source code</source><target>Código fuente</target></trans-unit>
+      <trans-unit id="ton.footer.status" datatype="html"><source>Status</source><target>Estado</target></trans-unit>
+      <trans-unit id="ton.footer.telegram" datatype="html"><source>Telegram</source><target>Telegram</target></trans-unit>
+      <trans-unit id="ton.footer.contact" datatype="html"><source>Contact Us</source><target>Contacto</target></trans-unit>
+      <trans-unit id="ton.footer.legal" datatype="html"><source>Legal</source><target>Aviso legal</target></trans-unit>
+      <trans-unit id="ton.footer.terms" datatype="html"><source>Terms of Service</source><target>Condiciones del servicio</target></trans-unit>
+      <trans-unit id="ton.footer.privacy" datatype="html"><source>Privacy Policy</source><target>Política de privacidad</target></trans-unit>
+      <trans-unit id="ton.footer.third-party" datatype="html"><source>Third-party Licenses</source><target>Licencias de terceros</target></trans-unit>
+      <trans-unit id="ton.footer.made-with" datatype="html"><source>Made with</source><target>Hecho con</target></trans-unit>
+      <trans-unit id="ton.footer.by" datatype="html"><source>by</source><target>por</target></trans-unit>
+      <trans-unit id="ton.footer.telegram-aria" datatype="html"><source>Join the tx.taxi Telegram channel</source><target>Únete al canal de Telegram de tx.taxi</target></trans-unit>
+      <trans-unit id="ton.more.currency-history" datatype="html"><source><x id="INTERPOLATION"/> history</source><target>Historial de <x id="INTERPOLATION"/></target></trans-unit>
+      <trans-unit id="ton.more.public-key" datatype="html"><source>Public key (hex)</source><target>Clave pública (hex)</target></trans-unit>
+      <trans-unit id="ton.more.expiring-domains" datatype="html"><source>Expiring domains</source><target>Dominios próximos a caducar</target></trans-unit>
+      <trans-unit id="ton.more.contract-inspection" datatype="html"><source>Contract inspection</source><target>Inspección del contrato</target></trans-unit>
+      <trans-unit id="ton.more.staking" datatype="html"><source>Staking</source><target>Staking</target></trans-unit>
+      <trans-unit id="ton.more.multisigs" datatype="html"><source>Multisigs</source><target>Multifirmas</target></trans-unit>
+      <trans-unit id="ton.more.subscriptions" datatype="html"><source>Subscriptions</source><target>Suscripciones</target></trans-unit>
+      <trans-unit id="ton.more.seconds" datatype="html"><source>seconds</source><target>segundos</target></trans-unit>
+      <trans-unit id="ton.more.sent-execution" datatype="html"><source>Sent for execution</source><target>Enviado para su ejecución</target></trans-unit>
+      <trans-unit id="ton.more.awaiting-execution" datatype="html"><source>Awaiting execution</source><target>Pendiente de ejecución</target></trans-unit>
+      <trans-unit id="ton.more.transfer-history" datatype="html"><source>Transfer history</source><target>Historial de transferencias</target></trans-unit>
+      <trans-unit id="ton.more.nft-details" datatype="html"><source>NFT details</source><target>Detalles del NFT</target></trans-unit>
+      <trans-unit id="ton.more.collection-details" datatype="html"><source>Collection details</source><target>Detalles de la colección</target></trans-unit>
+      <trans-unit id="ton.more.jetton-details" datatype="html"><source>Jetton details</source><target>Detalles del jetton</target></trans-unit>
+      <trans-unit id="ton.more.other-actions" datatype="html"><source>Other actions</source><target>Otras acciones</target></trans-unit>
+      <trans-unit id="ton.more.multisig" datatype="html"><source>Multisig</source><target>Multifirma</target></trans-unit>
+      <trans-unit id="ton.more.successful" datatype="html"><source>Successful</source><target>Correcta</target></trans-unit>
+      <trans-unit id="ton.more.failed" datatype="html"><source>Failed</source><target>Fallida</target></trans-unit>
+      <trans-unit id="ton.more.auctions" datatype="html"><source>auctions</source><target>subastas</target></trans-unit>
+      <trans-unit id="ton.more.verified" datatype="html"><source>Verified</source><target>Verificado</target></trans-unit>
+      <trans-unit id="ton.more.unverified" datatype="html"><source>Unverified</source><target>No verificado</target></trans-unit>
+      <trans-unit id="ton.more.parameter" datatype="html"><source>Parameter</source><target>Parámetro</target></trans-unit>
+      <trans-unit id="ton.more.loading-asset" datatype="html"><source>Loading asset data…</source><target>Cargando datos del activo…</target></trans-unit>
+      <trans-unit id="ton.more.asset-unavailable" datatype="html"><source>Asset unavailable</source><target>Activo no disponible</target></trans-unit>
+      <trans-unit id="ton.more.try-again" datatype="html"><source>Try again</source><target>Reintentar</target></trans-unit>
+      <trans-unit id="ton.more.soulbound" datatype="html"><source>Soulbound</source><target>Intransferible</target></trans-unit>
+      <trans-unit id="ton.more.jetton-metrics" datatype="html"><source>Jetton metrics</source><target>Indicadores del jetton</target></trans-unit>
+      <trans-unit id="ton.more.total-supply" datatype="html"><source>Total supply</source><target>Suministro total</target></trans-unit>
+      <trans-unit id="ton.more.mintable" datatype="html"><source>Mintable</source><target>Se pueden emitir más</target></trans-unit>
+      <trans-unit id="ton.more.yes" datatype="html"><source>Yes</source><target>Sí</target></trans-unit>
+      <trans-unit id="ton.more.no" datatype="html"><source>No</source><target>No</target></trans-unit>
+      <trans-unit id="ton.more.admin" datatype="html"><source>Admin</source><target>Administrador</target></trans-unit>
+      <trans-unit id="ton.more.index" datatype="html"><source>Index</source><target>Índice</target></trans-unit>
+      <trans-unit id="ton.more.next-index" datatype="html"><source>Next item index</source><target>Índice del siguiente elemento</target></trans-unit>
+      <trans-unit id="ton.more.membership" datatype="html"><source>Collection membership</source><target>Pertenencia a la colección</target></trans-unit>
+      <trans-unit id="ton.more.recognized-by" datatype="html"><source>Recognized by</source><target>Reconocido por</target></trans-unit>
+      <trans-unit id="ton.more.unnamed-nft" datatype="html"><source>Unnamed NFT</source><target>NFT sin nombre</target></trans-unit>
+      <trans-unit id="ton.more.unnamed-jetton" datatype="html"><source>Unnamed jetton</source><target>Jetton sin nombre</target></trans-unit>
+      <trans-unit id="ton.more.raw-units" datatype="html"><source>raw units</source><target>unidades sin procesar</target></trans-unit>
+      <trans-unit id="ton.more.units" datatype="html"><source>units</source><target>unidades</target></trans-unit>
+      <trans-unit id="ton.more.tokens" datatype="html"><source>tokens</source><target>tokens</target></trans-unit>
+      <trans-unit id="ton.more.account-qr" datatype="html"><source>Show account QR code</source><target>Mostrar el código QR de la cuenta</target></trans-unit>
+      <trans-unit id="ton.more.account-unavailable" datatype="html"><source>Account unavailable</source><target>Cuenta no disponible</target></trans-unit>
+      <trans-unit id="ton.more.loading-account" datatype="html"><source>Loading account</source><target>Cargando cuenta</target></trans-unit>
+      <trans-unit id="ton.more.account-identity" datatype="html"><source>TON account identity</source><target>Identidad de la cuenta de TON</target></trans-unit>
+      <trans-unit id="ton.more.last-activity" datatype="html"><source>Last activity</source><target>Última actividad</target></trans-unit>
+      <trans-unit id="ton.more.message-unavailable" datatype="html"><source>Message details unavailable</source><target>Detalles del mensaje no disponibles</target></trans-unit>
+      <trans-unit id="ton.more.state" datatype="html"><source>State</source><target>Estado</target></trans-unit>
+      <trans-unit id="ton.more.tx-type" datatype="html"><source>Transaction type</source><target>Tipo de transacción</target></trans-unit>
+      <trans-unit id="ton.more.aborted" datatype="html"><source>Aborted</source><target>Abortada</target></trans-unit>
+      <trans-unit id="ton.more.destroyed" datatype="html"><source>Destroyed</source><target>Destruida</target></trans-unit>
+      <trans-unit id="ton.more.previous-tx" datatype="html"><source>Previous transaction</source><target>Transacción anterior</target></trans-unit>
+      <trans-unit id="ton.more.previous-lt" datatype="html"><source>Previous logical time</source><target>Tiempo lógico anterior</target></trans-unit>
+      <trans-unit id="ton.more.state-update" datatype="html"><source>State update</source><target>Actualización del estado</target></trans-unit>
+      <trans-unit id="ton.more.state-hashes" datatype="html"><source>State hashes</source><target>Hashes del estado</target></trans-unit>
+      <trans-unit id="ton.more.before" datatype="html"><source>Before</source><target>Antes</target></trans-unit>
+      <trans-unit id="ton.more.after" datatype="html"><source>After</source><target>Después</target></trans-unit>
+      <trans-unit id="ton.more.not-applicable" datatype="html"><source>Not applicable</source><target>No aplicable</target></trans-unit>
+      <trans-unit id="ton.more.tx-details" datatype="html"><source>Transaction details</source><target>Detalles de la transacción</target></trans-unit>
+      <trans-unit id="ton.more.actions" datatype="html"><source>Actions</source><target>Acciones</target></trans-unit>
+      <trans-unit id="ton.more.loading-actions" datatype="html"><source>Loading actions</source><target>Cargando acciones</target></trans-unit>
+      <trans-unit id="ton.more.actions-unavailable" datatype="html"><source>Actions unavailable</source><target>Acciones no disponibles</target></trans-unit>
+      <trans-unit id="ton.more.related" datatype="html"><source>Related transactions</source><target>Transacciones relacionadas</target></trans-unit>
+      <trans-unit id="ton.more.loading-related" datatype="html"><source>Loading related transactions</source><target>Cargando transacciones relacionadas</target></trans-unit>
+      <trans-unit id="ton.more.related-unavailable" datatype="html"><source>Related transactions unavailable</source><target>Transacciones relacionadas no disponibles</target></trans-unit>
+      <trans-unit id="ton.more.trace-unavailable" datatype="html"><source>Trace transactions unavailable</source><target>Transacciones de la traza no disponibles</target></trans-unit>
+      <trans-unit id="ton.more.step" datatype="html"><source>Step</source><target>Paso</target></trans-unit>
+      <trans-unit id="ton.more.from-transaction" datatype="html"><source>From transaction</source><target>Desde la transacción</target></trans-unit>
+      <trans-unit id="ton.more.via-message" datatype="html"><source>via message</source><target>mediante el mensaje</target></trans-unit>
+      <trans-unit id="ton.more.trace-details" datatype="html"><source>Trace details</source><target>Detalles de la traza</target></trans-unit>
+      <trans-unit id="ton.dash.confirmed-fees" datatype="html"><source>Confirmed Transaction Fees</source><target>Comisiones de transacciones confirmadas</target></trans-unit>
+      <trans-unit id="ton.dash.pending" datatype="html"><source>Pending Messages</source><target>Mensajes pendientes</target></trans-unit>
+      <trans-unit id="ton.dash.master-block" datatype="html"><source>Masterchain block</source><target>Bloque de Masterchain</target></trans-unit>
+      <trans-unit id="ton.dash.base-block" datatype="html"><source>Basechain block</source><target>Bloque de Basechain</target></trans-unit>
+      <trans-unit id="ton.dash.transactions" datatype="html"><source>Transactions</source><target>Transacciones</target></trans-unit>
+      <trans-unit id="ton.dash.interval" datatype="html"><source>Mean block interval</source><target>Intervalo medio entre bloques</target></trans-unit>
+      <trans-unit id="ton.dash.collected" datatype="html"><source>Collected fees</source><target>Comisiones recaudadas</target></trans-unit>
+      <trans-unit id="ton.dash.time" datatype="html"><source>Time</source><target>Hora</target></trans-unit>
+      <trans-unit id="ton.dash.fees" datatype="html"><source>Fees</source><target>Comisiones</target></trans-unit>
+      <trans-unit id="ton.dash.map-unavailable" datatype="html"><source>Message map unavailable in this browser</source><target>El mapa de mensajes no está disponible en este navegador</target></trans-unit>
+      <trans-unit id="ton.dash.reconnecting" datatype="html"><source>Reconnecting…</source><target>Reconectando…</target></trans-unit>
+      <trans-unit id="ton.dash.network" datatype="html"><source>network</source><target>red</target></trans-unit>
+      <trans-unit id="ton.dash.success-unavailable" datatype="html"><source>Success rate unavailable</source><target>Tasa de éxito no disponible</target></trans-unit>
+      <trans-unit id="ton.dash.observed-time" datatype="html"><source>Observed block time</source><target>Tiempo de bloque observado</target></trans-unit>
+      <trans-unit id="ton.dash.seconds" datatype="html"><source>seconds</source><target>segundos</target></trans-unit>
+      <trans-unit id="ton.dash.ton-network" datatype="html"><source>TON Network</source><target>Red de TON</target></trans-unit>
+      <trans-unit id="ton.dash.ton-economics" datatype="html"><source>TON Economics</source><target>Economía de TON</target></trans-unit>
+      <trans-unit id="ton.dash.economics" datatype="html"><source>economics</source><target>economía</target></trans-unit>
+      <trans-unit id="ton.dash.latest-base" datatype="html"><source>Latest basechain block</source><target>Último bloque de Basechain</target></trans-unit>
+      <trans-unit id="ton.dash.latest-master" datatype="html"><source>Latest masterchain block</source><target>Último bloque de Masterchain</target></trans-unit>
+      <trans-unit id="ton.dash.successful" datatype="html"><source>Successful transactions</source><target>Transacciones exitosas</target></trans-unit>
+      <trans-unit id="ton.dash.minimum" datatype="html"><source>Minimum</source><target>Mínimo</target></trans-unit>
+      <trans-unit id="ton.dash.median" datatype="html"><source>Median</source><target>Mediana</target></trans-unit>
+      <trans-unit id="ton.dash.average" datatype="html"><source>Average</source><target>Promedio</target></trans-unit>
+      <trans-unit id="ton.dash.maximum" datatype="html"><source>Maximum</source><target>Máximo</target></trans-unit>
+      <trans-unit id="ton.dash.value" datatype="html"><source>Value</source><target>Valor</target></trans-unit>
+      <trans-unit id="ton.dash.messages" datatype="html"><source>Messages</source><target>Mensajes</target></trans-unit>
+      <trans-unit id="ton.dash.graph-fees" datatype="html"><source>Mean collected fees (GRAM/block)</source><target>Comisiones medias recaudadas (GRAM/bloque)</target></trans-unit>
+      <trans-unit id="ton.dash.graph-interval" datatype="html"><source>Mean block interval (s)</source><target>Intervalo medio entre bloques (s)</target></trans-unit>
+      <trans-unit id="ton.dash.master-history" datatype="html"><source>Masterchain history</source><target>Historial de Masterchain</target></trans-unit>
+      <trans-unit id="ton.dash.base-history" datatype="html"><source>Basechain history</source><target>Historial de Basechain</target></trans-unit>
+      <trans-unit id="ton.dash.current-sample" datatype="html"><source>Current sample</source><target>Muestra actual</target></trans-unit>
+      <trans-unit id="ton.dash.live-history" datatype="html"><source>Live history</source><target>Historial en vivo</target></trans-unit>
+      <trans-unit id="ton.dash.last-hours" datatype="html"><source>Last 2 hours</source><target>Últimas 2 horas</target></trans-unit>
+      <trans-unit id="ton.search.placeholder" datatype="html"><source>Wave a taxi, paste anything here.</source><target>Pide un taxi, pega lo que quieras aquí.</target></trans-unit>
+      <trans-unit id="ton.search.auto" datatype="html"><source>Automatic Routing</source><target>Enrutamiento automático</target></trans-unit>
+      <trans-unit id="ton.search.view-hub" datatype="html"><source>View Hub</source><target>Ver panel</target></trans-unit>
+      <trans-unit id="ton.search.native" datatype="html"><source>NATIVE EXPLORERS</source><target>EXPLORADORES NATIVOS</target></trans-unit>
+      <trans-unit id="ton.search.third-party" datatype="html"><source>3RD-PARTY EXPLORERS</source><target>EXPLORADORES DE TERCEROS</target></trans-unit>
+      <trans-unit id="ton.search.opened" datatype="html"><source>Opened</source><target>Abierto</target></trans-unit>
+      <trans-unit id="ton.search.switch" datatype="html"><source>Switch</source><target>Cambiar</target></trans-unit>
+      <trans-unit id="ton.pending.title" datatype="html"><source>Pending</source><target>Pendiente</target></trans-unit>
+      <trans-unit id="ton.pending.one" datatype="html"><source>message</source><target>mensaje</target></trans-unit>
+      <trans-unit id="ton.pending.many" datatype="html"><source>messages</source><target>mensajes</target></trans-unit>
+      <trans-unit id="ton.pending.unavailable" datatype="html"><source>Unavailable</source><target>No disponible</target></trans-unit>
+      <trans-unit id="ton.pending.last" datatype="html"><source>Last observation</source><target>Última observación</target></trans-unit>
+      <trans-unit id="ton.pending.feed-unavailable" datatype="html"><source>Feed unavailable</source><target>Datos no disponibles</target></trans-unit>
+      <trans-unit id="ton.block.id" datatype="html"><source>Block ID</source><target>ID de bloque</target></trans-unit>
+      <trans-unit id="ton.block.timestamp" datatype="html"><source>Timestamp</source><target>Fecha y hora</target></trans-unit>
+      <trans-unit id="ton.block.workchain" datatype="html"><source>Workchain</source><target>Cadena de trabajo</target></trans-unit>
+      <trans-unit id="ton.block.shard" datatype="html"><source>Shard</source><target>Fragmento</target></trans-unit>
+      <trans-unit id="ton.block.fees-rewards" datatype="html"><source>Fees &amp; rewards</source><target>Comisiones y recompensas</target></trans-unit>
+      <trans-unit id="ton.block.transaction" datatype="html"><source>transaction</source><target>transacción</target></trans-unit>
+      <trans-unit id="ton.block.transactions" datatype="html"><source>transactions</source><target>transacciones</target></trans-unit>
+      <trans-unit id="ton.block.shard-blocks" datatype="html"><source>Shard blocks</source><target>Bloques de fragmentos</target></trans-unit>
+      <trans-unit id="ton.search.choose" datatype="html"><source>Choose search chain</source><target>Elegir cadena de búsqueda</target></trans-unit>
+      <trans-unit id="ton.search.selected-explorer" datatype="html"><source>Selected explorer</source><target>Explorador seleccionado</target></trans-unit>
+      <trans-unit id="ton.search.selected" datatype="html"><source>SELECTED</source><target>SELECCIONADO</target></trans-unit>
+      <trans-unit id="ton.search.registry-unavailable" datatype="html"><source>Explorer registry unavailable</source><target>Registro de exploradores no disponible</target></trans-unit>
+      <trans-unit id="ton.search.loading" datatype="html"><source>Loading explorers</source><target>Cargando exploradores</target></trans-unit>
+      <trans-unit id="ton.search.open-hub-tab" datatype="html"><source>Open tx.taxi in a new tab</source><target>Abrir tx.taxi en una nueva pestaña</target></trans-unit>
+      <trans-unit id="ton.search.direct" datatype="html"><source>Or go straight to</source><target>O ve directamente a</target></trans-unit>
+      <trans-unit id="ton.search.additional-explorers" datatype="html"><source>additional explorers</source><target>exploradores adicionales</target></trans-unit>
+      <trans-unit id="ton.search.open" datatype="html"><source>Open</source><target>Abrir</target></trans-unit>
+      <trans-unit id="ton.search.new-tab" datatype="html"><source>in a new tab</source><target>en una nueva pestaña</target></trans-unit>
+      <trans-unit id="ton.search.switch-to" datatype="html"><source>Switch to</source><target>Cambiar a</target></trans-unit>
+      <trans-unit id="ton.search.show" datatype="html"><source>Show</source><target>Mostrar</target></trans-unit>
+      <trans-unit id="ton.search.hide" datatype="html"><source>Hide</source><target>Ocultar</target></trans-unit>
+      <trans-unit id="ton.search.found" datatype="html"><source>Found</source><target>Encontrado</target></trans-unit>
+      <trans-unit id="ton.search.possible" datatype="html"><source>Possible</source><target>Posible</target></trans-unit>
+      <trans-unit id="ton.search.search" datatype="html"><source>Search</source><target>Buscar</target></trans-unit>
+      <trans-unit id="ton.search.example" datatype="html"><source>tx.taxi/[your search]</source><target>tx.taxi/[tu búsqueda]</target></trans-unit>
+      <trans-unit id="ton.legal.terms.title" datatype="html"><source>Terms of Service</source><target>Términos del servicio</target></trans-unit>
+      <trans-unit id="ton.legal.terms.explorer.heading" datatype="html"><source>Explorer service</source><target>Servicio del explorador</target></trans-unit>
+      <trans-unit id="ton.legal.terms.explorer.body" datatype="html"><source>ton.tx.taxi is a public TON block explorer provided for informational purposes. It displays public blockchain data obtained from third-party infrastructure and may be delayed, incomplete, or unavailable.</source><target>ton.tx.taxi es un explorador público de bloques de TON que se ofrece con fines informativos. Muestra datos públicos de la cadena de bloques obtenidos de infraestructura de terceros, que pueden estar retrasados, incompletos o no disponibles.</target></trans-unit>
+      <trans-unit id="ton.legal.terms.advice.heading" datatype="html"><source>No financial advice</source><target>No constituye asesoramiento financiero</target></trans-unit>
+      <trans-unit id="ton.legal.terms.advice.body" datatype="html"><source>Nothing on this website is financial, investment, legal, or tax advice. Verify important transaction and account information with your own TON node or another independent source before acting on it.</source><target>Nada de lo que aparece en este sitio web constituye asesoramiento financiero, de inversión, legal o fiscal. Verifica la información importante sobre transacciones y cuentas con tu propio nodo de TON u otra fuente independiente antes de actuar.</target></trans-unit>
+      <trans-unit id="ton.legal.terms.availability.heading" datatype="html"><source>Availability and external services</source><target>Disponibilidad y servicios externos</target></trans-unit>
+      <trans-unit id="ton.legal.terms.availability.body" datatype="html"><source>The service is provided as-is without guarantees of accuracy, availability, or fitness for a particular purpose. External links are governed by their respective operators.</source><target>El servicio se proporciona tal cual, sin garantías de exactitud, disponibilidad o idoneidad para un propósito particular. Los enlaces externos se rigen por las condiciones de sus respectivos operadores.</target></trans-unit>
+      <trans-unit id="ton.legal.terms.source.heading" datatype="html"><source>Open-source attribution</source><target>Atribución de código abierto</target></trans-unit>
+      <trans-unit id="ton.legal.terms.source.body" datatype="html"><source>The interface is derived from the Mempool Open Source Project and is distributed under the GNU AGPLv3.</source><target>La interfaz deriva del proyecto de código abierto Mempool y se distribuye bajo la licencia GNU AGPLv3.</target></trans-unit>
+      <trans-unit id="ton.legal.terms.contact.heading" datatype="html"><source>Contact</source><target>Contacto</target></trans-unit>
+      <trans-unit id="ton.legal.terms.contact.before" datatype="html"><source>Questions and issue reports can be sent to the operator at</source><target>Las preguntas y los informes de problemas pueden enviarse al operador en</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.title" datatype="html"><source>Privacy Policy</source><target>Política de privacidad</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.audience.heading" datatype="html"><source>Audience measurement</source><target>Medición de audiencia</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.audience.body" datatype="html"><source>tx.taxi uses Cloudflare Web Analytics for page views and performance, and a first-party daily cookie shared across its explorers to count browsers once per UTC day. The daily audience collector stores only a daily identifier, the explorer hostname, and whether there was interaction. It does not receive search text, addresses, transaction IDs, URLs, or IP addresses. Individual daily records expire after 31 days; aggregate counts are retained for 400 days. Do Not Track and Global Privacy Control disable this first-party measurement.</source><target>tx.taxi utiliza Cloudflare Web Analytics para medir las visitas y el rendimiento de las páginas, y una cookie diaria propia compartida entre sus exploradores para contar cada navegador una vez por día UTC. El sistema de medición de audiencia diaria solo guarda un identificador diario, el nombre de host del explorador y si hubo interacción. No recibe textos de búsqueda, direcciones, identificadores de transacciones, URL ni direcciones IP. Los registros diarios individuales caducan a los 31 días; los recuentos agregados se conservan durante 400 días. Do Not Track y Global Privacy Control desactivan esta medición propia.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.audience.link" datatype="html"><source>Details and opt-out</source><target>Detalles y exclusión</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.lookups.heading" datatype="html"><source>Public blockchain lookups</source><target>Consultas de datos públicos de la cadena de bloques</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.lookups.body" datatype="html"><source>TON addresses, transaction hashes, and block identifiers submitted to the explorer are public blockchain data. Requests are processed by ton.tx.taxi and its configured public TON data providers.</source><target>Las direcciones de TON, los hashes de transacciones y los identificadores de bloques introducidos en el explorador son datos públicos de la cadena de bloques. Las solicitudes son procesadas por ton.tx.taxi y sus proveedores públicos de datos de TON configurados.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.preferences.heading" datatype="html"><source>Local preferences</source><target>Preferencias locales</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.preferences.body" datatype="html"><source>Display preferences such as language, timezone, fiat currency, amount mode, and theme may be stored in your browser. These preferences are used to render the interface and are not TON account credentials.</source><target>Las preferencias de visualización, como el idioma, la zona horaria, la moneda fiduciaria, el modo de importe y el tema, pueden almacenarse en tu navegador. Estas preferencias se usan para mostrar la interfaz y no son credenciales de una cuenta de TON.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.logs.heading" datatype="html"><source>Operational records</source><target>Registros operativos</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.logs.body" datatype="html"><source>The hosting stack and upstream data providers may retain routine security and request logs. Do not use a public explorer when a lookup itself is sensitive; use your own TON node and local tooling instead.</source><target>La infraestructura de alojamiento y los proveedores de datos pueden conservar registros rutinarios de seguridad y solicitudes. No uses un explorador público si la propia consulta es sensible; usa tu propio nodo de TON y herramientas locales.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.links.heading" datatype="html"><source>External links</source><target>Enlaces externos</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.links.body" datatype="html"><source>Links to TON documentation, Telegram, u.software, TONAPI, and the upstream Mempool project are governed by those services&#x27; own privacy policies.</source><target>Los enlaces a la documentación de TON, Telegram, u.software, TONAPI y el proyecto original Mempool se rigen por las políticas de privacidad de esos servicios.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.contact.heading" datatype="html"><source>Contact</source><target>Contacto</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.contact.before" datatype="html"><source>Privacy questions can be sent to the operator at</source><target>Las preguntas sobre privacidad pueden enviarse al operador en</target></trans-unit>
+      <trans-unit id="ton.legal.brand.title" datatype="html"><source>Brand attribution</source><target>Atribución de marcas</target></trans-unit>
+      <trans-unit id="ton.legal.brand.independent" datatype="html"><source>ton.tx.taxi is an independent TON explorer in the tx.taxi family.</source><target>ton.tx.taxi es un explorador de TON independiente de la familia tx.taxi.</target></trans-unit>
+      <trans-unit id="ton.legal.brand.ownership" datatype="html"><source>TON, Telegram, Mempool and other names and logos shown here belong to their respective owners. Their use identifies networks, assets and services; it does not imply endorsement or affiliation.</source><target>TON, Telegram, Mempool y los demás nombres y logotipos que aparecen aquí pertenecen a sus respectivos propietarios. Su uso identifica redes, activos y servicios; no implica respaldo ni afiliación.</target></trans-unit>
+      <trans-unit id="ton.legal.brand.source.before" datatype="html"><source>The interface is based on the</source><target>La interfaz se basa en el</target></trans-unit>
+      <trans-unit id="ton.legal.brand.source.link" datatype="html"><source>Mempool Open Source Project</source><target>proyecto de código abierto Mempool</target></trans-unit>
+      <trans-unit id="ton.legal.brand.source.after" datatype="html"><source>. Source licensing and third-party attribution are separate from rights to those brands.</source><target>. Las licencias del código fuente y la atribución a terceros son independientes de los derechos sobre esas marcas.</target></trans-unit>
+      <trans-unit id="ton.legal.brand.contact.before" datatype="html"><source>For questions about tx.taxi branding,</source><target>Para preguntas sobre la marca tx.taxi,</target></trans-unit>
+      <trans-unit id="ton.legal.brand.contact.link" datatype="html"><source>contact the maintainer</source><target>contacta con el responsable</target></trans-unit>
+      <trans-unit id="ton.legal.terms.meta.title" datatype="html"><source>Terms of Service</source><target>Términos del servicio</target></trans-unit>
+      <trans-unit id="ton.legal.terms.meta.description" datatype="html"><source>Terms for using ton.tx.taxi, an independent TON block explorer operated by tx.taxi.</source><target>Términos de uso de ton.tx.taxi, un explorador de bloques de TON independiente operado por tx.taxi.</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.meta.title" datatype="html"><source>Privacy Policy</source><target>Política de privacidad</target></trans-unit>
+      <trans-unit id="ton.legal.privacy.meta.description" datatype="html"><source>How ton.tx.taxi handles the limited technical data required to operate its TON explorer.</source><target>Cómo gestiona ton.tx.taxi los datos técnicos limitados necesarios para operar su explorador de TON.</target></trans-unit>
+      <trans-unit id="ton.legal.brand.meta.title" datatype="html"><source>Brand attribution</source><target>Atribución de marcas</target></trans-unit>
+      <trans-unit id="ton.legal.brand.meta.description" datatype="html"><source>Brand and open-source attribution for ton.tx.taxi.</source><target>Atribución de marcas y código abierto de ton.tx.taxi.</target></trans-unit>
+      <trans-unit id="ton.detail.execution" datatype="html"><source>Execution</source><target>Ejecución</target></trans-unit>
+      <trans-unit id="ton.detail.timestamp" datatype="html"><source>Timestamp</source><target>Fecha y hora</target></trans-unit>
+      <trans-unit id="ton.detail.account" datatype="html"><source>Account</source><target>Cuenta</target></trans-unit>
+      <trans-unit id="ton.detail.block" datatype="html"><source>Block</source><target>Bloque</target></trans-unit>
+      <trans-unit id="ton.detail.master-ref" datatype="html"><source>Masterchain reference</source><target>Referencia de Masterchain</target></trans-unit>
+      <trans-unit id="ton.detail.fee" datatype="html"><source>Transaction fee</source><target>Comisión de transacción</target></trans-unit>
+      <trans-unit id="ton.detail.logical-time" datatype="html"><source>Logical time</source><target>Tiempo lógico</target></trans-unit>
+      <trans-unit id="ton.detail.state" datatype="html"><source>Account state</source><target>Estado de la cuenta</target></trans-unit>
+      <trans-unit id="ton.detail.balance" datatype="html"><source>Ending balance</source><target>Saldo final</target></trans-unit>
+      <trans-unit id="ton.detail.to" datatype="html"><source>To</source><target>A</target></trans-unit>
+      <trans-unit id="ton.detail.from" datatype="html"><source>From</source><target>De</target></trans-unit>
+      <trans-unit id="ton.detail.no-incoming" datatype="html"><source>No incoming message</source><target>No hay mensajes entrantes</target></trans-unit>
+      <trans-unit id="ton.detail.no-outgoing" datatype="html"><source>No outgoing messages</source><target>No hay mensajes salientes</target></trans-unit>
+      <trans-unit id="ton.detail.no-actions" datatype="html"><source>No decoded actions</source><target>No hay acciones descodificadas</target></trans-unit>
+      <trans-unit id="ton.detail.in-progress" datatype="html"><source>In progress</source><target>En curso</target></trans-unit>
+      <trans-unit id="ton.detail.flagged-activity" datatype="html"><source>Flagged activity</source><target>Actividad marcada</target></trans-unit>
+      <trans-unit id="ton.detail.event-details" datatype="html"><source>Event details</source><target>Detalles del evento</target></trans-unit>
+      <trans-unit id="ton.detail.type" datatype="html"><source>Type</source><target>Tipo</target></trans-unit>
+      <trans-unit id="ton.detail.value" datatype="html"><source>Value</source><target>Valor</target></trans-unit>
+      <trans-unit id="ton.detail.hash" datatype="html"><source>Hash</source><target>Hash</target></trans-unit>
+      <trans-unit id="ton.detail.normalized-hash" datatype="html"><source>Normalized hash</source><target>Hash normalizado</target></trans-unit>
+      <trans-unit id="ton.detail.body-hash" datatype="html"><source>Body hash</source><target>Hash del cuerpo</target></trans-unit>
+      <trans-unit id="ton.detail.message-size" datatype="html"><source>Message size</source><target>Tamaño del mensaje</target></trans-unit>
+      <trans-unit id="ton.detail.first-seen" datatype="html"><source>First seen</source><target>Visto por primera vez</target></trans-unit>
+      <trans-unit id="ton.detail.last-seen" datatype="html"><source>Last seen</source><target>Visto por última vez</target></trans-unit>
+      <trans-unit id="ton.detail.message-details" datatype="html"><source>Message details</source><target>Detalles del mensaje</target></trans-unit>
+      <trans-unit id="ton.detail.external" datatype="html"><source>External</source><target>Externo</target></trans-unit>
+      <trans-unit id="ton.detail.bounced" datatype="html"><source>Bounced</source><target>Rebotado</target></trans-unit>
+      <trans-unit id="ton.detail.selected-message" datatype="html"><source>Selected message</source><target>Mensaje seleccionado</target></trans-unit>
+      <trans-unit id="ton.detail.pending-message" datatype="html"><source>Pending message</source><target>Mensaje pendiente</target></trans-unit>
+      <trans-unit id="ton.detail.incoming-message" datatype="html"><source>Incoming message</source><target>Mensaje entrante</target></trans-unit>
+      <trans-unit id="ton.detail.outgoing-message" datatype="html"><source>Outgoing message</source><target>Mensaje saliente</target></trans-unit>
+      <trans-unit id="ton.detail.value-unavailable" datatype="html"><source>Value unavailable</source><target>Valor no disponible</target></trans-unit>
+      <trans-unit id="ton.detail.no-native-value" datatype="html"><source>No native value</source><target>Sin valor nativo</target></trans-unit>
+      <trans-unit id="ton.detail.successful" datatype="html"><source>Successful</source><target>Exitosa</target></trans-unit>
+      <trans-unit id="ton.detail.failed" datatype="html"><source>Failed</source><target>Fallida</target></trans-unit>
+      <trans-unit id="ton.detail.unknown" datatype="html"><source>Unknown</source><target>Desconocido</target></trans-unit>
+      <trans-unit id="ton.detail.external-incoming" datatype="html"><source>External incoming</source><target>Entrante externo</target></trans-unit>
+      <trans-unit id="ton.detail.external-outgoing" datatype="html"><source>External outgoing</source><target>Saliente externo</target></trans-unit>
+      <trans-unit id="ton.detail.internal-message" datatype="html"><source>Internal message</source><target>Mensaje interno</target></trans-unit>
+      <trans-unit id="ton.detail.message" datatype="html"><source>Message</source><target>Mensaje</target></trans-unit>
+      <trans-unit id="ton.detail.storage-phase" datatype="html"><source>Storage phase</source><target>Fase de almacenamiento</target></trans-unit>
+      <trans-unit id="ton.detail.credit-phase" datatype="html"><source>Credit phase</source><target>Fase de crédito</target></trans-unit>
+      <trans-unit id="ton.detail.compute-phase" datatype="html"><source>Compute phase</source><target>Fase de cómputo</target></trans-unit>
+      <trans-unit id="ton.detail.action-phase" datatype="html"><source>Action phase</source><target>Fase de acción</target></trans-unit>
+      <trans-unit id="ton.detail.bounce-phase" datatype="html"><source>Bounce phase</source><target>Fase de rebote</target></trans-unit>
+      <trans-unit id="ton.phase.gas_fees" datatype="html"><source>gas fees</source><target>comisiones de gas</target></trans-unit>
+      <trans-unit id="ton.phase.gas_used" datatype="html"><source>gas used</source><target>gas utilizado</target></trans-unit>
+      <trans-unit id="ton.phase.gas_limit" datatype="html"><source>gas limit</source><target>límite de gas</target></trans-unit>
+      <trans-unit id="ton.phase.gas_credit" datatype="html"><source>gas credit</source><target>crédito de gas</target></trans-unit>
+      <trans-unit id="ton.phase.mode" datatype="html"><source>mode</source><target>modo</target></trans-unit>
+      <trans-unit id="ton.phase.exit_code" datatype="html"><source>exit code</source><target>código de salida</target></trans-unit>
+      <trans-unit id="ton.phase.exit_arg" datatype="html"><source>exit arg</source><target>argumento de salida</target></trans-unit>
+      <trans-unit id="ton.phase.success" datatype="html"><source>success</source><target>éxito</target></trans-unit>
+      <trans-unit id="ton.phase.skipped" datatype="html"><source>skipped</source><target>omitido</target></trans-unit>
+      <trans-unit id="ton.phase.reason" datatype="html"><source>reason</source><target>motivo</target></trans-unit>
+      <trans-unit id="ton.phase.valid" datatype="html"><source>valid</source><target>válido</target></trans-unit>
+      <trans-unit id="ton.phase.no_funds" datatype="html"><source>no funds</source><target>sin fondos</target></trans-unit>
+      <trans-unit id="ton.phase.status_change" datatype="html"><source>status change</source><target>cambio de estado</target></trans-unit>
+      <trans-unit id="ton.phase.total_fwd_fees" datatype="html"><source>total fwd fees</source><target>comisiones totales de reenvío</target></trans-unit>
+      <trans-unit id="ton.phase.total_action_fees" datatype="html"><source>total action fees</source><target>comisiones totales de acción</target></trans-unit>
+      <trans-unit id="ton.phase.storage_fees_collected" datatype="html"><source>storage fees collected</source><target>comisiones de almacenamiento recaudadas</target></trans-unit>
+      <trans-unit id="ton.phase.storage_fees_due" datatype="html"><source>storage fees due</source><target>comisiones de almacenamiento pendientes</target></trans-unit>
+      <trans-unit id="ton.phase.fees_collected" datatype="html"><source>fees collected</source><target>comisiones recaudadas</target></trans-unit>
+      <trans-unit id="ton.phase.fees_due" datatype="html"><source>fees due</source><target>comisiones pendientes</target></trans-unit>
+      <trans-unit id="ton.phase.total_fees" datatype="html"><source>total fees</source><target>comisiones totales</target></trans-unit>
+      <trans-unit id="ton.phase.credit" datatype="html"><source>credit</source><target>crédito</target></trans-unit>
+      <trans-unit id="ton.phase.msg_fees" datatype="html"><source>msg fees</source><target>comisiones de mensajes</target></trans-unit>
+      <trans-unit id="ton.phase.fwd_fees" datatype="html"><source>fwd fees</source><target>comisiones de reenvío</target></trans-unit>
+      <trans-unit id="ton.phase.total_actions" datatype="html"><source>total actions</source><target>acciones totales</target></trans-unit>
+      <trans-unit id="ton.phase.skipped_actions" datatype="html"><source>skipped actions</source><target>acciones omitidas</target></trans-unit>
+      <trans-unit id="ton.phase.msgs_created" datatype="html"><source>msgs created</source><target>mensajes creados</target></trans-unit>
+      <trans-unit id="ton.phase.result_code" datatype="html"><source>result code</source><target>código de resultado</target></trans-unit>
+      <trans-unit id="ton.phase.result_arg" datatype="html"><source>result arg</source><target>argumento de resultado</target></trans-unit>
+      <trans-unit id="ton.phase.action_list_hash" datatype="html"><source>action list hash</source><target>hash de la lista de acciones</target></trans-unit>
+      <trans-unit id="ton.phase.tot_msg_size" datatype="html"><source>tot msg size</source><target>tamaño total de mensajes</target></trans-unit>
+      <trans-unit id="ton.phase.vm_steps" datatype="html"><source>vm steps</source><target>pasos de la máquina virtual</target></trans-unit>
+      <trans-unit id="ton.nav.validators" datatype="html"><source>Validators</source><target>Validadores</target></trans-unit>
+      <trans-unit id="ton.nav.docs" datatype="html"><source>TON documentation</source><target>Documentación de TON</target></trans-unit>
+      <trans-unit id="ton.block.fees-collected" datatype="html"><source>Fees collected: <x id="amount"/> <x id="symbol"/>. Includes block creation and imported fees.</source><target>Comisiones recaudadas: <x id="amount"/> <x id="symbol"/>. Incluye las comisiones de creación de bloques e importadas.</target></trans-unit>
+      <trans-unit id="ton.block.fees-unavailable" datatype="html"><source>Transaction fees unavailable.</source><target>Comisiones de transacción no disponibles.</target></trans-unit>
+      <trans-unit id="ton.block.unavailable" datatype="html"><source>unavailable</source><target>no disponible</target></trans-unit>
+      <trans-unit id="ton.block.no-transactions" datatype="html"><source>No transactions; median and range unavailable.</source><target>Sin transacciones; la mediana y el intervalo no están disponibles.</target></trans-unit>
+      <trans-unit id="ton.block.fee-distribution" datatype="html"><source>Median: <x id="median"/> ng/tx. Range: <x id="range"/>.</source><target>Mediana: <x id="median"/> ng/tx. Intervalo: <x id="range"/>.</target></trans-unit>
+      <trans-unit id="ton.block.transaction-fees-one" datatype="html"><source>Transaction fees: <x id="total"/> GRAM across <x id="count"/> transaction in this block. <x id="distribution"/> ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.</source><target>Comisiones de transacción: <x id="total"/> GRAM en <x id="count"/> transacción de este bloque. <x id="distribution"/> ng/tx significa nanogramos por transacción; 1 GRAM = 1.000.000.000 nanogramos.</target></trans-unit>
+      <trans-unit id="ton.block.transaction-fees-many" datatype="html"><source>Transaction fees: <x id="total"/> GRAM across <x id="count"/> transactions in this block. <x id="distribution"/> ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.</source><target>Comisiones de transacción: <x id="total"/> GRAM en <x id="count"/> transacciones de este bloque. <x id="distribution"/> ng/tx significa nanogramos por transacción; 1 GRAM = 1.000.000.000 nanogramos.</target></trans-unit>
     </body>
   </file>
 </xliff>

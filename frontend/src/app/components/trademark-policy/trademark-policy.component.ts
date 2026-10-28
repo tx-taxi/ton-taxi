@@ -19,8 +19,8 @@ export class TrademarkPolicyComponent {
   ) { }
 
   ngOnInit(): void {
-    this.seoService.setTitle('Brand attribution');
-    this.seoService.setDescription('Brand and open-source attribution for ton.tx.taxi.');
+    this.seoService.setTitle($localize`:@@ton.legal.brand.meta.title:Brand attribution`);
+    this.seoService.setDescription($localize`:@@ton.legal.brand.meta.description:Brand and open-source attribution for ton.tx.taxi.`);
     this.ogService.clearOgImage();
   }
 }

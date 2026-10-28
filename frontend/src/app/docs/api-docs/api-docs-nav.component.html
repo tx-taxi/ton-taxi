@@ -1,4 +1,4 @@
-<nav aria-label="Documentation sections">
+<nav [attr.aria-label]="isSpanish ? 'Secciones de la documentación' : 'Documentation sections'">
   <ng-container *ngFor="let item of tabData">
     <p *ngIf="item.type === 'category'">{{ item.title }}</p>
     <a

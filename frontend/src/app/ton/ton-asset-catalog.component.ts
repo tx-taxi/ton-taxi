@@ -28,9 +28,9 @@ export class TonAssetCatalogComponent extends TonAssetsPageComponent {
   }
   catalogTrust(item: any): string {
     return item.verification === 'whitelist'
-      ? 'Recognized'
+      ? $localize`:@@ton.trust.recognized:Recognized`
       : item.verification === 'blacklist'
-      ? 'Flagged'
-      : 'Unclassified';
+      ? $localize`:@@ton.trust.flagged:Flagged`
+      : $localize`:@@ton.trust.unclassified:Unclassified`;
   }
 }

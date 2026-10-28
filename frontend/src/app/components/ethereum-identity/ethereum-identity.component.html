@@ -20,7 +20,7 @@
     <a
       *ngIf="link; else unlinkedIdentity"
       class="ethereum-identity__labels ethereum-identity__link"
-      [href]="link"
+      [href]="localizedLink"
       [attr.aria-label]="accessibleLabel"
     >
       <span class="ethereum-identity__primary">{{ primaryLabel }}</span>

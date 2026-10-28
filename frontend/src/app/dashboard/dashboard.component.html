@@ -6,11 +6,11 @@
     </select>
   </div>
 
-  <div *ngIf="native.error" class="alert alert-mempool" role="alert">{{ native.error }}</div><div *ngIf="dashboard.stale || dashboard._meta?.stale" class="alert alert-mempool" role="status">Reconnecting…</div>
+  <div *ngIf="native.error" class="alert alert-mempool" role="alert">{{ native.error }}</div><div *ngIf="dashboard.stale || dashboard._meta?.stale" class="alert alert-mempool" role="status" i18n="@@ton.dash.reconnecting">Reconnecting…</div>
   <div class="row row-cols-1 row-cols-md-2">
     <ng-container>
       <div class="col card-wrapper">
-        <div class="main-title">Confirmed Transaction Fees</div>
+        <div class="main-title" i18n="@@ton.dash.confirmed-fees">Confirmed Transaction Fees</div>
         <div class="card">
           <div class="card-body less-padding">
             <div *ngIf="native.transactionsError && !dashboard.confirmed" class="alert alert-mempool" role="status">{{ native.transactionsError }}</div><app-fees-box *ngIf="!native.transactionsError || dashboard.confirmed" class="d-block" [confirmedMode]="true" [confirmedFees]="dashboard.confirmed?.fees" [confirmedSource]="dashboard.confirmed?.source"></app-fees-box>
@@ -25,7 +25,7 @@
       <div class="card graph-card" *ngIf="pending$ | async as pending">
         <div class="card-body ps-lg-3 pe-lg-3 ps-2 pe-2">
           <a class="title-link mb-0 pending-transactions-title" style="margin-top: -2px" href="" [routerLink]="['/mempool-block/0' | relativeUrl]">
-            <h5 class="card-title">Pending Messages</h5>
+            <h5 class="card-title" i18n="@@ton.dash.pending">Pending Messages</h5>
             <fa-icon [icon]="['fas', 'external-link-alt']" [fixedWidth]="true" style="vertical-align: text-top; font-size: 13px; color: var(--title-fg)"></fa-icon>
           </a>
           <div class="mempool-block-wrapper" *ngIf="webGlEnabled">
@@ -39,10 +39,10 @@
 
             ></app-mempool-block-overview>
           </div>
-          <span *ngIf="pending.state === 'stale' && pending.messages.length" class="grey-info-text">Reconnecting…</span>
+          <span *ngIf="pending.state === 'stale' && pending.messages.length" class="grey-info-text" i18n="@@ton.dash.reconnecting">Reconnecting…</span>
           <div class="pending-map-unavailable" *ngIf="!webGlEnabled" role="status">
             <fa-icon [icon]="['fas', 'info-circle']" [fixedWidth]="true"></fa-icon>
-            <span>Message map unavailable in this browser</span>
+            <span i18n="@@ton.dash.map-unavailable">Message map unavailable in this browser</span>
           </div>
         </div>
       </div>
@@ -51,10 +51,10 @@
       <div class="card graph-card">
         <div class="card-body">
           <div class="mempool-info-data">
-            <div class="item"><h5 class="card-title">{{ native.chainLabel }} block</h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [tonBlockLink]="dashboard.head">{{ dashboard.head.seqno }}</a></p></div>
-            <div class="item"><h5 class="card-title">Transactions</h5><p class="card-text"><ng-container *ngIf="dashboard.head; else loading">{{ dashboard.head.tx_quantity | number }} <span>TXs</span></ng-container></p></div>
-            <div class="item"><h5 class="card-title">Mean block interval</h5><p class="card-text"><ng-container *ngIf="dashboard.intervals?.length; else unavailable">{{ meanInterval | number:'1.0-1' }} <span>s</span></ng-container></p></div>
-            <div class="item"><h5 class="card-title">Collected fees</h5><p class="card-text"><app-amount *ngIf="dashboard.head; else loading" [amount]="native.coin(dashboard.head.value_flow?.fees_collected?.grams)" [compactBlock]="true" [noFiat]="true"></app-amount></p></div>
+            <div class="item"><h5 class="card-title"><ng-container *ngIf="native.workchain === -1; else baseBlock" i18n="@@ton.dash.master-block">Masterchain block</ng-container><ng-template #baseBlock><ng-container i18n="@@ton.dash.base-block">Basechain block</ng-container></ng-template></h5><p class="card-text"><a *ngIf="dashboard.head; else loading" [tonBlockLink]="dashboard.head">{{ dashboard.head.seqno }}</a></p></div>
+            <div class="item"><h5 class="card-title" i18n="@@ton.dash.transactions">Transactions</h5><p class="card-text"><ng-container *ngIf="dashboard.head; else loading">{{ dashboard.head.tx_quantity | number }} <span>TXs</span></ng-container></p></div>
+            <div class="item"><h5 class="card-title" i18n="@@ton.dash.interval">Mean block interval</h5><p class="card-text"><ng-container *ngIf="dashboard.intervals?.length; else unavailable">{{ meanInterval | number:'1.0-1' }} <span>s</span></ng-container></p></div>
+            <div class="item"><h5 class="card-title" i18n="@@ton.dash.collected">Collected fees</h5><p class="card-text"><app-amount *ngIf="dashboard.head; else loading" [amount]="native.coin(dashboard.head.value_flow?.fees_collected?.grams)" [compactBlock]="true" [noFiat]="true"></app-amount></p></div>
           </div>
             <div class="ethereum-gas-market-wrapper">
               <app-ethereum-gas-market-graph
@@ -78,9 +78,9 @@
             <table class="table lastest-blocks-table">
               <thead>
                 <th class="table-cell-height" i18n="dashboard.latest-blocks.height">Height</th>
-                <th class="table-cell-mined">Time</th>
+                <th class="table-cell-mined" i18n="@@ton.dash.time">Time</th>
                 <th class="table-cell-transaction-count" i18n="dashboard.latest-blocks.transaction-count">TXs</th>
-                <th class="table-cell-size">Fees</th>
+                <th class="table-cell-size" i18n="@@ton.dash.fees">Fees</th>
               </thead>
               <tbody *ngIf="dashboard.blocks?.length; else blocksSkeleton">
                 <tr *ngFor="let block of dashboard.blocks.slice(0, 6); let i = index; trackBy: trackByBlock">

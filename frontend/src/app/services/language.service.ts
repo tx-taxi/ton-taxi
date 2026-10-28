@@ -1,3 +1,4 @@
+import { readSharedPreference, writeSharedPreference } from '@app/services/shared-preferences';
 import { DOCUMENT, getLocaleId } from '@angular/common';
 import { LOCALE_ID, Inject, Injectable } from '@angular/core';
 import { languages } from '@app/app.constants';
@@ -13,6 +14,16 @@ export class LanguageService {
     @Inject(LOCALE_ID) private locale: string,
   ) {
     this.language = getLocaleId(this.locale).substring(0, 2);
+    // Carry a previously selected host-only language into the shared setting,
+    // but never replace an existing shared choice or navigate on page load.
+    if (readSharedPreference('txtaxi_language') === null) {
+      try {
+        const raw = this.document.cookie.split(';').map((item) => item.trim()).find((item) => item.startsWith('lang='));
+        let legacy = raw ? decodeURIComponent(raw.substring(5)).toLowerCase() : '';
+        if (legacy === 'en-us') { legacy = 'en'; }
+        if (['en', 'es'].includes(legacy)) { writeSharedPreference('txtaxi_language', legacy); }
+      } catch { /* Ignore malformed or unavailable legacy cookies. */ }
+    }
   }
 
   getLanguage(): string {
@@ -34,6 +45,8 @@ export class LanguageService {
 
   setLanguage(language: string): void {
     try {
+      if (!['en', 'es'].includes(language)) { return; }
+      writeSharedPreference('txtaxi_language', language);
       document.cookie = `lang=${language}; expires=Thu, 18 Dec 2050 12:00:00 UTC; path=/`;
     } catch (e) { }
   }

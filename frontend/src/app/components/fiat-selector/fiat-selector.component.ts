@@ -1,3 +1,4 @@
+import { SHARED_CURRENCIES, writeSharedPreference } from '@app/services/shared-preferences';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { StorageService } from '@app/services/storage.service';
@@ -36,15 +37,14 @@ export class FiatSelectorComponent implements OnInit {
     this.stateService.fiatCurrency$.subscribe((fiat) => {
       this.fiatForm.get('fiat')?.setValue(fiat);
     });
-    if (!this.stateService.env.ADDITIONAL_CURRENCIES) {
-      this.currencies = this.currencies.filter((currency: any) => {
-        return ['AUD', 'CAD', 'EUR', 'JPY', 'GBP', 'CHF', 'USD'].includes(currency[0]);
-      });
-    }
+    // Only offer currencies the TON rate provider and shared preference support.
+    this.currencies = this.currencies.filter((currency: any) => SHARED_CURRENCIES.includes(currency[0]));
   }
 
   changeFiat() {
     const newFiat = this.fiatForm.get('fiat')?.value;
+    if (!SHARED_CURRENCIES.includes(newFiat)) return;
+    writeSharedPreference('txtaxi_currency', newFiat);
     this.storageService.setValue('fiat-preference', newFiat);
     this.stateService.fiatCurrency$.next(newFiat);
   }

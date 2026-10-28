@@ -49,10 +49,10 @@
           <tbody>
             <ng-container *ngIf="nativeMode; else legacyPrimaryRows">
               <ng-container *ngIf="nativeBlock as block; else skeletonRows">
-                <tr><td class="td-width">Block ID</td><td><span class="d-flex align-items-center"><span>{{ block.seqno }}</span><app-clipboard [text]="'' + block.seqno"></app-clipboard></span></td></tr>
-                <tr><td>Timestamp</td><td><app-timestamp [customFormat]="'yyyy-MM-dd HH:mm:ss'" [unixTime]="block.gen_utime ?? block.timestamp" [hideTimeSince]="true"></app-timestamp></td></tr>
-                <tr><td>Workchain</td><td>{{ block.workchain_id === -1 || block.workchain_id === '-1' ? 'Masterchain' : block.workchain_id }}</td></tr>
-                <tr><td>Shard</td><td>{{ block.shard ?? '—' }}</td></tr>
+                <tr><td class="td-width" i18n="@@ton.block.id">Block ID</td><td><span class="d-flex align-items-center"><span>{{ block.seqno }}</span><app-clipboard [text]="'' + block.seqno"></app-clipboard></span></td></tr>
+                <tr><td i18n="@@ton.block.timestamp">Timestamp</td><td><app-timestamp [customFormat]="'yyyy-MM-dd HH:mm:ss'" [unixTime]="block.gen_utime ?? block.timestamp" [hideTimeSince]="true"></app-timestamp></td></tr>
+                <tr><td i18n="@@ton.block.workchain">Workchain</td><td>{{ block.workchain_id === -1 || block.workchain_id === '-1' ? 'Masterchain' : block.workchain_id }}</td></tr>
+                <tr><td i18n="@@ton.block.shard">Shard</td><td>{{ block.shard ?? '—' }}</td></tr>
               </ng-container>
             </ng-container>
             <ng-template #legacyPrimaryRows>
@@ -150,8 +150,8 @@
   <ng-template #restOfTable>
     <ng-container *ngIf="nativeMode; else legacyRestRows">
       <ng-container *ngIf="nativeBlock as block; else loadingRest">
-        <tr><td class="td-width">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
-        <tr><td [ngbTooltip]="'Transaction and imported fees, plus the block creation reward.'">Fees &amp; rewards</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
+        <tr><td class="td-width" i18n="@@ton.dash.transactions">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
+        <tr><td [ngbTooltip]="'Transaction and imported fees, plus the block creation reward.'" i18n="@@ton.block.fees-rewards">Fees &amp; rewards</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
       </ng-container>
     </ng-container>
     <ng-template #legacyRestRows>
@@ -396,13 +396,13 @@
     </div>
 
     <ng-container *ngIf="nativeMode; else legacyBlockTransactions">
-      <div class="block-tx-title"><h2 class="text-start">{{ nativeTransactionsLoading || nativeRoute && tonData.transactionsError ? 'Transactions' : nativeTransactions.length + (nativeTransactions.length === 1 ? ' transaction' : ' transactions') }}</h2></div>
+      <div class="block-tx-title"><h2 class="text-start"><ng-container *ngIf="nativeTransactionsLoading || nativeRoute && tonData.transactionsError; else nativeTxCount" i18n="@@ton.dash.transactions">Transactions</ng-container><ng-template #nativeTxCount>{{ nativeTransactions.length }} <ng-container *ngIf="nativeTransactions.length === 1; else nativeTxPlural" i18n="@@ton.block.transaction">transaction</ng-container><ng-template #nativeTxPlural i18n="@@ton.block.transactions">transactions</ng-template></ng-template></h2></div>
       <div class="clearfix"></div>
       <div *ngIf="nativeTransactionsLoading" class="tx-skeleton"><div class="header-bg box"><span class="skeleton-loader"></span></div></div>
       <div *ngIf="nativeRoute && tonData.transactionsError" class="alert alert-mempool" role="alert">{{ tonData.transactionsError }}</div>
       <app-transactions-list *ngIf="!nativeTransactionsLoading && !(nativeRoute && tonData.transactionsError)" [nativeTransactions]="nativeTransactions"></app-transactions-list>
       <ng-container *ngIf="nativeRoute && (tonData.shardsLoading || tonData.shards.length || tonData.shardsError)">
-        <h2>Shard blocks</h2>
+        <h2 i18n="@@ton.block.shard-blocks">Shard blocks</h2>
         <div *ngIf="tonData.shardsError" class="alert alert-mempool" role="alert">{{ tonData.shardsError }}</div>
         <app-blocks-list [showTitle]="false" [tonBlocks]="tonData.shards" [tonLoading]="tonData.shardsLoading"></app-blocks-list>
       </ng-container>

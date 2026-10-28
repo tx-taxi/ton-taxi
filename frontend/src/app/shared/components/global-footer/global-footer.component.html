@@ -5,7 +5,7 @@
         <div class="main-logo" [class]="{'services': isServicesPage}">
           <img src="/resources/branding/ton-dark-navbar.svg" alt="ton.tx.taxi TON explorer" class="tx-taxi-footer-logo">
         </div>
-        <p class="explore-tagline-mobile">TON blocks, transactions, and accounts</p>
+        <p class="explore-tagline-mobile" i18n="@@ton.footer.tagline">TON blocks, transactions, and accounts</p>
         <div class="site-options language-selector d-flex justify-content-center align-items-center" [class]="{'services': isServicesPage}">
           <div class="selector"><app-language-selector></app-language-selector></div>
           <div class="selector"><app-fiat-selector></app-fiat-selector></div>
@@ -25,50 +25,50 @@
             <app-theme-selector class="add-margin"></app-theme-selector>
           </div>
         }
-        <p class="explore-tagline-desktop">TON blocks, transactions, and accounts</p>
+        <p class="explore-tagline-desktop" i18n="@@ton.footer.tagline">TON blocks, transactions, and accounts</p>
       </div>
     </div>
 
     <div class="row col-md-12 link-tree" [class]="{'services': isServicesPage}">
       <div class="links">
-        <p class="category">Explore</p>
-        <p><a [routerLink]="['/' | relativeUrl]">Dashboard</a></p>
-        <p><a [routerLink]="['/blocks' | relativeUrl]">Recent Blocks</a></p>
-        <p><a [routerLink]="['/txs' | relativeUrl]">Recent Transactions</a></p>
-        <p><a routerLink="/jettons">Jettons</a></p>
-        <p><a routerLink="/collections">NFT Collections</a></p>
-        <p><a routerLink="/market">Markets</a></p>
-        <p><a [routerLink]="['/validators' | relativeUrl]">Validators</a></p>
-        <p><a [routerLink]="['/dns']">TON DNS</a></p>
-        <p><a [routerLink]="['/config']">Network Configuration</a></p>
+        <p class="category" i18n="@@ton.footer.explore">Explore</p>
+        <p><a [routerLink]="['/' | relativeUrl]" i18n="@@ton.footer.dashboard">Dashboard</a></p>
+        <p><a [routerLink]="['/blocks' | relativeUrl]" i18n="@@ton.footer.recent-blocks">Recent Blocks</a></p>
+        <p><a [routerLink]="['/txs' | relativeUrl]" i18n="@@ton.footer.recent-txs">Recent Transactions</a></p>
+        <p><a routerLink="/jettons" i18n="@@ton.footer.jettons">Jettons</a></p>
+        <p><a routerLink="/collections" i18n="@@ton.footer.nfts">NFT Collections</a></p>
+        <p><a routerLink="/market" i18n="@@ton.footer.markets">Markets</a></p>
+        <p><a [routerLink]="['/validators' | relativeUrl]" i18n="@@ton.footer.validators">Validators</a></p>
+        <p><a [routerLink]="['/dns']" i18n="@@ton.footer.dns">TON DNS</a></p>
+        <p><a [routerLink]="['/config']" i18n="@@ton.footer.network-config">Network Configuration</a></p>
       </div>
       <div class="links">
         <p class="category">TON</p>
-        <p><a href="https://ton.org/" target="_blank" rel="noopener noreferrer">What is TON?</a></p>
-        <p><a href="https://docs.ton.org/learn/overviews/blocks" target="_blank" rel="noopener noreferrer">Blocks</a></p>
-        <p><a href="https://docs.ton.org/learn/overviews/transactions" target="_blank" rel="noopener noreferrer">Transactions</a></p>
-        <p><a href="/docs/guide" target="_blank" rel="noopener noreferrer">Messages and fees</a></p>
+        <p><a href="https://ton.org/" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.what-ton">What is TON?</a></p>
+        <p><a href="https://docs.ton.org/learn/overviews/blocks" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.blocks">Blocks</a></p>
+        <p><a href="https://docs.ton.org/learn/overviews/transactions" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.transactions">Transactions</a></p>
+        <p><a [routerLink]="['/docs/guide' | relativeUrl]" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.messages-fees">Messages and fees</a></p>
       </div>
       <div class="links">
         <p class="category">ton.tx.taxi</p>
-        <p><a [routerLink]="['/about']">About</a></p>
-        <p><a href="https://github.com/tx-taxi/ton-taxi" target="_blank" rel="noopener noreferrer">Source code</a></p>
-        <p><a href="https://status.tx.taxi/" target="_blank" rel="noopener noreferrer">Status</a></p>
-        <p><a href="https://t.me/txtaxi" target="_blank" rel="noopener noreferrer" aria-label="Join the tx.taxi Telegram channel">Telegram</a></p>
-        <p><a href="https://t.me/hiss" target="_blank" rel="noopener noreferrer">Contact Us</a></p>
+        <p><a [routerLink]="['/about']" i18n="@@ton.footer.about">About</a></p>
+        <p><a href="https://github.com/tx-taxi/ton-taxi" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.source">Source code</a></p>
+        <p><a href="https://status.tx.taxi/" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.status">Status</a></p>
+        <p><a href="https://t.me/txtaxi" target="_blank" rel="noopener noreferrer" aria-label="Join the tx.taxi Telegram channel" i18n-aria-label="@@ton.footer.telegram-aria" i18n="@@ton.footer.telegram">Telegram</a></p>
+        <p><a href="https://t.me/hiss" target="_blank" rel="noopener noreferrer" i18n="@@ton.footer.contact">Contact Us</a></p>
         <p>AGPLv3</p>
       </div>
       <div class="links">
-        <p class="category">Legal</p>
-        <p><a [routerLink]="['/terms-of-service']">Terms of Service</a></p>
-        <p><a [routerLink]="['/privacy-policy']">Privacy Policy</a></p>
-        <p><a href="/3rdpartylicenses.txt">Third-party Licenses</a></p>
+        <p class="category" i18n="@@ton.footer.legal">Legal</p>
+        <p><a [routerLink]="['/terms-of-service']" i18n="@@ton.footer.terms">Terms of Service</a></p>
+        <p><a [routerLink]="['/privacy-policy']" i18n="@@ton.footer.privacy">Privacy Policy</a></p>
+        <p><a href="/3rdpartylicenses.txt" i18n="@@ton.footer.third-party">Third-party Licenses</a></p>
       </div>
     </div>
 
     <div class="row footer-credit" [style]="{'background-color': isServicesPage ? 'var(--bg)' : ''}">
       <div class="col-sm-12">
-        <p>Made with <span class="footer-credit-emoji" aria-hidden="true">🚕</span> by <a class="footer-credit-link" href="https://u.software" target="_blank" rel="noopener noreferrer">u.software</a></p>
+        <p><span i18n="@@ton.footer.made-with">Made with</span> <span class="footer-credit-emoji" aria-hidden="true">🚕</span> <span i18n="@@ton.footer.by">by</span> <a class="footer-credit-link" href="https://u.software" target="_blank" rel="noopener noreferrer">u.software</a></p>
       </div>
     </div>
   </div>

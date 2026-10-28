@@ -1,6 +1,6 @@
 <div class="container-xl native-account-page">
   <div class="title-address">
-    <h1>Account</h1>
+    <h1 i18n="@@ton.85dfa32c97d8">Account</h1>
     <div class="tx-link">
       <app-truncate
         [text]="addressString"
@@ -12,7 +12,7 @@
           class="qrSpan btn btn-link p-0"
           (click)="showQR = !showQR"
           [attr.aria-expanded]="showQR"
-          aria-label="Show account QR code"
+          aria-label="Show account QR code" i18n-aria-label="@@ton.more.account-qr"
         >
           <fa-icon [icon]="['fas', 'qrcode']" [fixedWidth]="true"></fa-icon>
           <span class="qr-wrapper" *ngIf="showQR"
@@ -31,9 +31,9 @@
     role="alert"
   >
     <div>
-      <strong>Account unavailable</strong><span>{{ error }}</span>
+      <strong i18n="@@ton.more.account-unavailable">Account unavailable</strong><span>{{ error }}</span>
     </div>
-    <button class="btn btn-sm btn-outline-info ms-auto" (click)="retry.emit()">
+    <button class="btn btn-sm btn-outline-info ms-auto" (click)="retry.emit()" i18n="@@ton.9f5cd8a2e880">
       Retry
     </button>
   </div>
@@ -41,7 +41,7 @@
     *ngIf="isLoadingAddress && !account"
     class="box"
     role="status"
-    aria-label="Loading account"
+    aria-label="Loading account" i18n-aria-label="@@ton.more.loading-account"
   >
     <div class="row">
       <div class="col-sm" *ngFor="let column of [0, 1]">
@@ -58,14 +58,14 @@
   </div>
 
   <ng-container *ngIf="account as view">
-    <section class="ethereum-address-profile" aria-label="TON account identity">
+    <section class="ethereum-address-profile" aria-label="TON account identity" i18n-aria-label="@@ton.more.account-identity">
       <app-ethereum-identity
         [entity]="view.identity"
         chainName="TON"
         chainSymbol="GRAM"
       ></app-ethereum-identity>
       <div class="ethereum-address-meta">
-        <span class="badge badge-warning" *ngIf="view.stale"
+        <span class="badge badge-warning" *ngIf="view.stale" i18n="@@ton.04fd92b96a03"
           >Updates delayed</span
         ><a
           *ngFor="let domain of view.domains"
@@ -81,14 +81,14 @@
           <table class="table table-borderless table-striped address-table">
             <tbody>
               <tr>
-                <td>Balance</td>
+                <td i18n="@@ton.90eef613042c">Balance</td>
                 <td class="text-wrap">
                   <app-amount [amount]="view.balance"></app-amount>
                 </td>
               </tr>
               <tr>
-                <td>Status</td>
-                <td>{{ view.status || "Unknown" }}</td>
+                <td i18n="@@ton.bae7d5be7082">Status</td>
+                <td><ng-container *ngIf="view.status; else unknownAccountStatus">{{ view.status }}</ng-container><ng-template #unknownAccountStatus><span i18n="@@ton.bc7819b34ff8">Unknown</span></ng-template></td>
               </tr>
             </tbody>
           </table>
@@ -97,7 +97,7 @@
           <table class="table table-borderless table-striped address-table">
             <tbody>
               <tr>
-                <td>Last activity</td>
+                <td i18n="@@ton.more.last-activity">Last activity</td>
                 <td>
                   <app-timestamp
                     *ngIf="view.lastActivity; else unknownActivity"
@@ -107,7 +107,7 @@
                 </td>
               </tr>
               <tr>
-                <td>Contract</td>
+                <td i18n="@@ton.tab.contract">Contract</td>
                 <td class="text-wrap">
                   {{
                     view.interfaces.length ? view.interfaces.join(", ") : "—"

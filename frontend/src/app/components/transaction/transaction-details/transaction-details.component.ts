@@ -23,7 +23,10 @@ export class TransactionDetailsComponent implements OnInit {
   tonLabel = tonLabel;
   tonIdentity = tonIdentity;
   tonAmount = tonAmount;
-  tonExecution = tonExecution;
+  tonExecution(tx: TonTransaction): string {
+    return tx.success === true ? $localize`:@@ton.detail.successful:Successful`
+      : tx.success === false ? $localize`:@@ton.detail.failed:Failed` : $localize`:@@ton.detail.unknown:Unknown`;
+  }
   @Input() network: string;
   @Input() tx: Transaction;
   @Input() isLoadingTx: boolean;

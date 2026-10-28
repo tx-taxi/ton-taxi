@@ -33,9 +33,9 @@
   <table class="table latest-transactions">
     <thead>
       <th class="table-cell-txid" i18n="dashboard.latest-transactions.txid">TXID</th>
-      <th class="table-cell-satoshis">Value</th>
-      <th class="table-cell-vsize" *ngIf="!widget">{{ nativeMode ? 'Messages' : 'Gas used' }}</th>
-      <th class="table-cell-fees">{{ nativeMode ? 'Fees' : 'Gas price' }}</th>
+      <th class="table-cell-satoshis" i18n="@@ton.dash.value">Value</th>
+      <th class="table-cell-vsize" *ngIf="!widget"><ng-container *ngIf="nativeMode; else gasUsed" i18n="@@ton.dash.messages">Messages</ng-container><ng-template #gasUsed>Gas used</ng-template></th>
+      <th class="table-cell-fees"><ng-container *ngIf="nativeMode; else gasPrice" i18n="@@ton.dash.fees">Fees</ng-container><ng-template #gasPrice>Gas price</ng-template></th>
     </thead>
     <tbody data-cy="transactions-list" *ngIf="(nativeMode ? rows : (transactions$ | async)) as transactions; else skeleton">
       <tr *ngFor="let transaction of transactions; trackBy: trackByTxid">

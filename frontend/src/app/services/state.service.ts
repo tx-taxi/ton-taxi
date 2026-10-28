@@ -1,3 +1,4 @@
+import { supportedSharedCurrency } from '@app/services/shared-preferences';
 import { Inject, Injectable, PLATFORM_ID, LOCALE_ID } from '@angular/core';
 import { ReplaySubject, BehaviorSubject, Subject, fromEvent, Observable } from 'rxjs';
 import { initialTonPending } from '@app/shared/ton-pending-state';
@@ -395,7 +396,18 @@ export class StateService {
     });
 
     const fiatPreference = this.storageService.getValue('fiat-preference');
-    this.fiatCurrency$ = new BehaviorSubject<string>(fiatPreference || 'USD');
+    this.fiatCurrency$ = new BehaviorSubject<string>(supportedSharedCurrency() || fiatPreference || 'USD');
+    // Cookies do not emit storage events. Refresh when this tab becomes active
+    // after a choice made on another explorer.
+    const refreshSharedCurrency = () => {
+      const shared = supportedSharedCurrency();
+      if (shared && shared !== this.fiatCurrency$.value) {
+        this.storageService.setValue('fiat-preference', shared);
+        this.fiatCurrency$.next(shared);
+      }
+    };
+    window.addEventListener('focus', refreshSharedCurrency);
+    window.addEventListener('pageshow', refreshSharedCurrency);
 
     const rateUnitPreference = this.storageService.getValue('rate-unit-preference');
     this.rateUnits$ = new BehaviorSubject<string>(rateUnitPreference || 'vb');

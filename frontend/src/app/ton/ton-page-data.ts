@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Directive, HostListener, LOCALE_ID, OnDestroy, OnInit, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -18,6 +18,7 @@ interface Feed { items: any[]; loading: boolean; error: string; paging?: any; st
 @Directive()
 export class TonPageData implements OnInit, OnDestroy {
   publicDetails = publicDetails;
+  private readonly locale = inject(LOCALE_ID);
   private contextRequests = new Subscription();
   private contextRevision = 0;
   private contextDepth = 0;
@@ -32,7 +33,7 @@ export class TonPageData implements OnInit, OnDestroy {
   load(): void {
     this.requests.unsubscribe(); this.requests = new Subscription(); clearInterval(this.refresh); this.generation++; this.auctionTld = 'ton'; this.nftFilter = ''; this.nftFilterInput = ''; this.nftCollections = []; this.tokenFilter = ''; this.tokenSort = 'name'; this.mainError = ''; this.mainLoading = false; this.mainPaginated = false; this.state.markBlock$.next({}); this.state.nativeBlockContext$.next(['tx','message','trace','block'].includes(this.page) ? { blocks: [], loading: true, unavailable: false } : null); this.loading = true; this.error = ''; this.data = null; this.feeds = {}; this.resources = {}; this.resourceErrors = {}; this.resourceLoading = {}; this.fiatQuote = null; this.fiatQuotes = {}; this.quoteObservedAt = ''; this.quoteStale = false; this.getterResult = null; this.getterLoading = false; this.getterError = ''; this.getterName = ''; this.getterArgs = ''; this.tab = this.page === 'address' ? 'events' : 'activity';
     this.updateMetadata();
-    if (this.page === 'not-found') { this.loading = false; this.error = 'Page not found'; return; }
+    if (this.page === 'not-found') { this.loading = false; this.error = $localize`:@@ton.extra.page-not-found:Page not found`; return; }
     this.requests.add(this.state.fiatCurrency$.subscribe(currency => { this.selectedFiat = currency.toUpperCase(); this.applyQuote(); }));
     this.fetchPage();
     if (this.page === 'dashboard') this.requests.add(this.state.blocks$.subscribe(blocks => this.syncDashboard(blocks)));
@@ -40,7 +41,7 @@ export class TonPageData implements OnInit, OnDestroy {
   }
   fetchPage(quiet = false): void {
     const generation = this.generation;
-    this.requests.add(this.get<any>(this.endpoint() + (this.page === 'transactions' ? '?limit=20' : this.page === 'blocks' ? '?limit=10' : ['jettons','collections'].includes(this.page) ? '?limit=24' : '')).subscribe({ next: data => { if (generation !== this.generation) return; this.data = data; if (this.page === 'dashboard') this.syncDashboard(this.state.blocksSubject$.value); if (data.master_seqno) this.state.markBlock$.next({blockHeight:Number(data.master_seqno)}); if (this.page === 'block' && String(data.workchain_id) === '-1') this.state.markBlock$.next({blockHeight:Number(data.seqno)}); this.loading = false; this.error = ''; this.updateMetadata(); if (!quiet) { this.loadBlockContext(data); this.loadRelated(); } }, error: e => { if (generation !== this.generation) return; this.loading = false; this.error = e.status === 404 ? 'Not found' : 'Temporarily unavailable'; if (['tx','message','trace','block'].includes(this.page)) this.state.nativeBlockContext$.next({blocks: [], loading: false, unavailable: true}); if (quiet && this.data) this.data._meta = { ...this.data._meta, stale: true }; } }));
+    this.requests.add(this.get<any>(this.endpoint() + (this.page === 'transactions' ? '?limit=20' : this.page === 'blocks' ? '?limit=10' : ['jettons','collections'].includes(this.page) ? '?limit=24' : '')).subscribe({ next: data => { if (generation !== this.generation) return; this.data = data; if (this.page === 'dashboard') this.syncDashboard(this.state.blocksSubject$.value); if (data.master_seqno) this.state.markBlock$.next({blockHeight:Number(data.master_seqno)}); if (this.page === 'block' && String(data.workchain_id) === '-1') this.state.markBlock$.next({blockHeight:Number(data.seqno)}); this.loading = false; this.error = ''; this.updateMetadata(); if (!quiet) { this.loadBlockContext(data); this.loadRelated(); } }, error: e => { if (generation !== this.generation) return; this.loading = false; this.error = e.status === 404 ? $localize`:@@ton.extra.not-found:Not found` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`; if (['tx','message','trace','block'].includes(this.page)) this.state.nativeBlockContext$.next({blocks: [], loading: false, unavailable: true}); if (quiet && this.data) this.data._meta = { ...this.data._meta, stale: true }; } }));
   }
   loadBlockContext(data: any): void {
     if (!['tx','message','trace','block'].includes(this.page)) return;
@@ -140,7 +141,7 @@ export class TonPageData implements OnInit, OnDestroy {
       const key = this.page === 'blocks' ? 'blocks' : this.page === 'jettons' ? 'jettons' : this.page === 'collections' ? 'nft_collections' : 'transactions';
       const old = this.data[key] || []; const keys = new Set(old.map((item: any) => this.identity(item)));
       this.data[key] = old.concat((result[key] || []).filter((item: any) => !keys.has(this.identity(item)))); this.data._paging = result._paging; this.mainLoading = false;
-    },error: error => { this.mainLoading = false; this.mainError = error.status === 410 ? 'List updated' : 'Temporarily unavailable'; }}));
+    },error: error => { this.mainLoading = false; this.mainError = error.status === 410 ? $localize`:@@ton.extra.list-updated:List updated` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`; }}));
   }
 
   loadRates(): void {
@@ -150,7 +151,7 @@ export class TonPageData implements OnInit, OnDestroy {
   nativeFiat(): string | null {
     if(this.fiatQuote === null || !/^\d+$/.test(String(this.data?.balance)))return null;
     const value=Number(this.data.balance)/1e9*this.fiatQuote;if(!Number.isFinite(value))return null;
-    const formatter=new Intl.NumberFormat('en-US',{style:'currency',currency:this.selectedFiat});const smallest=10**-formatter.resolvedOptions().maximumFractionDigits;
+    const formatter=new Intl.NumberFormat(this.locale,{style:'currency',currency:this.selectedFiat});const smallest=10**-formatter.resolvedOptions().maximumFractionDigits;
     if(value>0 && value<smallest)return '<'+formatter.format(smallest);return formatter.format(value);
   }
   loadRelated(): void {
@@ -176,7 +177,7 @@ export class TonPageData implements OnInit, OnDestroy {
       const items = this.list(result); const existing = more ? feed.items : []; const keys = new Set(existing.map(x => this.identity(x)));
       feed.items = existing.concat(items.filter(x => !keys.has(this.identity(x))));
       if (name === 'nfts' && !this.nftFilter && Array.isArray(result.collections)) this.nftCollections = result.collections; feed.paging = result._paging; feed.stale = result._meta?.stale === true; feed.loading = false;
-    }, error: e => { feed.restart = e.status === 410; feed.error = feed.restart ? 'List updated' : e.status === 400 ? 'Invalid filter' : 'Temporarily unavailable'; feed.loading = false; } });
+    }, error: e => { feed.restart = e.status === 410; feed.error = feed.restart ? $localize`:@@ton.extra.list-updated:List updated` : e.status === 400 ? $localize`:@@ton.extra.invalid-filter:Invalid filter` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`; feed.loading = false; } });
     this.requests.add(feed.request);
   }
   filterNfts(value: string): void {
@@ -205,9 +206,9 @@ export class TonPageData implements OnInit, OnDestroy {
   runGetter(): void {
     if (!this.getterName || this.getterLoading) return; this.getterLoading = true; this.getterError = ''; this.getterResult = null;
     let args: string[] = [];
-    try { const input = this.getterArgs.trim(); if (input) { const parsed = input.startsWith('[') ? JSON.parse(input) : input.split(',').map(value => value.trim()); if (!Array.isArray(parsed) || parsed.some(value => typeof value !== 'string')) throw new Error(); args = parsed; } } catch { this.getterError = 'Enter comma-separated arguments or a JSON array of strings'; this.getterLoading = false; return; }
+    try { const input = this.getterArgs.trim(); if (input) { const parsed = input.startsWith('[') ? JSON.parse(input) : input.split(',').map(value => value.trim()); if (!Array.isArray(parsed) || parsed.some(value => typeof value !== 'string')) throw new Error(); args = parsed; } } catch { this.getterError = $localize`:@@ton.extra.bad-arguments:Enter comma-separated arguments or a JSON array of strings`; this.getterLoading = false; return; }
     const query = args.map(value => 'args=' + encodeURIComponent(value)).join('&');
-    this.requests.add(this.get<any>(this.endpoint() + '/methods/' + encodeURIComponent(this.getterName) + (query ? '?' + query : '')).subscribe({next: value => {this.getterResult = value; this.getterLoading = false;}, error: () => {this.getterError = 'Unable to run method'; this.getterLoading = false;}}));
+    this.requests.add(this.get<any>(this.endpoint() + '/methods/' + encodeURIComponent(this.getterName) + (query ? '?' + query : '')).subscribe({next: value => {this.getterResult = value; this.getterLoading = false;}, error: () => {this.getterError = $localize`:@@ton.extra.method-failed:Unable to run method`; this.getterLoading = false;}}));
   }
   fieldLabel(value: string): string { return value.replace(/_/g, ' '); }
   phaseValue(key: string, value: any): string { return ['gas_fees','total_fwd_fees','total_action_fees','storage_fees_collected','storage_fees_due','credit','msg_fees','fwd_fees'].includes(key) && /^-?\d+$/.test(String(value)) ? this.amount(value) + ' GRAM' : this.text(value); }
@@ -266,13 +267,16 @@ export class TonPageData implements OnInit, OnDestroy {
   media(item: any): string | null { const preview = item?.previews?.find((p: any) => p.resolution === '500x500'); return this.safeUrl(preview?.url || item?.metadata?.image || item?.image); }
   imageLoaded(event: Event): void { (event.target as HTMLImageElement).parentElement?.classList.remove('media-pending'); }
   hideImage(event: Event): void { this.imageLoaded(event); (event.target as HTMLImageElement).hidden = true; (event.target as HTMLImageElement).parentElement?.classList.add('image-unavailable'); }
-  name(item: any): string { return item?.metadata?.name || item?.name || (item?.address ? 'NFT ' + this.short(item.address) : 'Unnamed NFT'); }
+  name(item: any): string { return item?.metadata?.name || item?.name || (item?.address ? 'NFT ' + this.short(item.address) : $localize`:@@ton.more.unnamed-nft:Unnamed NFT`); }
   blockId(block: any): string { if (block?.last_known_block_id) return String(block.last_known_block_id); if (block?.last_known_block) return this.blockId(block.last_known_block); return block?.workchain_id != null ? '(' + block.workchain_id + ',' + block.shard + ',' + block.seqno + ')' : String(block?.id || block?.height || block?.seqno || ''); }
   typeofValue(value: any): string { return typeof value; }
-  selectAuctionTld(value: string): void { if (!['ton','t.me'].includes(value)) return; this.auctionTld=value; this.loading=true; this.data=null; this.error=''; this.requests.add(this.get<any>(this.endpoint()+'?tld='+encodeURIComponent(value)).subscribe({next: data=>{this.data=data;this.loading=false;},error:()=>{this.error='Temporarily unavailable';this.loading=false;}})); }
+  selectAuctionTld(value: string): void { if (!['ton','t.me'].includes(value)) return; this.auctionTld=value; this.loading=true; this.data=null; this.error=''; this.requests.add(this.get<any>(this.endpoint()+'?tld='+encodeURIComponent(value)).subscribe({next: data=>{this.data=data;this.loading=false;},error:()=>{this.error=$localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`;this.loading=false;}})); }
   trackEntry(_index: number, entry: {key:string}): string { return entry.key; }
   configEntries(): {key:string,value:any}[] { return this.entries(this.data).filter(entry => !entry.key.startsWith('_')); }
-  title(): string { const titles: {[key:string]:string} = {jettons:'Jettons',collections:'NFT collections',dashboard:'TON Explorer',blocks:'Blocks',block:'Block',tx:'Transaction',address:'Account',nft:'NFT',collection:'Collection',jetton:'Jetton',validators:'Validators',transactions:'Transactions',message:'Message',trace:'Trace','not-found':'Page not found',dns:'TON DNS','dns-auctions':'DNS auctions','staking-pool':'Staking pool','extra-currency':'Extra currency',config:'Network configuration'}; return titles[this.page]; }
+  title(): string { const titles: {[key:string]:string} = {jettons:$localize`:@@ton.title.jettons:Jettons`,collections:$localize`:@@ton.title.collections:NFT collections`,dashboard:$localize`:@@ton.title.dashboard:TON Explorer`,blocks:$localize`:@@ton.title.blocks:Blocks`,block:$localize`:@@ton.title.block:Block`,tx:$localize`:@@ton.title.tx:Transaction`,address:$localize`:@@ton.title.address:Account`,nft:$localize`:@@ton.title.nft:NFT`,collection:$localize`:@@ton.title.collection:Collection`,jetton:$localize`:@@ton.title.jetton:Jetton`,validators:$localize`:@@ton.title.validators:Validators`,transactions:$localize`:@@ton.title.transactions:Transactions`,message:$localize`:@@ton.title.message:Message`,trace:$localize`:@@ton.title.trace:Trace`,'not-found':$localize`:@@ton.title.not-found:Page not found`,dns:$localize`:@@ton.title.dns:TON DNS`,'dns-auctions':$localize`:@@ton.title.dns-auctions:DNS auctions`,'staking-pool':$localize`:@@ton.title.staking-pool:Staking pool`,'extra-currency':$localize`:@@ton.title.extra-currency:Extra currency`,config:$localize`:@@ton.title.config:Network configuration`}; return titles[this.page]; }
+  emptyFeedMessage(name: string): string { return name === 'nfts' || name === 'items' ? $localize`:@@ton.extra.empty-nfts:No NFTs` : name === 'jettons' ? $localize`:@@ton.extra.empty-jettons:No jettons` : name === 'shards' ? $localize`:@@ton.extra.empty-shards:No shards` : $localize`:@@ton.extra.empty-activity:No activity`; }
+  feedActionMessage(restart: boolean): string { return restart ? $localize`:@@ton.extra.refresh:Refresh` : $localize`:@@ton.9f5cd8a2e880:Retry`; }
+  revocationStatus(value: unknown): string { return value === '0' || value === 0 ? $localize`:@@ton.extra.not-revoked:Not revoked` : value ? $localize`:@@ton.extra.revoked:Revoked` : $localize`:@@ton.extra.unknown:Unknown`; }
   entries(value: any): {key:string,value:any}[] { return value && typeof value === 'object' ? Object.entries(value).map(([key,value]) => ({key,value})) : []; }
   text(value: any): string { return typeof value === 'object' ? JSON.stringify(value) : String(value ?? '—'); }
   messages(): any[] { return [...(this.data?.in_msg ? [{...this.data.in_msg, direction:'Incoming'}] : []), ...(this.data?.out_msgs || []).map((m: any) => ({...m,direction:'Outgoing'}))]; }

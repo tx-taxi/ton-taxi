@@ -25,8 +25,8 @@ export class PrivacyPolicyComponent {
   ) { }
 
   ngOnInit(): void {
-    this.seoService.setTitle('Privacy Policy');
-    this.seoService.setDescription('How ton.tx.taxi handles the limited technical data required to operate its TON explorer.');
+    this.seoService.setTitle($localize`:@@ton.legal.privacy.meta.title:Privacy Policy`);
+    this.seoService.setDescription($localize`:@@ton.legal.privacy.meta.description:How ton.tx.taxi handles the limited technical data required to operate its TON explorer.`);
     this.ogService.setManualOgImage('privacy.jpg');
 
     this.themeStateSubscription = this.themeService.themeState$.subscribe((state) => {

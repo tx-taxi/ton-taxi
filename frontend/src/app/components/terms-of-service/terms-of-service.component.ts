@@ -24,8 +24,8 @@ export class TermsOfServiceComponent {
   ) { }
 
   ngOnInit(): void {
-    this.seoService.setTitle('Terms of Service');
-    this.seoService.setDescription('Terms for using ton.tx.taxi, an independent TON block explorer operated by tx.taxi.');
+    this.seoService.setTitle($localize`:@@ton.legal.terms.meta.title:Terms of Service`);
+    this.seoService.setDescription($localize`:@@ton.legal.terms.meta.description:Terms for using ton.tx.taxi, an independent TON block explorer operated by tx.taxi.`);
     this.ogService.setManualOgImage('tos.jpg');
 
     this.themeStateSubscription = this.themeService.themeState$.subscribe((state) => {

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, HostListener, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, HostListener, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import {
   TonDocEntry,
@@ -7,6 +7,7 @@ import {
   tonRestData,
   tonWebsocketData,
 } from '@app/docs/api-docs/ton-docs-data';
+import { translateTonDocs } from '@app/docs/api-docs/ton-docs-es';
 
 @Component({
   selector: 'app-api-docs',
@@ -22,14 +23,16 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
   expandedFragments = new Set<string>();
   docs: TonDocItem[] = [];
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(private route: ActivatedRoute, @Inject(LOCALE_ID) private locale: string) {}
+
+  get isSpanish(): boolean { return this.locale.toLowerCase().startsWith('es'); }
 
   ngOnInit(): void {
-    this.docs = this.whichTab === 'rest'
+    this.docs = translateTonDocs(this.whichTab === 'rest'
       ? tonRestData
       : this.whichTab === 'websocket'
         ? tonWebsocketData
-        : tonGuideData;
+        : tonGuideData, this.locale);
   }
 
   ngAfterViewInit(): void {

@@ -60,6 +60,11 @@ export class DifficultyComponent implements OnInit {
     return samples.length ? samples.reduce((sum, value) => sum + value, 0) / samples.length : null;
   }
 
+  readonly tonNetworkTitle = $localize`:@@ton.dash.ton-network:TON Network`;
+  readonly tonEconomicsTitle = $localize`:@@ton.dash.ton-economics:TON Economics`;
+  readonly economicsLabel = $localize`:@@ton.dash.economics:economics`;
+  get latestTonBlockLabel(): string { return this.tonNetwork?.label === 'Basechain' ? $localize`:@@ton.dash.latest-base:Latest basechain block` : $localize`:@@ton.dash.latest-master:Latest masterchain block`; }
+
   get isConfirmed(): boolean { return this.confirmedMode || !!this.tonNetwork; }
 
   get suppliedNetwork(): EthereumNetworkStats | null {
@@ -74,7 +79,7 @@ export class DifficultyComponent implements OnInit {
       latestBlockHeight: this.tonNetwork.seqno,
       observedBlockTime: this.tonInterval,
       metric: successRate,
-      metricLabel: 'Successful transactions',
+      metricLabel: $localize`:@@ton.dash.successful:Successful transactions`,
       barLabel: 'Successful transactions in the confirmed sample',
       barTooltip: known ? `${successful} successful of ${known} transactions with a reported outcome${unknown ? `; ${unknown} outcomes unavailable` : ''}${sample?.masterSeqno ? ` confirmed by masterchain block #${sample.masterSeqno}` : ''}${sample?.partial ? ' (partial sample)' : ''}.` : 'No transaction outcomes are available for this confirmed sample.',
       shapes: filled === null ? [] : [

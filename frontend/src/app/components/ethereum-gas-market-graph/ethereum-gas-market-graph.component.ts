@@ -66,6 +66,8 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     return 'No gas market samples are available for the last two hours';
   }
 
+  get tonHistoryTitle(): string { return this.tonChainLabel === 'Masterchain' ? $localize`:@@ton.dash.master-history:Masterchain history` : $localize`:@@ton.dash.base-history:Basechain history`; }
+
   get isTon(): boolean { return this.tonSamples !== null; }
 
   private normalizeTonSamples(samples: TonNetworkHistorySample[] | null): ChartSample[] {
@@ -108,15 +110,15 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
 
   get historyLabel(): string {
     if (this.recentSamples.length === 1) {
-      return 'Current sample';
+      return $localize`:@@ton.dash.current-sample:Current sample`;
     }
 
     if (this.recentSamples.length < 2) {
-      return 'Live history';
+      return $localize`:@@ton.dash.live-history:Live history`;
     }
     const first = this.recentSamples[0].timestamp;
     const last = this.recentSamples[this.recentSamples.length - 1].timestamp;
-    return last - first >= TWO_HOURS_MS - 60_000 ? 'Last 2 hours' : 'Live history';
+    return last - first >= TWO_HOURS_MS - 60_000 ? $localize`:@@ton.dash.last-hours:Last 2 hours` : $localize`:@@ton.dash.live-history:Live history`;
   }
 
   private normalizeSamples(samples: EthereumGasMarketSample[] | null): ChartSample[] {

@@ -1,5 +1,5 @@
 import { compactBlockAmount, compactBlockNumber } from '@app/shared/block-format';
-import { Component, OnInit, OnDestroy, OnChanges, Injector, Input, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, Injector, Input, LOCALE_ID, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { StateService } from '@app/services/state.service';
 import { Observable, Subscription } from 'rxjs';
 import { NativeAmount, NativeQuote } from '@app/shared/native-view.types';
@@ -31,11 +31,11 @@ export class AmountComponent implements OnInit, OnDestroy, OnChanges {
   private mode: 'btc'|'sats'|'fiat' = 'btc';
   get nativeDisplay() {
     const mode = this.displayMode || (this.ignoreViewMode || this.noFiat && this.mode === 'fiat' ? 'btc' : this.mode);
-    const display = displayNativeAmount(this.amount, mode, this.currency, this.amount.native ? this.nativeQuotes[this.currency] : null);
+    const display = displayNativeAmount(this.amount, mode, this.currency, this.amount.native ? this.nativeQuotes[this.currency] : null, this.injector?.get(LOCALE_ID, 'en-US'));
     if (this.compactBlock && mode !== 'fiat' && display.value !== '—') {
       const atomic = mode === 'sats' && this.amount.native;
       const exact = exactUnits(this.amount.atomic, atomic ? 0 : this.amount.decimals, false);
-      return { ...display, value: compactBlockNumber(Number(exact), !atomic) };
+      return { ...display, value: compactBlockNumber(Number(exact), !atomic, this.injector?.get(LOCALE_ID, 'en-US')) };
     }
     return display;
   }
@@ -46,7 +46,7 @@ export class AmountComponent implements OnInit, OnDestroy, OnChanges {
   }
   @Input() satoshis: number;
   @Input() compactBlock = false;
-  compactBlockAmount = compactBlockAmount;
+  compactBlockAmount = (value: number | string, atomic = false) => compactBlockAmount(value, atomic, this.injector?.get(LOCALE_ID, 'en-US'));
 
   @Input() digitsInfo = '1.8-8';
   @Input() noFiat = false;
