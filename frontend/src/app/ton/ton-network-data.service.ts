@@ -88,13 +88,13 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
       error: error => {
         if (!current()) return;
         if (quiet && this.data) { this.data = { ...this.data, _meta: { ...this.data._meta, stale: true } }; return; }
-        this.loading = false; this.error = error.status === 404 ? 'Not found' : 'Temporarily unavailable';
+        this.loading = false; this.error = error.status === 404 ? $localize`:@@ton.extra.not-found:Not found` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`;
       },
     }));
   }
   loadMoreBlocks(): void {
     if (this.loadingMoreBlocks || !this.hasMoreBlocks || !this.nextBefore) return; this.loadingMoreBlocks = true; const generation = this.generation;
-    this.requests.add(this.getNative<any>(this.selectedUrl('/api/ton/blocks?limit=8&before=' + encodeURIComponent(this.nextBefore), true)).subscribe({ next: result => { if (generation !== this.generation) return; const ids = new Set(this.blocks.map(block => this.blockIdentity(block))); this.blocks = this.blocks.concat((result.blocks || []).filter(block => !ids.has(this.blockIdentity(block)))); this.nextBefore = result._paging?.nextBefore || null; this.hasMoreBlocks = result._paging?.hasMore === true; this.loadingMoreBlocks = false; }, error: () => { this.loadingMoreBlocks = false; this.blocksError = 'Unable to load earlier blocks'; } }));
+    this.requests.add(this.getNative<any>(this.selectedUrl('/api/ton/blocks?limit=8&before=' + encodeURIComponent(this.nextBefore), true)).subscribe({ next: result => { if (generation !== this.generation) return; const ids = new Set(this.blocks.map(block => this.blockIdentity(block))); this.blocks = this.blocks.concat((result.blocks || []).filter(block => !ids.has(this.blockIdentity(block)))); this.nextBefore = result._paging?.nextBefore || null; this.hasMoreBlocks = result._paging?.hasMore === true; this.loadingMoreBlocks = false; }, error: () => { this.loadingMoreBlocks = false; this.blocksError = $localize`:@@ton.network.earlier-blocks-unavailable:Unable to load earlier blocks`; } }));
   }
   private loadDashboardTransactions(seqno: string | number | undefined): void {
     if (seqno === undefined || seqno === null) { this.transactionsError = 'No masterchain head is available'; return; }
@@ -118,7 +118,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
       },
       error: () => {
         if (generation !== this.generation) return;
-        this.transactionsError = 'Recent transactions are temporarily unavailable';
+        this.transactionsError = $localize`:@@ton.network.recent-transactions-unavailable:Recent transactions are temporarily unavailable`;
         if (this.transactionWindow) this.transactionWindow = { ...this.transactionWindow, stale: true };
         finish();
       },
@@ -126,7 +126,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
     this.requests.add(this.transactionRequest);
   }
   private loadBlock(): void {
-    const generation = this.generation; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(this.id)).subscribe({ next: rawBlock => { if (generation !== this.generation) return; const block = { ...rawBlock, id: rawBlock.id || `(${rawBlock.workchain_id},${rawBlock.shard},${rawBlock.seqno})` }; this.block = block; this.data = block; this.loading = false; this.state.markBlock$.next(String(block.workchain_id) === '-1' ? { blockHeight: Number(block.seqno) } : {}); this.updateMetadata(); this.loadBlockContext(block); this.loadBlockTransactions(block); if (String(block.workchain_id) === '-1') this.loadShards(block); }, error: error => { if (generation === this.generation) { this.loading = false; this.error = error.status === 404 ? 'Not found' : 'Temporarily unavailable'; this.state.nativeBlockContext$.next({ blocks: [], loading: false, unavailable: true }); } } }));
+    const generation = this.generation; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(this.id)).subscribe({ next: rawBlock => { if (generation !== this.generation) return; const block = { ...rawBlock, id: rawBlock.id || `(${rawBlock.workchain_id},${rawBlock.shard},${rawBlock.seqno})` }; this.block = block; this.data = block; this.loading = false; this.state.markBlock$.next(String(block.workchain_id) === '-1' ? { blockHeight: Number(block.seqno) } : {}); this.updateMetadata(); this.loadBlockContext(block); this.loadBlockTransactions(block); if (String(block.workchain_id) === '-1') this.loadShards(block); }, error: error => { if (generation === this.generation) { this.loading = false; this.error = error.status === 404 ? $localize`:@@ton.extra.not-found:Not found` : $localize`:@@ton.extra.temporarily-unavailable:Temporarily unavailable`; this.state.nativeBlockContext$.next({ blocks: [], loading: false, unavailable: true }); } } }));
   }
   private loadBlockTransactions(block: any): void {
     const generation = this.generation;
@@ -148,11 +148,11 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
       error: () => {
         if (generation !== this.generation) return;
         this.transactionsLoading = false;
-        this.transactionsError = 'Block transactions are temporarily unavailable';
+        this.transactionsError = $localize`:@@ton.network.block-transactions-unavailable:Block transactions are temporarily unavailable`;
       },
     }));
   }
-  private loadShards(block: any): void { this.shardsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/shards').subscribe({ next: result => { this.shards = (result.shards || result.blocks || []).map(shard => shard.last_known_block ? { ...shard.last_known_block, id: shard.last_known_block_id } : shard); this.shardsLoading = false; }, error: () => { this.shardsLoading = false; this.shardsError = 'Shard references are temporarily unavailable'; } })); }
+  private loadShards(block: any): void { this.shardsLoading = true; this.requests.add(this.getNative<any>('/api/ton/block/' + encodeURIComponent(block.id || this.id) + '/shards').subscribe({ next: result => { this.shards = (result.shards || result.blocks || []).map(shard => shard.last_known_block ? { ...shard.last_known_block, id: shard.last_known_block_id } : shard); this.shardsLoading = false; }, error: () => { this.shardsLoading = false; this.shardsError = $localize`:@@ton.network.shards-unavailable:Shard references are temporarily unavailable`; } })); }
   onVisibilityChange(): void { if (!document.hidden && (this.nativeRoute === 'dashboard' || this.nativeRoute === 'blocks' && !this.blocks.length) && !this.loading) this.loadBlocks('/api/ton/dashboard', true); }
   private blockIdentity(block: any): string { return block.id || block.ton?.id || `${block.workchain_id ?? block.ton?.workchain_id}:${block.shard ?? block.ton?.shard}:${block.seqno ?? block.ton?.seqno}`; }
   private consecutivePrefix(blocks: any[]): any[] {

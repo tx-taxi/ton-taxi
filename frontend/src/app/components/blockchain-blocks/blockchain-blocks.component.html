@@ -50,7 +50,7 @@
             </div>
             <ng-template #noMiningInfo>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + 'block-size'"
-              class="block-size">{{ block.tx_count | number }} transactions</div>
+              class="block-size" i18n="@@ton.a11y.block-count">{{ block.tx_count | number }} transactions</div>
             </ng-template>
             <div [attr.data-cy]="'bitcoin-block-' + i + '-transactions'" class="transaction-count">
               <ng-container
@@ -97,12 +97,12 @@
         <div class="loading" [class.flashing]="!block.unavailable">
           <div class="text-center bitcoin-block mined-block" id="bitcoin-block-{{ block.height }}"
             [ngStyle]="convertStyleForLoadingBlock(blockStyles[i])"
-            [attr.aria-label]="block.unavailable ? 'Block data unavailable' : block?.height >= 0 ? 'Loading block ' + block.height : 'Loading block data'">
+            [attr.aria-label]="block.unavailable ? blockUnavailableLabel : block?.height >= 0 ? loadingBlockLabel(block.height) : loadingBlockDataLabel">
             <div *ngIf="!minimal && block?.height >= 0" class="block-height loading-height">{{ block.height }}</div>
             <div *ngIf="!minimal" class="loading-block-body" aria-hidden="true">
               <span class="loading-line loading-line-short"></span>
               <span class="loading-line"></span>
-              <span class="loading-label">{{ block.unavailable ? 'Unavailable' : 'Loading' }}</span>
+              <span class="loading-label">{{ block.unavailable ? unavailableLabel : loadingLabel }}</span>
             </div>
           </div>
         </div>

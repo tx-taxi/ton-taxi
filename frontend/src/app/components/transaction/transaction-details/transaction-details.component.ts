@@ -27,6 +27,15 @@ export class TransactionDetailsComponent implements OnInit {
     return tx.success === true ? $localize`:@@ton.detail.successful:Successful`
       : tx.success === false ? $localize`:@@ton.detail.failed:Failed` : $localize`:@@ton.detail.unknown:Unknown`;
   }
+  tonAccountStatus(status: string | null | undefined): string {
+    switch (status) {
+      case 'active': return $localize`:@@ton.status.active:active`;
+      case 'uninit': return $localize`:@@ton.status.uninit:uninit`;
+      case 'frozen': return $localize`:@@ton.status.frozen:frozen`;
+      case 'nonexist': return $localize`:@@ton.status.nonexist:nonexist`;
+      default: return status || $localize`:@@ton.detail.unknown:Unknown`;
+    }
+  }
   @Input() network: string;
   @Input() tx: Transaction;
   @Input() isLoadingTx: boolean;

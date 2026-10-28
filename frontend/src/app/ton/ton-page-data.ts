@@ -7,7 +7,7 @@ import { SeoService } from '../services/seo.service';
 import { OpenGraphService } from '../services/opengraph.service';
 import { NativeBlockContext, StateService } from '../services/state.service';
 import { scaledJettonUnits } from './scaled-ui';
-import { publicDetails } from './transaction-view';
+import { publicDetails, actionTitle, actionFieldLabel } from './transaction-view';
 import { nativeContextDepth } from '../shared/native-block-context';
 import { NativeAmount } from '../shared/native-view.types';
 import { TonChainSelectionService } from './ton-chain-selection.service';
@@ -226,12 +226,12 @@ export class TonPageData implements OnInit, OnDestroy {
   }
   visibleActions(event: any): any[] { return this.page === 'nft' ? (event.actions || []).filter((action:any)=>this.actionReferencesNft(action)) : event.actions || []; }
   otherActions(event: any): any[] { return this.page === 'nft' ? (event.actions || []).filter((action:any)=>!this.actionReferencesNft(action)) : []; }
-  actionTitle(action: any): string { return ({NftItemTransfer:'NFT transfer',NftPurchase:'NFT purchase'}[action.type] || action.type || 'Action').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^Ton Transfer$/, 'GRAM transfer'); }
+  actionTitle(action: any): string { const fallback = ({NftItemTransfer:'NFT transfer',NftPurchase:'NFT purchase'}[action.type] || action.type || 'Action').replace(/([a-z])([A-Z])/g,'$1 $2').replace(/^Ton Transfer$/, 'GRAM transfer'); return actionTitle(action, this.locale, fallback); }
   actionFields(action: any): {label:string,text:string,route?:string[],flagged?:boolean}[] {
     const payload = this.actionDetails(action); const fields = [];
     for (const [key,value] of Object.entries<any>(payload)) {
       if (value == null || key === 'ton_attached' && payload.gram_attached != null || key === 'amount' && payload.stake_meta) continue;
-      const label = this.fieldLabel(key).replace(/^(ton|gram) attached$/, 'Amount attached');
+      const label = actionFieldLabel(key, this.locale, this.fieldLabel(key).replace(/^(ton|gram) attached$/, 'Amount attached'));
       if (key === 'currency' && value?.id != null) { fields.push({label,text:value.symbol || String(value.id),route:['/extra-currency',String(value.id)]}); continue; }
       if (value?.address) { fields.push({label,text:value.name || value.symbol || value.address,route:[key.includes('jetton') ? '/jetton' : key.includes('nft') ? '/nft' : '/address',value.address],flagged:value.is_scam || value.verification === 'blacklist'}); continue; }
       if (typeof value === 'string' && /^(?:-?\d:[a-fA-F0-9]{64}|[A-Za-z0-9_-]{48})$/.test(value)) {fields.push({label,text:value,route:[key.includes('nft') ? '/nft' : '/address',value]}); continue;}
@@ -257,7 +257,7 @@ export class TonPageData implements OnInit, OnDestroy {
   }
   currentJettonUnits(value: any, jetton: any): string | null { return scaledJettonUnits(value,jetton?.scaled_ui); }
   currentJettonAmount(value: any, jetton: any): string { const units=this.currentJettonUnits(value,jetton);return units === null ? '—' : this.tokenAmount(units,jetton?.decimals ?? jetton?.metadata?.decimals); }
-  tokenAmount(value: any, decimals: any): string { return decimals == null ? this.text(value) + ' units' : this.amount(value,decimals); }
+  tokenAmount(value: any, decimals: any): string { return decimals == null ? this.text(value) + ' ' + $localize`:@@ton.more.units:units` : this.amount(value,decimals); }
   isAddress(value: any): boolean { return typeof value === 'string' && /^(?:-?\d:[a-fA-F0-9]{64}|[A-Za-z0-9_-]{48})$/.test(value); }
   address(value: any): string { return typeof value === 'string' ? value : value?.address || ''; }
   label(value: any): string { return value?.name || this.address(value); }

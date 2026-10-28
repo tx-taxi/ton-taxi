@@ -11,6 +11,10 @@ import { StorageService } from '@app/services/storage.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockchainComponent implements OnInit, OnDestroy, OnChanges {
+  readonly showTransactionCountsLabel = $localize`:@@ton.a11y.show-transaction-counts:Switch to displaying transaction counts`;
+  readonly showBlockFeesLabel = $localize`:@@ton.a11y.show-block-fees:Switch to displaying total fees per block`;
+  readonly newestRightLabel = $localize`:@@ton.a11y.newest-right:Switch to displaying newest blocks on the right`;
+  readonly newestLeftLabel = $localize`:@@ton.a11y.newest-left:Switch to displaying newest blocks on the left`;
   @Input() nativeContext: NativeBlockContext | null = null;
   @Input() pages: any[] = [];
   @Input() pageIndex: number;

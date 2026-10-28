@@ -1,11 +1,11 @@
-<section class="gas-market" [attr.aria-label]="(isTon ? 'TON ' + tonChainLabel.toLowerCase() + ' history ' : 'Ethereum gas market ') + historyLabel.toLowerCase()">
+<section class="gas-market" [attr.aria-label]="chartLabel">
   <div class="gas-market__header">
     <div>
       <h3 class="gas-market__title">{{ isTon ? tonHistoryTitle : 'Gas market' }}</h3>
       <span class="sr-only">{{ isTon ? tonHistoryTitle : 'Gas market' }}, {{ historyLabel }}</span>
     </div>
 
-    <ul class="gas-market__legend" aria-label="Chart legend">
+    <ul class="gas-market__legend" [attr.aria-label]="isSpanish ? 'Leyenda del gráfico' : 'Chart legend'">
       <li><span class="gas-market__swatch gas-market__swatch--fee" aria-hidden="true"></span><ng-container *ngIf="isTon; else baseFee" i18n="@@ton.dash.graph-fees">Mean collected fees (GRAM/block)</ng-container><ng-template #baseFee>Base fee (gwei)</ng-template></li>
       <li><span class="gas-market__swatch gas-market__swatch--utilization" aria-hidden="true"></span><ng-container *ngIf="isTon; else utilization" i18n="@@ton.dash.graph-interval">Mean block interval (s)</ng-container><ng-template #utilization>Network utilization (%)</ng-template></li>
     </ul>

@@ -22,6 +22,8 @@ const REWARD_SAMPLE_BLOCKS = 6;
   standalone: false,
 })
 export class RewardStatsComponent implements OnInit {
+  readonly loadingConfirmedFeesLabel = $localize`:@@ton.a11y.loading-confirmed-fees:Loading confirmed transaction fees`;
+  readonly loadingRecentRewardsLabel = $localize`:@@ton.a11y.loading-recent-rewards:Loading recent execution rewards`;
   @Input() confirmedMode = false;
   @Input() confirmedData: ConfirmedDashboardData | null = null;
   public $rewardStats: Observable<EthereumRewardStats | null>;

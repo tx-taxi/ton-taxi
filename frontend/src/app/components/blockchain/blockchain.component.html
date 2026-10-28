@@ -11,17 +11,17 @@
         </ng-container>
       </div>
       <div id="divider" [hidden]="pageIndex > 0 || !!nativeContext">
-        <a class="chain-divider-mark" [routerLink]="['/' | relativeUrl]" aria-label="TON explorer dashboard"><img src="/resources/branding/ton-divider.png" alt=""></a>
+        <a class="chain-divider-mark" [routerLink]="['/' | relativeUrl]" aria-label="TON explorer dashboard" i18n-aria-label="@@ton.a11y.dashboard"><img src="/resources/branding/ton-divider.png" alt=""></a>
         <button
           type="button"
           class="block-display-toggle"
           (click)="toggleBlockDisplayMode()"
           [attr.aria-label]="blockDisplayMode === 'fees'
-            ? 'Switch to displaying transaction counts'
-            : 'Switch to displaying total fees per block'"
+            ? showTransactionCountsLabel
+            : showBlockFeesLabel"
           [attr.title]="blockDisplayMode === 'fees'
-            ? 'Switch to displaying transaction counts'
-            : 'Switch to displaying total fees per block'">
+            ? showTransactionCountsLabel
+            : showBlockFeesLabel">
           <fa-icon [icon]="['fas', 'exchange-alt']" [fixedWidth]="true"></fa-icon>
         </button>
 
@@ -30,11 +30,11 @@
           class="time-toggle"
           (click)="toggleTimeDirection()"
           [attr.aria-label]="timeLtr
-            ? 'Switch to displaying newest blocks on the right'
-            : 'Switch to displaying newest blocks on the left'"
+            ? newestRightLabel
+            : newestLeftLabel"
           [attr.title]="timeLtr
-            ? 'Switch to displaying newest blocks on the right'
-            : 'Switch to displaying newest blocks on the left'">
+            ? newestRightLabel
+            : newestLeftLabel">
           <fa-icon [icon]="['fas', 'exchange-alt']" [fixedWidth]="true"></fa-icon>
         </button>
       </div>

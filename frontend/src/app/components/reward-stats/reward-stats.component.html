@@ -20,7 +20,7 @@
 </div>
 
 <ng-template #loadingReward>
-  <div class="fee-estimation-container loading-container" [attr.aria-label]="confirmedMode ? 'Loading confirmed transaction fees' : 'Loading recent execution rewards'">
+  <div class="fee-estimation-container loading-container" [attr.aria-label]="confirmedMode ? loadingConfirmedFeesLabel : loadingRecentRewardsLabel">
     <div class="item" *ngFor="let label of labels"><h5 class="card-title">{{ label }}</h5><div class="card-text"><div class="skeleton-loader"></div><div class="skeleton-loader"></div></div></div>
   </div>
 </ng-template>

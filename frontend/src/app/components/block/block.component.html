@@ -21,7 +21,7 @@
         </span>
         <a *ngIf="nativeMode; else legacyCurrentBlock" [tonBlockLink]="displayBlockHash" class="block-link">{{ displayBlockHeight }}</a>
         <ng-template #legacyCurrentBlock><a [routerLink]="['/block/' | relativeUrl, displayBlockHash]" class="block-link">{{ displayBlockHeight }}</a></ng-template>
-        <a *ngIf="nativeMode && canGoPrevious" class="nav-arrow prev" [tonBlockLink]="nativePreviousBlock" ngbTooltip="Previous Block" placement="bottom">
+        <a *ngIf="nativeMode && canGoPrevious" class="nav-arrow prev" [tonBlockLink]="nativePreviousBlock" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
           <fa-icon [icon]="['fas', 'angle-right']" [fixedWidth]="true"></fa-icon>
         </a>
         <a *ngIf="!nativeMode && canGoPrevious" class="nav-arrow prev" [routerLink]="['/block/' | relativeUrl, block.previousblockhash]" (click)="navigateToPreviousBlock()" i18n-ngbTooltip="Previous Block" ngbTooltip="Previous Block" placement="bottom">
@@ -151,7 +151,7 @@
     <ng-container *ngIf="nativeMode; else legacyRestRows">
       <ng-container *ngIf="nativeBlock as block; else loadingRest">
         <tr><td class="td-width" i18n="@@ton.dash.transactions">Transactions</td><td>{{ block.tx_quantity ?? block.tx_count ?? '—' }}</td></tr>
-        <tr><td [ngbTooltip]="'Transaction and imported fees, plus the block creation reward.'" i18n="@@ton.block.fees-rewards">Fees &amp; rewards</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
+        <tr><td ngbTooltip="Transaction and imported fees, plus the block creation reward." i18n-ngbTooltip="@@ton.block.fees-rewards-tooltip" i18n="@@ton.block.fees-rewards">Fees &amp; rewards</td><td><ng-container *ngIf="tonAmount(block.value_flow?.fees_collected?.grams ?? block.ton?.value_flow?.fees_collected?.grams) as fees; else unknownFees"><app-amount [amount]="fees"></app-amount></ng-container><ng-template #unknownFees>—</ng-template></td></tr>
       </ng-container>
     </ng-container>
     <ng-template #legacyRestRows>
@@ -309,9 +309,9 @@
           <div class="col-sm">
             <table class="table table-borderless table-striped" [class.ton-block-details]="nativeMode">
               <tbody>
-              <ng-container *ngIf="nativeMode; else legacyDetails0"><tr><td class="td-width">Root hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash"></app-clipboard></span></td></tr>
-                <tr><td>File hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash"></app-clipboard></span></td></tr>
-                <tr><td>Logical time</td><td>{{ nativeBlock.start_lt ?? '—' }} – {{ nativeBlock.end_lt ?? '—' }}</td></tr></ng-container>
+              <ng-container *ngIf="nativeMode; else legacyDetails0"><tr><td class="td-width" i18n="@@ton.block.root-hash">Root hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.root_hash || nativeBlock.ton?.root_hash"></app-clipboard></span></td></tr>
+                <tr><td i18n="@@ton.block.file-hash">File hash</td><td><span class="d-flex align-items-center"><app-truncate [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash" [lastChars]="12"></app-truncate><app-clipboard [text]="nativeBlock.file_hash || nativeBlock.ton?.file_hash"></app-clipboard></span></td></tr>
+                <tr><td i18n="@@ton.detail.logical-time">Logical time</td><td>{{ nativeBlock.start_lt ?? '—' }} – {{ nativeBlock.end_lt ?? '—' }}</td></tr></ng-container>
               <ng-template #legacyDetails0>
                 <tr>
                   <td class="td-width">Parent hash</td>
@@ -332,9 +332,9 @@
           <div class="col-sm">
             <table class="table table-borderless table-striped" [class.ton-block-details]="nativeMode">
               <tbody>
-              <ng-container *ngIf="nativeMode; else legacyDetails1"><tr><td class="td-width">Previous blocks</td><td><ng-container *ngFor="let previous of nativeBlock.prev_refs || nativeBlock.ton?.prev_refs; let last = last"><app-truncate [text]="previous" [lastChars]="8" [link]="['/block', previous]"></app-truncate><span *ngIf="!last">, </span></ng-container><span *ngIf="!(nativeBlock.prev_refs || nativeBlock.ton?.prev_refs)?.length">—</span></td></tr>
-                <tr *ngIf="nativeBlock.key_block"><td>Key block</td><td><a routerLink="/config" [queryParams]="{ master_seqno: nativeBlock.seqno }">View configuration</a></td></tr>
-                <tr><td>BOC</td><td><a [href]="tonBocUrl(tonBlockId(nativeBlock))">Download BOC</a></td></tr></ng-container>
+              <ng-container *ngIf="nativeMode; else legacyDetails1"><tr><td class="td-width" i18n="@@ton.block.previous-blocks">Previous blocks</td><td><ng-container *ngFor="let previous of nativeBlock.prev_refs || nativeBlock.ton?.prev_refs; let last = last"><app-truncate [text]="previous" [lastChars]="8" [link]="['/block', previous]"></app-truncate><span *ngIf="!last">, </span></ng-container><span *ngIf="!(nativeBlock.prev_refs || nativeBlock.ton?.prev_refs)?.length">—</span></td></tr>
+                <tr *ngIf="nativeBlock.key_block"><td i18n="@@ton.block.key-block">Key block</td><td><a routerLink="/config" [queryParams]="{ master_seqno: nativeBlock.seqno }" i18n="@@ton.block.view-configuration">View configuration</a></td></tr>
+                <tr><td>BOC</td><td><a [href]="tonBocUrl(tonBlockId(nativeBlock))" i18n="@@ton.block.download-boc">Download BOC</a></td></tr></ng-container>
               <ng-template #legacyDetails1>
                 <tr *ngIf="isMobile"></tr>
                 <tr>

@@ -1,6 +1,6 @@
 <div class="container-xl" *ngIf="pending$ | async as pending">
   <div class="title-block">
-    <h1>Pending messages</h1>
+    <h1 i18n="@@ton.pending.page-title">Pending messages</h1>
     <button [routerLink]="['/' | relativeUrl]" class="btn btn-sm float-end">&#10005;</button>
   </div>
   <div class="clearfix"></div>
@@ -10,34 +10,34 @@
       <div class="col-md">
         <table class="table table-borderless table-striped">
           <tbody>
-            <tr><td>Messages</td><td><span *ngIf="pending.state === 'loading' && pending.totalObserved === null; else messageCount" class="skeleton-loader">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><ng-template #messageCount>{{ pending.totalObserved === null ? 'Unavailable' : (pending.totalObserved | number) }}</ng-template></td></tr>
-            <tr><td>Type</td><td>External incoming</td></tr>
-            <tr><td>Last update</td><td><app-timestamp *ngIf="unixTime(pending.observedAt) as time; else missingTime" [unixTime]="time"></app-timestamp><ng-template #missingTime>—</ng-template></td></tr>
-            <tr><td>Feed</td><td>{{ pending.state === 'ready' ? 'Live' : pending.state === 'loading' ? 'Connecting' : pending.state === 'stale' ? 'Reconnecting' : 'Unavailable' }}</td></tr>
+            <tr><td i18n="@@ton.dash.messages">Messages</td><td><span *ngIf="pending.state === 'loading' && pending.totalObserved === null; else messageCount" class="skeleton-loader">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><ng-template #messageCount><span *ngIf="pending.totalObserved === null; else observedCount" i18n="@@ton.2c9c1f79142d">Unavailable</span><ng-template #observedCount>{{ pending.totalObserved | number }}</ng-template></ng-template></td></tr>
+            <tr><td i18n="@@ton.detail.type">Type</td><td i18n="@@ton.detail.external-incoming">External incoming</td></tr>
+            <tr><td i18n="@@ton.pending.last-update">Last update</td><td><app-timestamp *ngIf="unixTime(pending.observedAt) as time; else missingTime" [unixTime]="time"></app-timestamp><ng-template #missingTime>—</ng-template></td></tr>
+            <tr><td i18n="@@ton.pending.feed">Feed</td><td>{{ feedState(pending.state) }}</td></tr>
           </tbody>
         </table>
-        <p *ngIf="pending.state === 'stale' || pending.state === 'unavailable'" class="grey-info-text">{{ pending.observedAt ? 'The pending feed is unavailable. Showing the last update.' : 'The pending feed is unavailable.' }}</p>
+        <p *ngIf="pending.state === 'stale' || pending.state === 'unavailable'" class="grey-info-text"><ng-container *ngIf="pending.observedAt; else feedUnavailable" i18n="@@ton.pending.feed-stale">The pending feed is unavailable. Showing the last update.</ng-container><ng-template #feedUnavailable i18n="@@ton.pending.feed-unavailable-sentence">The pending feed is unavailable.</ng-template></p>
       </div>
       <div class="col-md chart-container">
         <div class="block-with-filters" *ngIf="webGlEnabled">
           <app-mempool-block-overview [index]="0"
             [suppliedPendingMessages]="pending.messages"
             [suppliedLoading]="pending.state === 'loading' && !pending.messages.length"
-            [suppliedError]="pending.state === 'unavailable' || pending.state === 'stale' ? 'Pending feed unavailable' : null"
+            [suppliedError]="pending.state === 'unavailable' || pending.state === 'stale' ? pendingFeedUnavailable : null"
           ></app-mempool-block-overview>
         </div>
-        <p *ngIf="!webGlEnabled" class="grey-info-text">Message map unavailable in this browser</p>
+        <p *ngIf="!webGlEnabled" class="grey-info-text" i18n="@@ton.dash.map-unavailable">Message map unavailable in this browser</p>
       </div>
     </div>
   </div>
   <br>
-  <div class="subtitle-block"><div class="title"><h2>Messages</h2></div></div>
+  <div class="subtitle-block"><div class="title"><h2 i18n="@@ton.dash.messages">Messages</h2></div></div>
   <ng-container *ngIf="{hash: selectedHash$ | async} as selected">
     <app-transactions-list *ngIf="pending.messages.length" [nativePendingMessages]="visibleMessages(pending, selected.hash)" [selectedMessageHash]="selected.hash || ''"></app-transactions-list>
     <div *ngIf="pending.state === 'loading' && !pending.messages.length" class="box"><span class="skeleton-loader"></span></div>
-    <p *ngIf="pending.state === 'ready' && !pending.messages.length" class="grey-info-text">No pending messages</p>
-    <button *ngIf="visibleCount < pending.messages.length" type="button" class="btn btn-primary" (click)="visibleCount = visibleCount + 20">Show more</button>
-    <p *ngIf="pending.truncated" class="grey-info-text mt-2">Latest {{ pending.messages.length | number }} of {{ pending.totalObserved | number }} messages</p>
-    <p *ngIf="selected.hash && !hasMessage(pending, selected.hash) && pending.state !== 'loading'" class="grey-info-text">This message is no longer in the pending list.</p>
+    <p *ngIf="pending.state === 'ready' && !pending.messages.length" class="grey-info-text" i18n="@@ton.pending.none">No pending messages</p>
+    <button *ngIf="visibleCount < pending.messages.length" type="button" class="btn btn-primary" (click)="visibleCount = visibleCount + 20" i18n="@@ton.pending.show-more">Show more</button>
+    <p *ngIf="pending.truncated" class="grey-info-text mt-2"><span i18n="@@ton.pending.latest">Latest</span> {{ pending.messages.length | number }} <span i18n="@@ton.pending.of">of</span> {{ pending.totalObserved | number }} <span i18n="@@ton.pending.many">messages</span></p>
+    <p *ngIf="selected.hash && !hasMessage(pending, selected.hash) && pending.state !== 'loading'" class="grey-info-text" i18n="@@ton.pending.message-gone">This message is no longer in the pending list.</p>
   </ng-container>
 </div>

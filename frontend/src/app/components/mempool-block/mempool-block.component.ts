@@ -20,6 +20,13 @@ import { detectWebGL } from '@app/shared/graphs.utils';
 export class MempoolBlockComponent implements OnInit, OnDestroy, AfterViewChecked {
   pending$: Observable<TonPendingSnapshot> = this.stateService.tonPending$;
   selectedHash$ = this.route.fragment;
+  readonly pendingFeedUnavailable = $localize`:@@ton.pending.full-feed-unavailable:Pending feed unavailable`;
+  feedState(state: TonPendingSnapshot['state']): string {
+    return state === 'ready' ? $localize`:@@ton.pending.live:Live`
+      : state === 'loading' ? $localize`:@@ton.pending.connecting:Connecting`
+      : state === 'stale' ? $localize`:@@ton.pending.reconnecting:Reconnecting`
+      : $localize`:@@ton.2c9c1f79142d:Unavailable`;
+  }
   visibleCount = 20;
   webGlEnabled = this.stateService.isBrowser && detectWebGL();
   private fragmentSubscription: Subscription;

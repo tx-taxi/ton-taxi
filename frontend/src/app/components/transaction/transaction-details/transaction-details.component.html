@@ -54,7 +54,7 @@
     <ng-container *ngIf="nativeTransaction as transaction; else nativeSummaryLoading">
           <tr><td class="td-width" i18n="@@ton.detail.fee">Transaction fee</td><td><app-amount *ngIf="tonAmount(transaction.total_fees) as fee; else unavailable" [amount]="fee"></app-amount></td></tr>
           <tr><td i18n="@@ton.detail.logical-time">Logical time</td><td>{{ transaction.lt || '—' }}</td></tr>
-          <tr><td i18n="@@ton.detail.state">Account state</td><td>{{ transaction.orig_status || 'Unknown' }} <span aria-label="to">→</span> {{ transaction.end_status || 'Unknown' }}</td></tr>
+          <tr><td i18n="@@ton.detail.state">Account state</td><td>{{ tonAccountStatus(transaction.orig_status) }} <span aria-label="to" i18n-aria-label="@@ton.aria.to">→</span> {{ tonAccountStatus(transaction.end_status) }}</td></tr>
           <tr><td i18n="@@ton.detail.balance">Ending balance</td><td><app-amount *ngIf="tonAmount(transaction.end_balance) as balance; else unavailable" [amount]="balance"></app-amount></td></tr>
             </ng-container>
   } @else {

@@ -1,8 +1,8 @@
 
 <div class="container-xl dashboard-container">
-  <div *ngIf="native.workchain === 0 && native.activeShards.length > 1" class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON shard selection">
-    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" [value]="native.selectedShard" (change)="native.selectShard($any($event.target).value)">
-      <option *ngFor="let shard of native.activeShards" [value]="shard.shard">Shard {{ shard.shard }}</option>
+  <div *ngIf="native.workchain === 0 && native.activeShards.length > 1" class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON shard selection" i18n-aria-label="@@ton.a11y.shard-selection">
+    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" i18n-aria-label="@@ton.a11y.shard" [value]="native.selectedShard" (change)="native.selectShard($any($event.target).value)">
+      <option *ngFor="let shard of native.activeShards" [value]="shard.shard" i18n="@@ton.a11y.shard-option">Shard {{ shard.shard }}</option>
     </select>
   </div>
 

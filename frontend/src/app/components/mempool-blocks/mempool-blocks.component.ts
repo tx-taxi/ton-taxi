@@ -1,7 +1,7 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { Subscription, Observable, of, combineLatest } from 'rxjs';
 import { MempoolBlock } from '@interfaces/websocket.interface';
 import { StateService } from '@app/services/state.service';
@@ -46,6 +46,12 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   }
   get pendingTitle(): string {
     const count = this.pendingCount;
+    if (this.locale.toLowerCase().startsWith('es')) {
+      const summary = count == null ? 'Información de pendientes no disponible' : `${count} mensaje${count === 1 ? '' : 's'} externo${count === 1 ? '' : 's'} pendiente${count === 1 ? '' : 's'}`;
+      const updated = this.nativePending?.observedAt ? ` · Última actualización ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Reconectando' : '';
+      return summary + updated + stale;
+    }
     const summary = count == null ? 'Pending feed unavailable' : `${count} pending external message${count === 1 ? '' : 's'}`;
     const updated = this.nativePending?.observedAt ? ` · Last updated ${this.nativePending.observedAt}` : '';
     const stale = this.nativePending?.state === 'stale' ? ' · Reconnecting' : '';
@@ -143,6 +149,7 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   blockIndex = 1;
 
   constructor(
+    @Inject(LOCALE_ID) private locale: string,
     private router: Router,
     public stateService: StateService,
     private etaService: EtaService,

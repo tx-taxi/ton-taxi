@@ -126,7 +126,13 @@ export class SeoService {
     const requestedUrl = new URL(path, 'https://' + this.baseDomain);
     const block = tonBlockIdentityFromUrl(requestedUrl.href);
     const native = this.nativePage(path);
-    const canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + (native?.path || requestedUrl.pathname);
+    let canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + (native?.path || requestedUrl.pathname);
+    // Angular routes omit the locale base. Keep Spanish pages self-canonical after client-side navigation.
+    if (typeof window !== 'undefined' && /^\/es(?:\/|$)/.test(window.location.pathname)) {
+      const localized = new URL(canonicalUrl);
+      if (!/^\/es(?:\/|$)/.test(localized.pathname)) localized.pathname = '/es' + localized.pathname;
+      canonicalUrl = localized.href;
+    }
     this.canonicalLink?.setAttribute('href', canonicalUrl);
     this.updateDiscoveryLinks(canonicalUrl);
     const pageSchema = document.getElementById('native-page-schema');

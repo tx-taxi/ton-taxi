@@ -8,9 +8,9 @@
 
   <div class="clearfix"></div>
 <ng-container *ngIf="nativeRoute">
-  <div *ngIf="tonData.workchain === 0 && tonData.activeShards.length > 1" class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON shard selection">
-    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" [value]="tonData.selectedShard" (change)="tonData.selectShard($any($event.target).value)">
-      <option *ngFor="let shard of tonData.activeShards" [value]="shard.shard">Shard {{ shard.shard }}</option>
+  <div *ngIf="tonData.workchain === 0 && tonData.activeShards.length > 1" class="d-flex justify-content-end flex-wrap gap-2 mb-3" role="group" aria-label="TON shard selection" i18n-aria-label="@@ton.a11y.shard-selection">
+    <select class="form-select form-select-sm form-control-secondary form-control w-auto" aria-label="Shard" i18n-aria-label="@@ton.a11y.shard" [value]="tonData.selectedShard" (change)="tonData.selectShard($any($event.target).value)">
+      <option *ngFor="let shard of tonData.activeShards" [value]="shard.shard" i18n="@@ton.a11y.shard-option">Shard {{ shard.shard }}</option>
     </select>
   </div>
 </ng-container>

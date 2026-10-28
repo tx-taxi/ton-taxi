@@ -24,6 +24,11 @@ interface BlockchainBlock extends BlockExtended {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
+  readonly blockUnavailableLabel = $localize`:@@ton.a11y.block-unavailable:Block data unavailable`;
+  readonly loadingBlockDataLabel = $localize`:@@ton.a11y.loading-block-data:Loading block data`;
+  readonly unavailableLabel = $localize`:@@ton.a11y.unavailable:Unavailable`;
+  readonly loadingLabel = $localize`:@@ton.a11y.loading:Loading`;
+  loadingBlockLabel(height: number): string { return $localize`:@@ton.a11y.loading-block:Loading block ${height}:height:`; }
   transactionFeeView = transactionFeeView;
   @Input() suppliedBlocks?: Array<BlockExtended | null>;
   @Input() suppliedSelectedBlockId?: string;

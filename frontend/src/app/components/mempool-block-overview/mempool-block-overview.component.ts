@@ -167,7 +167,7 @@ export class MempoolBlockOverviewComponent implements OnInit, OnDestroy, OnChang
   }
 
   get suppliedEmptyMessage(): string | null {
-    return this.suppliedError || (this.hasSuppliedPendingMessages && !this.suppliedLoading ? 'No pending messages' : null);
+    return this.suppliedError || (this.hasSuppliedPendingMessages && !this.suppliedLoading ? $localize`:@@ton.pending.none:No pending messages` : null);
   }
 
   private renderSuppliedTransactions(): void {

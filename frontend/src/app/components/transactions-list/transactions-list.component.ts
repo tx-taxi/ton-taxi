@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectionStrategy, OnChanges, Output, EventEmitter, ChangeDetectorRef, OnDestroy, LOCALE_ID, inject } from '@angular/core';
 import { StateService, SignaturesMode } from '@app/services/state.service';
 import { CacheService } from '@app/services/cache.service';
 import { Observable, ReplaySubject, BehaviorSubject, merge, Subscription, of, forkJoin } from 'rxjs';
@@ -46,13 +46,15 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
   tonMessages = tonMessages;
   publicDetails = publicDetails;
   readableField = readableField;
-  actionTitle = actionTitle;
-  tonActionFields = tonActionFields;
+  private readonly locale = inject(LOCALE_ID);
+  actionTitle(action: any): string { return actionTitle(action, this.locale); }
+  tonActionFields(action: any) { return tonActionFields(action, this.locale); }
   get nativeMode(): boolean { return this.nativeTransactions !== null || this.nativeEvents !== null || this.nativePendingMessages !== null; }
   messageAmount(message: TonMessage) { return tonAmount(message.value); }
   readonly successfulLabel = $localize`:@@ton.detail.successful:Successful`;
   readonly failedLabel = $localize`:@@ton.detail.failed:Failed`;
   readonly externalIncomingLabel = $localize`:@@ton.detail.external-incoming:External incoming`;
+  readonly rawUnitsLabel = $localize`:@@ton.more.raw-units:raw units`;
   messageKind(message: TonMessage): string {
     return message.msg_type === 'ext_in_msg' ? this.externalIncomingLabel
       : message.msg_type === 'ext_out_msg' ? $localize`:@@ton.detail.external-outgoing:External outgoing`
@@ -281,7 +283,7 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
     const amount = this.formatEthereumTransferAmount(transfer);
     if (amount === 'Unavailable') return amount;
     if (this.parseEthereumDecimals(transfer.token.decimals) === null) {
-      return `${amount} raw units`;
+      return `${amount} ${this.rawUnitsLabel}`;
     }
     return `${amount} ${transfer.token.symbol || 'tokens'}`;
   }
@@ -290,7 +292,7 @@ export class TransactionsListComponent implements OnInit, OnChanges, OnDestroy {
     const normalizedValue = this.normalizeEthereumInteger(transfer.value);
     if (normalizedValue === null) return 'Unavailable';
     if (this.parseEthereumDecimals(transfer.token.decimals) === null) {
-      return `${this.groupEthereumInteger(normalizedValue)} raw units`;
+      return `${this.groupEthereumInteger(normalizedValue)} ${this.rawUnitsLabel}`;
     }
     return this.ethereumTransferLabel(transfer);
   }

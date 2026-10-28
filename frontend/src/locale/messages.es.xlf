@@ -11980,6 +11980,59 @@
       <trans-unit id="ton.block.fee-distribution" datatype="html"><source>Median: <x id="median"/> ng/tx. Range: <x id="range"/>.</source><target>Mediana: <x id="median"/> ng/tx. Intervalo: <x id="range"/>.</target></trans-unit>
       <trans-unit id="ton.block.transaction-fees-one" datatype="html"><source>Transaction fees: <x id="total"/> GRAM across <x id="count"/> transaction in this block. <x id="distribution"/> ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.</source><target>Comisiones de transacción: <x id="total"/> GRAM en <x id="count"/> transacción de este bloque. <x id="distribution"/> ng/tx significa nanogramos por transacción; 1 GRAM = 1.000.000.000 nanogramos.</target></trans-unit>
       <trans-unit id="ton.block.transaction-fees-many" datatype="html"><source>Transaction fees: <x id="total"/> GRAM across <x id="count"/> transactions in this block. <x id="distribution"/> ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.</source><target>Comisiones de transacción: <x id="total"/> GRAM en <x id="count"/> transacciones de este bloque. <x id="distribution"/> ng/tx significa nanogramos por transacción; 1 GRAM = 1.000.000.000 nanogramos.</target></trans-unit>
+      <trans-unit id="ton.network.earlier-blocks-unavailable" datatype="html"><source>Unable to load earlier blocks</source><target>No se pueden cargar los bloques anteriores</target></trans-unit>
+      <trans-unit id="ton.network.recent-transactions-unavailable" datatype="html"><source>Recent transactions are temporarily unavailable</source><target>Las transacciones recientes no están disponibles temporalmente</target></trans-unit>
+      <trans-unit id="ton.network.block-transactions-unavailable" datatype="html"><source>Block transactions are temporarily unavailable</source><target>Las transacciones del bloque no están disponibles temporalmente</target></trans-unit>
+      <trans-unit id="ton.network.shards-unavailable" datatype="html"><source>Shard references are temporarily unavailable</source><target>Las referencias de fragmentos no están disponibles temporalmente</target></trans-unit>
+      <trans-unit id="ton.block.root-hash" datatype="html"><source>Root hash</source><target>Hash raíz</target></trans-unit>
+      <trans-unit id="ton.block.file-hash" datatype="html"><source>File hash</source><target>Hash del archivo</target></trans-unit>
+      <trans-unit id="ton.block.previous-blocks" datatype="html"><source>Previous blocks</source><target>Bloques anteriores</target></trans-unit>
+      <trans-unit id="ton.block.key-block" datatype="html"><source>Key block</source><target>Bloque clave</target></trans-unit>
+      <trans-unit id="ton.block.view-configuration" datatype="html"><source>View configuration</source><target>Ver configuración</target></trans-unit>
+      <trans-unit id="ton.block.download-boc" datatype="html"><source>Download BOC</source><target>Descargar BOC</target></trans-unit>
+      <trans-unit id="ton.block.fees-rewards-tooltip" datatype="html"><source>Transaction and imported fees, plus the block creation reward.</source><target>Comisiones de transacción e importadas, más la recompensa por crear el bloque.</target></trans-unit>
+      <trans-unit id="ton.a11y.clipboard-copied" datatype="html"><source>Copied to clipboard</source><target>Copiado al portapapeles</target></trans-unit>
+      <trans-unit id="ton.a11y.clipboard-copy" datatype="html"><source>Copy to clipboard</source><target>Copiar al portapapeles</target></trans-unit>
+      <trans-unit id="ton.a11y.copied" datatype="html"><source>Copied</source><target>Copiado</target></trans-unit>
+      <trans-unit id="ton.a11y.copy" datatype="html"><source>Copy</source><target>Copiar</target></trans-unit>
+      <trans-unit id="ton.a11y.show-transaction-counts" datatype="html"><source>Switch to displaying transaction counts</source><target>Mostrar el número de transacciones</target></trans-unit>
+      <trans-unit id="ton.a11y.show-block-fees" datatype="html"><source>Switch to displaying total fees per block</source><target>Mostrar las comisiones totales por bloque</target></trans-unit>
+      <trans-unit id="ton.a11y.newest-right" datatype="html"><source>Switch to displaying newest blocks on the right</source><target>Mostrar los bloques más recientes a la derecha</target></trans-unit>
+      <trans-unit id="ton.a11y.newest-left" datatype="html"><source>Switch to displaying newest blocks on the left</source><target>Mostrar los bloques más recientes a la izquierda</target></trans-unit>
+      <trans-unit id="ton.a11y.dashboard" datatype="html"><source>TON explorer dashboard</source><target>Panel del explorador de TON</target></trans-unit>
+      <trans-unit id="ton.a11y.block-unavailable" datatype="html"><source>Block data unavailable</source><target>Datos del bloque no disponibles</target></trans-unit>
+      <trans-unit id="ton.a11y.loading-block-data" datatype="html"><source>Loading block data</source><target>Cargando datos del bloque</target></trans-unit>
+      <trans-unit id="ton.a11y.unavailable" datatype="html"><source>Unavailable</source><target>No disponible</target></trans-unit>
+      <trans-unit id="ton.a11y.loading" datatype="html"><source>Loading</source><target>Cargando</target></trans-unit>
+      <trans-unit id="ton.a11y.loading-confirmed-fees" datatype="html"><source>Loading confirmed transaction fees</source><target>Cargando comisiones de transacciones confirmadas</target></trans-unit>
+      <trans-unit id="ton.a11y.loading-recent-rewards" datatype="html"><source>Loading recent execution rewards</source><target>Cargando recompensas de ejecución recientes</target></trans-unit>
+      <trans-unit id="ton.a11y.shard-selection" datatype="html"><source>TON shard selection</source><target>Selección de shard de TON</target></trans-unit>
+      <trans-unit id="ton.a11y.shard" datatype="html"><source>Shard</source><target>Shard</target></trans-unit>
+      <trans-unit id="ton.a11y.project-links" datatype="html"><source>Project links</source><target>Enlaces del proyecto</target></trans-unit>
+      <trans-unit id="ton.a11y.loading-block" datatype="html"><source>Loading block <x id="height"/></source><target>Cargando bloque <x id="height"/></target></trans-unit>
+      <trans-unit id="ton.a11y.block-count" datatype="html"><source><x id="INTERPOLATION"/> transactions</source><target><x id="INTERPOLATION"/> transacciones</target></trans-unit>
+      <trans-unit id="ton.a11y.shard-option" datatype="html"><source>Shard <x id="INTERPOLATION"/></source><target>Shard <x id="INTERPOLATION"/></target></trans-unit>
+      <trans-unit id="ton.pending.page-title" datatype="html"><source>Pending messages</source><target>Mensajes pendientes</target></trans-unit>
+      <trans-unit id="ton.pending.last-update" datatype="html"><source>Last update</source><target>Última actualización</target></trans-unit>
+      <trans-unit id="ton.pending.feed" datatype="html"><source>Feed</source><target>Flujo</target></trans-unit>
+      <trans-unit id="ton.pending.feed-stale" datatype="html"><source>The pending feed is unavailable. Showing the last update.</source><target>El flujo de mensajes pendientes no está disponible. Se muestra la última actualización.</target></trans-unit>
+      <trans-unit id="ton.pending.feed-unavailable-sentence" datatype="html"><source>The pending feed is unavailable.</source><target>El flujo de mensajes pendientes no está disponible.</target></trans-unit>
+      <trans-unit id="ton.pending.full-feed-unavailable" datatype="html"><source>Pending feed unavailable</source><target>Flujo de mensajes pendientes no disponible</target></trans-unit>
+      <trans-unit id="ton.pending.none" datatype="html"><source>No pending messages</source><target>No hay mensajes pendientes</target></trans-unit>
+      <trans-unit id="ton.pending.show-more" datatype="html"><source>Show more</source><target>Mostrar más</target></trans-unit>
+      <trans-unit id="ton.pending.latest" datatype="html"><source>Latest</source><target>Últimos</target></trans-unit>
+      <trans-unit id="ton.pending.of" datatype="html"><source>of</source><target>de</target></trans-unit>
+      <trans-unit id="ton.pending.message-gone" datatype="html"><source>This message is no longer in the pending list.</source><target>Este mensaje ya no está en la lista de pendientes.</target></trans-unit>
+      <trans-unit id="ton.pending.live" datatype="html"><source>Live</source><target>En directo</target></trans-unit>
+      <trans-unit id="ton.pending.connecting" datatype="html"><source>Connecting</source><target>Conectando</target></trans-unit>
+      <trans-unit id="ton.pending.reconnecting" datatype="html"><source>Reconnecting</source><target>Reconectando</target></trans-unit>
+      <trans-unit id="ton.aria.to" datatype="html"><source>to</source><target>a</target></trans-unit>
+      <trans-unit id="ton.status.active" datatype="html"><source>active</source><target>activa</target></trans-unit>
+      <trans-unit id="ton.status.uninit" datatype="html"><source>uninit</source><target>sin inicializar</target></trans-unit>
+      <trans-unit id="ton.status.frozen" datatype="html"><source>frozen</source><target>congelada</target></trans-unit>
+      <trans-unit id="ton.status.nonexist" datatype="html"><source>nonexist</source><target>inexistente</target></trans-unit>
+      <trans-unit id="ton.a11y.return-latest-ton" datatype="html"><source>Return to the latest TON block</source><target>Volver al bloque de TON más reciente</target></trans-unit>
+      <trans-unit id="ton.a11y.return-latest" datatype="html"><source>Return to latest block</source><target>Volver al bloque más reciente</target></trans-unit>
     </body>
   </file>
 </xliff>

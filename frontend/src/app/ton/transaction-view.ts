@@ -80,28 +80,56 @@ export function publicDetails(value: unknown): unknown {
   return value;
 }
 export function readableField(key: string): string { return key.replace(/_/g, ' ').replace(/([a-z])([A-Z])/g, '$1 $2'); }
-export function actionTitle(action: any): string {
+// Keep provider values intact. Only known action types and field keys are translated.
+const spanishActionNames: Record<string, string> = {
+  TonTransfer: 'Transferencia de GRAM', JettonTransfer: 'Transferencia de jettons',
+  JettonSwap: 'Intercambio de jettons', JettonMint: 'Emisión de jettons', JettonBurn: 'Quema de jettons',
+  NftItemTransfer: 'Transferencia de NFT', NftPurchase: 'Compra de NFT',
+  ExtraCurrencyTransfer: 'Transferencia de moneda adicional', SmartContractExec: 'Ejecución de contrato inteligente',
+  DepositStake: 'Depósito de participación', WithdrawStake: 'Retiro de participación',
+  WithdrawStakeRequest: 'Solicitud de retiro de participación', ElectionsDepositStake: 'Depósito de participación en elecciones',
+  ElectionsRecoverStake: 'Recuperación de participación en elecciones', Subscription: 'Suscripción',
+  UnSubscription: 'Cancelación de suscripción', AuctionBid: 'Puja en subasta', GasRelay: 'Retransmisión de gas',
+};
+const spanishActionFields: Record<string, string> = {
+  amount: 'cantidad', ton_attached: 'cantidad adjunta', gram_attached: 'cantidad adjunta',
+  sender: 'remitente', recipient: 'destinatario', source: 'origen', destination: 'destino',
+  account: 'cuenta', wallet: 'cartera', address: 'dirección', contract: 'contrato',
+  fee: 'comisión', refund: 'reembolso', cost: 'coste', value: 'valor',
+  price: 'precio', currency: 'moneda', jetton: 'jetton', nft: 'NFT',
+  buyer: 'comprador', seller: 'vendedor', auction: 'subasta', bid: 'puja',
+  pool: 'grupo', comment: 'comentario', payload: 'carga útil',
+};
+function isSpanish(locale: string): boolean { return /^es(?:-|$)/i.test(locale); }
+export function actionFieldLabel(key: string, locale = 'en', fallback?: string): string {
+  if (isSpanish(locale) && Object.prototype.hasOwnProperty.call(spanishActionFields, key)) return spanishActionFields[key];
+  return fallback || readableField(key).replace(/^(ton|gram) attached$/, 'Amount attached');
+}
+export function actionTitle(action: any, locale = 'en', fallback?: string): string {
+  if (isSpanish(locale) && Object.prototype.hasOwnProperty.call(spanishActionNames, action?.type)) return spanishActionNames[action.type];
+  if (fallback !== undefined) return fallback;
   return readableField(({NftItemTransfer: 'NFT transfer', NftPurchase: 'NFT purchase', TonTransfer: 'GRAM transfer'} as Record<string, string>)[action.type] || action.type || 'Action');
 }
 export interface TonActionField { label: string; text?: string; route?: string[]; identity?: NativeIdentity; amount?: ReturnType<typeof tonAmount>; flagged?: boolean; }
-export function tonActionFields(action: any): TonActionField[] {
+export function tonActionFields(action: any, locale = 'en'): TonActionField[] {
   const payload = action?.[action.type] || {};
   return Object.entries<any>(payload).flatMap(([key, value]): TonActionField[] => {
     if (value == null || key === 'ton_attached' && payload.gram_attached != null || key === 'amount' && payload.stake_meta) return [];
-    const label = readableField(key).replace(/^(ton|gram) attached$/, 'Amount attached');
+    const label = actionFieldLabel(key, locale);
+    const rawUnits = isSpanish(locale) ? 'unidades sin procesar' : 'raw units';
     if (key === 'currency' && value.id != null) return [{label, text: value.symbol || String(value.id), route: ['/extra-currency', String(value.id)]}];
     if (value.address) return [{label, text: value.name || value.symbol || value.address, identity: {...tonIdentity(value), tokenSymbol: value.symbol}, route: [key.includes('jetton') ? '/jetton' : key.includes('nft') ? '/nft' : '/address', value.address], flagged: value.is_scam || value.verification === 'blacklist'}];
     if (typeof value === 'string' && /^(?:-?\d:[a-fA-F0-9]{64}|[A-Za-z0-9_-]{48})$/.test(value)) return [{label, text: value, identity: tonIdentity(value), route: [key.includes('nft') ? '/nft' : '/address', value]}];
     if (value.currency_type && value.value != null) {
       const native = value.currency_type === 'native';
       const decimals = native ? 9 : value.decimals;
-      return [{label, amount: decimals == null ? null : tonAmount(value.value, decimals, native ? 'GRAM' : value.token_name || 'tokens', native), text: `${value.value}${decimals == null ? ' raw units' : ''}`}];
+      return [{label, amount: decimals == null ? null : tonAmount(value.value, decimals, native ? 'GRAM' : value.token_name || 'tokens', native), text: `${value.value}${decimals == null ? ' ' + rawUnits : ''}`}];
     }
     if (['amount', 'ton_attached', 'gram_attached', 'fee', 'refund', 'cost', 'value'].includes(key) && /^-?\d+$/.test(String(value))) {
       const native = /^(TonTransfer|DepositStake|WithdrawStake|WithdrawStakeRequest|ElectionsDepositStake|ElectionsRecoverStake|SmartContractExec|Subscription|UnSubscription|AuctionBid|GasRelay)$/.test(action.type);
       const token = action.type === 'ExtraCurrencyTransfer' ? payload.currency : payload.jetton;
       const amount = token?.decimals != null ? tonAmount(value, token.decimals, token.symbol || 'tokens', false) : native ? tonAmount(value) : null;
-      return [{label, amount, text: token && token.decimals == null ? `${value} raw units` : String(value)}];
+      return [{label, amount, text: token && token.decimals == null ? `${value} ${rawUnits}` : String(value)}];
     }
     return [{label, text: typeof value === 'object' ? JSON.stringify(publicDetails(value)) : String(value)}];
   });

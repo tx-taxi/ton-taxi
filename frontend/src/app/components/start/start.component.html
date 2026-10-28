@@ -34,7 +34,7 @@
     ></app-blockchain>
   </div>
   <button *ngIf="!nativeContextMode" type="button" class="reset-scroll" [class.hidden]="pageIndex === 0" (click)="resetScroll()"
-    aria-label="Return to the latest TON block" title="Return to latest block">
+    aria-label="Return to the latest TON block" i18n-aria-label="@@ton.a11y.return-latest-ton" title="Return to latest block" i18n-title="@@ton.a11y.return-latest">
     <fa-icon [icon]="['fas', 'circle-left']" [fixedWidth]="true"></fa-icon>
   </button>
 </div>
