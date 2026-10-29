@@ -855,6 +855,7 @@
       class="skeleton-loader media-skeleton"
       aria-hidden="true"
     ></div>
+    <span *ngIf="media(data)" class="image-unavailable-label" i18n="@@ton.extra.image-unavailable">Image unavailable</span>
     <img
       *ngIf="media(data); else noMedia"
       [src]="media(data)"

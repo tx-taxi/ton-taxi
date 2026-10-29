@@ -106,9 +106,8 @@ h3 {
   opacity: 0.65;
   font-size: 0.85rem;
 }
-.asset-media.image-unavailable::after {
-  content: "Image unavailable";
-}
+.image-unavailable-label { display: none; }
+.asset-media.image-unavailable > .image-unavailable-label { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; opacity: 0.65; font-size: 0.85rem; }
 @media (max-width: 767px) {
   .asset-media {
     max-width: 400px;

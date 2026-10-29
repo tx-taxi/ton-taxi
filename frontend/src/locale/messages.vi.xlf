@@ -16352,6 +16352,8 @@
       </trans-unit>
             <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>Không tìm thấy kết quả phù hợp.</target></trans-unit>
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>Không thể tìm kiếm. Vui lòng thử lại.</target></trans-unit>
+          <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Không có bộ sưu tập NFT</target></trans-unit>
+      <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Hình ảnh không khả dụng</target></trans-unit>
     </body>
   </file>
 </xliff>

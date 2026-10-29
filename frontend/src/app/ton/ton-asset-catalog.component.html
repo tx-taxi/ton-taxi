@@ -88,7 +88,7 @@
       itemKind="collection"
     ></app-ton-nft-grid>
     <p *ngIf="!list(data).length" class="box">
-      {{ page === "jettons" ? "No jettons" : "No NFT collections" }}
+      <ng-container *ngIf="page === 'jettons'; else emptyCollections" i18n="@@ton.extra.empty-jettons">No jettons</ng-container><ng-template #emptyCollections><ng-container i18n="@@ton.extra.empty-collections">No NFT collections</ng-container></ng-template>
     </p>
     <div class="feed-state">
       <p *ngIf="mainError" role="alert">
@@ -96,9 +96,9 @@
         <button
           type="button"
           class="btn btn-outline-info"
-          (click)="mainError === 'List updated' ? load() : loadMoreMain()"
+          (click)="mainError === listUpdatedMessage ? load() : loadMoreMain()"
         >
-          {{ mainError === "List updated" ? "Refresh" : "Retry" }}
+          {{ feedActionMessage(mainError === listUpdatedMessage) }}
         </button>
       </p>
       <div

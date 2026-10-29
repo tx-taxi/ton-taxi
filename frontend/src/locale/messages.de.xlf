@@ -12117,6 +12117,8 @@
       <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Währung</target></trans-unit>
           <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>Kein Treffer gefunden.</target></trans-unit>
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>Die Suche ist nicht verfügbar. Bitte versuche es erneut.</target></trans-unit>
+          <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Keine NFT-Sammlungen</target></trans-unit>
+      <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Bild nicht verfügbar</target></trans-unit>
     </body>
   </file>
 </xliff>

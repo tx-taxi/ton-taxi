@@ -12698,6 +12698,8 @@
       <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Devise</target></trans-unit>
           <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>Aucun résultat trouvé.</target></trans-unit>
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>La recherche est indisponible. Réessayez.</target></trans-unit>
+          <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Aucune collection NFT</target></trans-unit>
+      <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Image indisponible</target></trans-unit>
     </body>
   </file>
 </xliff>

@@ -11,6 +11,7 @@
         aria-hidden="true"
       ></div>
       <span *ngIf="!item.image" class="no-image" i18n="@@ton.fc5e5bdcd5f6">No image</span>
+      <span *ngIf="item.image" class="image-unavailable-label" i18n="@@ton.extra.image-unavailable">Image unavailable</span>
       <img
         *ngIf="item.image"
         [src]="item.image"

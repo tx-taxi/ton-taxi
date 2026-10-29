@@ -62,9 +62,8 @@ small {
   opacity: 0.65;
   font-size: 0.85rem;
 }
-.image-unavailable::after {
-  content: "Image unavailable";
-}
+.image-unavailable-label { display: none; }
+.image-unavailable > .image-unavailable-label { display: flex; position: absolute; inset: 0; align-items: center; justify-content: center; opacity: 0.65; font-size: 0.85rem; }
 @media (max-width: 767px) {
   .nft-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

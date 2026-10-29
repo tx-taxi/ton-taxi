@@ -16466,6 +16466,8 @@
       </trans-unit>
             <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>未找到匹配结果。</target></trans-unit>
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>搜索暂不可用。请重试。</target></trans-unit>
+          <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>没有 NFT 系列</target></trans-unit>
+      <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>图像不可用</target></trans-unit>
     </body>
   </file>
 </xliff>
