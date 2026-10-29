@@ -35,13 +35,13 @@
     fetch(hubOrigin + '/api/v1/locale-capabilities', { credentials: 'omit', redirect: 'error', signal: controller.signal })
       .then(response => response.ok ? response.json() : null)
       .then(data => {
-        hubLocales = data?.version === 1 && Array.isArray(data?.hosts?.['tx.taxi']) ? data.hosts['tx.taxi'].filter(locale => ['es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi'].includes(locale)) : [];
+        hubLocales = data?.version === 1 && Array.isArray(data?.hosts?.['tx.taxi']) ? data.hosts['tx.taxi'].filter(locale => ['es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi', 'pl'].includes(locale)) : [];
         if (hubLocales.length) window.dispatchEvent(new Event('txTaxiLocaleCapabilities'));
       }).catch(() => {}).finally(() => clearTimeout(timeout));
   } catch {}
   // Keep an explicit language only when the hub publishes it.
   const localizedHubPath = () => {
-    const explicit = location.pathname.match(/^\/(en|es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/i)?.[1]?.toLowerCase();
+    const explicit = location.pathname.match(/^\/(en|es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl)(?:\/|$)/i)?.[1]?.toLowerCase();
     let saved = '';
     try { saved = decodeURIComponent(document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith('txtaxi_language='))?.slice('txtaxi_language='.length) || ''); } catch {}
     const selected = explicit || saved;
@@ -193,9 +193,9 @@
       const root = dashboardPath();
       document.querySelectorAll('a.navbar-brand, a.chain-divider-mark').forEach(link => {
         link.href = dashboard ? hubOrigin + localizedHubPath() : root;
-        const lang = location.pathname.match(/^\/(es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/)?.[1] || 'en';
-        const back = {en: 'Back to tx.taxi', es: 'Volver a tx.taxi', fr: 'Retour à tx.taxi', de: 'Zurück zu tx.taxi', pt: 'Voltar ao tx.taxi', it: 'Torna a tx.taxi', ru: 'Вернуться на tx.taxi', uk: 'Повернутися на tx.taxi', nl: 'Terug naar tx.taxi', ja: 'tx.taxiに戻る', zh: '返回 tx.taxi', ko: 'tx.taxi로 돌아가기', vi: 'Quay lại tx.taxi'};
-        const dash = {en: sourceName + ' dashboard', es: 'Panel de ' + sourceName, fr: 'Tableau de bord de ' + sourceName, de: sourceName + '-Übersicht', pt: 'Painel de ' + sourceName, it: 'Panoramica di ' + sourceName, ru: 'Обзор ' + sourceName, uk: 'Огляд ' + sourceName, nl: sourceName + '-overzicht', ja: sourceName + 'のダッシュボード', zh: sourceName + ' 仪表板', ko: sourceName + ' 대시보드', vi: 'Tổng quan ' + sourceName};
+        const lang = location.pathname.match(/^\/(es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl)(?:\/|$)/)?.[1] || 'en';
+        const back = {en: 'Back to tx.taxi', es: 'Volver a tx.taxi', fr: 'Retour à tx.taxi', de: 'Zurück zu tx.taxi', pt: 'Voltar ao tx.taxi', it: 'Torna a tx.taxi', ru: 'Вернуться на tx.taxi', uk: 'Повернутися на tx.taxi', nl: 'Terug naar tx.taxi', ja: 'tx.taxiに戻る', zh: '返回 tx.taxi', ko: 'tx.taxi로 돌아가기', vi: 'Quay lại tx.taxi', pl: 'Wróć do tx.taxi'};
+        const dash = {en: sourceName + ' dashboard', es: 'Panel de ' + sourceName, fr: 'Tableau de bord de ' + sourceName, de: sourceName + '-Übersicht', pt: 'Painel de ' + sourceName, it: 'Panoramica di ' + sourceName, ru: 'Обзор ' + sourceName, uk: 'Огляд ' + sourceName, nl: sourceName + '-overzicht', ja: sourceName + 'のダッシュボード', zh: sourceName + ' 仪表板', ko: sourceName + ' 대시보드', vi: 'Tổng quan ' + sourceName, pl: 'Panel ' + sourceName};
         const navigationLabel = dashboard ? back[lang] : dash[lang];
         link.setAttribute('aria-label', navigationLabel);
         link.title = navigationLabel;

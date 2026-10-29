@@ -1,0 +1,694 @@
+{
+  "reviewed_fields": [
+    {
+      "id": "0:title",
+      "source_sha256": "ab36d83c2517624cacfa293dee6f37ad9c260f6bf78e92c625e9ec201b5e778a",
+      "value": "Co oznaczają bloki masterchain i shardów?"
+    },
+    {
+      "id": "0:description",
+      "source_sha256": "011246f26f59317219112c9c1c14cf7a2db8fa2e3f47872325845754306f522e",
+      "value": "⟦TX0⟧Masterchain przechowuje konfigurację globalną i odwołania do stanów shardchainów. Większość kont użytkowników znajduje się w basechain, który może być podzielony na shardy. Blok identyfikują łącznie jego workchain, shard i numer sekwencyjny; sam numer sekwencyjny nie jest wysokością bloku w całej sieci.⟦TX1⟧⟦TX2⟧Górny pasek pokazuje bloki basechain. Otwórz menu wyszukiwania i wybierz Masterchain w sekcji WYBRANO, aby zobaczyć bloki masterchain. Gdy aktywnych jest kilka shardów, wybierz jeden. Otwórz blok, aby sprawdzić jego transakcje; bloki masterchain zawierają również linki do shardów, do których się odwołują.⟦TX3⟧"
+    },
+    {
+      "id": "1:title",
+      "source_sha256": "f7c6e34cc61c906042f47c7f81d460edaeb5be1e45a0e07265ccaf9c226d2515",
+      "value": "Jak powiązane są transakcje, wiadomości i ślady?"
+    },
+    {
+      "id": "1:description",
+      "source_sha256": "4cf443c4de6585b94efa92e5fe2ec0e0920530d80a0db0e67e97e319219e4176",
+      "value": "⟦TX0⟧Transakcja zapisuje przetworzenie wiadomości lub operacji systemowej przez jedno konto. Wiadomości łączą konta; przetworzenie wiadomości przychodzącej może utworzyć wiadomości wychodzące i kolejne transakcje. Ślad przedstawia te powiązane transakcje.⟦TX1⟧⟦TX2⟧Użyj strony transakcji do sprawdzenia lokalnego wykonania, wiadomości do transferów między kontraktami, a śladu do prześledzenia całej operacji. ⟦TX3⟧Podstawy ⟦TX6⟧⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "2:title",
+      "source_sha256": "7b2bd9f8e303b6e427e8f76eb9013f5ddf1e942551950872848db6883718924a",
+      "value": "Czym jest czas logiczny?"
+    },
+    {
+      "id": "2:description",
+      "source_sha256": "3a8f43523e176f43d1b72bf2ace74d3ddbbe1aa89220ba3029887fd2a844a1f5",
+      "value": "⟦TX0⟧Czas logiczny (LT) porządkuje transakcje i wiadomości. Jest niezależny od znacznika czasu Unix wyświetlanego jako data transakcji. Historia konta używa LT jako kursora stronicowania; zachowaj go jako dokładny ciąg liczby całkowitej.⟦TX1⟧"
+    },
+    {
+      "id": "3:title",
+      "source_sha256": "2fdfa58b219dc6cbc96c024cc09806e62692bc9d699911370c6d6b71812c3e8b",
+      "value": "Co składa się na opłatę?"
+    },
+    {
+      "id": "3:description",
+      "source_sha256": "ed93e7e057b23adb6366c04038a84333efc3c512f6e19f0d89d1005629465964",
+      "value": "⟦TX0⟧Wykonanie może obejmować fazy przechowywania, uznania, obliczeń, działań i odbicia. Strona transakcji pokazuje łączne opłaty oraz zapisane szczegóły faz, w tym zużycie gazu, koszty przekazania i kody wyjścia. Nieudana operacja nadal może wiązać się z opłatami.⟦TX1⟧⟦TX2⟧GRAM jest natywną walutą ⟦TX8⟧ i ma ⟦TX4⟧ miejsc dziesiętnych: ⟦TX5⟧ GRAM = ⟦TX6⟧,⟦TX7⟧ nanogramów. Wartość wiadomości i opłata transakcyjna oznaczają różne kwoty.⟦TX3⟧"
+    },
+    {
+      "id": "4:title",
+      "source_sha256": "116a09397671ace26968fd10625f647badfd7826715a592f57e767d6c8cc6c00",
+      "value": "Co oznacza odbita wiadomość lub nieudana transakcja?"
+    },
+    {
+      "id": "4:description",
+      "source_sha256": "512b8be33ca4d4b6538cadc921699391c6db4246f56271e3739cf8e125de170f",
+      "value": "⟦TX0⟧Odbita wiadomość zwraca odpowiedź, gdy wiadomość z możliwością odbicia nie może zostać przetworzona zgodnie z odpowiednimi zasadami. Jest to osobna wiadomość z własną wartością i kosztami. Sprawdź łącznie wynik transakcji, wyniki obliczeń i działań oraz wiadomości wychodzące.⟦TX1⟧⟦TX2⟧Potwierdzona transakcja może zakończyć się błędem wykonania. Jedna pomyślna transakcja nie dowodzi też, że wszystkie późniejsze transakcje w jej śladzie się powiodły. ⟦TX3⟧Specyfikacja blockchain ⟦TX6⟧⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "5:title",
+      "source_sha256": "1db53674f0d760cb15b4e2664de7aea3d974b854a9c15787baa8f89ab1060c41",
+      "value": "Czy potwierdzenie oznacza zakończenie całej operacji?"
+    },
+    {
+      "id": "5:description",
+      "source_sha256": "a978ca25800ad0d6b3eda20e0ebd30a7c36c579b092c1499875632beb5459a37",
+      "value": "⟦TX0⟧Potwierdzenie oznacza włączenie transakcji do jej bloku. Operacja obejmująca wiele kontraktów może wymagać kolejnych transakcji i wiadomości. Sprawdź cały ślad i końcowego odbiorcę, zamiast uznawać pierwszą transakcję za cały transfer.⟦TX1⟧"
+    },
+    {
+      "id": "6:title",
+      "source_sha256": "b0b5d17569eedea764c845cd3844d75d5f899ef7cd8686d62bbf743079d99b63",
+      "value": "Co pokazuje strona konta?"
+    },
+    {
+      "id": "6:description",
+      "source_sha256": "e3e2680af06688adadb3968884779f6e97c36ffd239617143c5f1d147e770d08",
+      "value": "⟦TX0⟧Konta pokazują saldo GRAM, stan, ostatnią aktywność i wykryte interfejsy kontraktów. Historia grupuje rozpoznane działania; Transakcje zawierają listę transakcji konta. Jettony i NFT mają osobne karty.⟦TX1⟧⟦TX2⟧Karta Kontrakt zawiera stan, kod i dane, metody tylko do odczytu oraz dostępne rekordy stakingu, portfeli wielopodpisowych, subskrypcji i DeFi. Rozwiń Szczegóły konta, aby zobaczyć dodatkowe pola i waluty.⟦TX3⟧"
+    },
+    {
+      "id": "7:title",
+      "source_sha256": "7638ebe6945b14869fe3c12de4c2ccd4b3c38d83361c3a6feea36f68b8ea0f1e",
+      "value": "Dlaczego to samo konto może mieć różne adresy?"
+    },
+    {
+      "id": "7:description",
+      "source_sha256": "87ceb1b37f2628a046ba38643d8a5af50f30cfaefd6d4b116a6e92805ef871e4",
+      "value": "⟦TX0⟧Konta ⟦TX4⟧ można zapisać jako surowy workchain i szesnastkowy identyfikator konta albo w postaci przyjaznego adresu. Flagi odbijalności i sieci mogą zmieniać przyjazną reprezentację bez zmiany samego konta.⟦TX1⟧⟦TX2⟧Wyszukiwarka przyjmuje adresy ⟦TX5⟧ i nazwy .ton. Rozwiązanie DNS prowadzi do odpowiedniego konta; nazwa domeny nie zastępuje sprawdzenia adresu konta.⟦TX3⟧"
+    },
+    {
+      "id": "8:title",
+      "source_sha256": "f3cdaee5f7dda75774618234546e9a0d637ac5005ca128030b74c1a6fb2fefbc",
+      "value": "Czy mogę odczytać inteligentny kontrakt?"
+    },
+    {
+      "id": "8:description",
+      "source_sha256": "fb1b78761b50921934b89a47894933d39b02e60a9dd3fff01bed642df80c528e",
+      "value": "⟦TX0⟧Wybierz wymienioną metodę odczytu na karcie Kontrakt i w razie potrzeby podaj jej argumenty. Odczyt zwraca wynik bez podpisywania transakcji. Argumenty mogą być ciągami oddzielonymi przecinkami lub tablicą ciągów ⟦TX4⟧; duże liczby całkowite zachowuj jako ciągi.⟦TX1⟧⟦TX2⟧Szczegóły konta zachowują pola kodu, danych i przechowywania. Inspekcja pokazuje rozpoznane interfejsy i dostępne informacje o kompilatorze.⟦TX3⟧"
+    },
+    {
+      "id": "9:title",
+      "source_sha256": "83cf45025f796d7fe3f8a5f314adddc29315ef1fcb10cbecc4c09837c0dcc4a3",
+      "value": "Co pokazuje strona walidatorów?"
+    },
+    {
+      "id": "9:description",
+      "source_sha256": "75f2d98e1ca0b3201c9aff1b1178bbfea550b3e012e76db55de1c2ed48d6c9cf",
+      "value": "⟦TX0⟧Strona walidatorów pokazuje czasy wyborów, łączny i minimalny stake oraz uczestniczące konta walidatorów, ich stake i adresy ADNL. Pola opisują wyświetlane dane wyborów; adres ze stake’em nie musi być producentem konkretnego bloku.⟦TX1⟧"
+    },
+    {
+      "id": "10:title",
+      "source_sha256": "3bf36daea31393fa03b181526ea74d3f091fa1f37792c725bd63dae851b26ca3",
+      "value": "Jak działają jettony?"
+    },
+    {
+      "id": "10:description",
+      "source_sha256": "0cff398525644a31854682cf5d0ad78d855177065e3a36cd76756a740ff720db",
+      "value": "⟦TX0⟧Jetton ma kontrakt główny oraz indywidualne kontrakty portfeli jettonów dla posiadaczy. Identyfikuj go po adresie kontraktu głównego, a nie nazwie lub symbolu. Strona jettona pokazuje podaż, liczbę miejsc dziesiętnych, administrację i posiadaczy.⟦TX1⟧⟦TX2⟧Wyświetlaj salda z użyciem liczby miejsc dziesiętnych danego jettona. Nie zakładaj, że każdy jetton ma ⟦TX6⟧ miejsc dziesiętnych. ⟦TX3⟧Standard jettonów⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "11:title",
+      "source_sha256": "bb60449703446085188710ffaaff673fd316b954e2670a9cd3b759e23aa3d328",
+      "value": "Dlaczego wyświetlane saldo jettona może różnić się od kwoty w łańcuchu?"
+    },
+    {
+      "id": "11:description",
+      "source_sha256": "e1afc5b254b6040f05a5761e020fdd5cc950d4b1a816a425f6ccd71421108f32",
+      "value": "⟦TX0⟧Niektóre jettony używają mnożnika wyświetlania. Bieżące salda portfeli, salda posiadaczy i łączna podaż stosują ten współczynnik z dokładnym zaokrągleniem, a następnie liczbę miejsc dziesiętnych tokena. Rozwiń Szczegóły kwoty, aby zobaczyć kwotę w łańcuchu, jednostki surowe i współczynnik.⟦TX1⟧⟦TX2⟧Historyczne transfery zachowują zapisaną ilość w łańcuchu; bieżący mnożnik nie dowodzi, jaki mnożnik obowiązywał w tamtym czasie. ⟦TX3⟧Standard skalowania wyświetlania jettonów⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "12:title",
+      "source_sha256": "a2cbc6399530a93f6f1726197df62ffce722f6e898194e4836ef3dbb67b55186",
+      "value": "Co identyfikuje NFT?"
+    },
+    {
+      "id": "12:description",
+      "source_sha256": "d1667a03d1dacf9689dcce2f07668b4c7844fa80e6ac32038838b877c149eec8",
+      "value": "⟦TX0⟧Tożsamością przedmiotu NFT jest adres jego kontraktu. Kolekcja, właściciel i indeks przedmiotu są osobnymi polami. Weryfikacja przynależności do kolekcji sprawdza związek przedmiotu z kolekcją; nie potwierdza wiarygodności jego obrazu, nazwy ani sprzedawcy.⟦TX1⟧⟦TX2⟧Szczegóły przedmiotu pokazują dokładny indeks, gdy potwierdzi go kontrakt NFT. Numer wyświetlany w nazwie NFT nie musi być równy jego indeksowi w łańcuchu.⟦TX3⟧"
+    },
+    {
+      "id": "13:title",
+      "source_sha256": "1f7903562e72360ecf41a95a9dfe993b7763341261897906e5c282737584a09c",
+      "value": "Skąd pochodzą obrazy i atrybuty?"
+    },
+    {
+      "id": "13:description",
+      "source_sha256": "6973d4ce74e1c2e8a041331fd93a6831c3b8c797f78c1e3635fa37bd45bbb23a",
+      "value": "⟦TX0⟧TEP-⟦TX6⟧ obsługuje metadane w łańcuchu, poza łańcuchem i łączone. Strona NFT wyświetla nazwy, opisy, obrazy i atrybuty, a pełne metadane można rozwinąć. Media lub metadane przechowywane gdzie indziej mogą się zmienić lub stać się niedostępne.⟦TX1⟧⟦TX2⟧Animacje otwieraj bezpośrednio ze strony przedmiotu. Brak mediów nie usuwa kontraktu NFT ani zapisu własności. ⟦TX3⟧Standard metadanych tokenów⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "14:title",
+      "source_sha256": "3903f1b219fef3450eebe0b29884130dc799b2f012d78c1bf5ed9c6686bfb7e7",
+      "value": "Dlaczego właścicielem NFT jest kontrakt sprzedaży?"
+    },
+    {
+      "id": "14:description",
+      "source_sha256": "12a660786ddc435855cd217e099e280c754ad676c1b8a4af1f94b4d2aa2026e5",
+      "value": "⟦TX0⟧Wystawione NFT może być przechowywane przez kontrakt sprzedaży platformy handlowej. Listy NFT portfela obejmują rozpoznaną pośrednią własność przez sprzedaż. Strona przedmiotu oddziela właściciela w łańcuchu, sprzedawcę, kontrakt sprzedaży i walutę ceny.⟦TX1⟧⟦TX2⟧Wystawienie na sprzedaż nie jest zakończonym transferem. Użyj historii transferów do śledzenia zmian i strony kolekcji do przeglądania jej przedmiotów.⟦TX3⟧"
+    },
+    {
+      "id": "15:title",
+      "source_sha256": "af35f6fa56761d8a9a937733e74e64951ef64d3ccbdcf05db665641efb14e646",
+      "value": "Czy wszystkie prezenty Telegrama są widoczne w łańcuchu?"
+    },
+    {
+      "id": "15:description",
+      "source_sha256": "118456ee37ffa7a6edbd0d95d4ce4cac2132157d6d4748639856afe27e58d938",
+      "value": "⟦TX0⟧Nie. Prezent musi istnieć jako NFT ⟦TX6⟧, aby miał tutaj adres przedmiotu i zapis własności w łańcuchu. Prezenty Telegrama oraz kolekcjonerskie nazwy użytkowników i numery mogą mieć powiązane NFT ⟦TX7⟧, ale sam profil Telegrama lub zwykła nazwa użytkownika nie dowodzi własności portfela.⟦TX1⟧⟦TX2⟧Przedmiot kolekcjonerski może być wyświetlany w profilu Telegrama, podczas gdy jego właścicielem pozostaje portfel ⟦TX8⟧. Sprawdź adres przedmiotu, kolekcję i bieżącego właściciela. ⟦TX3⟧Prezenty kolekcjonerskie Telegrama⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "16:title",
+      "source_sha256": "1394da5699cda2fd542ad1e54ef94689a5db16520fb210cc4f9de1df219ab439",
+      "value": "Jak zobaczyć wszystkie NFT na koncie lub w kolekcji?"
+    },
+    {
+      "id": "16:description",
+      "source_sha256": "1b5e39300c5885da29039480eb6b32ecf967545dac1b78b3aecc8e1b2b5d1709",
+      "value": "⟦TX0⟧Użyj Wczytaj więcej pod listą NFT, aby kontynuować przeglądanie kolekcji lub portfela. Karta NFT pokazuje każdy zwrócony przedmiot osobno, z pełną nazwą i linkiem do szczegółów. Kolekcja NFT portfela i jego historia transakcji są niezależnymi listami.⟦TX1⟧"
+    },
+    {
+      "id": "17:title",
+      "source_sha256": "542357ee9cc18100b4b53a14024c9e789b07cce41c31347d7092e56a0e9805d8",
+      "value": "Co oznaczają etykiety rozpoznania?"
+    },
+    {
+      "id": "17:description",
+      "source_sha256": "124faa86c200a2c8e0807f980b45720c56c96f08abc5c67c7bb083c079fffb39",
+      "value": "⟦TX0⟧Przynależność do kolekcji, klasyfikacja wiarygodności i zatwierdzenia platform handlowych są odrębnymi faktami. Rozpoznane nazwy i obrazy nie są dowodami własności. Przed uznaniem dwóch podobnie nazwanych aktywów za ten sam token porównaj adresy kontraktów i linki do kolekcji.⟦TX1⟧"
+    },
+    {
+      "id": "18:title",
+      "source_sha256": "af8fe02c9778586a2665419647863c4a60da7d7a0e6fd5fa73a75bf30b647aad",
+      "value": "Jak działa automatyczne przekierowanie?"
+    },
+    {
+      "id": "18:description",
+      "source_sha256": "d23407f1d2fd45efecc88f31a6d4fdc5405c8b802b3a568ce539d533e0b2b472",
+      "value": "⟦TX0⟧Wklej adres, hash transakcji, hash wiadomości, numer bloku lub nazwę .ton do wyszukiwarki. Automatyczne przekierowanie pozwala taksówce znaleźć odpowiedni łańcuch. Wybór natywnego eksploratora zachowuje wyszukiwanie tego łańcucha; Zobacz centrum prowadzi do tx.taxi.⟦TX1⟧"
+    },
+    {
+      "id": "19:title",
+      "source_sha256": "8c1fc5f3f7e59141135f6a958b44a4d0ad40a98b6583438ab045bbe7de60b544",
+      "value": "Co oznacza komunikat „Aktualizacje opóźnione”?"
+    },
+    {
+      "id": "19:description",
+      "source_sha256": "b66db641931c248a9133b999961dcd64856af9eb8d0e022759c7087ad2db9035",
+      "value": "⟦TX0⟧Ostatnie dostępne dane pozostają widoczne, gdy nowe aktualizacje są opóźnione. Ponów wczytywanie niedostępnej sekcji. Pusta lista i niedostępna lista to różne stany.⟦TX1⟧"
+    },
+    {
+      "id": "20:title",
+      "source_sha256": "6b439b75addc4a0a3186f5e262792d657b2fe4f80f1f308f44d7c3b9f5653b67",
+      "value": "Czy tx.taxi może cofnąć transakcję?"
+    },
+    {
+      "id": "20:description",
+      "source_sha256": "7d6b9b46b1566101d4cd42794880983b8a57b7ea608b58499369b23a068fa3d8",
+      "value": "⟦TX0⟧tx.taxi wyświetla publiczne dane łańcucha. Nie może podpisywać transakcji, uzyskiwać dostępu do kluczy prywatnych ani cofać transferów. Aby uzyskać pomoc dotyczącą portfela lub konta giełdowego, skontaktuj się z usługą, która wysłała operację.⟦TX1⟧"
+    },
+    {
+      "id": "21:title",
+      "source_sha256": "66d14061e5fe02aa4819f70d5dfef021908bbdbba3a4668434b9f1cd817fa9bc",
+      "value": "Wartości i stronicowanie"
+    },
+    {
+      "id": "21:description",
+      "source_sha256": "309a3b832ad166da4cc164e7a76355d2c82cce47146817afe928c7da226e08d8",
+      "value": "⟦TX7⟧Wszystkie poniższe trasy używają GET. Liczby całkowite wymagające precyzji są ciągami dziesiętnymi; przetwarzaj je z dowolną precyzją. Salda i opłaty GRAM podawane są w nanogramach. Ilości jettonów używają zadeklarowanej liczby miejsc dziesiętnych.⟦TX8⟧⟦TX9⟧Odpowiedzi stronicowane zawierają ⟦TX0⟧. Kontynuuj tylko wtedy, gdy ⟦TX1⟧ ma wartość true, używając ⟦TX2⟧, ⟦TX3⟧ lub ⟦TX4⟧ dla odpowiedniego punktu końcowego. Limity list są ograniczone do ⟦TX13⟧, a list bloków do ⟦TX14⟧.⟦TX10⟧⟦TX11⟧⟦TX5⟧ wskazuje czas obserwacji, a ⟦TX6⟧ oznacza zachowane dane. HTTP ⟦TX15⟧ oznacza nieprawidłowe dane, ⟦TX16⟧ brak wyniku, a ⟦TX17⟧ tymczasową niedostępność.⟦TX12⟧"
+    },
+    {
+      "id": "22:title",
+      "source_sha256": "ed4c012d6881025a429d6f68313bbf3a94a8228bd9a2e06d6e714f5829e6fb48",
+      "value": "Przegląd sieci"
+    },
+    {
+      "id": "22:description",
+      "source_sha256": "c9c16113c989454eeccfe089f657d77e13a5eb22790dc7c7ac04e8e48d115bc3",
+      "value": "⟦TX4⟧Zwraca wybrany workchain i shard, ostatnie bloki, zaobserwowaną historię, czas obserwacji i stan nieaktualnych danych. Domyślny jest basechain. Użyj ⟦TX0⟧ dla masterchain lub ⟦TX1⟧ dla aktywnego sharda basechain. ⟦TX2⟧ wymienia dostępne shardy; ⟦TX3⟧ to ostatni blok masterchain sieci.⟦TX5⟧"
+    },
+    {
+      "id": "23:title",
+      "source_sha256": "1cd5a6687bb76e3926f8c89a9fb290cd17d893ca944899952322d3fb5c9896d3",
+      "value": "Bloki"
+    },
+    {
+      "id": "23:description",
+      "source_sha256": "c4b12bc0df1c05b0436b29c9cc226287c5c695533cc8ae9fe5807f807d6dfbe4",
+      "value": "⟦TX4⟧Zwraca bloki jednego workchaina i sharda w malejącej kolejności numerów sekwencyjnych. Domyślny jest basechain; użyj ⟦TX0⟧ dla bloków masterchain. Kontynuuj za pomocą ⟦TX1⟧ i zachowaj ⟦TX2⟧ oraz ⟦TX3⟧ z odpowiedzi; granica nie jest włączana. Stronicowanie kończy się na podziale lub połączeniu sharda.⟦TX5⟧"
+    },
+    {
+      "id": "24:title",
+      "source_sha256": "c6dd037f44891078dba62cd9494a87ab05103e0c9eb5237ae455c3becb8d04dc",
+      "value": "Szczegóły bloku"
+    },
+    {
+      "id": "24:description",
+      "source_sha256": "901543dbc6309c6a096ba3216d4b72014c66c382c1288fc1aec204627c94a599",
+      "value": "⟦TX1⟧Użyj numeru sekwencyjnego lub pełnego identyfikatora ⟦TX0⟧. Numer sekwencyjny używa wybranego workchaina i sharda; bez wyboru używa domyślnego workchaina hosta i sharda głównego. Zwraca hashe, znaczniki czasu, czasy logiczne, odwołania i pola przepływu wartości.⟦TX2⟧"
+    },
+    {
+      "id": "25:title",
+      "source_sha256": "d5cfe84594348242301a33cd5bc2135dae2e164dc1302237beaf564328486603",
+      "value": "Transakcje bloku"
+    },
+    {
+      "id": "25:description",
+      "source_sha256": "7a6549fae4846fefb906c36d19855169ba6985af7fb4f47fbc85cf3a4f33cacf",
+      "value": "⟦TX0⟧Zwraca transakcje zawarte we wskazanym bloku.⟦TX1⟧"
+    },
+    {
+      "id": "26:title",
+      "source_sha256": "46ba1487cc18fae177885eaa96d1cd9dc4aa04e6961b899496ba5e1fcb5895bf",
+      "value": "Odwołania masterchain do shardów"
+    },
+    {
+      "id": "26:description",
+      "source_sha256": "d1416726cc5cce27ea423f530ba0e48625fb31706f306c88f277605b7366664b",
+      "value": "⟦TX0⟧Użyj numeru sekwencyjnego masterchain lub identyfikatora bloku masterchain. Zwraca odpowiadające odwołania do shardów.⟦TX1⟧"
+    },
+    {
+      "id": "27:title",
+      "source_sha256": "efde9a0a45fb98031f89cee8deb0ed2073524fb757092ebd179a1919405e1871",
+      "value": "Transakcje sieci"
+    },
+    {
+      "id": "27:description",
+      "source_sha256": "ab676ec8d13faa0d4c1bb9d93cf0dd71eac72ddec0377c8472c50a8622dd335e",
+      "value": "⟦TX4⟧Zwraca transakcje w shardach w jednym przedziale masterchain. Kontynuuj w tym przedziale za pomocą ⟦TX0⟧ i ⟦TX1⟧. Gdy ⟦TX2⟧ ma wartość null, kontynuuj zamiast tego za pomocą ⟦TX3⟧. Limity są ograniczone do ⟦TX6⟧.⟦TX5⟧"
+    },
+    {
+      "id": "28:title",
+      "source_sha256": "f22d30c712f91e9e2bc9c09f234ad7e6aa286705e375a6896d2d89da75c50601",
+      "value": "Transakcje masterchain"
+    },
+    {
+      "id": "28:description",
+      "source_sha256": "341c271de5486ef361e96e5de85ea1541093a5dafac0c715c4ff3bda9f19e449",
+      "value": "⟦TX1⟧Zwraca transakcje z jednego bloku masterchain. Kontynuuj za pomocą ⟦TX0⟧. Są to transakcje masterchain, a nie wszystkie transakcje we wszystkich shardach.⟦TX2⟧"
+    },
+    {
+      "id": "29:title",
+      "source_sha256": "49df873871d6eee5740d9c7ea7d6aad1c255b7904c9920bc69de497a86d746ef",
+      "value": "Walidatorzy"
+    },
+    {
+      "id": "29:description",
+      "source_sha256": "f8f9a6629a8a1ae27cdfc96f2d2ee54947af7a93c08344bee28c5679a68187bb",
+      "value": "⟦TX0⟧Zwraca informacje o wyborach walidatorów, kwoty stake i wpisy walidatorów.⟦TX1⟧"
+    },
+    {
+      "id": "30:title",
+      "source_sha256": "641494dc8129fb6507b1cecdf976bb7d5abd9f7f2a590a882d831c906a86fd0a",
+      "value": "Szczegóły domeny"
+    },
+    {
+      "id": "30:description",
+      "source_sha256": "6ec2f28e5afcc347143b3bdf733e70d7197c45a976ac6af6582568aba4ccfaa8",
+      "value": "⟦TX2⟧Tożsamość domeny, data wygaśnięcia i powiązane NFT. Dodaj ⟦TX0⟧, aby uzyskać rekordy portfela, strony, przechowywania i resolvera, lub ⟦TX1⟧, aby uzyskać historię ofert.⟦TX3⟧"
+    },
+    {
+      "id": "31:title",
+      "source_sha256": "aada1ecb5e67952c5f6ebc84a10466ce02b55eff9ae02cb26cbf53cc64268d92",
+      "value": "Aukcje DNS"
+    },
+    {
+      "id": "31:description",
+      "source_sha256": "1dbc8c0b3fe81099672aff2b12a8f7b15669855e801a27a50edca79bce7e7f6f",
+      "value": "⟦TX2⟧Bieżące aukcje domen. Wybierz ⟦TX0⟧ lub ⟦TX1⟧.⟦TX3⟧"
+    },
+    {
+      "id": "32:title",
+      "source_sha256": "fccf68394ba91238757c002e304a37ce2176d2760a5af2256a1e00073320fea7",
+      "value": "Wygasające domeny"
+    },
+    {
+      "id": "32:description",
+      "source_sha256": "d016aea128f2f7f54e2cc0e20cbade56ede4656ffb202fdd94671c37554d896c",
+      "value": "⟦TX1⟧Zwraca domeny zbliżające się do wygaśnięcia. Opcjonalne ⟦TX0⟧ oznacza liczbę dni przed wygaśnięciem.⟦TX2⟧"
+    },
+    {
+      "id": "33:title",
+      "source_sha256": "1ab5b9c24252fafa75f641001e0f22e1beed1a6896ce048cca1c9140ab20df4b",
+      "value": "Pula stakingowa"
+    },
+    {
+      "id": "33:description",
+      "source_sha256": "9d4f6f9cf8937c2161c3049863cb3c2ae5928efc69a40bfbb4014fb5892e7b89",
+      "value": "⟦TX1⟧Stake puli, nominujący, cykl, implementacja i roczna stopa zwrotu. Dodaj ⟦TX0⟧, aby uzyskać zaobserwowaną historię APY.⟦TX2⟧"
+    },
+    {
+      "id": "34:title",
+      "source_sha256": "dc04913c72c679adf6e557e9990a1e03b2e39d08d8ba67c2777884ef92e6740f",
+      "value": "Dodatkowa waluta"
+    },
+    {
+      "id": "34:description",
+      "source_sha256": "bbd70a3eba95e68f66cc1dac76c14de4705f833fb241e12f681695ac90e85233",
+      "value": "⟦TX0⟧Identyfikator waluty, symbol, liczba miejsc dziesiętnych i obraz.⟦TX1⟧"
+    },
+    {
+      "id": "35:title",
+      "source_sha256": "10c4d8205e851b6d6fbbb3ba262f8c71252a192ec7a1a295059a1fb828087b29",
+      "value": "Historia dodatkowej waluty"
+    },
+    {
+      "id": "35:description",
+      "source_sha256": "a532a0767c850c3aba52e7ab1ca2e36367e7fd0c8b9ed39eabe2a2f528017f25",
+      "value": "⟦TX1⟧Zdarzenia konta dla wybranej waluty. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "36:title",
+      "source_sha256": "7c8e1b5ab2dd67d54cabeb89397a09b7f472db563cfccbc076fdd97dde6269a2",
+      "value": "BOC bloku"
+    },
+    {
+      "id": "36:description",
+      "source_sha256": "5dbe70a181cb5b7d3fe504b67ca512a8a9f31a2ef869b6e2379896af7d29003d",
+      "value": "⟦TX0⟧Pobiera blok jako binarny Bag of Cells.⟦TX1⟧"
+    },
+    {
+      "id": "37:title",
+      "source_sha256": "493d4f2717d68c3998bbf3f23ce387923d974608207888ff4aeb60708182cd6b",
+      "value": "Surowa konfiguracja"
+    },
+    {
+      "id": "37:description",
+      "source_sha256": "3468d819eb43f68aeda63984fec863a271f3115a0379126538f80b8c2c38adb2",
+      "value": "⟦TX1⟧Surowa konfiguracja sieci. Dodaj ⟦TX0⟧, aby zażądać historycznej konfiguracji masterchain.⟦TX2⟧"
+    },
+    {
+      "id": "38:title",
+      "source_sha256": "f472092cd712ac6a8a9bf18d82d4ca797bb375b4f73715de6233c5923cd043d7",
+      "value": "Konfiguracja blockchain"
+    },
+    {
+      "id": "38:description",
+      "source_sha256": "6971d5c964755bd440c4fa41bc0b183e07577a5adc796de31f35ee10c4c02e32",
+      "value": "⟦TX1⟧Zwraca zdekodowane parametry konfiguracji blockchain. Dodaj ⟦TX0⟧, aby uzyskać historyczną konfigurację masterchain.⟦TX2⟧"
+    },
+    {
+      "id": "39:title",
+      "source_sha256": "90c515c6bdfb2a3d1825c62278ab4553aea8eca14e5101257abdbf9ba158a054",
+      "value": "Kursy GRAM"
+    },
+    {
+      "id": "39:description",
+      "source_sha256": "8b4b630493dabc674d29ae27fb2b04feb48632d2f533cfe633bcfd52dd1e565c",
+      "value": "⟦TX0⟧Zwraca kursy GRAM w AUD, CAD, CHF, EUR, GBP, JPY i USD.⟦TX1⟧"
+    },
+    {
+      "id": "40:title",
+      "source_sha256": "e208c466f923b935587eb94793b4f6f92567ef35aeabaa5f55ee638807864c29",
+      "value": "Szczegóły transakcji"
+    },
+    {
+      "id": "40:description",
+      "source_sha256": "71c01365d2c44b62a27d5a82449a6850332f74eb9a7468be5bc0ac37841da6eb",
+      "value": "⟦TX1⟧Zwraca transakcję konta, wiadomości, opłaty, fazy i zmiany stanu oraz dostępne szczegóły śladu i zinterpretowanych zdarzeń. ⟦TX0⟧ wskazuje powiązane sekcje, których nie udało się wczytać.⟦TX2⟧"
+    },
+    {
+      "id": "41:title",
+      "source_sha256": "f9951cb016b4d06bee83aeb8635e9fe02e40e2ac16a627f38c5f9aab9cdc6239",
+      "value": "Transakcja według hasha wiadomości"
+    },
+    {
+      "id": "41:description",
+      "source_sha256": "f5c46a3e71ae7363401f3d9d137b7b5ab1132d82506fc423a08c95b929264950",
+      "value": "⟦TX0⟧Znajduje transakcję powiązaną z podanym hashem wiadomości.⟦TX1⟧"
+    },
+    {
+      "id": "42:title",
+      "source_sha256": "7e14c3d7dd12bbd0947aa8cb491dff154a1644a85848fc28bd1997ef9ef54a2a",
+      "value": "Ślad"
+    },
+    {
+      "id": "42:description",
+      "source_sha256": "6ee02038b19682d0f74c0599718a5ae3a2010f90d1db0b5a53e927954ad6efd5",
+      "value": "⟦TX0⟧Zwraca drzewo powiązanych transakcji ze śladami podrzędnymi i szczegółami wykonania.⟦TX1⟧"
+    },
+    {
+      "id": "43:title",
+      "source_sha256": "92482268c99e1db6591166be23f47d4c925f121d9f7699fe9241e8e14407d9b2",
+      "value": "Rozpoznaj dane wyszukiwania"
+    },
+    {
+      "id": "43:description",
+      "source_sha256": "d31dd0dfb4e0cc5a63cfc526b3ab074b2716d84cdf2d6bdbeb334b402ebc8008",
+      "value": "⟦TX0⟧Rozpoznaje konto ⟦TX2⟧, NFT, kolekcję, jetton, transakcję, hash wiadomości, identyfikator bloku lub domenę .ton. Zwraca typ i identyfikator obiektu.⟦TX1⟧"
+    },
+    {
+      "id": "44:title",
+      "source_sha256": "17be95e1a1884ebc8904a38b6a754f0bcbe59e3563e6e811b2a3f68b36cf1c76",
+      "value": "Szczegóły konta"
+    },
+    {
+      "id": "44:description",
+      "source_sha256": "84838d6063928fc95d0a16136d5e66c69e29c2070c3daffde267d313a3aa9c85",
+      "value": "⟦TX0⟧Zwraca saldo, status, interfejsy kontraktu, dostępny stan blockchain i nazwy DNS. Stan może zawierać kod, dane, informacje o przechowywaniu i dodatkowe waluty.⟦TX1⟧"
+    },
+    {
+      "id": "45:title",
+      "source_sha256": "7ebecd1975d35e9a4d1ecf28637b71b3d31eabcd2c4fe6fdbedd290e50edc34d",
+      "value": "Transakcje konta"
+    },
+    {
+      "id": "45:description",
+      "source_sha256": "91b5f849144c4b7dcf1bae44088207257d9d72756b727fabdcd8ba2169b0bd0d",
+      "value": "⟦TX2⟧Wyświetla transakcje konta. Kontynuuj za pomocą ⟦TX0⟧; akceptowane jest również ⟦TX1⟧.⟦TX3⟧"
+    },
+    {
+      "id": "46:title",
+      "source_sha256": "612868be774fd2cbcfe6a2941b27f58c81defb559303167e63025b6a03554745",
+      "value": "Transfery i zdarzenia konta"
+    },
+    {
+      "id": "46:description",
+      "source_sha256": "bb2b4edeec0cb009f6ef90012bea921f0a07acac13afe908fb5d845f90a51300",
+      "value": "⟦TX1⟧Zwraca zinterpretowane działania i ich statusy. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "47:title",
+      "source_sha256": "65277a2a8168a8a1e56cfc53d082cbcfcb4c3db89a84f1e881aa2e96f8366194",
+      "value": "Salda jettonów"
+    },
+    {
+      "id": "47:description",
+      "source_sha256": "f329823cf1a226fb4ff4c137a78df37d3da0a7b9d03d531eec100365e0a13a22",
+      "value": "⟦TX0⟧Zwraca salda z metadanymi kontraktów głównych i adresami portfeli jettonów konta.⟦TX1⟧"
+    },
+    {
+      "id": "48:title",
+      "source_sha256": "486c3ede5848be13ba213412b3363ffeb2ed556c2b4a89e3f2edbad1c7c8f0f4",
+      "value": "NFT konta"
+    },
+    {
+      "id": "48:description",
+      "source_sha256": "4ccbeaad7cbec8177f0af5c79d79b22ac865b6188b5faca628fa7e1d8cb5aaa7",
+      "value": "⟦TX3⟧Zwraca przedmioty NFT, domyślnie uwzględniając rozpoznaną pośrednią własność przez sprzedaż. Filtruj za pomocą ⟦TX0⟧ lub użyj ⟦TX1⟧, aby uwzględnić tylko własność bezpośrednią. Kontynuuj za pomocą ⟦TX2⟧.⟦TX4⟧"
+    },
+    {
+      "id": "49:title",
+      "source_sha256": "880231f0382658ba830f9dba8569f244639a71365af2ce98f5b5bb72f95fd041",
+      "value": "Operacje NFT"
+    },
+    {
+      "id": "49:description",
+      "source_sha256": "eba76abce9ad7efbb8632fb99e3a8b128873053773a30f3f10afc53b161b1398",
+      "value": "⟦TX1⟧Zwraca operacje NFT konta. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "50:title",
+      "source_sha256": "dcf82226c3a9c2ffd39ddeb1caad432fdb4beece0be03b9a2831cbbbe6baca10",
+      "value": "Historia jettonów"
+    },
+    {
+      "id": "50:description",
+      "source_sha256": "6415256a6e4b54af0e3e4a40b640d0e3b637086435dc0d3d327765ca160432fa",
+      "value": "⟦TX1⟧Zwraca zdarzenia jettonów dla konta. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "51:title",
+      "source_sha256": "e93e79a3b8bff15accdd2dc36e049cd923378e038bda6fcbf17ea2d2c3cb3c36",
+      "value": "Inspekcja kontraktu"
+    },
+    {
+      "id": "51:description",
+      "source_sha256": "49739050d87013b66db6f97d3704e5f49c58e24ef2cb69a8515b34c32dfa5ce2",
+      "value": "⟦TX0⟧Zwraca dostępne szczegóły inspekcji kontraktu i rozpoznane interfejsy.⟦TX1⟧"
+    },
+    {
+      "id": "52:title",
+      "source_sha256": "1a3689dfef0580128e5f0c7238682e9485f3562edc9aed9b92fe4fecb4d5a745",
+      "value": "Odczytaj metodę kontraktu"
+    },
+    {
+      "id": "52:description",
+      "source_sha256": "4c7f3bd6b2de158e9b44ece71e4df5286727ee5a0bfa43b869c8ad1e69cdb53a",
+      "value": "⟦TX2⟧Wykonuje metodę odczytu. Podaj każdy argument jako powtarzany parametr ⟦TX0⟧, na przykład ⟦TX1⟧. Argumenty pozostają ciągami i mogą zawierać wartości całkowite, adresy lub BOC akceptowane przez metodę.⟦TX3⟧"
+    },
+    {
+      "id": "53:title",
+      "source_sha256": "d2c3c6c36c0dc26c83666d8f54ee07ab7acd6115a77663d19d7d647bd000a7a5",
+      "value": "Pule stakingowe"
+    },
+    {
+      "id": "53:description",
+      "source_sha256": "c247bd9c787843b9f2854f4786367c2d27372fbf2f701141007fc687525a62c8",
+      "value": "⟦TX0⟧Zwraca pozycje konta w pulach nominujących.⟦TX1⟧"
+    },
+    {
+      "id": "54:title",
+      "source_sha256": "5ea0ed7ed8b49a048b7ae753d105f8fa3c2bb82f8afee746ef5590f6ae0fb65e",
+      "value": "Kontrakt wielopodpisowy"
+    },
+    {
+      "id": "54:description",
+      "source_sha256": "6999cb0b8ccc9d635016408c07bf00907c83ef0a5a7e55862b201bed1d1f1cd3",
+      "value": "⟦TX0⟧Zwraca próg kontraktu wielopodpisowego, sygnatariuszy, proponujących, numer sekwencyjny i zlecenia. Użyj poniższej trasy w liczbie mnogiej, aby znaleźć portfele wielopodpisowe powiązane z portfelem sygnatariusza.⟦TX1⟧"
+    },
+    {
+      "id": "55:title",
+      "source_sha256": "46d92008d96549217d077be703f95876e41a6c5f52bf67cf7eb238184987856e",
+      "value": "Rekordy wielopodpisowe"
+    },
+    {
+      "id": "55:description",
+      "source_sha256": "eb51d109b5d2af826ec712a5541681ec8a8548bb876018aeb843ca0e7cf2a01b",
+      "value": "⟦TX0⟧Zwraca rekordy wielopodpisowe powiązane z kontem.⟦TX1⟧"
+    },
+    {
+      "id": "56:title",
+      "source_sha256": "a151f2e912fe8d5b31e07dae6315f861d39160480d78848a0cdadfb51f09d327",
+      "value": "Subskrypcje"
+    },
+    {
+      "id": "56:description",
+      "source_sha256": "b3c43bbe4628bae9b5f2657bf22c2eef5f9898619df0e943819747abe29c03d8",
+      "value": "⟦TX0⟧Zwraca rekordy subskrypcji konta.⟦TX1⟧"
+    },
+    {
+      "id": "57:title",
+      "source_sha256": "c392d07e9c5f8336d3615316e431e090bba7aad5fdfaac02c6ae92f0ea64931b",
+      "value": "Aktywa DeFi"
+    },
+    {
+      "id": "57:description",
+      "source_sha256": "290381495d98bd73a69ed2a8e3b02b38390c5debb728a58bce52b7ec70d42002",
+      "value": "⟦TX0⟧Zwraca rozpoznane pozycje i aktywa DeFi konta.⟦TX1⟧"
+    },
+    {
+      "id": "58:title",
+      "source_sha256": "bfe5eac64a596f4bd7584fe21cd01158f1e7ce0584fe6db8238d0966cd4b8c17",
+      "value": "Przedmiot NFT"
+    },
+    {
+      "id": "58:description",
+      "source_sha256": "c4a1b0525ba4e55324ba27df00e8d65a8cf505c99942a7ad7e68e2adb2f9edd1",
+      "value": "⟦TX4⟧Zwraca właściciela przedmiotu, kolekcję, metadane, podglądy mediów, wiarygodność i pola sprzedaży. ⟦TX0⟧ wskazuje, czy ⟦TX1⟧ zostało potwierdzone przez ⟦TX2⟧; oryginalny indeks pozostaje w ⟦TX3⟧.⟦TX5⟧"
+    },
+    {
+      "id": "59:title",
+      "source_sha256": "46f4a4143ee5a57a4f9adc2c41521a65ba9a51d0af18c50a6d13b3078508832d",
+      "value": "Szczegóły niezbywalnego NFT"
+    },
+    {
+      "id": "59:description",
+      "source_sha256": "b7c4532ad21beda6e6701cf197ef9f601dd628e2c265b4a8dc2414799f9fdb77",
+      "value": "⟦TX0⟧Dla niezbywalnego NFT zwraca z kontraktu adres organu i znacznik czasu odwołania. Zerowy znacznik czasu odwołania oznacza brak odwołania. Przedmioty soulbound są niezbywalne.⟦TX1⟧"
+    },
+    {
+      "id": "60:title",
+      "source_sha256": "33026cedc1e25eac2ad801ade97631ac365ddc26956ff066832e8510d5ccbe41",
+      "value": "Historia NFT"
+    },
+    {
+      "id": "60:description",
+      "source_sha256": "75aa0714eb365c46948691aa9974b883dae8f87174a0c716677d89ebd4bb01c2",
+      "value": "⟦TX1⟧Zwraca zdarzenia pojedynczego NFT. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "61:title",
+      "source_sha256": "b66b47b8f812c5498760e935b5696522e02576dc99aa64b58201f77ba9a2e1e8",
+      "value": "Szczegóły kolekcji"
+    },
+    {
+      "id": "61:description",
+      "source_sha256": "650e94fa1dad53b83edbd38263df0fc434088827f9e3edd4eb70f92907adad7a",
+      "value": "⟦TX2⟧Zwraca właściciela kolekcji, zawartość, metadane i podglądy. Gdy ⟦TX0⟧ ma wartość true, ⟦TX1⟧ jest potwierdzone przez metodę odczytu kolekcji; nie musi być całkowitą liczbą przedmiotów.⟦TX3⟧"
+    },
+    {
+      "id": "62:title",
+      "source_sha256": "c85fc6b88ff4f86cc9543cdb26498926d8263bb327d749a426a1d694dec4d33b",
+      "value": "Przedmioty kolekcji"
+    },
+    {
+      "id": "62:description",
+      "source_sha256": "d3364bcad8c48a83dedeb1b53fc8412dd61da94de19b58892bc134421d06dae3",
+      "value": "⟦TX1⟧Zwraca przedmioty NFT z kolekcji. Kontynuuj za pomocą ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "63:title",
+      "source_sha256": "abc01e0a71e31ad5a718815f0f91a3f8b1caa8c2a5fa9ecf9251a36a01e201fa",
+      "value": "Szczegóły jettona"
+    },
+    {
+      "id": "63:description",
+      "source_sha256": "cf255d0f269858cf826fa10d984c17c83983d74b5f0024eafdd659355fe9ed2f",
+      "value": "⟦TX0⟧Zwraca metadane kontraktu głównego, całkowitą podaż, administrację, liczbę miejsc dziesiętnych i liczbę posiadaczy.⟦TX1⟧"
+    },
+    {
+      "id": "64:title",
+      "source_sha256": "19bf9a79c836c6b6e7e64574d90fd784b98796bf5c7c6dc3fd10089e44a0cead",
+      "value": "Posiadacze jettona"
+    },
+    {
+      "id": "64:description",
+      "source_sha256": "193a1b107b1ab08ecdea3961de4b63f73153c9febc3830bcf3c9622a5f196a9b",
+      "value": "⟦TX2⟧Zwraca wpisy posiadaczy pod ⟦TX0⟧. Kontynuuj za pomocą ⟦TX1⟧. Wartości sald używają liczby miejsc dziesiętnych jettona.⟦TX3⟧"
+    },
+    {
+      "id": "65:title",
+      "source_sha256": "1a2303ede07493acc7caaa7c737f3c52bcc9cf04372be19ed1b0af6b9f2c791e",
+      "value": "Połącz"
+    },
+    {
+      "id": "65:description",
+      "source_sha256": "2790d45d61373653559cbcda4f8444b1850d6f762b1d743ef1e944170b6e1259",
+      "value": "⟦TX4⟧Połącz się z tym samym hostem pod ⟦TX0⟧ i wyślij ⟦TX1⟧, aby uzyskać bieżący stan. Domyślnie wybrane są bloki basechain. Dodaj ⟦TX2⟧ dla masterchain lub ⟦TX3⟧ dla sharda basechain. Użyj REST ⟦TX6⟧ dla poszczególnych kont, NFT, transakcji i śladów.⟦TX5⟧"
+    },
+    {
+      "id": "66:title",
+      "source_sha256": "6d3657e552a8eda23b6c0db9d9a4617cecfa57867f6d63cdab47c1b59078a304",
+      "value": "Bieżący stan"
+    },
+    {
+      "id": "66:description",
+      "source_sha256": "a1a50f81ba263850c6c97930ce5f81201eb06fce76b4165542452c0e872c0bb7",
+      "value": "⟦TX5⟧Odpowiedź zawiera ostatnie ujednolicone ⟦TX0⟧ z wybranego workchaina i sharda oraz obiekt ⟦TX1⟧ z ostatnim blokiem, zaobserwowaną historią, czasem obserwacji i stanem nieaktualnych danych. Użyj ⟦TX2⟧ dla pełnych pól wybranego bloku i ⟦TX3⟧ dla ostatniego bloku masterchain sieci. Wyślij ⟦TX4⟧, aby przełączyć otwarte połączenie na masterchain.⟦TX6⟧"
+    },
+    {
+      "id": "67:title",
+      "source_sha256": "8c1fa2faedac42da96b7a171669173ea9def5bbda016c86cec2ec6445bd22057",
+      "value": "Utrzymuj aktywne połączenie"
+    },
+    {
+      "id": "67:description",
+      "source_sha256": "41daff49d844721070de3f72e1e2bf31cea3a0fabeec3a0f9ba4e6618b70e6fe",
+      "value": "⟦TX1⟧Wyślij ping, aby sprawdzić połączenie. Po ponownym połączeniu wyślij ponownie ⟦TX0⟧, aby uzyskać bieżący stan.⟦TX2⟧"
+    },
+    {
+      "id": "68:title",
+      "source_sha256": "def3cada822644f6026f66ee2f9877d4a339a6fcaa3140957df55a73ddc061c8",
+      "value": "Opóźnione aktualizacje"
+    },
+    {
+      "id": "68:description",
+      "source_sha256": "1ad33d153a1c9d275ba54ffdaa54dfd95da454a387976c741baea7051c9ec999",
+      "value": "⟦TX2⟧Gdy ⟦TX0⟧ ma wartość true, zachowaj ostatnie dostępne bloki i oznacz je jako opóźnione. ⟦TX1⟧ jest znacznikiem czasu obserwacji. Sam stan połączenia WebSocket nie dowodzi aktualności danych.⟦TX3⟧"
+    }
+  ]
+}

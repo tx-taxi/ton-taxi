@@ -1,5 +1,5 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
-import { russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
+import { polishCountNoun, russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
@@ -33,8 +33,10 @@ import { ThemeService } from '@app/services/theme.service';
 export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   readonly russianCountNoun = russianCountNoun;
   readonly ukrainianCountNoun = ukrainianCountNoun;
-  get isSlavic(): boolean { return /^(ru|uk)/i.test(this.locale); }
+  readonly polishCountNoun = polishCountNoun;
+  get isSlavic(): boolean { return /^(ru|uk|pl)/i.test(this.locale); }
   get isUkrainian(): boolean { return this.locale.toLowerCase().startsWith('uk'); }
+  get isPolish(): boolean { return this.locale.toLowerCase().startsWith('pl'); }
   blockValueDetails = blockValueDetails;
   nativePendingMode = false;
   nativePending: TonPendingSnapshot;
@@ -52,6 +54,14 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   get pendingTitle(): string {
     const count = this.pendingCount;
     const language = this.locale.toLowerCase();
+    if (language.startsWith('pl')) {
+      const form = count === null ? 'other' : new Intl.PluralRules('pl').select(count);
+      const suffix = form === 'one' ? 'zewnętrzna oczekuje' : form === 'few' ? 'zewnętrzne oczekują' : form === 'many' ? 'zewnętrznych oczekuje' : 'zewnętrznej oczekuje';
+      const summary = count === null ? 'Dane oczekujących wiadomości są niedostępne' : `${new Intl.NumberFormat(this.locale).format(count)} ${polishCountNoun(count, 'message')} ${suffix}`;
+      const updated = this.nativePending?.observedAt ? ` · Ostatnia aktualizacja ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Ponowne łączenie' : '';
+      return summary + updated + stale;
+    }
     if (language.startsWith('vi')) {
       const summary = count === null ? 'Không có dữ liệu tin nhắn đang chờ' : `${new Intl.NumberFormat(this.locale).format(count)} tin nhắn bên ngoài đang chờ`;
       const updated = this.nativePending?.observedAt ? ` · Cập nhật gần nhất ${this.nativePending.observedAt}` : '';

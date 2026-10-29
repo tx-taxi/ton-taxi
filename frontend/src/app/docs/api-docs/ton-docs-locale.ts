@@ -11,6 +11,7 @@ import { translateTonDocsJapanese } from './ton-docs-ja';
 import { translateTonDocsChinese } from './ton-docs-zh';
 import { translateTonDocsKorean } from './ton-docs-ko';
 import { translateTonDocsVietnamese } from './ton-docs-vi';
+import { translateTonDocsPolish } from './ton-docs-pl';
 
 export function localizedTonDocs(items: TonDocItem[], locale: string): TonDocItem[] {
   const code = locale.toLowerCase().split('-')[0];
@@ -25,5 +26,6 @@ export function localizedTonDocs(items: TonDocItem[], locale: string): TonDocIte
     : code === 'ja' ? translateTonDocsJapanese(items, locale)
     : code === 'zh' ? translateTonDocsChinese(items, locale)
     : code === 'ko' ? translateTonDocsKorean(items, locale)
-    : code === 'vi' ? translateTonDocsVietnamese(items, locale) : items;
+    : code === 'vi' ? translateTonDocsVietnamese(items, locale)
+    : code === 'pl' ? translateTonDocsPolish(items, locale) : items;
 }

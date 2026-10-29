@@ -285,7 +285,7 @@ async function metadata(pathname, api, provider, collector, host) {
     status,
     facts,
   }, pathname, entity, site);
-  if (/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/.test(pathname)) {
+  if (/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl)(?:\/|$)/.test(pathname)) {
     localized.title = short(localized.title, 240);
     localized.description = short(localized.description, 300);
     localized.summary = short(localized.summary, 60);
@@ -356,7 +356,7 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     } catch {}
   }
   set("title", () => true, {}, meta.title);
-  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && !/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/.test(pathname) && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
+  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && !/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl)(?:\/|$)/.test(pathname) && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
     id: "canonical",
     rel: "canonical",

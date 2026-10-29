@@ -1,5 +1,16 @@
 /** Short interface copy shared by the TON guide and its introduction. */
 const copies = {
+  pl: {
+    faqEyebrow: 'Sieć główna TON', faqTitle: 'Zrozum, co pokazuje eksplorator', faqDescription: 'Przeglądaj transakcje, wiadomości, portfele, jettony i NFT w sieci TON.',
+    restEyebrow: 'Dokumentacja dla programistów', restDescription: 'Pobieraj bloki, transakcje, konta i aktywa.', baseUrl: 'Bazowy URL', endpoint: 'Punkt końcowy',
+    websocketEyebrow: 'Dane na żywo', websocketDescription: 'Śledź na żywo bloki basechain lub masterchain.',
+    supportTitle: 'ton.tx.taxi wyświetla publiczne dane sieci.', supportText: 'Nie może odzyskać środków, cofnąć transakcji ani uzyskać dostępu do portfeli.',
+    description: 'Opis', clientMessage: 'Wiadomość klienta', serverResponse: 'Odpowiedź serwera', navigation: 'Sekcje dokumentacji',
+    preferences: 'Ustawienia wyświetlania', guideTab: 'Przewodnik TON', faqMeta: 'Przeglądaj transakcje, wiadomości, portfele, jettony, NFT i walidatorów TON.',
+    restMeta: 'Dokumentacja TON REST API dla bloków, transakcji, wiadomości, kont, jettonów i NFT.',
+    websocketMeta: 'Dokumentacja TON WebSocket API dla bloków basechain i masterchain na żywo.',
+    aboutLabel: 'O tx.taxi', documentation: 'dokumentacja', explorer: 'eksplorator', open: 'Otwórz', explore: 'Przeglądaj', introAction: 'Otwórz tx.taxi',
+  },
   vi: {
     faqEyebrow: 'Mạng chính TON', faqTitle: 'Hiểu thông tin trên trình khám phá', faqDescription: 'Khám phá giao dịch, tin nhắn, ví, jetton và NFT trên TON.',
     restEyebrow: 'Tài liệu cho nhà phát triển', restDescription: 'Truy vấn khối, giao dịch, tài khoản và tài sản.', baseUrl: 'URL cơ sở', endpoint: 'Điểm cuối',
