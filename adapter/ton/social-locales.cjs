@@ -116,6 +116,18 @@ const dictionaries = {
     facts:{'Next transaction':'Volgende transactie','Transaction':'Transactie','Status':'Status','Timestamp':'Tijdstip','Account':'Account','Logical time':'Logische tijd','Fee':'Kosten','Block':'Blok','Incoming message':'Inkomend bericht','From':'Van','To':'Aan','Incoming value':'Inkomende waarde','Outgoing messages':'Uitgaande berichten','Workchain':'Workchain','Shard':'Shard','Transactions':'Transacties','Collected fees':'Geïnde kosten','Root hash':'Roothash','Name':'Naam','Balance':'Saldo','Interfaces':'Interfaces','Address':'Adres','Owner':'Eigenaar','Collection':'Collectie','Index':'Index','Approved by':'Goedgekeurd door'},statuses:{Confirmed:'Bevestigd',Failed:'Mislukt'}
   },
 };
+// Localize explorer fact links without changing external or already-localized URLs.
+function localizeFactHref(href, locale) {
+  if (typeof href !== 'string' || href.startsWith('//')) return href;
+  const localPath = path => /^\/(?:address|block|tx|message|collection|nft|jetton|trace)(?:\/|[?#]|$)/.test(path);
+  if (href.startsWith('/')) return localPath(href) ? `/${locale}${href}` : href;
+  let url;
+  try { url = new URL(href); } catch { return href; }
+  if (url.protocol !== 'https:' || url.username || url.password || url.port || !['ton.tx.taxi', 'masterchain.ton.tx.taxi'].includes(url.hostname) || !localPath(url.pathname)) return href;
+  url.pathname = `/${locale}${url.pathname}`;
+  return url.href;
+}
+
 function localizeTonMetadata(meta, pathname, entity, site) {
   const parts = pathname.split('/').filter(Boolean);
   const dict = dictionaries[parts[0]];
@@ -130,7 +142,7 @@ function localizeTonMetadata(meta, pathname, entity, site) {
     meta.line1 = label;
     meta.summary = meta.description;
     meta.type = `TON / ${label}`;
-    meta.facts = meta.facts.map(fact => ({...fact, label:dict.facts[fact.label] || fact.label, value:fact.label === 'Status' ? (dict.statuses[fact.value] || fact.value) : fact.value}));
+    meta.facts = meta.facts.map(fact => ({...fact, href:localizeFactHref(fact.href, parts[0]), label:dict.facts[fact.label] || fact.label, value:fact.label === 'Status' ? (dict.statuses[fact.value] || fact.value) : fact.value}));
     return meta;
   }
   let item = dict.pages[page];
