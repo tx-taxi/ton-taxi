@@ -16471,6 +16471,12 @@
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>NFT 컬렉션이 없습니다</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>이미지를 사용할 수 없습니다</target></trans-unit>
           <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>속성</target></trans-unit>
+          <trans-unit id="ton.identity.unknown" datatype="html"><source>Unknown</source><target>알 수 없는</target></trans-unit>
+      <trans-unit id="ton.identity.entity" datatype="html"><source>entity</source><target>항목</target></trans-unit>
+      <trans-unit id="ton.identity.address" datatype="html"><source>address</source><target>주소</target></trans-unit>
+      <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>프록시</target></trans-unit>
+      <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>프록시 컨트랙트</target></trans-unit>
+      <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>사기 경고</target></trans-unit>
     </body>
   </file>
 </xliff>

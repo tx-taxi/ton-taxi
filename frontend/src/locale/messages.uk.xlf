@@ -16218,6 +16218,12 @@
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Немає колекцій NFT</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Зображення недоступне</target></trans-unit>
           <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Атрибут</target></trans-unit>
+          <trans-unit id="ton.identity.unknown" datatype="html"><source>Unknown</source><target>Невідомий</target></trans-unit>
+      <trans-unit id="ton.identity.entity" datatype="html"><source>entity</source><target>об’єкт</target></trans-unit>
+      <trans-unit id="ton.identity.address" datatype="html"><source>address</source><target>адреса</target></trans-unit>
+      <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Проксі</target></trans-unit>
+      <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Проксі-контракт</target></trans-unit>
+      <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Попередження про шахрайство</target></trans-unit>
     </body>
   </file>
 </xliff>

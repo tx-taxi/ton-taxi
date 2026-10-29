@@ -12118,6 +12118,12 @@
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Нет коллекций NFT</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Изображение недоступно</target></trans-unit>
           <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Атрибут</target></trans-unit>
+          <trans-unit id="ton.identity.unknown" datatype="html"><source>Unknown</source><target>Неизвестный</target></trans-unit>
+      <trans-unit id="ton.identity.entity" datatype="html"><source>entity</source><target>объект</target></trans-unit>
+      <trans-unit id="ton.identity.address" datatype="html"><source>address</source><target>адрес</target></trans-unit>
+      <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Прокси</target></trans-unit>
+      <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Прокси-контракт</target></trans-unit>
+      <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Предупреждение о мошенничестве</target></trans-unit>
     </body>
   </file>
 </xliff>

@@ -16385,6 +16385,12 @@
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Geen NFT-collecties</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Afbeelding niet beschikbaar</target></trans-unit>
           <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Kenmerk</target></trans-unit>
+          <trans-unit id="ton.identity.unknown" datatype="html"><source>Unknown</source><target>Onbekende</target></trans-unit>
+      <trans-unit id="ton.identity.entity" datatype="html"><source>entity</source><target>entiteit</target></trans-unit>
+      <trans-unit id="ton.identity.address" datatype="html"><source>address</source><target>adres</target></trans-unit>
+      <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Proxy</target></trans-unit>
+      <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Proxycontract</target></trans-unit>
+      <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Waarschuwing voor oplichting</target></trans-unit>
     </body>
   </file>
 </xliff>

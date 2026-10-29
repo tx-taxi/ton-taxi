@@ -16355,6 +16355,12 @@
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Không có bộ sưu tập NFT</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Hình ảnh không khả dụng</target></trans-unit>
           <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Thuộc tính</target></trans-unit>
+          <trans-unit id="ton.identity.unknown" datatype="html"><source>Unknown</source><target>Không xác định</target></trans-unit>
+      <trans-unit id="ton.identity.entity" datatype="html"><source>entity</source><target>đối tượng</target></trans-unit>
+      <trans-unit id="ton.identity.address" datatype="html"><source>address</source><target>địa chỉ</target></trans-unit>
+      <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Proxy</target></trans-unit>
+      <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Hợp đồng proxy</target></trans-unit>
+      <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Cảnh báo lừa đảo</target></trans-unit>
     </body>
   </file>
 </xliff>

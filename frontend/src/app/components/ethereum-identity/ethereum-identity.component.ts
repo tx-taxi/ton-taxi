@@ -59,7 +59,7 @@ export class EthereumIdentityComponent implements OnChanges {
       this.entity?.ensName,
       this.entity?.tokenSymbol,
       this.abbreviatedAddress,
-    ) || `Unknown ${this.chainName} entity`;
+    ) || `${$localize`:@@ton.identity.unknown:Unknown`} ${this.chainName} ${$localize`:@@ton.identity.entity:entity`}`;
   }
 
   get secondaryLabel(): string | null {
@@ -106,18 +106,18 @@ export class EthereumIdentityComponent implements OnChanges {
   get accessibleLabel(): string {
     const address = this.entity?.address?.trim();
     return address && address !== this.primaryLabel
-      ? `${this.primaryLabel}, ${this.chainName} address ${address}`
+      ? `${this.primaryLabel}, ${this.chainName} ${$localize`:@@ton.identity.address:address`} ${address}`
       : this.primaryLabel;
   }
 
   get proxyLabel(): string {
     const proxyType = this.entity?.proxyType?.trim();
-    return proxyType ? `Proxy: ${proxyType}` : 'Proxy contract';
+    return proxyType ? `${$localize`:@@ton.identity.proxy:Proxy`}: ${proxyType}` : $localize`:@@ton.identity.proxy-contract:Proxy contract`;
   }
 
   get scamLabel(): string {
     const reputation = this.entity?.reputation?.trim();
-    return reputation ? `Scam warning: ${reputation}` : 'Scam warning';
+    return reputation ? `${$localize`:@@ton.identity.scam-warning:Scam warning`}: ${reputation}` : $localize`:@@ton.identity.scam-warning:Scam warning`;
   }
 
   private firstPresent(...values: Array<string | null | undefined>): string {
