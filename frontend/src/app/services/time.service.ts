@@ -51,7 +51,7 @@ function czechDuration(kind: string, unit: string, amount: number): string | nul
   const category = new Intl.PluralRules('cs').select(amount);
   const base = category === 'one' ? 0 : category === 'few' ? 1 : category === 'many' ? 3 : 2;
   const isPast = kind === 'since' || kind === 'before';
-  const index = isPast ? (category === 'one' ? 5 : 6)
+  const index = isPast ? (category === 'one' || category === 'many' ? 5 : 6)
     : kind === 'within' ? (category === 'one' || category === 'many' ? 3 : 2)
     : ['until', 'span'].includes(kind) && category === 'one' ? 4 : base;
   const duration = `${amount.toLocaleString('cs')} ${forms[index]}`;
