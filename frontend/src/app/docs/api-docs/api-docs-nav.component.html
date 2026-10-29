@@ -3,7 +3,7 @@
     <p *ngIf="item.type === 'category'">{{ item.title }}</p>
     <a
       *ngIf="item.type === 'entry'"
-      [href]="'#' + item.fragment"
+      [href]="anchorHref(item.fragment)"
       (click)="navLinkClick($event, item.fragment)"
     >{{ item.title }}</a>
   </ng-container>

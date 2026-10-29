@@ -43,7 +43,7 @@
       >
         <a
           class="section-header"
-          [href]="'#' + item.fragment"
+          [href]="anchorHref(item.fragment)"
           (click)="anchorLinkClick({ event: $event, fragment: item.fragment })"
           [attr.aria-expanded]="isExpanded(item.fragment)"
         >

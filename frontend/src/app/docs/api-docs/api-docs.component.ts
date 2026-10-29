@@ -50,6 +50,7 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
 
 
   anchorLinkClick(event: { event?: Event; fragment: string }): void {
+    if (event.event instanceof MouseEvent && (event.event.defaultPrevented || event.event.button !== 0 || event.event.metaKey || event.event.ctrlKey || event.event.shiftKey || event.event.altKey)) return;
     event.event?.preventDefault();
     const fragment = event.fragment;
     if (this.mobileViewport && this.expandedFragments.has(fragment)) {
@@ -57,6 +58,10 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
       return;
     }
     this.openAndScroll(fragment);
+  }
+
+  anchorHref(fragment: string): string {
+    return `${window.location.pathname}${window.location.search}#${encodeURIComponent(fragment)}`;
   }
 
   isEntry(item: TonDocItem): item is TonDocEntry {
@@ -85,7 +90,7 @@ export class ApiDocsComponent implements OnInit, AfterViewInit {
     if (!element) {
       return;
     }
-    window.history.replaceState({}, '', `${document.location.pathname}#${fragment}`);
+    window.history.replaceState(window.history.state, '', this.anchorHref(fragment));
     setTimeout(() => {
       const offset = this.mobileViewport ? 110 : 70;
       window.scrollTo({ top: element.offsetTop - offset, behavior: 'smooth' });

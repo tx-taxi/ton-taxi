@@ -32,8 +32,12 @@ export class ApiDocsNavComponent implements OnInit {
         : tonGuideData, this.locale);
   }
 
-  navLinkClick(event: Event, fragment: string): void {
-    event.preventDefault();
+  anchorHref(fragment: string): string {
+    return `${window.location.pathname}${window.location.search}#${encodeURIComponent(fragment)}`;
+  }
+
+  navLinkClick(event: MouseEvent, fragment: string): void {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     this.navLinkClickEvent.emit({ event, fragment });
   }
 }
