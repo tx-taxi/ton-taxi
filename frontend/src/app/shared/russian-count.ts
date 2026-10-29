@@ -11,9 +11,11 @@ export function ukrainianCountNoun(count: number, kind: 'transaction' | 'message
   return form === 'one' ? 'повідомлення' : form === 'few' ? 'повідомлення' : 'повідомлень';
 }
 
-export function polishCountNoun(count: number, kind: 'transaction' | 'message'): string {
+export function polishCountNoun(count: number, kind: 'transaction' | 'message' | 'byte' | 'second'): string {
   const form = new Intl.PluralRules('pl').select(count);
   if (kind === 'transaction') return form === 'one' ? 'transakcja' : form === 'few' ? 'transakcje' : 'transakcji';
+  if (kind === 'byte') return form === 'one' ? 'bajt' : form === 'few' ? 'bajty' : form === 'many' ? 'bajtów' : 'bajta';
+  if (kind === 'second') return form === 'one' ? 'sekunda' : form === 'few' ? 'sekundy' : form === 'many' ? 'sekund' : 'sekundy';
   return form === 'one' ? 'wiadomość' : form === 'few' ? 'wiadomości' : 'wiadomości';
 }
 

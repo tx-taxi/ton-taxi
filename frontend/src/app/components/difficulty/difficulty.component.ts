@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID, OnInit } from '@angular/core';
-import { czechCountNoun } from '@app/shared/russian-count';
+import { czechCountNoun, polishCountNoun } from '@app/shared/russian-count';
 import { Observable } from 'rxjs';
 import { map, shareReplay } from 'rxjs/operators';
 import { BlockExtended } from '@interfaces/node-api.interface';
@@ -65,7 +65,7 @@ export class DifficultyComponent implements OnInit {
   readonly tonNetworkTitle = $localize`:@@ton.dash.ton-network:TON Network`;
   readonly tonEconomicsTitle = $localize`:@@ton.dash.ton-economics:TON Economics`;
   readonly economicsLabel = $localize`:@@ton.dash.economics:economics`;
-  tonSecondsTitle(seconds: number): string { return /^cs(?:-|$)/i.test(this.locale) ? `${seconds.toLocaleString('cs')} ${czechCountNoun(seconds, 'second')}` : $localize`:@@ton.dash.seconds-title:${seconds}:count: seconds`; }
+  tonSecondsTitle(seconds: number): string { return /^cs(?:-|$)/i.test(this.locale) ? `${seconds.toLocaleString('cs')} ${czechCountNoun(seconds, 'second')}` : /^pl(?:-|$)/i.test(this.locale) ? `${seconds.toLocaleString('pl')} ${polishCountNoun(seconds, 'second')}` : $localize`:@@ton.dash.seconds-title:${seconds}:count: seconds`; }
   get latestTonBlockLabel(): string { return this.tonNetwork?.label === 'Basechain' ? $localize`:@@ton.dash.latest-base:Latest basechain block` : $localize`:@@ton.dash.latest-master:Latest masterchain block`; }
 
   get isConfirmed(): boolean { return this.confirmedMode || !!this.tonNetwork; }
