@@ -16477,6 +16477,9 @@
       <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>프록시</target></trans-unit>
       <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>프록시 컨트랙트</target></trans-unit>
       <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>사기 경고</target></trans-unit>
+          <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>사기</target></trans-unit>
+      <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>검증된 항목</target></trans-unit>
+      <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>스마트 컨트랙트</target></trans-unit>
     </body>
   </file>
 </xliff>

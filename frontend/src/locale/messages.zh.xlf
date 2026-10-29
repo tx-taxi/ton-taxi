@@ -16475,6 +16475,9 @@
       <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>代理</target></trans-unit>
       <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>代理合约</target></trans-unit>
       <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>诈骗警告</target></trans-unit>
+          <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>诈骗</target></trans-unit>
+      <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>已验证实体</target></trans-unit>
+      <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>智能合约</target></trans-unit>
     </body>
   </file>
 </xliff>

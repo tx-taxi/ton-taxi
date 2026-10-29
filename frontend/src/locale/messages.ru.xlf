@@ -12124,6 +12124,9 @@
       <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Прокси</target></trans-unit>
       <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Прокси-контракт</target></trans-unit>
       <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Предупреждение о мошенничестве</target></trans-unit>
+          <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Мошенничество</target></trans-unit>
+      <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Проверенный объект</target></trans-unit>
+      <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Смарт-контракт</target></trans-unit>
     </body>
   </file>
 </xliff>

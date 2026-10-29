@@ -16391,6 +16391,9 @@
       <trans-unit id="ton.identity.proxy" datatype="html"><source>Proxy</source><target>Proxy</target></trans-unit>
       <trans-unit id="ton.identity.proxy-contract" datatype="html"><source>Proxy contract</source><target>Proxycontract</target></trans-unit>
       <trans-unit id="ton.identity.scam-warning" datatype="html"><source>Scam warning</source><target>Waarschuwing voor oplichting</target></trans-unit>
+          <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Oplichting</target></trans-unit>
+      <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Geverifieerde entiteit</target></trans-unit>
+      <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Smart contract</target></trans-unit>
     </body>
   </file>
 </xliff>

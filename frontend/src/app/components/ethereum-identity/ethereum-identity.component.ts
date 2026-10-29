@@ -41,7 +41,7 @@ export class EthereumIdentityComponent implements OnChanges {
   get localizedLink(): string | null {
     if (!this.link) return null;
     if (typeof window === 'undefined' || !/^\/(?!\/)/.test(this.link)) return this.link;
-    const localePattern = /^\/(?:ar|ca|cs|da|de|en(?:-US)?|es|fa|fi|fr|he|hi|hr|hu|it|ja|ka|ko|lt|mk|nb|ne|nl|pl|pt(?:-BR)?|ro|ru|sl|sr|sv|th|tr|uk|vi|zh)(?:\/|$)/i;
+    const localePattern = /^\/(?:ar|ca|cs|da|de|en(?:-US)?|es|fa|fi|fr|he|hi|hr|hu|it|ja|ka|ko|lt|mk|nb|ne|nl|pl|pt(?:-BR)?|ro|ru|sl|sr|sv|th|tr|uk|vi|zh)(?=\/|[?#]|$)/i;
     const currentLocale = window.location.pathname.match(localePattern)?.[0].replace(/\/$/, '');
     return currentLocale && !localePattern.test(this.link) ? `${currentLocale}${this.link}` : this.link;
   }

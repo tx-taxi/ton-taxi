@@ -43,16 +43,16 @@
     </span>
 
     <span class="ethereum-identity__badges" *ngIf="entity?.isVerified || entity?.proxyType || entity?.isContract || entity?.isScam">
-      <span *ngIf="entity?.isVerified" class="ethereum-identity__badge ethereum-identity__badge--verified" aria-label="Verified entity">
+      <span *ngIf="entity?.isVerified" class="ethereum-identity__badge ethereum-identity__badge--verified" aria-label="Verified entity" i18n-aria-label="@@ton.identity.verified-entity" i18n="@@ton.more.verified">
         Verified
       </span>
-      <span *ngIf="entity?.proxyType" class="ethereum-identity__badge ethereum-identity__badge--proxy" [attr.aria-label]="proxyLabel" [title]="proxyLabel">
+      <span *ngIf="entity?.proxyType" class="ethereum-identity__badge ethereum-identity__badge--proxy" [attr.aria-label]="proxyLabel" [title]="proxyLabel" i18n="@@ton.identity.proxy">
         Proxy
       </span>
-      <span *ngIf="entity?.isContract" class="ethereum-identity__badge ethereum-identity__badge--contract" aria-label="Smart contract">
+      <span *ngIf="entity?.isContract" class="ethereum-identity__badge ethereum-identity__badge--contract" aria-label="Smart contract" i18n-aria-label="@@ton.identity.smart-contract" i18n="@@ton.tab.contract">
         Contract
       </span>
-      <span *ngIf="entity?.isScam" class="ethereum-identity__badge ethereum-identity__badge--scam" [attr.aria-label]="scamLabel" [title]="scamLabel">
+      <span *ngIf="entity?.isScam" class="ethereum-identity__badge ethereum-identity__badge--scam" [attr.aria-label]="scamLabel" [title]="scamLabel" i18n="@@ton.identity.scam">
         Scam
       </span>
     </span>
