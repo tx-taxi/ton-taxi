@@ -94,10 +94,6 @@
             "translation": "src/locale/messages.nb.xlf",
             "baseHref": "/nb/"
           },
-          "pl": {
-            "translation": "src/locale/messages.pl.xlf",
-            "baseHref": "/pl/"
-          },
           "pt": {
             "translation": "src/locale/messages.pt.xlf",
             "baseHref": "/pt/"
@@ -125,14 +121,6 @@
           "fi": {
             "translation": "src/locale/messages.fi.xlf",
             "baseHref": "/fi/"
-          },
-          "vi": {
-            "translation": "src/locale/messages.vi.xlf",
-            "baseHref": "/vi/"
-          },
-          "pl": {
-            "translation": "src/locale/messages.pl.xlf",
-            "baseHref": "/pl/"
           },
           "hu": {
             "translation": "src/locale/messages.hu.xlf",
