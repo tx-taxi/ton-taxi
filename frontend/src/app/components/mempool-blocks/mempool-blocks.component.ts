@@ -1,5 +1,5 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
-import { polishCountNoun, russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
+import { czechCountNoun, polishCountNoun, russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
@@ -34,9 +34,11 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   readonly russianCountNoun = russianCountNoun;
   readonly ukrainianCountNoun = ukrainianCountNoun;
   readonly polishCountNoun = polishCountNoun;
-  get isSlavic(): boolean { return /^(ru|uk|pl)/i.test(this.locale); }
+  readonly czechCountNoun = czechCountNoun;
+  get isSlavic(): boolean { return /^(ru|uk|pl|cs)/i.test(this.locale); }
   get isUkrainian(): boolean { return this.locale.toLowerCase().startsWith('uk'); }
   get isPolish(): boolean { return this.locale.toLowerCase().startsWith('pl'); }
+  get isCzech(): boolean { return this.locale.toLowerCase().startsWith('cs'); }
   blockValueDetails = blockValueDetails;
   nativePendingMode = false;
   nativePending: TonPendingSnapshot;
@@ -54,6 +56,12 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   get pendingTitle(): string {
     const count = this.pendingCount;
     const language = this.locale.toLowerCase();
+    if (language.startsWith('cs')) {
+      const summary = count === null ? 'Data čekajících zpráv nejsou dostupná' : `Čekající externí zprávy: ${new Intl.NumberFormat(this.locale).format(count)}`;
+      const updated = this.nativePending?.observedAt ? ` · Poslední aktualizace ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Opětovné připojování' : '';
+      return summary + updated + stale;
+    }
     if (language.startsWith('pl')) {
       const form = count === null ? 'other' : new Intl.PluralRules('pl').select(count);
       const suffix = form === 'one' ? 'zewnętrzna oczekuje' : form === 'few' ? 'zewnętrzne oczekują' : form === 'many' ? 'zewnętrznych oczekuje' : 'zewnętrznej oczekuje';

@@ -194,7 +194,7 @@
           },
           "configurations": {
             "spanish": {"localize": ["es"]},
-            "multilingual": {"localize": ["es", "fr", "de", "pt", "it", "ru", "uk", "nl", "ja", "zh", "ko", "vi", "pl"]},
+            "multilingual": {"localize": ["es", "fr", "de", "pt", "it", "ru", "uk", "nl", "ja", "zh", "ko", "vi", "pl", "cs"]},
             "production": {
               "assets": [
                 "src/favicon.ico",

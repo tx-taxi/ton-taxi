@@ -1,4 +1,5 @@
-import { Component, ElementRef, ViewChild, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, OnChanges, ChangeDetectionStrategy, ChangeDetectorRef, Inject, LOCALE_ID } from '@angular/core';
+import { czechCountNoun } from '@app/shared/russian-count';
 import { Position } from '@components/block-overview-graph/sprite-types.js';
 import { Price } from '@app/services/price.service';
 import { TransactionStripped } from '@interfaces/node-api.interface.js';
@@ -15,6 +16,7 @@ import { TonPendingMessage } from '@app/shared/ton-pending.types';
   standalone: false,
 })
 export class BlockOverviewTooltipComponent implements OnChanges {
+  readonly czechCountNoun = czechCountNoun;
   @Input() tx: TransactionStripped | void;
   @Input() relativeTime?: number;
   @Input() cursorPosition: Position;
@@ -47,6 +49,7 @@ export class BlockOverviewTooltipComponent implements OnChanges {
 
   constructor(
     private cd: ChangeDetectorRef,
+    @Inject(LOCALE_ID) readonly locale: string,
   ) {}
 
   ngOnChanges(changes): void {

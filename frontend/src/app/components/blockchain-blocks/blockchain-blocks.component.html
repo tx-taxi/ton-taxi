@@ -50,10 +50,10 @@
             </div>
             <ng-template #noMiningInfo>
             <div [attr.data-cy]="'bitcoin-block-' + offset + '-index-' + i + 'block-size'"
-              class="block-size" i18n="@@ton.a11y.block-count">{{ block.tx_count | number }} transactions</div>
+              class="block-size"><ng-container *ngIf="locale.toLowerCase().startsWith('cs'); else otherCountLabel">{{ block.tx_count | number }} {{ czechCountNoun(block.tx_count, 'transaction') }}</ng-container><ng-template #otherCountLabel><ng-container i18n="@@ton.a11y.block-count">{{ block.tx_count | number }} transactions</ng-container></ng-template></div>
             </ng-template>
             <div [attr.data-cy]="'bitcoin-block-' + i + '-transactions'" class="transaction-count">
-              <ng-container *ngIf="(locale.toLowerCase().startsWith('ru') || locale.toLowerCase().startsWith('uk') || locale.toLowerCase().startsWith('pl')); else otherTransactionCounts">{{ block.tx_count | number }} {{ locale.toLowerCase().startsWith('pl') ? polishCountNoun(block.tx_count, 'transaction') : locale.toLowerCase().startsWith('uk') ? ukrainianCountNoun(block.tx_count, 'transaction') : russianCountNoun(block.tx_count, 'transaction') }}</ng-container>
+              <ng-container *ngIf="(locale.toLowerCase().startsWith('ru') || locale.toLowerCase().startsWith('uk') || locale.toLowerCase().startsWith('pl') || locale.toLowerCase().startsWith('cs')); else otherTransactionCounts">{{ block.tx_count | number }} {{ locale.toLowerCase().startsWith('cs') ? czechCountNoun(block.tx_count, 'transaction') : locale.toLowerCase().startsWith('pl') ? polishCountNoun(block.tx_count, 'transaction') : locale.toLowerCase().startsWith('uk') ? ukrainianCountNoun(block.tx_count, 'transaction') : russianCountNoun(block.tx_count, 'transaction') }}</ng-container>
               <ng-template #otherTransactionCounts><ng-container
                 *ngTemplateOutlet="block.tx_count === 1 ? transactionsSingular : transactionsPlural; context: {$implicit: block.tx_count | number}"></ng-container>
               <ng-template #transactionsSingular let-i i18n="shared.transaction-count.singular">{{ i }} transaction</ng-template>

@@ -230,7 +230,7 @@ const server = http.createServer(async (req, res) => {
         ? "no-cache"
         : "public, max-age=300",
       "X-Content-Type-Options": "nosniff",
-      ...(filename.endsWith("index.html") && (/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl)(?:\/|$)/.test(url.pathname) || !social.isIndexableEntity(url.pathname))
+      ...(filename.endsWith("index.html") && (/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi|pl|cs)(?:\/|$)/.test(url.pathname) || !social.isIndexableEntity(url.pathname))
         ? {"X-Robots-Tag":"noindex, follow"} : {}),
     });
     res.end(req.method === "HEAD" ? undefined : body);

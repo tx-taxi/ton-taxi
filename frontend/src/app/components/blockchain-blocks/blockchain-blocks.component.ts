@@ -1,6 +1,6 @@
 import { transactionFeeView } from '@app/shared/block-format';
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { polishCountNoun, russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
+import { czechCountNoun, polishCountNoun, russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { Observable, Subscription, delay, filter, tap } from 'rxjs';
 import { StateService } from '@app/services/state.service';
 import { nativeContextDepth } from '@app/shared/native-block-context';
@@ -28,6 +28,7 @@ export class BlockchainBlocksComponent implements OnInit, OnChanges, OnDestroy {
   readonly russianCountNoun = russianCountNoun;
   readonly ukrainianCountNoun = ukrainianCountNoun;
   readonly polishCountNoun = polishCountNoun;
+  readonly czechCountNoun = czechCountNoun;
   readonly blockUnavailableLabel = $localize`:@@ton.a11y.block-unavailable:Block data unavailable`;
   readonly loadingBlockDataLabel = $localize`:@@ton.a11y.loading-block-data:Loading block data`;
   readonly unavailableLabel = $localize`:@@ton.a11y.unavailable:Unavailable`;

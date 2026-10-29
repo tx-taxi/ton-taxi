@@ -11,7 +11,7 @@
       <tr><td class="label" i18n="@@ton.tooltip.message">Message</td><td class="value"><a [routerLink]="['/mempool-block/0' | relativeUrl]" [fragment]="pendingMessage.normalizedHash">{{ pendingMessage.normalizedHash | shortenString : 16 }}</a></td></tr>
       <tr><td class="label" i18n="@@ton.tooltip.destination">Destination</td><td class="value"><a [routerLink]="['/address' | relativeUrl, pendingMessage.destination]">{{ pendingMessage.destination | shortenString : 16 }}</a></td></tr>
       <tr><td class="label" i18n="@@ton.tooltip.first-seen">First seen</td><td class="value"><i><app-time kind="since" [time]="pendingFirstSeen" [fastRender]="true"></app-time></i></td></tr>
-      <tr><td class="label" i18n="@@ton.tooltip.message-size">Message size</td><td class="value"><span i18n="@@ton.tooltip.bytes">{{ pendingMessage.bocBytes | number }} bytes</span></td></tr>
+      <tr><td class="label" i18n="@@ton.tooltip.message-size">Message size</td><td class="value"><span *ngIf="locale.toLowerCase().startsWith('cs'); else otherBytes">{{ pendingMessage.bocBytes | number }} {{ czechCountNoun(pendingMessage.bocBytes, 'byte') }}</span><ng-template #otherBytes><span i18n="@@ton.tooltip.bytes">{{ pendingMessage.bocBytes | number }} bytes</span></ng-template></td></tr>
       <tr><td class="label" i18n="@@ton.tooltip.status">Status</td><td class="value"><span class="badge bg-secondary" i18n="@@ton.pending.title">Pending</span></td></tr>
     </tbody>
   </table>

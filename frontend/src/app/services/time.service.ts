@@ -33,6 +33,37 @@ const polishUnits: Record<string, [string, string, string, string, string]> = {
   second: ['sekunda', 'sekundy', 'sekund', 'sekundę', 'sekundy'],
 };
 
+// nominative one/few, genitive plural/singular, accusative singular,
+// instrumental singular/plural.
+const czechUnits: Record<string, [string, string, string, string, string, string, string]> = {
+  year: ['rok', 'roky', 'let', 'roku', 'rok', 'rokem', 'lety'],
+  month: ['měsíc', 'měsíce', 'měsíců', 'měsíce', 'měsíc', 'měsícem', 'měsíci'],
+  week: ['týden', 'týdny', 'týdnů', 'týdne', 'týden', 'týdnem', 'týdny'],
+  day: ['den', 'dny', 'dní', 'dne', 'den', 'dnem', 'dny'],
+  hour: ['hodina', 'hodiny', 'hodin', 'hodiny', 'hodinu', 'hodinou', 'hodinami'],
+  minute: ['minuta', 'minuty', 'minut', 'minuty', 'minutu', 'minutou', 'minutami'],
+  second: ['sekunda', 'sekundy', 'sekund', 'sekundy', 'sekundu', 'sekundou', 'sekundami'],
+};
+
+function czechDuration(kind: string, unit: string, amount: number): string | null {
+  const forms = czechUnits[unit];
+  if (!forms || !Number.isFinite(amount)) return null;
+  const category = new Intl.PluralRules('cs').select(amount);
+  const base = category === 'one' ? 0 : category === 'few' ? 1 : category === 'many' ? 3 : 2;
+  const isPast = kind === 'since' || kind === 'before';
+  const index = isPast ? (category === 'one' ? 5 : 6)
+    : kind === 'within' ? (category === 'one' || category === 'many' ? 3 : 2)
+    : ['until', 'span'].includes(kind) && category === 'one' ? 4 : base;
+  const duration = `${amount.toLocaleString('cs')} ${forms[index]}`;
+  switch (kind) {
+    case 'since': case 'before': return `Před ${duration}`;
+    case 'until': return `Za ~${duration}`;
+    case 'within': return `Během ~${duration}`;
+    case 'span': return `Za ${duration}`;
+    default: return duration;
+  }
+}
+
 function polishDuration(kind: string, unit: string, amount: number): string | null {
   const forms = polishUnits[unit];
   if (!forms || !Number.isFinite(amount)) return null;
@@ -152,6 +183,10 @@ export class TimeService {
   }
 
   private formatTime(kind, unit, number): string {
+    if (/^cs(?:-|$)/i.test(this.locale)) {
+      const localized = czechDuration(kind, unit, number);
+      if (localized) return localized;
+    }
     if (/^pl(?:-|$)/i.test(this.locale)) {
       const localized = polishDuration(kind, unit, number);
       if (localized) return localized;

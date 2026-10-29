@@ -1,5 +1,16 @@
 /** Short interface copy shared by the TON guide and its introduction. */
 const copies = {
+  cs: {
+    faqEyebrow: 'Hlavní síť TON', faqTitle: 'Porozumějte údajům v průzkumníku', faqDescription: 'Prozkoumejte transakce, zprávy, peněženky, jettony a NFT v síti TON.',
+    restEyebrow: 'Reference pro vývojáře', restDescription: 'Načítejte bloky, transakce, účty a aktiva.', baseUrl: 'Základní URL', endpoint: 'Koncový bod',
+    websocketEyebrow: 'Živá data', websocketDescription: 'Sledujte živě bloky basechainu nebo masterchainu.',
+    supportTitle: 'ton.tx.taxi zobrazuje veřejná síťová data.', supportText: 'Nemůže obnovit prostředky, vrátit transakce ani přistupovat k peněženkám.',
+    description: 'Popis', clientMessage: 'Zpráva klienta', serverResponse: 'Odpověď serveru', navigation: 'Sekce dokumentace',
+    preferences: 'Nastavení zobrazení', guideTab: 'Průvodce TON', faqMeta: 'Prozkoumejte transakce, zprávy, peněženky, jettony, NFT a validátory TON.',
+    restMeta: 'Reference TON REST API pro bloky, transakce, zprávy, účty, jettony a NFT.',
+    websocketMeta: 'Reference TON WebSocket API pro živé bloky basechainu a masterchainu.',
+    aboutLabel: 'O tx.taxi', documentation: 'dokumentace', explorer: 'průzkumník', open: 'Otevřít', explore: 'Prozkoumat', introAction: 'Otevřít tx.taxi',
+  },
   pl: {
     faqEyebrow: 'Sieć główna TON', faqTitle: 'Zrozum, co pokazuje eksplorator', faqDescription: 'Przeglądaj transakcje, wiadomości, portfele, jettony i NFT w sieci TON.',
     restEyebrow: 'Dokumentacja dla programistów', restDescription: 'Pobieraj bloki, transakcje, konta i aktywa.', baseUrl: 'Bazowy URL', endpoint: 'Punkt końcowy',

@@ -21,7 +21,7 @@ export class LanguageService {
         const raw = this.document.cookie.split(';').map((item) => item.trim()).find((item) => item.startsWith('lang='));
         let legacy = raw ? decodeURIComponent(raw.substring(5)).toLowerCase() : '';
         if (legacy === 'en-us') { legacy = 'en'; }
-        if (['en', 'es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi', 'pl'].includes(legacy)) { writeSharedPreference('txtaxi_language', legacy); }
+        if (['en', 'es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi', 'pl', 'cs'].includes(legacy)) { writeSharedPreference('txtaxi_language', legacy); }
       } catch { /* Ignore malformed or unavailable legacy cookies. */ }
     }
   }
@@ -45,7 +45,7 @@ export class LanguageService {
 
   setLanguage(language: string): void {
     try {
-      if (!['en', 'es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi', 'pl'].includes(language)) { return; }
+      if (!['en', 'es', 'fr', 'de', 'pt', 'it', 'ru', 'uk', 'nl', 'ja', 'zh', 'ko', 'vi', 'pl', 'cs'].includes(language)) { return; }
       writeSharedPreference('txtaxi_language', language);
       document.cookie = `lang=${language}; expires=Thu, 18 Dec 2050 12:00:00 UTC; path=/`;
     } catch (e) { }
