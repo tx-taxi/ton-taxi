@@ -16480,6 +16480,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>詐欺</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>確認済みエンティティ</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>スマートコントラクト</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>マスターチェーンの最新ブロックを取得できません</target></trans-unit>
     </body>
   </file>
 </xliff>

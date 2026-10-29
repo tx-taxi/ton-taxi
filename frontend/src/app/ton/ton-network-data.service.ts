@@ -97,7 +97,7 @@ export class TonNetworkData extends TonPageData implements OnInit, OnDestroy {
     this.requests.add(this.getNative<any>(this.selectedUrl('/api/ton/blocks?limit=8&before=' + encodeURIComponent(this.nextBefore), true)).subscribe({ next: result => { if (generation !== this.generation) return; const ids = new Set(this.blocks.map(block => this.blockIdentity(block))); this.blocks = this.blocks.concat((result.blocks || []).filter(block => !ids.has(this.blockIdentity(block)))); this.nextBefore = result._paging?.nextBefore || null; this.hasMoreBlocks = result._paging?.hasMore === true; this.loadingMoreBlocks = false; }, error: () => { this.loadingMoreBlocks = false; this.blocksError = $localize`:@@ton.network.earlier-blocks-unavailable:Unable to load earlier blocks`; } }));
   }
   private loadDashboardTransactions(seqno: string | number | undefined): void {
-    if (seqno === undefined || seqno === null) { this.transactionsError = 'No masterchain head is available'; return; }
+    if (seqno === undefined || seqno === null) { this.transactionsError = $localize`:@@ton.network.no-master-head:No masterchain head is available`; return; }
     // Refresh cadence must not starve a slower provider by repeatedly canceling
     // its first usable response. Keep one request and coalesce newer heads.
     if (this.transactionsLoading) { this.queuedTransactionSeqno = String(seqno); return; }

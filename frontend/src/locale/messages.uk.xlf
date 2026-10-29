@@ -16227,6 +16227,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Шахрайство</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Перевірений об’єкт</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Смартконтракт</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>Вершина мастерчейну недоступна</target></trans-unit>
     </body>
   </file>
 </xliff>

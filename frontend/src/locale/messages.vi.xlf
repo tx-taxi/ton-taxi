@@ -16364,6 +16364,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Lừa đảo</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Đối tượng đã xác minh</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Hợp đồng thông minh</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>Không có khối masterchain mới nhất</target></trans-unit>
     </body>
   </file>
 </xliff>

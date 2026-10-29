@@ -16446,6 +16446,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Oszustwo</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Zweryfikowany podmiot</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Inteligentny kontrakt</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>Najnowszy blok masterchain jest niedostępny</target></trans-unit>
     </body>
   </file>
 </xliff>

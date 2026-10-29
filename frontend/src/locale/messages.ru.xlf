@@ -12127,6 +12127,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Мошенничество</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Проверенный объект</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Смарт-контракт</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>Текущая вершина мастерчейна недоступна</target></trans-unit>
     </body>
   </file>
 </xliff>

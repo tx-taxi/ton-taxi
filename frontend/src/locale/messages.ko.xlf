@@ -16480,6 +16480,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>사기</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>검증된 항목</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>스마트 컨트랙트</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>마스터체인의 최신 블록을 사용할 수 없습니다</target></trans-unit>
     </body>
   </file>
 </xliff>

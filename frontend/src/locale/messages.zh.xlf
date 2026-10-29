@@ -16478,6 +16478,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>诈骗</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>已验证实体</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>智能合约</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>无法获取主链最新区块</target></trans-unit>
     </body>
   </file>
 </xliff>

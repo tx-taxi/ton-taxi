@@ -12710,6 +12710,7 @@
           <trans-unit id="ton.identity.scam" datatype="html"><source>Scam</source><target>Arnaque</target></trans-unit>
       <trans-unit id="ton.identity.verified-entity" datatype="html"><source>Verified entity</source><target>Entité vérifiée</target></trans-unit>
       <trans-unit id="ton.identity.smart-contract" datatype="html"><source>Smart contract</source><target>Contrat intelligent</target></trans-unit>
+          <trans-unit id="ton.network.no-master-head" datatype="html"><source>No masterchain head is available</source><target>Aucune tête de masterchain disponible</target></trans-unit>
     </body>
   </file>
 </xliff>
