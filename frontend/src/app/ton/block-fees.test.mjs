@@ -56,3 +56,19 @@ test('even-count median remainders stay exact and a positive sub-nanogram median
   assert.match(large.title, /Median: 9007199254740993\.5 ng\/tx/);
   assert.match(large.title, /Transaction fees: 18014398\.509481987 GRAM/);
 });
+
+test('atomic unit names follow the actual count without losing large integer precision', () => {
+  const values = {
+    cs: ['atomických jednotek', 'atomická jednotka', 'atomické jednotky', 'atomických jednotek', 'atomických jednotek', 'atomických jednotek'],
+    pl: ['jednostek atomowych', 'jednostka atomowa', 'jednostki atomowe', 'jednostek atomowych', 'jednostek atomowych', 'jednostki atomowe'],
+    ru: ['атомарных единиц', 'атомарная единица', 'атомарные единицы', 'атомарных единиц', 'атомарная единица', 'атомарные единицы'],
+    uk: ['атомарних одиниць', 'атомарна одиниця', 'атомарні одиниці', 'атомарних одиниць', 'атомарна одиниця', 'атомарні одиниці'],
+  };
+  for (const [locale, names] of Object.entries(values)) {
+    for (const [index, atomic] of ['0', '1', '2', '5', '21', '9007199254741022'].entries()) {
+      const amount = { atomic, decimals: 0, symbol: 'JETTON', native: false, quote: null };
+      assert.ok(nativeAmount.displayNativeAmount(amount, 'btc', 'USD', null, locale).title.endsWith(names[index]));
+    }
+  }
+  assert.match(nativeAmount.displayNativeAmount({ atomic: '2', decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true }, 'sats', 'USD', null, 'cs').unit, /^nanogramy$/);
+});

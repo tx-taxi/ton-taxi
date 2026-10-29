@@ -51,15 +51,35 @@ function fiatValue(atomic: string, decimals: number, quote: NativeQuote, locale:
   return (small ? (negative ? '>' : '<') : '') + formatted;
 }
 
+// These units follow the cardinal count, which can exceed Number's safe range.
+function slavicAtomicUnit(atomic: string, symbol: string | undefined, locale: string): string | null {
+  const language = locale.toLowerCase().split('-')[0];
+  if (!['cs', 'pl', 'ru', 'uk'].includes(language)) return null;
+  const kind = symbol === 'nanograms' ? 'nanograms' : symbol === 'raw units' ? 'raw' : !symbol ? 'atomic' : null;
+  if (!kind) return null;
+  const n = BigInt(atomic), magnitude = n < 0n ? -n : n;
+  const last = Number(magnitude % 10n), lastTwo = Number(magnitude % 100n);
+  const form = language === 'cs' ? (magnitude === 1n ? 0 : magnitude >= 2n && magnitude <= 4n ? 1 : 2)
+    : language === 'pl' ? (magnitude === 1n ? 0 : last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14) ? 1 : 2)
+    : (last === 1 && lastTwo !== 11 ? 0 : last >= 2 && last <= 4 && (lastTwo < 12 || lastTwo > 14) ? 1 : 2);
+  const forms: Record<string, Record<string, string[]>> = {
+    cs: { nanograms: ['nanogram', 'nanogramy', 'nanogramů'], raw: ['surová jednotka', 'surové jednotky', 'surových jednotek'], atomic: ['atomická jednotka', 'atomické jednotky', 'atomických jednotek'] },
+    pl: { nanograms: ['nanogram', 'nanogramy', 'nanogramów'], raw: ['jednostka surowa', 'jednostki surowe', 'jednostek surowych'], atomic: ['jednostka atomowa', 'jednostki atomowe', 'jednostek atomowych'] },
+    ru: { nanograms: ['нанограмм', 'нанограмма', 'нанограммов'], raw: ['исходная единица', 'исходные единицы', 'исходных единиц'], atomic: ['атомарная единица', 'атомарные единицы', 'атомарных единиц'] },
+    uk: { nanograms: ['нанограм', 'нанограми', 'нанограмів'], raw: ['вихідна одиниця', 'вихідні одиниці', 'вихідних одиниць'], atomic: ['атомарна одиниця', 'атомарні одиниці', 'атомарних одиниць'] },
+  };
+  return forms[language][kind][form];
+}
+
 export function displayNativeAmount(amount: NativeAmount, mode: 'btc'|'sats'|'fiat', currency: string, fallback?: NativeQuote | null, locale = 'en-US'): AmountDisplay {
   const exact = exactUnits(amount.atomic, amount.decimals, true, locale);
   const unavailable = { value: '—', unit: '', title: $localize`:@@ton.amount.unavailable:Amount unavailable`, stale: false };
   if (exact === null) return unavailable;
-  const atomicUnit = amount.atomicSymbol === 'nanograms'
+  const atomicUnit = slavicAtomicUnit(String(amount.atomic), amount.atomicSymbol, locale) || (amount.atomicSymbol === 'nanograms'
     ? $localize`:@@ton.amount.nanograms:nanograms`
     : amount.atomicSymbol === 'raw units'
     ? $localize`:@@ton.amount.raw-units:raw units`
-    : amount.atomicSymbol || $localize`:@@ton.amount.atomic-units:atomic units`;
+    : amount.atomicSymbol || $localize`:@@ton.amount.atomic-units:atomic units`);
   const title = `${exact} ${amount.symbol} · ${exactUnits(amount.atomic, 0, true, locale)} ${atomicUnit}`;
   if (amount.native && mode === 'sats') return { value: exactUnits(amount.atomic, 0, true, locale), unit: atomicUnit, title, stale: false };
   const quote = amount.quote === undefined ? fallback : amount.quote;
