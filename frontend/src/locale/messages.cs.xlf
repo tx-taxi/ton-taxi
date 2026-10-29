@@ -14834,7 +14834,7 @@
       </trans-unit>
       <trans-unit id="ton.block.transaction-fees-many" datatype="html">
         <source>Transaction fees: <x id="total" equiv-text="totalText" /> GRAM across <x id="count" equiv-text="count" /> transactions in this block. <x id="distribution" equiv-text="distribution" /> ng/tx means nanograms per transaction; 1 GRAM = 1,000,000,000 nanograms.</source>
-        <target state="needs-review-translation">Transakční poplatky: <x id="total" equiv-text="totalText" /> GRAM za <x id="count" equiv-text="count" /> transakcí v tomto bloku. <x id="distribution" equiv-text="distribution" /> ng/tx znamená nanogramy na transakci; 1 GRAM = 1,000,000,000 nanogramů.</target><context-group purpose="location">
+        <target state="needs-review-translation">Transakční poplatky: <x id="total" equiv-text="totalText" /> GRAM; počet transakcí v tomto bloku: <x id="count" equiv-text="count" />. <x id="distribution" equiv-text="distribution" /> ng/tx znamená nanogramy na transakci; 1 GRAM = 1 000 000 000 nanogramů.</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/block-format.ts</context>
           <context context-type="linenumber">68</context>
         </context-group>
