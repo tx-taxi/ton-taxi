@@ -11523,6 +11523,598 @@
       <trans-unit id="ton.amount.stale-price" datatype="html"><source>Last available price</source><target>Zuletzt verfügbarer Preis</target></trans-unit>
       <trans-unit id="ton.amount.price-as-of" datatype="html"><source>Price as of <x id="time"/></source><target>Preis vom <x id="time"/></target></trans-unit>
       <trans-unit id="ton.amount.stale-price-as-of" datatype="html"><source>Last available price as of <x id="time"/></source><target>Zuletzt verfügbarer Preis vom <x id="time"/></target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.c2ba4283527d" datatype="html"><source>ADNL address</source><target>ADNL-Adresse</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2b258ba10b85" datatype="html"><source>APY history</source><target>Renditeverlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.85dfa32c97d8" datatype="html"><source>Account</source><target>Konto</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.e68d6d1e1cf2" datatype="html"><source>Account details</source><target>Kontodetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.81c0d915fa6d" datatype="html"><source>Activity</source><target>Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1e8c09c8a3d6" datatype="html"><source>All collections</source><target>Alle Sammlungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cd7586c09d04" datatype="html"><source>All jettons</source><target>Alle Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.43dc8532f7e5" datatype="html"><source>Amount</source><target>Betrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.f071978a7faf" datatype="html"><source>Amount details</source><target>Betragsdetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cfea419c3b4e" datatype="html"><source>Apply</source><target>Anwenden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.deb9d03cf06d" datatype="html"><source>Approvals</source><target>Genehmigungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cbb9fa252e60" datatype="html"><source>Arguments</source><target>Argumente</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a6652617f2c7" datatype="html"><source>Attributes</source><target>Attribute</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.97a9869cf89f" datatype="html"><source>Authority</source><target>Berechtigung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.90eef613042c" datatype="html"><source>Balance</source><target>Guthaben</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.3f327acd783e" datatype="html"><source>Beneficiary</source><target>Begünstigter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.3e82fd56953a" datatype="html"><source>Bidder</source><target>Bieter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.43136fbc06cb" datatype="html"><source>Bids</source><target>Gebote</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.719ea396ad92" datatype="html"><source>Clear</source><target>Zurücksetzen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.83627c1bf4f7" datatype="html"><source>Code and data</source><target>Code und Daten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.70d50f44e69a" datatype="html"><source>Collection address</source><target>Sammlungsadresse</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.5230bb7b0eec" datatype="html"><source>Contract state</source><target>Vertragsstatus</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.7dd81ae810f8" datatype="html"><source>Currency ID</source><target>Währungs-ID</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.edc2e9466a8e" datatype="html"><source>Cycle end</source><target>Zyklusende</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.75478cd96ba4" datatype="html"><source>Cycle start</source><target>Zyklusbeginn</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.019ce476e2cd" datatype="html"><source>DNS records</source><target>DNS-Einträge</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2a4e3cb3c61a" datatype="html"><source>Decimals</source><target>Dezimalstellen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dc3decbb9384" datatype="html"><source>Details</source><target>Details</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.e0dd792dae13" datatype="html"><source>Display multiplier</source><target>Anzeigemultiplikator</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.9b10914d8b0a" datatype="html"><source>Domain</source><target>Domain</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b21b2ce45f21" datatype="html"><source>Domain type</source><target>Domain-Typ</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.217da2dcefee" datatype="html"><source>Election</source><target>Wahl</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cd990de40f66" datatype="html"><source>Election close</source><target>Wahlende</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.6d525b71568c" datatype="html"><source>Execution</source><target>Ausführung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a99be3da0c9d" datatype="html"><source>Expires</source><target>Läuft ab</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cf81e848d0ed" datatype="html"><source>Extra currencies</source><target>Zusätzliche Währungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.f8db8a172be6" datatype="html"><source>Flagged</source><target>Markiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.8c2e0e1d55b8" datatype="html"><source>For sale</source><target>Zum Verkauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.65e14a168f40" datatype="html"><source>Holders</source><target>Inhaber</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.44d25b5d1b6d" datatype="html"><source>Items</source><target>Objekte</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2b67881ce25a" datatype="html"><source>Jetton activity</source><target>Jetton-Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.8148f977f98c" datatype="html"><source>Last transaction</source><target>Letzte Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.9f7a5125e18f" datatype="html"><source>Last transaction logical time</source><target>Logische Zeit der letzten Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.01ce707e2f41" datatype="html"><source>Liquid staking jetton</source><target>Liquid-Staking-Jetton</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.d85460ddaf8e" datatype="html"><source>Load activity</source><target>Aktivität laden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dfe60ca92e8c" datatype="html"><source>Load more</source><target>Mehr laden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dd3c47b1ddf9" datatype="html"><source>Logical time</source><target>Logische Zeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.983095c0ea49" datatype="html"><source>Marketplace</source><target>Marktplatz</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.88306943fea7" datatype="html"><source>Method</source><target>Methode</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a7f544fdb06d" datatype="html"><source>Minimum stake</source><target>Mindesteinsatz</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b2b0c71e9b84" datatype="html"><source>NFT activity</source><target>NFT-Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1a1196248ac7" datatype="html"><source>NFT collections</source><target>NFT-Sammlungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.709a23220f2c" datatype="html"><source>Name</source><target>Name</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b73b53a8bc26" datatype="html"><source>Next resolver</source><target>Nächster Resolver</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b94053695be5" datatype="html"><source>No DeFi positions</source><target>Keine DeFi-Positionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.881cc9bbd7eb" datatype="html"><source>No auctions</source><target>Keine Auktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.57b0bfcef217" datatype="html"><source>No expiring domains</source><target>Keine ablaufenden Domains</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.fc5e5bdcd5f6" datatype="html"><source>No image</source><target>Kein Bild</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.248cdfdd8b09" datatype="html"><source>No matching jettons</source><target>Keine passenden Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.04ad08c2fb36" datatype="html"><source>No multisigs</source><target>Keine Multisig-Verträge</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.62e70d7b484a" datatype="html"><source>No orders</source><target>Keine Aufträge</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.accf2130918b" datatype="html"><source>No staking positions</source><target>Keine Staking-Positionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.6ddd0036004d" datatype="html"><source>No subscriptions</source><target>Keine Abonnements</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1abeb8757a1a" datatype="html"><source>Nominator stake</source><target>Einsatz der Nominatoren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b6c6faf2bc74" datatype="html"><source>Nominators</source><target>Nominatoren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cad5c587ae9e" datatype="html"><source>Non-transferable</source><target>Nicht übertragbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.e370bf59e3f5" datatype="html"><source>On-chain amount</source><target>On-Chain-Betrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.e89a111b7754" datatype="html"><source>On-chain supply</source><target>On-Chain-Angebot</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1d75774c0f96" datatype="html"><source>Order</source><target>Auftrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cded093321dd" datatype="html"><source>Orders</source><target>Aufträge</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.89ff31225c5f" datatype="html"><source>Owner</source><target>Eigentümer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b41a92bed032" datatype="html"><source>Payment</source><target>Zahlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.5e5539912558" datatype="html"><source>Pending deposit</source><target>Ausstehende Einzahlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.714dee1179fd" datatype="html"><source>Pending withdrawal</source><target>Ausstehende Auszahlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.170a28a9db6d" datatype="html"><source>Period</source><target>Zeitraum</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.8d97b591fd55" datatype="html"><source>Pool type</source><target>Pool-Typ</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cf1c85adba54" datatype="html"><source>Position</source><target>Position</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.3e8248e32edf" datatype="html"><source>Price</source><target>Preis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.cf04b6aee397" datatype="html"><source>Proposers</source><target>Vorschlagende</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1ed77c3f7ffc" datatype="html"><source>Protocol</source><target>Protokoll</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b7c8c8186e4d" datatype="html"><source>Public storage cells</source><target>Öffentliche Speicherzellen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.3c6de25c4d7d" datatype="html"><source>Raw configuration</source><target>Rohkonfiguration</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.eb245d4de947" datatype="html"><source>Raw units</source><target>Roheinheiten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.852b438f91ad" datatype="html"><source>Read</source><target>Lesen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.150402cea1ca" datatype="html"><source>Read contract</source><target>Vertrag lesen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.61b152c1d581" datatype="html"><source>Ready to withdraw</source><target>Zur Auszahlung bereit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.9f5cd8a2e880" datatype="html"><source>Retry</source><target>Erneut versuchen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.6f6bf2c2a092" datatype="html"><source>Revocation</source><target>Widerruf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.d93cab6203fc" datatype="html"><source>Royalties</source><target>Lizenzgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.7c30af7662a7" datatype="html"><source>Sale contract</source><target>Verkaufsvertrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.4bdbaabecf05" datatype="html"><source>Scheduled charge</source><target>Geplante Abbuchung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dc59e8357c44" datatype="html"><source>Select method</source><target>Methode auswählen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.ec3ef051d5a8" datatype="html"><source>Seller</source><target>Verkäufer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.c143ebd22f47" datatype="html"><source>Sequence number</source><target>Sequenznummer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.ddfd835b2d65" datatype="html"><source>Signed by</source><target>Unterzeichnet von</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.e01e922d6a64" datatype="html"><source>Signers</source><target>Unterzeichner</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.5cae88ddf533" datatype="html"><source>Sites</source><target>Websites</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2fd4388f4074" datatype="html"><source>Soulbound details</source><target>Soulbound-Details</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.78d7103a319e" datatype="html"><source>Stake</source><target>Einsatz</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.ca37c7aa9669" datatype="html"><source>Staked</source><target>Gestakt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.0054eca09fce" datatype="html"><source>State unavailable</source><target>Status nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.bae7d5be7082" datatype="html"><source>Status</source><target>Status</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.9e092dda4f0e" datatype="html"><source>Storage</source><target>Speicher</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.bcfb4b9c4322" datatype="html"><source>Storage bits</source><target>Speicherbits</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.944f188b6856" datatype="html"><source>Storage cells</source><target>Speicherzellen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b381354ddb70" datatype="html"><source>Storage last paid</source><target>Letzte Speicherzahlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.57f66d393870" datatype="html"><source>Storage payment due</source><target>Fällige Speicherzahlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.8fde48f31aff" datatype="html"><source>Subscription</source><target>Abonnement</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.3f84ef531f9d" datatype="html"><source>Symbol</source><target>Symbol</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.c51f7b72279e" datatype="html"><source>Threshold</source><target>Schwellenwert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.6c82e6dd8680" datatype="html"><source>Time</source><target>Zeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.5cd6978d6354" datatype="html"><source>Total stake</source><target>Gesamteinsatz</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.83323d9d227a" datatype="html"><source>Total staked</source><target>Insgesamt gestakt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2f38169a712e" datatype="html"><source>Trace</source><target>Ablauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.1a7b7c1b33d1" datatype="html"><source>Transaction</source><target>Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.33a579ffc0dc" datatype="html"><source>Trust</source><target>Vertrauen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.2c9c1f79142d" datatype="html"><source>Unavailable</source><target>Nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.bc7819b34ff8" datatype="html"><source>Unknown</source><target>Unbekannt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.04fd92b96a03" datatype="html"><source>Updates delayed</source><target>Aktualisierungen verzögert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.6e5b7a609804" datatype="html"><source>Validator</source><target>Validator</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.bffffde265e6" datatype="html"><source>Validator stake</source><target>Einsatz des Validators</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.03128bed9062" datatype="html"><source>Verification</source><target>Verifizierung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.b60862f4855a" datatype="html"><source>Wallet</source><target>Wallet</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.trust.recognized" datatype="html"><source>Recognized</source><target>Erkannt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.trust.flagged" datatype="html"><source>Flagged</source><target>Markiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.trust.unclassified" datatype="html"><source>Unclassified</source><target>Nicht klassifiziert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.history" datatype="html"><source>History</source><target>Verlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.transactions" datatype="html"><source>Transactions</source><target>Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.traces" datatype="html"><source>Traces</source><target>Abläufe</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.nfts" datatype="html"><source>NFTs</source><target>NFTs</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tab.contract" datatype="html"><source>Contract</source><target>Vertrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.catalog.shown" datatype="html"><source><x id="INTERPOLATION" equiv-text="{{ list(data).length }}" /> shown</source><target><x id="INTERPOLATION" equiv-text="{{ list(data).length }}" /> angezeigt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.ec4a2956ddc7" datatype="html"><source>About ton.tx.taxi</source><target>Über ton.tx.taxi</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.9a8ff6902dd0" datatype="html"><source>The TON explorer in the tx.taxi family.</source><target>Der TON-Explorer der tx.taxi-Familie.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.a2df9750b2c2" datatype="html"><source>TON documentation</source><target>TON-Dokumentation</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.230181c155ba" datatype="html"><source>Contact the maintainer</source><target>Kontakt zum Betreiber</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.388d2614631e" datatype="html"><source>Explore TON blocks, messages, transactions, accounts, jettons, and NFTs in the familiar tx.taxi interface.</source><target>Erkunde TON-Blöcke, Nachrichten, Transaktionen, Konten, Jettons und NFTs in der vertrauten tx.taxi-Oberfläche.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.ad19fa3c31c0" datatype="html"><source>Follow the whole transaction</source><target>Verfolge die gesamte Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.f9ea762c9354" datatype="html"><source>TON activity can span several contracts and messages. Follow each step, inspect its status and fees, and open the full transaction details.</source><target>TON-Aktivitäten können mehrere Verträge und Nachrichten umfassen. Verfolge jeden Schritt, prüfe Status und Gebühren und öffne die vollständigen Transaktionsdetails.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.adf55a81efdb" datatype="html"><source>See what a wallet holds</source><target>Sieh, was eine Wallet enthält</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.7d71c42ecb5f" datatype="html"><source>Browse jettons and collectibles, including on-chain Telegram gifts, usernames, numbers, and TON domains. Open an item for ownership, collection, attributes, and transfer history.</source><target>Erkunde Jettons und Sammlerstücke, einschließlich Telegram-Geschenken, Nutzernamen, Nummern und TON-Domains auf der Blockchain. Öffne ein Objekt, um Eigentum, Sammlung, Attribute und Übertragungsverlauf anzuzeigen.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.e54c7055d701" datatype="html"><source>Built on open source</source><target>Auf Open Source aufgebaut</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.29d606cfd689" datatype="html"><source>One search across chains.</source><target>Eine Suche über mehrere Chains.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.8dc06a59d879" datatype="html"><source>Paste a transaction, block or address into tx.taxi. Open a confirmed match, choose between possible networks, or head straight to your chain’s explorer.</source><target>Füge eine Transaktion, einen Block oder eine Adresse bei tx.taxi ein. Öffne einen bestätigten Treffer, wähle zwischen möglichen Netzwerken oder gehe direkt zum Explorer deiner Chain.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.collections" datatype="html"><source>NFT collections</source><target>NFT-Sammlungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.dashboard" datatype="html"><source>TON Explorer</source><target>TON-Explorer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.blocks" datatype="html"><source>Blocks</source><target>Blöcke</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.block" datatype="html"><source>Block</source><target>Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.tx" datatype="html"><source>Transaction</source><target>Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.address" datatype="html"><source>Account</source><target>Konto</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.nft" datatype="html"><source>NFT</source><target>NFT</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.collection" datatype="html"><source>Collection</source><target>Sammlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.jetton" datatype="html"><source>Jetton</source><target>Jetton</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.validators" datatype="html"><source>Validators</source><target>Validatoren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.transactions" datatype="html"><source>Transactions</source><target>Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.message" datatype="html"><source>Message</source><target>Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.trace" datatype="html"><source>Trace</source><target>Ablauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.not-found" datatype="html"><source>Page not found</source><target>Seite nicht gefunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.dns" datatype="html"><source>TON DNS</source><target>TON DNS</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.dns-auctions" datatype="html"><source>DNS auctions</source><target>DNS-Auktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.staking-pool" datatype="html"><source>Staking pool</source><target>Staking-Pool</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.extra-currency" datatype="html"><source>Extra currency</source><target>Zusätzliche Währung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.title.config" datatype="html"><source>Network configuration</source><target>Netzwerkkonfiguration</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.find-jetton" datatype="html"><source>Find jetton</source><target>Jetton suchen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.sort" datatype="html"><source>Sort</source><target>Sortieren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.collection" datatype="html"><source>Collection</source><target>Sammlung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.metadata" datatype="html"><source>Metadata</source><target>Metadaten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.website" datatype="html"><source>Website ↗</source><target>Website ↗</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.open-animation" datatype="html"><source>Open animation ↗</source><target>Animation öffnen ↗</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.pool" datatype="html"><source>Pool</source><target>Pool</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.temporarily-unavailable" datatype="html"><source>Temporarily unavailable</source><target>Vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.records-unavailable" datatype="html"><source>Records unavailable</source><target>Einträge nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.placeholder-asset" datatype="html"><source>Name, symbol or address</source><target>Name, Symbol oder Adresse</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.placeholder-collection" datatype="html"><source>Collection address</source><target>Sammlungsadresse</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.placeholder-arguments" datatype="html"><source>Comma-separated arguments</source><target>Kommagetrennte Argumente</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.loading" datatype="html"><source>Loading</source><target>Wird geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.loading-assets" datatype="html"><source>Loading assets</source><target>Assets werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.loading-more-assets" datatype="html"><source>Loading more assets</source><target>Weitere Assets werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.empty-nfts" datatype="html"><source>No NFTs</source><target>Keine NFTs</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.empty-jettons" datatype="html"><source>No jettons</source><target>Keine Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.empty-shards" datatype="html"><source>No shards</source><target>Keine Shards</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.empty-activity" datatype="html"><source>No activity</source><target>Keine Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.refresh" datatype="html"><source>Refresh</source><target>Aktualisieren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.not-found" datatype="html"><source>Not found</source><target>Nicht gefunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.page-not-found" datatype="html"><source>Page not found</source><target>Seite nicht gefunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.list-updated" datatype="html"><source>List updated</source><target>Liste aktualisiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.invalid-filter" datatype="html"><source>Invalid filter</source><target>Ungültiger Filter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.invalid-jetton" datatype="html"><source>Invalid jetton</source><target>Ungültiger Jetton</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.bad-arguments" datatype="html"><source>Enter comma-separated arguments or a JSON array of strings</source><target>Kommagetrennte Argumente oder ein JSON-Array mit Zeichenfolgen eingeben</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.method-failed" datatype="html"><source>Unable to run method</source><target>Methode konnte nicht ausgeführt werden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.revoked" datatype="html"><source>Revoked</source><target>Widerrufen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.not-revoked" datatype="html"><source>Not revoked</source><target>Nicht widerrufen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.unknown" datatype="html"><source>Unknown</source><target>Unbekannt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.extra.for-sale" datatype="html"><source>For sale</source><target>Zum Verkauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.tagline" datatype="html"><source>TON blocks, transactions, and accounts</source><target>TON-Blöcke, Transaktionen und Konten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.explore" datatype="html"><source>Explore</source><target>Erkunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.dashboard" datatype="html"><source>Dashboard</source><target>Übersicht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.recent-blocks" datatype="html"><source>Recent Blocks</source><target>Neueste Blöcke</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.recent-txs" datatype="html"><source>Recent Transactions</source><target>Neueste Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.jettons" datatype="html"><source>Jettons</source><target>Jettons</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.nfts" datatype="html"><source>NFT Collections</source><target>NFT-Sammlungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.markets" datatype="html"><source>Markets</source><target>Märkte</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.validators" datatype="html"><source>Validators</source><target>Validatoren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.dns" datatype="html"><source>TON DNS</source><target>TON DNS</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.network-config" datatype="html"><source>Network Configuration</source><target>Netzwerkkonfiguration</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.what-ton" datatype="html"><source>What is TON?</source><target>Was ist TON?</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.blocks" datatype="html"><source>Blocks</source><target>Blöcke</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.transactions" datatype="html"><source>Transactions</source><target>Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.messages-fees" datatype="html"><source>Messages and fees</source><target>Nachrichten und Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.about" datatype="html"><source>About</source><target>Über</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.source" datatype="html"><source>Source code</source><target>Quellcode</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.status" datatype="html"><source>Status</source><target>Status</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.telegram" datatype="html"><source>Telegram</source><target>Telegram</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.contact" datatype="html"><source>Contact Us</source><target>Kontakt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.legal" datatype="html"><source>Legal</source><target>Rechtliches</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.terms" datatype="html"><source>Terms of Service</source><target>Nutzungsbedingungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.privacy" datatype="html"><source>Privacy Policy</source><target>Datenschutzerklärung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.third-party" datatype="html"><source>Third-party Licenses</source><target>Lizenzen Dritter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.made-with" datatype="html"><source>Made with</source><target>Erstellt mit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.by" datatype="html"><source>by</source><target>von</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.footer.telegram-aria" datatype="html"><source>Join the tx.taxi Telegram channel</source><target>Tritt dem tx.taxi-Telegram-Kanal bei</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.currency-history" datatype="html"><source><x id="INTERPOLATION" /> history</source><target>Verlauf von <x id="INTERPOLATION" /></target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.public-key" datatype="html"><source>Public key (hex)</source><target>Öffentlicher Schlüssel (hex)</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.expiring-domains" datatype="html"><source>Expiring domains</source><target>Ablaufende Domains</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.contract-inspection" datatype="html"><source>Contract inspection</source><target>Vertragsprüfung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.staking" datatype="html"><source>Staking</source><target>Staking</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.multisigs" datatype="html"><source>Multisigs</source><target>Multisig-Verträge</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.subscriptions" datatype="html"><source>Subscriptions</source><target>Abonnements</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.seconds" datatype="html"><source>seconds</source><target>Sekunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.sent-execution" datatype="html"><source>Sent for execution</source><target>Zur Ausführung gesendet</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.awaiting-execution" datatype="html"><source>Awaiting execution</source><target>Ausführung ausstehend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.transfer-history" datatype="html"><source>Transfer history</source><target>Übertragungsverlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.nft-details" datatype="html"><source>NFT details</source><target>NFT-Details</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.collection-details" datatype="html"><source>Collection details</source><target>Sammlungsdetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.jetton-details" datatype="html"><source>Jetton details</source><target>Jetton-Details</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.other-actions" datatype="html"><source>Other actions</source><target>Weitere Aktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.multisig" datatype="html"><source>Multisig</source><target>Multisig</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.successful" datatype="html"><source>Successful</source><target>Erfolgreich</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.failed" datatype="html"><source>Failed</source><target>Fehlgeschlagen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.auctions" datatype="html"><source>auctions</source><target>Auktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.verified" datatype="html"><source>Verified</source><target>Verifiziert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.unverified" datatype="html"><source>Unverified</source><target>Nicht verifiziert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.parameter" datatype="html"><source>Parameter</source><target>Parameter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.loading-asset" datatype="html"><source>Loading asset data…</source><target>Asset-Daten werden geladen…</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.asset-unavailable" datatype="html"><source>Asset unavailable</source><target>Asset nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.try-again" datatype="html"><source>Try again</source><target>Erneut versuchen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.soulbound" datatype="html"><source>Soulbound</source><target>Soulbound</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.jetton-metrics" datatype="html"><source>Jetton metrics</source><target>Jetton-Kennzahlen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.total-supply" datatype="html"><source>Total supply</source><target>Gesamtangebot</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.mintable" datatype="html"><source>Mintable</source><target>Prägbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.yes" datatype="html"><source>Yes</source><target>Ja</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.no" datatype="html"><source>No</source><target>Nein</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.admin" datatype="html"><source>Admin</source><target>Administrator</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.index" datatype="html"><source>Index</source><target>Index</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.next-index" datatype="html"><source>Next item index</source><target>Nächster Objektindex</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.membership" datatype="html"><source>Collection membership</source><target>Sammlungszugehörigkeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.recognized-by" datatype="html"><source>Recognized by</source><target>Erkannt von</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.unnamed-nft" datatype="html"><source>Unnamed NFT</source><target>Unbenanntes NFT</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.unnamed-jetton" datatype="html"><source>Unnamed jetton</source><target>Unbenannter Jetton</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.raw-units" datatype="html"><source>raw units</source><target>Roheinheiten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.units" datatype="html"><source>units</source><target>Einheiten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.tokens" datatype="html"><source>tokens</source><target>Token</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.account-qr" datatype="html"><source>Show account QR code</source><target>Konto-QR-Code anzeigen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.account-unavailable" datatype="html"><source>Account unavailable</source><target>Konto nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.loading-account" datatype="html"><source>Loading account</source><target>Konto wird geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.account-identity" datatype="html"><source>TON account identity</source><target>TON-Kontoidentität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.last-activity" datatype="html"><source>Last activity</source><target>Letzte Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.message-unavailable" datatype="html"><source>Message details unavailable</source><target>Nachrichtendetails nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.state" datatype="html"><source>State</source><target>Status</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.tx-type" datatype="html"><source>Transaction type</source><target>Transaktionstyp</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.aborted" datatype="html"><source>Aborted</source><target>Abgebrochen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.destroyed" datatype="html"><source>Destroyed</source><target>Zerstört</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.previous-tx" datatype="html"><source>Previous transaction</source><target>Vorherige Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.previous-lt" datatype="html"><source>Previous logical time</source><target>Vorherige logische Zeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.state-update" datatype="html"><source>State update</source><target>Statusaktualisierung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.state-hashes" datatype="html"><source>State hashes</source><target>Status-Hashes</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.before" datatype="html"><source>Before</source><target>Vorher</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.after" datatype="html"><source>After</source><target>Nachher</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.not-applicable" datatype="html"><source>Not applicable</source><target>Nicht zutreffend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.tx-details" datatype="html"><source>Transaction details</source><target>Transaktionsdetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.actions" datatype="html"><source>Actions</source><target>Aktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.loading-actions" datatype="html"><source>Loading actions</source><target>Aktionen werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.actions-unavailable" datatype="html"><source>Actions unavailable</source><target>Aktionen nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.related" datatype="html"><source>Related transactions</source><target>Zugehörige Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.loading-related" datatype="html"><source>Loading related transactions</source><target>Zugehörige Transaktionen werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.related-unavailable" datatype="html"><source>Related transactions unavailable</source><target>Zugehörige Transaktionen nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.trace-unavailable" datatype="html"><source>Trace transactions unavailable</source><target>Ablauftransaktionen nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.step" datatype="html"><source>Step</source><target>Schritt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.from-transaction" datatype="html"><source>From transaction</source><target>Aus Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.via-message" datatype="html"><source>via message</source><target>über Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.trace-details" datatype="html"><source>Trace details</source><target>Ablaufdetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.confirmed-fees" datatype="html"><source>Confirmed Transaction Fees</source><target>Bestätigte Transaktionsgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.pending" datatype="html"><source>Pending Messages</source><target>Ausstehende Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.master-block" datatype="html"><source>Masterchain block</source><target>Masterchain-Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.base-block" datatype="html"><source>Basechain block</source><target>Basechain-Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.transactions" datatype="html"><source>Transactions</source><target>Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.interval" datatype="html"><source>Mean block interval</source><target>Durchschnittliches Blockintervall</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.collected" datatype="html"><source>Collected fees</source><target>Eingenommene Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.time" datatype="html"><source>Time</source><target>Zeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fees" datatype="html"><source>Fees</source><target>Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.map-unavailable" datatype="html"><source>Message map unavailable in this browser</source><target>Nachrichtenübersicht in diesem Browser nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.reconnecting" datatype="html"><source>Reconnecting…</source><target>Verbindung wird wiederhergestellt…</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.network" datatype="html"><source>network</source><target>Netzwerk</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.success-unavailable" datatype="html"><source>Success rate unavailable</source><target>Erfolgsrate nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.observed-time" datatype="html"><source>Observed block time</source><target>Beobachtete Blockzeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.seconds" datatype="html"><source>seconds</source><target>Sekunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.ton-network" datatype="html"><source>TON Network</source><target>TON-Netzwerk</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.ton-economics" datatype="html"><source>TON Economics</source><target>TON-Ökonomie</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.economics" datatype="html"><source>economics</source><target>Ökonomie</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.latest-base" datatype="html"><source>Latest basechain block</source><target>Neuester Basechain-Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.latest-master" datatype="html"><source>Latest masterchain block</source><target>Neuester Masterchain-Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.successful" datatype="html"><source>Successful transactions</source><target>Erfolgreiche Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.minimum" datatype="html"><source>Minimum</source><target>Minimum</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.median" datatype="html"><source>Median</source><target>Median</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.average" datatype="html"><source>Average</source><target>Durchschnitt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.maximum" datatype="html"><source>Maximum</source><target>Maximum</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.value" datatype="html"><source>Value</source><target>Wert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.messages" datatype="html"><source>Messages</source><target>Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.graph-fees" datatype="html"><source>Mean collected fees (GRAM/block)</source><target>Durchschnittliche eingenommene Gebühren (GRAM/Block)</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.graph-interval" datatype="html"><source>Mean block interval (s)</source><target>Durchschnittliches Blockintervall (s)</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.master-history" datatype="html"><source>Masterchain history</source><target>Masterchain-Verlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.base-history" datatype="html"><source>Basechain history</source><target>Basechain-Verlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.current-sample" datatype="html"><source>Current sample</source><target>Aktuelle Stichprobe</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.live-history" datatype="html"><source>Live history</source><target>Live-Verlauf</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.last-hours" datatype="html"><source>Last 2 hours</source><target>Letzte 2 Stunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.placeholder" datatype="html"><source>Wave a taxi, paste anything here.</source><target>Wink ein Taxi heran und füge hier etwas ein.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.auto" datatype="html"><source>Automatic Routing</source><target>Automatische Weiterleitung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.view-hub" datatype="html"><source>View Hub</source><target>Hub anzeigen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.native" datatype="html"><source>NATIVE EXPLORERS</source><target>NATIVE EXPLORER</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.third-party" datatype="html"><source>3RD-PARTY EXPLORERS</source><target>EXPLORER VON DRITTANBIETERN</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.opened" datatype="html"><source>Opened</source><target>Geöffnet</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.switch" datatype="html"><source>Switch</source><target>Wechseln</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.id" datatype="html"><source>Block ID</source><target>Block-ID</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.timestamp" datatype="html"><source>Timestamp</source><target>Zeitstempel</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.workchain" datatype="html"><source>Workchain</source><target>Workchain</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.shard" datatype="html"><source>Shard</source><target>Shard</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.fees-rewards" datatype="html"><source>Fees &amp; rewards</source><target>Gebühren und Belohnungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.transaction" datatype="html"><source>transaction</source><target>Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.transactions" datatype="html"><source>transactions</source><target>Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.shard-blocks" datatype="html"><source>Shard blocks</source><target>Shard-Blöcke</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.choose" datatype="html"><source>Choose search chain</source><target>Chain für Suche auswählen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.selected-explorer" datatype="html"><source>Selected explorer</source><target>Ausgewählter Explorer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.selected" datatype="html"><source>SELECTED</source><target>AUSGEWÄHLT</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.registry-unavailable" datatype="html"><source>Explorer registry unavailable</source><target>Explorer-Verzeichnis nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.loading" datatype="html"><source>Loading explorers</source><target>Explorer werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.open-hub-tab" datatype="html"><source>Open tx.taxi in a new tab</source><target>tx.taxi in neuem Tab öffnen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.direct" datatype="html"><source>Or go straight to</source><target>Oder direkt zu</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.additional-explorers" datatype="html"><source>additional explorers</source><target>weitere Explorer</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.open" datatype="html"><source>Open</source><target>Öffnen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.new-tab" datatype="html"><source>in a new tab</source><target>in neuem Tab</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.switch-to" datatype="html"><source>Switch to</source><target>Wechseln zu</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.show" datatype="html"><source>Show</source><target>Anzeigen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.hide" datatype="html"><source>Hide</source><target>Ausblenden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.found" datatype="html"><source>Found</source><target>Gefunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.possible" datatype="html"><source>Possible</source><target>Möglich</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.search" datatype="html"><source>Search</source><target>Suchen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.search.example" datatype="html"><source>tx.taxi/[your search]</source><target>tx.taxi/[deine Suche]</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.title" datatype="html"><source>Terms of Service</source><target>Nutzungsbedingungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.explorer.heading" datatype="html"><source>Explorer service</source><target>Explorer-Dienst</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.explorer.body" datatype="html"><source>ton.tx.taxi is a public TON block explorer provided for informational purposes. It displays public blockchain data obtained from third-party infrastructure and may be delayed, incomplete, or unavailable.</source><target>ton.tx.taxi ist ein öffentlicher TON-Blockexplorer, der zu Informationszwecken bereitgestellt wird. Er zeigt öffentliche Blockchain-Daten aus Drittanbieter-Infrastruktur an, die verzögert, unvollständig oder nicht verfügbar sein können.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.advice.heading" datatype="html"><source>No financial advice</source><target>Keine Finanzberatung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.advice.body" datatype="html"><source>Nothing on this website is financial, investment, legal, or tax advice. Verify important transaction and account information with your own TON node or another independent source before acting on it.</source><target>Keine Angaben auf dieser Website stellen Finanz-, Anlage-, Rechts- oder Steuerberatung dar. Überprüfe wichtige Transaktions- und Kontodaten vor Entscheidungen mit deinem eigenen TON-Knoten oder einer anderen unabhängigen Quelle.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.availability.heading" datatype="html"><source>Availability and external services</source><target>Verfügbarkeit und externe Dienste</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.availability.body" datatype="html"><source>The service is provided as-is without guarantees of accuracy, availability, or fitness for a particular purpose. External links are governed by their respective operators.</source><target>Der Dienst wird ohne Gewähr für Richtigkeit, Verfügbarkeit oder Eignung für einen bestimmten Zweck bereitgestellt. Für externe Links gelten die Bedingungen der jeweiligen Betreiber.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.source.heading" datatype="html"><source>Open-source attribution</source><target>Open-Source-Nachweis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.source.body" datatype="html"><source>The interface is derived from the Mempool Open Source Project and is distributed under the GNU AGPLv3.</source><target>Die Oberfläche basiert auf dem Mempool Open Source Project und wird unter der GNU AGPLv3 verbreitet.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.contact.heading" datatype="html"><source>Contact</source><target>Kontakt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.contact.before" datatype="html"><source>Questions and issue reports can be sent to the operator at</source><target>Fragen und Fehlermeldungen können an den Betreiber gesendet werden unter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.title" datatype="html"><source>Privacy Policy</source><target>Datenschutzerklärung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.audience.heading" datatype="html"><source>Audience measurement</source><target>Reichweitenmessung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.audience.body" datatype="html"><source>tx.taxi uses Cloudflare Web Analytics for page views and performance, and a first-party daily cookie shared across its explorers to count browsers once per UTC day. The daily audience collector stores only a daily identifier, the explorer hostname, and whether there was interaction. It does not receive search text, addresses, transaction IDs, URLs, or IP addresses. Individual daily records expire after 31 days; aggregate counts are retained for 400 days. Do Not Track and Global Privacy Control disable this first-party measurement.</source><target>tx.taxi verwendet Cloudflare Web Analytics zur Messung von Seitenaufrufen und Leistung sowie ein täglich wechselndes Erstanbieter-Cookie, das von allen Explorern gemeinsam genutzt wird, um Browser einmal pro UTC-Tag zu zählen. Der Reichweitenzähler speichert nur eine tägliche Kennung, den Hostnamen des Explorers und ob eine Interaktion stattgefunden hat. Suchtexte, Adressen, Transaktions-IDs, URLs und IP-Adressen werden nicht übermittelt. Einzelne Tagesdatensätze verfallen nach 31 Tagen; zusammengefasste Zählwerte werden 400 Tage aufbewahrt. Do Not Track und Global Privacy Control deaktivieren diese Erstanbieter-Messung.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.audience.link" datatype="html"><source>Details and opt-out</source><target>Details und Widerspruch</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.lookups.heading" datatype="html"><source>Public blockchain lookups</source><target>Öffentliche Blockchain-Abfragen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.lookups.body" datatype="html"><source>TON addresses, transaction hashes, and block identifiers submitted to the explorer are public blockchain data. Requests are processed by ton.tx.taxi and its configured public TON data providers.</source><target>An den Explorer übermittelte TON-Adressen, Transaktions-Hashes und Blockkennungen sind öffentliche Blockchain-Daten. Anfragen werden von ton.tx.taxi und seinen konfigurierten öffentlichen TON-Datenanbietern verarbeitet.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.preferences.heading" datatype="html"><source>Local preferences</source><target>Lokale Einstellungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.preferences.body" datatype="html"><source>Display preferences such as language, timezone, fiat currency, amount mode, and theme may be stored in your browser. These preferences are used to render the interface and are not TON account credentials.</source><target>Anzeigeeinstellungen wie Sprache, Zeitzone, Fiatwährung, Betragsmodus und Design können in deinem Browser gespeichert werden. Diese Einstellungen dienen zur Darstellung der Oberfläche und sind keine Zugangsdaten für ein TON-Konto.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.logs.heading" datatype="html"><source>Operational records</source><target>Betriebsprotokolle</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.logs.body" datatype="html"><source>The hosting stack and upstream data providers may retain routine security and request logs. Do not use a public explorer when a lookup itself is sensitive; use your own TON node and local tooling instead.</source><target>Die Hosting-Infrastruktur und vorgelagerte Datenanbieter können übliche Sicherheits- und Anfrageprotokolle speichern. Verwende keinen öffentlichen Explorer, wenn bereits die Abfrage vertraulich ist; nutze stattdessen deinen eigenen TON-Knoten und lokale Werkzeuge.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.links.heading" datatype="html"><source>External links</source><target>Externe Links</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.links.body" datatype="html"><source>Links to TON documentation, Telegram, u.software, TONAPI, and the upstream Mempool project are governed by those services' own privacy policies.</source><target>Für Links zur TON-Dokumentation, zu Telegram, u.software, TONAPI und zum ursprünglichen Mempool-Projekt gelten die Datenschutzerklärungen der jeweiligen Dienste.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.contact.heading" datatype="html"><source>Contact</source><target>Kontakt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.contact.before" datatype="html"><source>Privacy questions can be sent to the operator at</source><target>Fragen zum Datenschutz können an den Betreiber gesendet werden unter</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.title" datatype="html"><source>Brand attribution</source><target>Markenhinweis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.independent" datatype="html"><source>ton.tx.taxi is an independent TON explorer in the tx.taxi family.</source><target>ton.tx.taxi ist ein unabhängiger TON-Explorer der tx.taxi-Familie.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.ownership" datatype="html"><source>TON, Telegram, Mempool and other names and logos shown here belong to their respective owners. Their use identifies networks, assets and services; it does not imply endorsement or affiliation.</source><target>TON, Telegram, Mempool sowie weitere hier gezeigte Namen und Logos gehören ihren jeweiligen Eigentümern. Ihre Verwendung dient der Bezeichnung von Netzwerken, Assets und Diensten und impliziert keine Unterstützung oder Zugehörigkeit.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.source.before" datatype="html"><source>The interface is based on the</source><target>Die Oberfläche basiert auf dem</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.source.link" datatype="html"><source>Mempool Open Source Project</source><target>Mempool Open Source Project</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.source.after" datatype="html"><source>. Source licensing and third-party attribution are separate from rights to those brands.</source><target>. Die Lizenzierung des Quellcodes und die Nennung Dritter sind von den Rechten an diesen Marken getrennt.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.contact.before" datatype="html"><source>For questions about tx.taxi branding,</source><target>Bei Fragen zur Marke tx.taxi</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.contact.link" datatype="html"><source>contact the maintainer</source><target>kontaktiere den Betreiber</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.meta.title" datatype="html"><source>Terms of Service</source><target>Nutzungsbedingungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.terms.meta.description" datatype="html"><source>Terms for using ton.tx.taxi, an independent TON block explorer operated by tx.taxi.</source><target>Nutzungsbedingungen für ton.tx.taxi, einen unabhängigen TON-Blockexplorer von tx.taxi.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.meta.title" datatype="html"><source>Privacy Policy</source><target>Datenschutzerklärung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.privacy.meta.description" datatype="html"><source>How ton.tx.taxi handles the limited technical data required to operate its TON explorer.</source><target>Wie ton.tx.taxi die begrenzten technischen Daten verarbeitet, die für den Betrieb seines TON-Explorers erforderlich sind.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.meta.title" datatype="html"><source>Brand attribution</source><target>Markenhinweis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.legal.brand.meta.description" datatype="html"><source>Brand and open-source attribution for ton.tx.taxi.</source><target>Marken- und Open-Source-Hinweise für ton.tx.taxi.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.execution" datatype="html"><source>Execution</source><target>Ausführung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.timestamp" datatype="html"><source>Timestamp</source><target>Zeitstempel</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.account" datatype="html"><source>Account</source><target>Konto</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.block" datatype="html"><source>Block</source><target>Block</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.master-ref" datatype="html"><source>Masterchain reference</source><target>Masterchain-Referenz</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.fee" datatype="html"><source>Transaction fee</source><target>Transaktionsgebühr</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.logical-time" datatype="html"><source>Logical time</source><target>Logische Zeit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.state" datatype="html"><source>Account state</source><target>Kontostatus</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.balance" datatype="html"><source>Ending balance</source><target>Endguthaben</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.to" datatype="html"><source>To</source><target>An</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.from" datatype="html"><source>From</source><target>Von</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.no-incoming" datatype="html"><source>No incoming message</source><target>Keine eingehende Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.no-outgoing" datatype="html"><source>No outgoing messages</source><target>Keine ausgehenden Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.no-actions" datatype="html"><source>No decoded actions</source><target>Keine dekodierten Aktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.in-progress" datatype="html"><source>In progress</source><target>In Bearbeitung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.flagged-activity" datatype="html"><source>Flagged activity</source><target>Markierte Aktivität</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.event-details" datatype="html"><source>Event details</source><target>Ereignisdetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.type" datatype="html"><source>Type</source><target>Typ</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.value" datatype="html"><source>Value</source><target>Wert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.hash" datatype="html"><source>Hash</source><target>Hash</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.normalized-hash" datatype="html"><source>Normalized hash</source><target>Normalisierter Hash</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.body-hash" datatype="html"><source>Body hash</source><target>Body-Hash</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.message-size" datatype="html"><source>Message size</source><target>Nachrichtengröße</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.first-seen" datatype="html"><source>First seen</source><target>Erstmals gesehen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.last-seen" datatype="html"><source>Last seen</source><target>Zuletzt gesehen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.message-details" datatype="html"><source>Message details</source><target>Nachrichtendetails</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.external" datatype="html"><source>External</source><target>Extern</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.bounced" datatype="html"><source>Bounced</source><target>Zurückgewiesen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.selected-message" datatype="html"><source>Selected message</source><target>Ausgewählte Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.pending-message" datatype="html"><source>Pending message</source><target>Ausstehende Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.incoming-message" datatype="html"><source>Incoming message</source><target>Eingehende Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.outgoing-message" datatype="html"><source>Outgoing message</source><target>Ausgehende Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.value-unavailable" datatype="html"><source>Value unavailable</source><target>Wert nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.no-native-value" datatype="html"><source>No native value</source><target>Kein nativer Wert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.successful" datatype="html"><source>Successful</source><target>Erfolgreich</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.failed" datatype="html"><source>Failed</source><target>Fehlgeschlagen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.unknown" datatype="html"><source>Unknown</source><target>Unbekannt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.external-incoming" datatype="html"><source>External incoming</source><target>Extern eingehend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.external-outgoing" datatype="html"><source>External outgoing</source><target>Extern ausgehend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.internal-message" datatype="html"><source>Internal message</source><target>Interne Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.message" datatype="html"><source>Message</source><target>Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.storage-phase" datatype="html"><source>Storage phase</source><target>Speicherphase</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.credit-phase" datatype="html"><source>Credit phase</source><target>Gutschriftphase</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.compute-phase" datatype="html"><source>Compute phase</source><target>Berechnungsphase</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.action-phase" datatype="html"><source>Action phase</source><target>Aktionsphase</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.detail.bounce-phase" datatype="html"><source>Bounce phase</source><target>Rücksprungphase</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.gas_fees" datatype="html"><source>gas fees</source><target>Gasgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.gas_used" datatype="html"><source>gas used</source><target>Gasverbrauch</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.gas_limit" datatype="html"><source>gas limit</source><target>Gaslimit</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.gas_credit" datatype="html"><source>gas credit</source><target>Gasgutschrift</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.mode" datatype="html"><source>mode</source><target>Modus</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.exit_code" datatype="html"><source>exit code</source><target>Exit-Code</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.exit_arg" datatype="html"><source>exit arg</source><target>Exit-Argument</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.success" datatype="html"><source>success</source><target>Erfolg</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.skipped" datatype="html"><source>skipped</source><target>Übersprungen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.reason" datatype="html"><source>reason</source><target>Grund</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.valid" datatype="html"><source>valid</source><target>Gültig</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.no_funds" datatype="html"><source>no funds</source><target>Keine Mittel</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.status_change" datatype="html"><source>status change</source><target>Statusänderung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.total_fwd_fees" datatype="html"><source>total fwd fees</source><target>Weiterleitungsgebühren insgesamt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.total_action_fees" datatype="html"><source>total action fees</source><target>Aktionsgebühren insgesamt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.storage_fees_collected" datatype="html"><source>storage fees collected</source><target>Eingenommene Speichergebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.storage_fees_due" datatype="html"><source>storage fees due</source><target>Fällige Speichergebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.fees_collected" datatype="html"><source>fees collected</source><target>Eingenommene Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.fees_due" datatype="html"><source>fees due</source><target>Fällige Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.total_fees" datatype="html"><source>total fees</source><target>Gesamtgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.credit" datatype="html"><source>credit</source><target>Gutschrift</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.msg_fees" datatype="html"><source>msg fees</source><target>Nachrichtengebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.fwd_fees" datatype="html"><source>fwd fees</source><target>Weiterleitungsgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.total_actions" datatype="html"><source>total actions</source><target>Aktionen insgesamt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.skipped_actions" datatype="html"><source>skipped actions</source><target>Übersprungene Aktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.msgs_created" datatype="html"><source>msgs created</source><target>Erstellte Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.result_code" datatype="html"><source>result code</source><target>Ergebniscode</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.result_arg" datatype="html"><source>result arg</source><target>Ergebnisargument</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.action_list_hash" datatype="html"><source>action list hash</source><target>Hash der Aktionsliste</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.tot_msg_size" datatype="html"><source>tot msg size</source><target>Gesamte Nachrichtengröße</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.phase.vm_steps" datatype="html"><source>vm steps</source><target>VM-Schritte</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.nav.validators" datatype="html"><source>Validators</source><target>Validatoren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.nav.docs" datatype="html"><source>TON documentation</source><target>TON-Dokumentation</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.network.earlier-blocks-unavailable" datatype="html"><source>Unable to load earlier blocks</source><target>Frühere Blöcke konnten nicht geladen werden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.network.recent-transactions-unavailable" datatype="html"><source>Recent transactions are temporarily unavailable</source><target>Neueste Transaktionen sind vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.network.block-transactions-unavailable" datatype="html"><source>Block transactions are temporarily unavailable</source><target>Blocktransaktionen sind vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.network.shards-unavailable" datatype="html"><source>Shard references are temporarily unavailable</source><target>Shard-Referenzen sind vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.root-hash" datatype="html"><source>Root hash</source><target>Root-Hash</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.file-hash" datatype="html"><source>File hash</source><target>Datei-Hash</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.previous-blocks" datatype="html"><source>Previous blocks</source><target>Vorherige Blöcke</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.key-block" datatype="html"><source>Key block</source><target>Schlüsselblock</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.view-configuration" datatype="html"><source>View configuration</source><target>Konfiguration anzeigen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.download-boc" datatype="html"><source>Download BOC</source><target>BOC herunterladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.block.fees-rewards-tooltip" datatype="html"><source>Transaction and imported fees, plus the block creation reward.</source><target>Transaktions- und Importgebühren sowie die Belohnung für die Blockerstellung.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.clipboard-copied" datatype="html"><source>Copied to clipboard</source><target>In die Zwischenablage kopiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.clipboard-copy" datatype="html"><source>Copy to clipboard</source><target>In die Zwischenablage kopieren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.copied" datatype="html"><source>Copied</source><target>Kopiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.copy" datatype="html"><source>Copy</source><target>Kopieren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.loading-confirmed-fees" datatype="html"><source>Loading confirmed transaction fees</source><target>Bestätigte Transaktionsgebühren werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.loading-recent-rewards" datatype="html"><source>Loading recent execution rewards</source><target>Neueste Ausführungsbelohnungen werden geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.shard-selection" datatype="html"><source>TON shard selection</source><target>TON-Shard-Auswahl</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.shard" datatype="html"><source>Shard</source><target>Shard</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.project-links" datatype="html"><source>Project links</source><target>Projektlinks</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.shard-option" datatype="html"><source>Shard <x id="INTERPOLATION" /></source><target>Shard <x id="INTERPOLATION" /></target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.page-title" datatype="html"><source>Pending messages</source><target>Ausstehende Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.last-update" datatype="html"><source>Last update</source><target>Letzte Aktualisierung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.feed" datatype="html"><source>Feed</source><target>Feed</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.feed-stale" datatype="html"><source>The pending feed is unavailable. Showing the last update.</source><target>Der Feed ausstehender Nachrichten ist nicht verfügbar. Die letzte Aktualisierung wird angezeigt.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.feed-unavailable-sentence" datatype="html"><source>The pending feed is unavailable.</source><target>Der Feed ausstehender Nachrichten ist nicht verfügbar.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.full-feed-unavailable" datatype="html"><source>Pending feed unavailable</source><target>Feed ausstehender Nachrichten nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.none" datatype="html"><source>No pending messages</source><target>Keine ausstehenden Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.show-more" datatype="html"><source>Show more</source><target>Mehr anzeigen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.latest" datatype="html"><source>Latest</source><target>Neueste</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.of" datatype="html"><source>of</source><target>von</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.message-gone" datatype="html"><source>This message is no longer in the pending list.</source><target>Diese Nachricht ist nicht mehr in der Liste ausstehender Nachrichten.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.live" datatype="html"><source>Live</source><target>Live</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.connecting" datatype="html"><source>Connecting</source><target>Verbindung wird hergestellt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.pending.reconnecting" datatype="html"><source>Reconnecting</source><target>Verbindung wird wiederhergestellt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.aria.to" datatype="html"><source>to</source><target>an</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.status.active" datatype="html"><source>active</source><target>aktiv</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.status.uninit" datatype="html"><source>uninit</source><target>nicht initialisiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.status.frozen" datatype="html"><source>frozen</source><target>eingefroren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.status.nonexist" datatype="html"><source>nonexist</source><target>nicht vorhanden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.return-latest-ton" datatype="html"><source>Return to the latest TON block</source><target>Zum neuesten TON-Block zurückkehren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.a11y.return-latest" datatype="html"><source>Return to latest block</source><target>Zum neuesten Block zurückkehren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.network-panel" datatype="html"><source>TON network dashboard panel</source><target>Übersichtsbereich des TON-Netzwerks</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="81b97b8ea996ad1e4f9fca8415021850214884b1" datatype="html"><source>Status</source><target>Status</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="b7ebd62926b7f199db09a6185c5caf793cd35770" datatype="html"><source>Successful</source><target>Erfolgreich</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ecc3694da313ec05f82bea58d596c4d8e9f935e1" datatype="html"><source>Total fee</source><target>Gesamtgebühr</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="6d1c8856044cc923fc70f32cb4be360d200cfa82" datatype="html"><source>1 new transaction</source><target>1 neue Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="a5c3bb57620832141bf6c51d7344e69af366c7e8" datatype="html"><source><x id="INTERPOLATION" /> new transactions</source><target><x id="INTERPOLATION" /> neue Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="487bebf9352332c5e7f5bd00a78371cacff0fd95" datatype="html"><source>Pause/Resume</source><target>Pausieren/Fortsetzen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="88f27d579752fd40ef53cfff5e936c293ca19221" datatype="html"><source>Pause/Resume</source><target>Pausieren/Fortsetzen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="recent-transactions-title" datatype="html"><source>Recent Transactions</source><target>Neueste Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.message" datatype="html"><source>Message</source><target>Nachricht</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.destination" datatype="html"><source>Destination</source><target>Ziel</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.first-seen" datatype="html"><source>First seen</source><target>Erstmals gesehen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.message-size" datatype="html"><source>Message size</source><target>Nachrichtengröße</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.bytes" datatype="html"><source><x id="INTERPOLATION" /> bytes</source><target><x id="INTERPOLATION" /> Bytes</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.status" datatype="html"><source>Status</source><target>Status</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.messages" datatype="html"><source>Messages</source><target>Nachrichten</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.incoming" datatype="html"><source><x id="INTERPOLATION" /> incoming</source><target><x id="INTERPOLATION" /> eingehend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.outgoing" datatype="html"><source><x id="INTERPOLATION" /> outgoing</source><target><x id="INTERPOLATION" /> ausgehend</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.transfer" datatype="html"><source>Transfer</source><target>Übertragung</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.contract" datatype="html"><source>Contract</source><target>Vertrag</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.tooltip.other" datatype="html"><source>Other</source><target>Sonstige</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.failed-transaction" datatype="html"><source>Failed transaction</source><target>Fehlgeschlagene Transaktion</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.loading-ellipsis" datatype="html"><source>Loading…</source><target>Wird geladen…</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.latest" datatype="html"><source>Latest</source><target>Neueste</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.more.earlier-blocks" datatype="html"><source>Load earlier blocks</source><target>Frühere Blöcke laden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.history-unavailable" datatype="html"><source>Price history temporarily unavailable</source><target>Preisverlauf vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.quotes-unavailable" datatype="html"><source>Market quotes temporarily unavailable</source><target>Marktkurse vorübergehend nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.loading-history" datatype="html"><source>Loading price history</source><target>Preisverlauf wird geladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.no-history" datatype="html"><source>No price history available</source><target>Kein Preisverlauf verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.price" datatype="html"><source><x id="INTERPOLATION" /> price</source><target><x id="INTERPOLATION" /> Preis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.download-chart" datatype="html"><source>Download price chart</source><target>Preisdiagramm herunterladen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.quotes" datatype="html"><source>Market quotes</source><target>Marktkurse</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.market" datatype="html"><source>Market</source><target>Markt</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.usd-price" datatype="html"><source>USD price</source><target>USD-Preis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.updated" datatype="html"><source>Updated</source><target>Aktualisiert</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.market.no-quotes" datatype="html"><source>No market quotes available</source><target>Keine Marktkurse verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.seconds-title" datatype="html"><source><x id="count" /> seconds</source><target><x id="count" /> Sekunden</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-summary" datatype="html"><source><x id="successful" /> successful of <x id="known" /> transactions with a reported outcome</source><target><x id="successful" /> erfolgreiche von <x id="known" /> Transaktionen mit bekanntem Ergebnis</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-unknown" datatype="html"><source>; <x id="unknown" /> outcomes unavailable</source><target>; <x id="unknown" /> Ergebnisse nicht verfügbar</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-master" datatype="html"><source> confirmed by masterchain block #<x id="seqno" /></source><target> bestätigt durch Masterchain-Block #<x id="seqno" /></target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-partial" datatype="html"><source> (partial sample)</source><target> (Teilprobe)</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-label" datatype="html"><source>Successful transactions in the confirmed sample</source><target>Erfolgreiche Transaktionen in der bestätigten Stichprobe</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.outcome-empty" datatype="html"><source>No transaction outcomes are available for this confirmed sample.</source><target>Für diese bestätigte Stichprobe sind keine Transaktionsergebnisse verfügbar.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.meta.title" datatype="html"><source>About ton.tx.taxi</source><target>Über ton.tx.taxi</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.meta.description" datatype="html"><source>Learn about ton.tx.taxi, its TON blocks, accounts and collectibles, open-source lineage, and operator contact details.</source><target>Erfahre mehr über ton.tx.taxi, seine TON-Blöcke, Konten und Sammlerstücke, seine Open-Source-Herkunft und die Kontaktdaten des Betreibers.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.attribution-1" datatype="html"><source>This explorer builds on the</source><target>Dieser Explorer baut auf dem</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.attribution-2" datatype="html"><source>See</source><target>Siehe</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.attribution-3" datatype="html"><source>third-party attribution</source><target>Hinweise zu Drittanbietern</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.about.attribution-4" datatype="html"><source>and contact the maintainer for source and license information.</source><target>und kontaktiere den Betreiber für Informationen zu Quellcode und Lizenz.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.total-fees" datatype="html"><source>Total fees</source><target>Gesamtgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.compute-fees" datatype="html"><source>Compute fees</source><target>Berechnungsgebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.average-tx-fee" datatype="html"><source>Average tx fee</source><target>Durchschnittliche Transaktionsgebühr</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.confirmed-sample" datatype="html"><source><x id="count" /> confirmed transactions</source><target><x id="count" /> bestätigte Transaktionen</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-sample" datatype="html"><source><x id="count" /> confirmed transactions across the network with reported fees</source><target><x id="count" /> bestätigte Transaktionen im Netzwerk mit bekannten Gebühren</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fees-total-description" datatype="html"><source>Total reported transaction fees (<x id="count" /> known).</source><target>Gemeldete Transaktionsgebühren insgesamt (<x id="count" /> bekannt).</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fees-compute-description" datatype="html"><source>Compute-phase gas fees (<x id="count" /> known).</source><target>Gasgebühren der Berechnungsphase (<x id="count" /> bekannt).</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fees-average-description" datatype="html"><source>Average reported fee across <x id="count" /> transactions, rounded down to a whole nanogram when necessary.</source><target>Durchschnittliche gemeldete Gebühr für <x id="count" /> Transaktionen, bei Bedarf auf ein ganzes Nanogramm abgerundet.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-min-description" datatype="html"><source>Lowest observed transaction fee.</source><target>Niedrigste beobachtete Transaktionsgebühr.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-median-description" datatype="html"><source>Middle observed transaction fee, rounded down to a whole nanogram when necessary.</source><target>Mittlere beobachtete Transaktionsgebühr, bei Bedarf auf ein ganzes Nanogramm abgerundet.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-mean-description" datatype="html"><source>Average observed transaction fee, rounded down to a whole nanogram when necessary.</source><target>Durchschnittliche beobachtete Transaktionsgebühr, bei Bedarf auf ein ganzes Nanogramm abgerundet.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-max-description" datatype="html"><source>Highest observed transaction fee.</source><target>Höchste beobachtete Transaktionsgebühr.</target></trans-unit>
+      <trans-unit xmlns="urn:oasis:names:tc:xliff:document:1.2" id="ton.dash.fee-exact" datatype="html"><source> Exact result: <x id="atomic" /> + <x id="remainder" />/<x id="denominator" /> nanograms.</source><target> Exaktes Ergebnis: <x id="atomic" /> + <x id="remainder" />/<x id="denominator" /> Nanogramm.</target></trans-unit>
+
+      <trans-unit id="ton.search.show-one" datatype="html"><source>Show <x id="count"/> additional <x id="name"/> option</source><target><x id="count"/> zusätzliche Option für <x id="name"/> anzeigen</target></trans-unit>
+      <trans-unit id="ton.search.show-many" datatype="html"><source>Show <x id="count"/> additional <x id="name"/> options</source><target><x id="count"/> zusätzliche Optionen für <x id="name"/> anzeigen</target></trans-unit>
+      <trans-unit id="ton.search.hide-one" datatype="html"><source>Hide <x id="count"/> additional <x id="name"/> option</source><target><x id="count"/> zusätzliche Option für <x id="name"/> ausblenden</target></trans-unit>
+      <trans-unit id="ton.search.hide-many" datatype="html"><source>Hide <x id="count"/> additional <x id="name"/> options</source><target><x id="count"/> zusätzliche Optionen für <x id="name"/> ausblenden</target></trans-unit>
+      <trans-unit id="c4221ec405e432a0dac150a4c48c9100eac712bd" datatype="html"><source>Values were capped at the max supply of 21M BTC</source><target>Die Werte wurden auf das maximale Angebot von 21 Millionen BTC begrenzt</target></trans-unit>
+      <trans-unit id="3504995129774539345" datatype="html"><source>Ethereum activity</source><target>Ethereum-Aktivität</target></trans-unit>
+
+          <trans-unit id="ton.pending.page-description" datatype="html"><source>Inspect pending TON external messages, destinations, message hashes, and observation times.</source><target>Prüfe ausstehende externe TON-Nachrichten, Ziele, Nachrichten-Hashes und Beobachtungszeiten.</target></trans-unit>
+          <trans-unit id="ton.preferences.language" datatype="html"><source>Language</source><target>Sprache</target></trans-unit>
+      <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Währung</target></trans-unit>
     </body>
   </file>
 </xliff>

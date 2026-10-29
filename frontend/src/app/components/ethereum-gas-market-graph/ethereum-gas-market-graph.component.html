@@ -5,7 +5,7 @@
       <span class="sr-only">{{ isTon ? tonHistoryTitle : 'Gas market' }}, {{ historyLabel }}</span>
     </div>
 
-    <ul class="gas-market__legend" [attr.aria-label]="isSpanish ? 'Leyenda del gráfico' : 'Chart legend'">
+    <ul class="gas-market__legend" [attr.aria-label]="chartLegendLabel">
       <li><span class="gas-market__swatch gas-market__swatch--fee" aria-hidden="true"></span><ng-container *ngIf="isTon; else baseFee" i18n="@@ton.dash.graph-fees">Mean collected fees (GRAM/block)</ng-container><ng-template #baseFee>Base fee (gwei)</ng-template></li>
       <li><span class="gas-market__swatch gas-market__swatch--utilization" aria-hidden="true"></span><ng-container *ngIf="isTon; else utilization" i18n="@@ton.dash.graph-interval">Mean block interval (s)</ng-container><ng-template #utilization>Network utilization (%)</ng-template></li>
     </ul>

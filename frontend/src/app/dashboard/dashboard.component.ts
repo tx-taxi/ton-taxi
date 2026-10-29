@@ -5,6 +5,7 @@ import { TonNetworkData } from '@app/ton/ton-network-data.service';
 
 @Component({ selector: 'app-dashboard', templateUrl: './dashboard.component.html', styleUrls: ['./dashboard.component.scss'], standalone: false, changeDetection: ChangeDetectionStrategy.OnPush, providers: [TonNetworkData] })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  readonly pendingFeedUnavailable = $localize`:@@ton.pending.full-feed-unavailable:Pending feed unavailable`;
   gasMarketGraphHeight = 260;
   goggleResolution = 82;
   webGlEnabled: boolean;

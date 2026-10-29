@@ -1,0 +1,6 @@
+/** Russian cardinal forms for the TON counts shown in the native block strip. */
+export function russianCountNoun(count: number, kind: 'transaction' | 'message'): string {
+  const form = new Intl.PluralRules('ru').select(count);
+  if (kind === 'transaction') return form === 'one' ? 'транзакция' : form === 'few' ? 'транзакции' : 'транзакций';
+  return form === 'one' ? 'сообщение' : form === 'few' ? 'сообщения' : 'сообщений';
+}

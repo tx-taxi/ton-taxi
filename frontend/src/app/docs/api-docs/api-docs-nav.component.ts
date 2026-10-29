@@ -5,7 +5,8 @@ import {
   tonRestData,
   tonWebsocketData,
 } from '@app/docs/api-docs/ton-docs-data';
-import { translateTonDocs } from '@app/docs/api-docs/ton-docs-es';
+import { localizedTonDocs } from '@app/docs/api-docs/ton-docs-locale';
+import { tonDocsCopy } from '@app/shared/ton-docs-copy';
 
 @Component({
   selector: 'app-api-docs-nav',
@@ -21,10 +22,10 @@ export class ApiDocsNavComponent implements OnInit {
 
   constructor(@Inject(LOCALE_ID) private locale: string) {}
 
-  get isSpanish(): boolean { return this.locale.toLowerCase().startsWith('es'); }
+  get copy() { return tonDocsCopy(this.locale); }
 
   ngOnInit(): void {
-    this.tabData = translateTonDocs(this.whichTab === 'rest'
+    this.tabData = localizedTonDocs(this.whichTab === 'rest'
       ? tonRestData
       : this.whichTab === 'websocket'
         ? tonWebsocketData

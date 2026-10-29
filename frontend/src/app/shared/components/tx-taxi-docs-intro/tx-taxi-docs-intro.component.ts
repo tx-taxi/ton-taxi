@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Inject, Input, LOCALE_ID } from '@angular/core';
+import { tonDocsCopy } from '@app/shared/ton-docs-copy';
 
 @Component({
   selector: 'app-tx-taxi-docs-intro',
@@ -14,9 +15,8 @@ export class TxTaxiDocsIntroComponent {
 
   constructor(@Inject(LOCALE_ID) private locale: string) {}
 
-  get isSpanish(): boolean { return this.locale.toLowerCase().startsWith('es'); }
+  get copy() { return tonDocsCopy(this.locale); }
   get localizedContext(): string {
-    if (!this.isSpanish) return this.context;
-    return this.context === 'documentation' ? 'documentación' : this.context === 'explorer' ? 'explorador' : this.context;
+    return this.context === 'documentation' ? this.copy.documentation : this.context === 'explorer' ? this.copy.explorer : this.context;
   }
 }

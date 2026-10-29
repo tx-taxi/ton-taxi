@@ -13,8 +13,8 @@ import { LanguageService } from '@app/services/language.service';
 })
 export class LanguageSelectorComponent implements OnInit {
   languageForm: UntypedFormGroup;
-  // Spanish is partially translated and remains excluded from search indexing.
-  languages = languages.filter(language => ['en', 'es'].includes(language.code));
+  // Translated pages remain excluded from search indexing until reviewed.
+  languages = languages.filter(language => ['en', 'es', 'fr', 'de', 'pt', 'it', 'ru'].includes(language.code));
 
   constructor(
     @Inject(DOCUMENT) private document: Document,

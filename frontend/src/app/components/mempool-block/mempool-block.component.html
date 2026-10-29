@@ -37,7 +37,7 @@
     <div *ngIf="pending.state === 'loading' && !pending.messages.length" class="box"><span class="skeleton-loader"></span></div>
     <p *ngIf="pending.state === 'ready' && !pending.messages.length" class="grey-info-text" i18n="@@ton.pending.none">No pending messages</p>
     <button *ngIf="visibleCount < pending.messages.length" type="button" class="btn btn-primary" (click)="visibleCount = visibleCount + 20" i18n="@@ton.pending.show-more">Show more</button>
-    <p *ngIf="pending.truncated" class="grey-info-text mt-2"><span i18n="@@ton.pending.latest">Latest</span> {{ pending.messages.length | number }} <span i18n="@@ton.pending.of">of</span> {{ pending.totalObserved | number }} <span i18n="@@ton.pending.many">messages</span></p>
+    <p *ngIf="pending.truncated" class="grey-info-text mt-2"><span i18n="@@ton.pending.latest">Latest</span> {{ pending.messages.length | number }} <span i18n="@@ton.pending.of">of</span> {{ pending.totalObserved | number }} <ng-container *ngIf="locale.toLowerCase().startsWith('ru'); else otherTruncatedCount">{{ russianCountNoun(pending.totalObserved, 'message') }}</ng-container><ng-template #otherTruncatedCount><span i18n="@@ton.pending.many">messages</span></ng-template></p>
     <p *ngIf="selected.hash && !hasMessage(pending, selected.hash) && pending.state !== 'loading'" class="grey-info-text" i18n="@@ton.pending.message-gone">This message is no longer in the pending list.</p>
   </ng-container>
 </div>

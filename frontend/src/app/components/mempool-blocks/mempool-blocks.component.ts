@@ -1,4 +1,5 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
+import { russianCountNoun } from '@app/shared/russian-count';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
@@ -30,6 +31,8 @@ import { ThemeService } from '@app/services/theme.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
+  readonly russianCountNoun = russianCountNoun;
+  get isRussian(): boolean { return this.locale.toLowerCase().startsWith('ru'); }
   blockValueDetails = blockValueDetails;
   nativePendingMode = false;
   nativePending: TonPendingSnapshot;
@@ -46,6 +49,28 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   }
   get pendingTitle(): string {
     const count = this.pendingCount;
+    const language = this.locale.toLowerCase();
+    if (language.startsWith('ru')) {
+      const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
+      const category = count === null ? 'other' : new Intl.PluralRules('ru').select(count);
+      const noun = category === 'one' ? 'внешнее сообщение ожидает' : category === 'few' ? 'внешних сообщения ожидают' : 'внешних сообщений ожидают';
+      const summary = amount === null ? 'Лента ожидающих сообщений недоступна' : `${amount} ${noun}`;
+      const updated = this.nativePending?.observedAt ? ` · Последнее обновление ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Повторное подключение' : '';
+      return summary + updated + stale;
+    }
+    if (language.startsWith('fr') || language.startsWith('de') || language.startsWith('pt') || language.startsWith('it')) {
+      const fr = language.startsWith('fr');
+      const pt = language.startsWith('pt');
+      const it = language.startsWith('it');
+      const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
+      const summary = amount === null
+        ? (fr ? 'Flux des messages en attente indisponible' : pt ? 'Fluxo de mensagens pendentes indisponível' : it ? 'Flusso dei messaggi in attesa non disponibile' : 'Feed ausstehender Nachrichten nicht verfügbar')
+        : fr ? `${amount} message${count === 1 ? '' : 's'} externe${count === 1 ? '' : 's'} en attente` : pt ? `${amount} mensage${count === 1 ? 'm externa pendente' : 'ns externas pendentes'}` : it ? `${amount} messagg${count === 1 ? 'io esterno' : 'i esterni'} in attesa` : `${amount} ausstehende externe Nachricht${count === 1 ? '' : 'en'}`;
+      const updated = this.nativePending?.observedAt ? ` · ${fr ? 'Dernière mise à jour' : pt ? 'Última atualização' : it ? 'Ultimo aggiornamento' : 'Zuletzt aktualisiert'} ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ` · ${fr ? 'Reconnexion' : pt ? 'Reconectando' : it ? 'Riconnessione' : 'Verbindung wird wiederhergestellt'}` : '';
+      return summary + updated + stale;
+    }
     if (this.locale.toLowerCase().startsWith('es')) {
       const summary = count == null ? 'Información de pendientes no disponible' : `${count} mensaje${count === 1 ? '' : 's'} externo${count === 1 ? '' : 's'} pendiente${count === 1 ? '' : 's'}`;
       const updated = this.nativePending?.observedAt ? ` · Última actualización ${this.nativePending.observedAt}` : '';

@@ -8,28 +8,28 @@
 
   <main class="doc-content">
     <section class="docs-intro" *ngIf="whichTab === 'faq'">
-      <p class="eyebrow">{{ isSpanish ? 'Red principal de TON' : 'TON mainnet' }}</p>
-      <h1>{{ isSpanish ? 'Entiende lo que muestra el explorador' : 'Understand what the explorer shows' }}</h1>
-      <p>{{ isSpanish ? 'Explora transacciones, mensajes, carteras, jettons y NFT de TON.' : 'Explore TON transactions, messages, wallets, jettons and NFTs.' }}</p>
+      <p class="eyebrow">{{ copy.faqEyebrow }}</p>
+      <h1>{{ copy.faqTitle }}</h1>
+      <p>{{ copy.faqDescription }}</p>
     </section>
 
     <section class="docs-intro" *ngIf="whichTab === 'rest'">
-      <p class="eyebrow">{{ isSpanish ? 'Referencia para desarrolladores' : 'Developer reference' }}</p>
+      <p class="eyebrow">{{ copy.restEyebrow }}</p>
       <h1>TON REST API</h1>
-      <p>{{ isSpanish ? 'Consulta bloques, transacciones, cuentas y activos.' : 'Read blocks, transactions, accounts and assets.' }}</p>
-      <div class="connection-line"><span>{{ isSpanish ? 'URL base' : 'Base URL' }}</span><code>{{ hostname }}</code></div>
+      <p>{{ copy.restDescription }}</p>
+      <div class="connection-line"><span>{{ copy.baseUrl }}</span><code>{{ hostname }}</code></div>
     </section>
 
     <section class="docs-intro" *ngIf="whichTab === 'websocket'">
-      <p class="eyebrow">{{ isSpanish ? 'Datos en vivo' : 'Live data' }}</p>
+      <p class="eyebrow">{{ copy.websocketEyebrow }}</p>
       <h1>TON WebSocket API</h1>
-      <p>{{ isSpanish ? 'Sigue los bloques de la basechain o la masterchain en vivo.' : 'Follow live basechain or masterchain blocks.' }}</p>
-      <div class="connection-line"><span>Endpoint</span><code>{{ websocketUrl() }}</code></div>
+      <p>{{ copy.websocketDescription }}</p>
+      <div class="connection-line"><span>{{ copy.endpoint }}</span><code>{{ websocketUrl() }}</code></div>
     </section>
 
     <aside class="support-note" *ngIf="whichTab === 'faq'">
       <app-svg-images name="warning" viewBox="0 0 304 304" fill="#ffc107" width="30" height="30"></app-svg-images>
-      <p><strong>{{ isSpanish ? 'ton.tx.taxi muestra datos públicos de la red.' : 'ton.tx.taxi displays public network data.' }}</strong> {{ isSpanish ? 'No puede recuperar fondos, revertir transacciones ni acceder a carteras.' : 'It cannot recover funds, reverse transactions, or access wallets.' }}</p>
+      <p><strong>{{ copy.supportTitle }}</strong> {{ copy.supportText }}</p>
     </aside>
 
     <ng-container *ngFor="let item of docs">
@@ -59,7 +59,7 @@
           </div>
 
           <div class="description">
-            <div class="subtitle" *ngIf="whichTab !== 'faq'">{{ isSpanish ? 'Descripción' : 'Description' }}</div>
+            <div class="subtitle" *ngIf="whichTab !== 'faq'">{{ copy.description }}</div>
             <div [innerHTML]="item.description"></div>
           </div>
 
@@ -70,13 +70,13 @@
           </div>
 
           <div class="code-example" *ngIf="item.request">
-            <div class="subtitle">{{ item.fragment === 'websocket-connect' ? 'JavaScript' : (isSpanish ? 'Mensaje del cliente' : 'Client message') }}</div>
+            <div class="subtitle">{{ item.fragment === 'websocket-connect' ? 'JavaScript' : (copy.clientMessage) }}</div>
             <app-clipboard [text]="item.request"></app-clipboard>
             <pre><code>{{ item.request }}</code></pre>
           </div>
 
           <div class="code-example" *ngIf="item.response">
-            <div class="subtitle">{{ isSpanish ? 'Respuesta del servidor' : 'Server response' }}</div>
+            <div class="subtitle">{{ copy.serverResponse }}</div>
             <pre><code>{{ item.response }}</code></pre>
           </div>
         </div>

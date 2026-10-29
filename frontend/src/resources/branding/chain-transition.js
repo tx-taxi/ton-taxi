@@ -20,23 +20,24 @@
   }
   const hubOrigin = local ? (script?.dataset.hubOrigin || 'http://127.0.0.1:4330') : 'https://tx.taxi';
   // The hub must explicitly advertise a locale before links target it.
-  let hubSpanishAvailable = false;
+  let hubLocales = [];
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
     fetch(hubOrigin + '/api/v1/locale-capabilities', { credentials: 'omit', redirect: 'error', signal: controller.signal })
       .then(response => response.ok ? response.json() : null)
       .then(data => {
-        hubSpanishAvailable = data?.version === 1 && Array.isArray(data?.hosts?.['tx.taxi']) && data.hosts['tx.taxi'].includes('es');
-        if (hubSpanishAvailable) window.dispatchEvent(new Event('txTaxiLocaleCapabilities'));
+        hubLocales = data?.version === 1 && Array.isArray(data?.hosts?.['tx.taxi']) ? data.hosts['tx.taxi'].filter(locale => ['es', 'fr', 'de', 'pt', 'it', 'ru'].includes(locale)) : [];
+        if (hubLocales.length) window.dispatchEvent(new Event('txTaxiLocaleCapabilities'));
       }).catch(() => {}).finally(() => clearTimeout(timeout));
   } catch {}
-  // Keep the user's explicit Spanish view when returning to the hub.
+  // Keep an explicit language only when the hub publishes it.
   const localizedHubPath = () => {
-    const explicit = location.pathname.match(/^\/(en|es)(?:\/|$)/i)?.[1]?.toLowerCase();
+    const explicit = location.pathname.match(/^\/(en|es|fr|de|pt|it|ru)(?:\/|$)/i)?.[1]?.toLowerCase();
     let saved = '';
     try { saved = decodeURIComponent(document.cookie.split(';').map(item => item.trim()).find(item => item.startsWith('txtaxi_language='))?.slice('txtaxi_language='.length) || ''); } catch {}
-    return hubSpanishAvailable && (explicit || saved) === 'es' ? '/es/' : '/';
+    const selected = explicit || saved;
+    return hubLocales.includes(selected) ? '/' + selected + '/' : '/';
   };
   const dashboardPath = () => document.querySelector('#btn-home a')?.getAttribute('href') || '/';
   const isDashboard = () => location.pathname.replace(/\/$/,'') === new URL(dashboardPath(),location.origin).pathname.replace(/\/$/,'');
@@ -184,8 +185,10 @@
       const root = dashboardPath();
       document.querySelectorAll('a.navbar-brand, a.chain-divider-mark').forEach(link => {
         link.href = dashboard ? hubOrigin + localizedHubPath() : root;
-        const spanish = /^\/es(?:\/|$)/.test(location.pathname);
-        const navigationLabel = dashboard ? (spanish ? 'Volver a tx.taxi' : 'Back to tx.taxi') : (spanish ? 'Panel de ' + sourceName : sourceName + ' dashboard');
+        const lang = location.pathname.match(/^\/(es|fr|de|pt|it|ru)(?:\/|$)/)?.[1] || 'en';
+        const back = {en: 'Back to tx.taxi', es: 'Volver a tx.taxi', fr: 'Retour à tx.taxi', de: 'Zurück zu tx.taxi', pt: 'Voltar ao tx.taxi', it: 'Torna a tx.taxi', ru: 'Вернуться на tx.taxi'};
+        const dash = {en: sourceName + ' dashboard', es: 'Panel de ' + sourceName, fr: 'Tableau de bord de ' + sourceName, de: sourceName + '-Übersicht', pt: 'Painel de ' + sourceName, it: 'Panoramica di ' + sourceName, ru: 'Обзор ' + sourceName};
+        const navigationLabel = dashboard ? back[lang] : dash[lang];
         link.setAttribute('aria-label', navigationLabel);
         link.title = navigationLabel;
       });

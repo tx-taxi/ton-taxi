@@ -58,10 +58,13 @@ export class SearchFormComponent implements OnInit {
   readonly searchLabel = $localize`:@@ton.search.search:Search`;
   additionalOptionLabel(explorer: any, count: number): string {
     const expanded = this.additionalExplorersExpanded(explorer);
-    if (this.languageService.getLanguage() === 'es') {
-      return (expanded ? this.hideLabel : this.showLabel) + ' ' + count + ' ' + (count === 1 ? 'opción adicional para' : 'opciones adicionales para') + ' ' + explorer.name;
-    }
-    return (expanded ? 'Hide ' : 'Show ') + count + ' additional ' + explorer.name + (count === 1 ? ' option' : ' options');
+    const name = explorer.name;
+    if (expanded) return count === 1
+      ? $localize`:@@ton.search.hide-one:Hide ${count}:count: additional ${name}:name: option`
+      : $localize`:@@ton.search.hide-many:Hide ${count}:count: additional ${name}:name: options`;
+    return count === 1
+      ? $localize`:@@ton.search.show-one:Show ${count}:count: additional ${name}:name: option`
+      : $localize`:@@ton.search.show-many:Show ${count}:count: additional ${name}:name: options`;
   }
   @Input() hamburgerOpen = false;
   readonly sourceChainId = 'ton';

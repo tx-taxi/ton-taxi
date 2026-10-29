@@ -51,7 +51,7 @@ export class SeoService {
       this.clearSoft404();
       this.updateCanonical(this.router.url);
       const page = this.nativePage();
-      if (page && page.path !== '/' && !this.isSpanishPage()) { this.setTitle(page.title); this.setDescription(page.description); }
+      if (page && page.path !== '/' && !this.isLocalizedPage()) { this.setTitle(page.title); this.setDescription(page.description); }
     });
   }
 
@@ -60,8 +60,8 @@ export class SeoService {
     catch { return { pages: [], aliases: {} }; }
   }
 
-  private isSpanishPage(): boolean {
-    return typeof window !== 'undefined' && /^\/es(?:\/|$)/.test(window.location.pathname);
+  private isLocalizedPage(): boolean {
+    return typeof window !== 'undefined' && /^\/(?:es|fr|de|pt|it|ru)(?:\/|$)/.test(window.location.pathname);
   }
 
   private nativePage(path = this.router.url): {path: string; title: string; description: string} | undefined {
@@ -89,7 +89,7 @@ export class SeoService {
 
   setTitle(newTitle: string): void {
     const native = this.nativePage();
-    if (native && native.path !== '/' && !this.isSpanishPage()) newTitle = native.title;
+    if (native && native.path !== '/' && !this.isLocalizedPage()) newTitle = native.title;
     const fullTitle = newTitle + ' - ' + this.getTitle();
     this.titleService.setTitle(fullTitle);
     this.metaService.updateTag({ property: 'og:title', content: fullTitle});
@@ -114,7 +114,7 @@ export class SeoService {
   }
 
   setDescription(newDescription: string): void {
-    if (!this.isSpanishPage()) newDescription = this.nativePage()?.description || newDescription;
+    if (!this.isLocalizedPage()) newDescription = this.nativePage()?.description || newDescription;
     this.metaService.updateTag({ name: 'description', content: newDescription});
     this.metaService.updateTag({ name: 'twitter:description', content: newDescription});
     this.metaService.updateTag({ property: 'og:description', content: newDescription});
@@ -131,10 +131,11 @@ export class SeoService {
     const block = tonBlockIdentityFromUrl(requestedUrl.href);
     const native = this.nativePage(path);
     let canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + (native?.path || requestedUrl.pathname);
-    // Angular routes omit the locale base. Keep Spanish pages self-canonical after client-side navigation.
-    if (typeof window !== 'undefined' && /^\/es(?:\/|$)/.test(window.location.pathname)) {
+    // Angular routes omit the locale base. Keep translated pages self-canonical after client-side navigation.
+    const locale = typeof window !== 'undefined' ? /^\/(es|fr|de|pt|it|ru)(?:\/|$)/.exec(window.location.pathname)?.[1] : undefined;
+    if (locale) {
       const localized = new URL(canonicalUrl);
-      if (!/^\/es(?:\/|$)/.test(localized.pathname)) localized.pathname = '/es' + localized.pathname;
+      if (!/^\/(?:es|fr|de|pt|it|ru)(?:\/|$)/.test(localized.pathname)) localized.pathname = '/' + locale + localized.pathname;
       canonicalUrl = localized.href;
     }
     this.canonicalLink?.setAttribute('href', canonicalUrl);
@@ -142,7 +143,7 @@ export class SeoService {
     const pageSchema = document.getElementById('native-page-schema');
     const schemaPage = this.nativePage(path);
     if (pageSchema) {
-      if (schemaPage && !this.isSpanishPage()) pageSchema.textContent = JSON.stringify({'@context': 'https://schema.org', '@type': schemaPage.path.startsWith('/docs/') ? 'TechArticle' : 'WebPage', name: schemaPage.title, description: schemaPage.description, url: canonicalUrl});
+      if (schemaPage && !this.isLocalizedPage()) pageSchema.textContent = JSON.stringify({'@context': 'https://schema.org', '@type': schemaPage.path.startsWith('/docs/') ? 'TechArticle' : 'WebPage', name: schemaPage.title, description: schemaPage.description, url: canonicalUrl});
       else pageSchema.remove();
     }
     this.metaService.updateTag({ property: 'og:url', content: canonicalUrl });

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
+import { russianCountNoun } from '@app/shared/russian-count';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -18,6 +19,7 @@ import { detectWebGL } from '@app/shared/graphs.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MempoolBlockComponent implements OnInit, OnDestroy, AfterViewChecked {
+  readonly russianCountNoun = russianCountNoun;
   pending$: Observable<TonPendingSnapshot> = this.stateService.tonPending$;
   selectedHash$ = this.route.fragment;
   readonly pendingFeedUnavailable = $localize`:@@ton.pending.full-feed-unavailable:Pending feed unavailable`;
@@ -35,6 +37,7 @@ export class MempoolBlockComponent implements OnInit, OnDestroy, AfterViewChecke
   private scrollFrame: number | null = null;
 
   constructor(
+    @Inject(LOCALE_ID) public locale: string,
     private route: ActivatedRoute,
     public stateService: StateService,
     private seoService: SeoService,
@@ -48,8 +51,8 @@ export class MempoolBlockComponent implements OnInit, OnDestroy, AfterViewChecke
     });
     this.websocketService.want(['blocks', 'mempool-blocks']);
     this.stateService.markBlock$.next({ mempoolBlockIndex: 0 });
-    this.seoService.setTitle('Pending messages');
-    this.seoService.setDescription('Inspect pending TON external messages, destinations, message hashes, and observation times.');
+    this.seoService.setTitle($localize`:@@ton.pending.page-title:Pending messages`);
+    this.seoService.setDescription($localize`:@@ton.pending.page-description:Inspect pending TON external messages, destinations, message hashes, and observation times.`);
   }
 
   ngOnDestroy(): void {

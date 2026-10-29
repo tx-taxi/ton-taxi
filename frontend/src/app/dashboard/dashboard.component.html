@@ -34,7 +34,7 @@
               [resolution]="goggleResolution"
               [suppliedPendingMessages]="pending.messages"
               [suppliedLoading]="pending.state === 'loading' && !pending.messages.length"
-              [suppliedError]="pending.state === 'unavailable' || pending.state === 'stale' ? 'Pending feed unavailable' : null"
+              [suppliedError]="pending.state === 'unavailable' || pending.state === 'stale' ? pendingFeedUnavailable : null"
 
 
             ></app-mempool-block-overview>

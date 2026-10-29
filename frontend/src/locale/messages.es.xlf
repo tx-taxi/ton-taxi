@@ -12105,6 +12105,15 @@
       <trans-unit id="ton.dash.fee-mean-description" datatype="html"><source>Average observed transaction fee, rounded down to a whole nanogram when necessary.</source><target>Comisión media de transacción observada, redondeada hacia abajo a un nanogramo entero cuando sea necesario.</target></trans-unit>
       <trans-unit id="ton.dash.fee-max-description" datatype="html"><source>Highest observed transaction fee.</source><target>Comisión de transacción observada más alta.</target></trans-unit>
       <trans-unit id="ton.dash.fee-exact" datatype="html"><source> Exact result: <x id="atomic"/> + <x id="remainder"/>/<x id="denominator"/> nanograms.</source><target> Resultado exacto: <x id="atomic"/> + <x id="remainder"/>/<x id="denominator"/> nanogramos.</target></trans-unit>
+      <trans-unit id="ton.search.show-one" datatype="html"><source>Show <x id="count"/> additional <x id="name"/> option</source><target>Mostrar <x id="count"/> opción adicional para <x id="name"/></target></trans-unit>
+      <trans-unit id="ton.search.show-many" datatype="html"><source>Show <x id="count"/> additional <x id="name"/> options</source><target>Mostrar <x id="count"/> opciones adicionales para <x id="name"/></target></trans-unit>
+      <trans-unit id="ton.search.hide-one" datatype="html"><source>Hide <x id="count"/> additional <x id="name"/> option</source><target>Ocultar <x id="count"/> opción adicional para <x id="name"/></target></trans-unit>
+      <trans-unit id="ton.search.hide-many" datatype="html"><source>Hide <x id="count"/> additional <x id="name"/> options</source><target>Ocultar <x id="count"/> opciones adicionales para <x id="name"/></target></trans-unit>
+      <trans-unit id="c4221ec405e432a0dac150a4c48c9100eac712bd" datatype="html"><source>Values were capped at the max supply of 21M BTC</source><target>Los valores se limitaron al suministro máximo de 21 millones de BTC</target></trans-unit>
+      <trans-unit id="3504995129774539345" datatype="html"><source>Ethereum activity</source><target>Actividad de Ethereum</target></trans-unit>
+          <trans-unit id="ton.pending.page-description" datatype="html"><source>Inspect pending TON external messages, destinations, message hashes, and observation times.</source><target>Consulta los mensajes externos TON pendientes, sus destinos, hashes y horarios de observación.</target></trans-unit>
+          <trans-unit id="ton.preferences.language" datatype="html"><source>Language</source><target>Idioma</target></trans-unit>
+      <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Moneda</target></trans-unit>
     </body>
   </file>
 </xliff>

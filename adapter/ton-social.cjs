@@ -5,6 +5,7 @@ const fs = require("node:fs/promises"),
   sharp = require("sharp"),
   parse5 = require("parse5");
 const { tonSite } = require("./ton/block-selection.cjs");
+const { localizeTonMetadata } = require("./ton/social-locales.cjs");
 const { blockRouteIdentity, blockUrl } = require("./ton/block-route.cjs");
 const PAGE_CAPTURE = Object.freeze({url:"https://tx.taxi/assets/screenshots/hub-c0f1a521a7ad.jpg",width:1440,height:2611,alt:"The tx.taxi hub showing its native blockchain explorer strips and external explorer blocks."});
 const cache = new Map(),
@@ -272,7 +273,7 @@ async function metadata(pathname, api, provider, collector, host) {
       clearTimeout(timer);
     }
   }
-  return {
+  const localized = localizeTonMetadata({
     title: short(title, 240),
     description: short(description, 300),
     canonical,
@@ -283,7 +284,13 @@ async function metadata(pathname, api, provider, collector, host) {
     type,
     status,
     facts,
-  };
+  }, pathname, entity, site);
+  if (/^\/(?:es|fr|de|pt|it|ru)(?:\/|$)/.test(pathname)) {
+    localized.title = short(localized.title, 240);
+    localized.description = short(localized.description, 300);
+    localized.summary = short(localized.summary, 60);
+  }
+  return localized;
 }
 async function inject(html, pathname, api, provider, collector, host, staticPage, response = {}) {
   const meta = await metadata(pathname, api, provider, collector, host),
@@ -349,7 +356,7 @@ async function inject(html, pathname, api, provider, collector, host, staticPage
     } catch {}
   }
   set("title", () => true, {}, meta.title);
-  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && !/^\/es(?:\/|$)/.test(pathname) && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
+  set("meta", (n) => attr(n,"name") === "robots", {name:"robots",content:meta.status !== 404 && !/^\/(?:es|fr|de|pt|it|ru)(?:\/|$)/.test(pathname) && (staticPage || isIndexableEntity(pathname)) ? "index, follow" : "noindex, follow"});
   set("link", (n) => attr(n, "rel") === "canonical", {
     id: "canonical",
     rel: "canonical",

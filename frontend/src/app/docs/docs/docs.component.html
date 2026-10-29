@@ -8,7 +8,7 @@
     <ul ngbNav #nav="ngbNav" [animation]="false" [(activeId)]="activeTab" class="nav-tabs" role="tablist">
 
       <li [ngbNavItem]="0" *ngIf="showFaqTab" role="presentation">
-        <a ngbNavLink [routerLink]="['/docs/faq' | relativeUrl]" role="tab">{{ isSpanish ? 'Guía de TON' : 'TON Guide' }}</a>
+        <a ngbNavLink [routerLink]="['/docs/faq' | relativeUrl]" role="tab">{{ copy.guideTab }}</a>
         <ng-template ngbNavContent>
 
           <app-api-docs [whichTab]="'faq'"></app-api-docs>
@@ -37,6 +37,11 @@
     </ul>
 
     <div id="main-tab-content" [ngbNavOutlet]="nav"></div>
+
+    <footer class="docs-preferences" role="group" [attr.aria-label]="copy.preferences">
+      <app-language-selector></app-language-selector>
+      <app-fiat-selector></app-fiat-selector>
+    </footer>
 
   </div>
 </div>
