@@ -16250,7 +16250,7 @@
       </trans-unit>
       <trans-unit id="ton.78d7103a319e" datatype="html">
         <source>Stake</source>
-        <target state="needs-review-translation">Stake</target><context-group purpose="location">
+        <target state="needs-review-translation">Stawka</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/ton/ton-page.component.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
