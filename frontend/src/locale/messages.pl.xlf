@@ -15572,7 +15572,7 @@
       </trans-unit>
       <trans-unit id="ton.97a9869cf89f" datatype="html">
         <source>Authority</source>
-        <target state="needs-review-translation">Organ</target><context-group purpose="location">
+        <target state="needs-review-translation">Podmiot uprawniony</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/ton/ton-assets-page.component.html</context>
           <context context-type="linenumber">953</context>
         </context-group>
