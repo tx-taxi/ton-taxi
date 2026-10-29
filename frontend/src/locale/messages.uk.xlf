@@ -16217,6 +16217,7 @@
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>Пошук недоступний. Спробуйте ще раз.</target></trans-unit>
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Немає колекцій NFT</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Зображення недоступне</target></trans-unit>
+          <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Атрибут</target></trans-unit>
     </body>
   </file>
 </xliff>

@@ -281,6 +281,7 @@ export class TonPageData implements OnInit, OnDestroy {
   emptyFeedMessage(name: string): string { return name === 'nfts' || name === 'items' ? $localize`:@@ton.extra.empty-nfts:No NFTs` : name === 'jettons' ? $localize`:@@ton.extra.empty-jettons:No jettons` : name === 'shards' ? $localize`:@@ton.extra.empty-shards:No shards` : $localize`:@@ton.extra.empty-activity:No activity`; }
   feedActionMessage(restart: boolean): string { return restart ? $localize`:@@ton.extra.refresh:Refresh` : $localize`:@@ton.9f5cd8a2e880:Retry`; }
   get listUpdatedMessage(): string { return $localize`:@@ton.extra.list-updated:List updated`; }
+  get attributeFallback(): string { return $localize`:@@ton.extra.attribute:Attribute`; }
   revocationStatus(value: unknown): string { return value === '0' || value === 0 ? $localize`:@@ton.extra.not-revoked:Not revoked` : value ? $localize`:@@ton.extra.revoked:Revoked` : $localize`:@@ton.extra.unknown:Unknown`; }
   entries(value: any): {key:string,value:any}[] { return value && typeof value === 'object' ? Object.entries(value).map(([key,value]) => ({key,value})) : []; }
   text(value: any): string { return typeof value === 'object' ? JSON.stringify(value) : String(value ?? '—'); }

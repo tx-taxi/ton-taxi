@@ -12118,6 +12118,7 @@
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>Ricerca non disponibile. Riprova.</target></trans-unit>
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>Nessuna collezione NFT</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>Immagine non disponibile</target></trans-unit>
+          <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>Attributo</target></trans-unit>
     </body>
   </file>
 </xliff>

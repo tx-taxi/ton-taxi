@@ -16470,6 +16470,7 @@
       <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>検索を利用できません。もう一度お試しください。</target></trans-unit>
           <trans-unit id="ton.extra.empty-collections" datatype="html"><source>No NFT collections</source><target>NFTコレクションはありません</target></trans-unit>
       <trans-unit id="ton.extra.image-unavailable" datatype="html"><source>Image unavailable</source><target>画像を利用できません</target></trans-unit>
+          <trans-unit id="ton.extra.attribute" datatype="html"><source>Attribute</source><target>属性</target></trans-unit>
     </body>
   </file>
 </xliff>
