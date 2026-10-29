@@ -70,6 +70,10 @@
             "translation": "src/locale/messages.ko.xlf",
             "baseHref": "/ko/"
           },
+          "vi": {
+            "translation": "src/locale/messages.vi.xlf",
+            "baseHref": "/vi/"
+          },
           "it": {
             "translation": "src/locale/messages.it.xlf",
             "baseHref": "/it/"
@@ -194,7 +198,7 @@
           },
           "configurations": {
             "spanish": {"localize": ["es"]},
-            "multilingual": {"localize": ["es", "fr", "de", "pt", "it", "ru", "uk", "nl", "ja", "zh", "ko"]},
+            "multilingual": {"localize": ["es", "fr", "de", "pt", "it", "ru", "uk", "nl", "ja", "zh", "ko", "vi"]},
             "production": {
               "assets": [
                 "src/favicon.ico",

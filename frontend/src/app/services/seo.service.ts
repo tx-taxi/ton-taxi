@@ -61,7 +61,7 @@ export class SeoService {
   }
 
   private isLocalizedPage(): boolean {
-    return typeof window !== 'undefined' && /^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko)(?:\/|$)/.test(window.location.pathname);
+    return typeof window !== 'undefined' && /^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/.test(window.location.pathname);
   }
 
   private nativePage(path = this.router.url): {path: string; title: string; description: string} | undefined {
@@ -132,10 +132,10 @@ export class SeoService {
     const native = this.nativePage(path);
     let canonicalUrl = block ? tonBlockUrl(block, undefined, requestedUrl.pathname) : requestedUrl.origin + (native?.path || requestedUrl.pathname);
     // Angular routes omit the locale base. Keep translated pages self-canonical after client-side navigation.
-    const locale = typeof window !== 'undefined' ? /^\/(es|fr|de|pt|it|ru|uk|nl|ja|zh|ko)(?:\/|$)/.exec(window.location.pathname)?.[1] : undefined;
+    const locale = typeof window !== 'undefined' ? /^\/(es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/.exec(window.location.pathname)?.[1] : undefined;
     if (locale) {
       const localized = new URL(canonicalUrl);
-      if (!/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko)(?:\/|$)/.test(localized.pathname)) localized.pathname = '/' + locale + localized.pathname;
+      if (!/^\/(?:es|fr|de|pt|it|ru|uk|nl|ja|zh|ko|vi)(?:\/|$)/.test(localized.pathname)) localized.pathname = '/' + locale + localized.pathname;
       canonicalUrl = localized.href;
     }
     this.canonicalLink?.setAttribute('href', canonicalUrl);

@@ -1,5 +1,16 @@
 /** Short interface copy shared by the TON guide and its introduction. */
 const copies = {
+  vi: {
+    faqEyebrow: 'Mạng chính TON', faqTitle: 'Hiểu thông tin trên trình khám phá', faqDescription: 'Khám phá giao dịch, tin nhắn, ví, jetton và NFT trên TON.',
+    restEyebrow: 'Tài liệu cho nhà phát triển', restDescription: 'Truy vấn khối, giao dịch, tài khoản và tài sản.', baseUrl: 'URL cơ sở', endpoint: 'Điểm cuối',
+    websocketEyebrow: 'Dữ liệu trực tiếp', websocketDescription: 'Theo dõi các khối basechain hoặc masterchain trực tiếp.',
+    supportTitle: 'ton.tx.taxi hiển thị dữ liệu mạng công khai.', supportText: 'Trang này không thể khôi phục tiền, đảo ngược giao dịch hoặc truy cập ví.',
+    description: 'Mô tả', clientMessage: 'Tin nhắn từ máy khách', serverResponse: 'Phản hồi từ máy chủ', navigation: 'Mục tài liệu',
+    preferences: 'Tùy chọn hiển thị', guideTab: 'Hướng dẫn TON', faqMeta: 'Khám phá giao dịch, tin nhắn, ví, jetton, NFT và trình xác thực TON.',
+    restMeta: 'Tài liệu TON REST API cho khối, giao dịch, tin nhắn, tài khoản, jetton và NFT.',
+    websocketMeta: 'Tài liệu TON WebSocket API cho khối basechain và masterchain trực tiếp.',
+    aboutLabel: 'Về tx.taxi', documentation: 'tài liệu', explorer: 'trình khám phá', open: 'Mở', explore: 'Khám phá', introAction: 'Mở tx.taxi',
+  },
   en: {
     faqEyebrow: 'TON mainnet', faqTitle: 'Understand what the explorer shows', faqDescription: 'Explore TON transactions, messages, wallets, jettons and NFTs.',
     restEyebrow: 'Developer reference', restDescription: 'Read blocks, transactions, accounts and assets.', baseUrl: 'Base URL', endpoint: 'Endpoint',

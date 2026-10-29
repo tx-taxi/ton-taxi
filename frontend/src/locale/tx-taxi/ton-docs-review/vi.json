@@ -1,0 +1,694 @@
+{
+  "reviewed_fields": [
+    {
+      "id": "0:title",
+      "source_sha256": "ab36d83c2517624cacfa293dee6f37ad9c260f6bf78e92c625e9ec201b5e778a",
+      "value": "Khối masterchain và shard có ý nghĩa gì?"
+    },
+    {
+      "id": "0:description",
+      "source_sha256": "011246f26f59317219112c9c1c14cf7a2db8fa2e3f47872325845754306f522e",
+      "value": "⟦TX0⟧Masterchain lưu cấu hình toàn mạng và tham chiếu trạng thái của các shardchain. Phần lớn tài khoản người dùng nằm trên basechain, có thể được chia thành các shard. Một khối được xác định bởi cả workchain, shard và số thứ tự; riêng số thứ tự không phải là chiều cao khối trên toàn mạng.⟦TX1⟧⟦TX2⟧Dải trên cùng hiển thị các khối basechain. Mở menu tìm kiếm và chọn Masterchain trong mục SELECTED để xem các khối masterchain. Chọn một shard khi có nhiều shard đang hoạt động. Mở một khối để xem các giao dịch của nó; các khối masterchain cũng liên kết đến những shard mà chúng tham chiếu.⟦TX3⟧"
+    },
+    {
+      "id": "1:title",
+      "source_sha256": "f7c6e34cc61c906042f47c7f81d460edaeb5be1e45a0e07265ccaf9c226d2515",
+      "value": "Giao dịch, thông điệp và trace liên quan với nhau như thế nào?"
+    },
+    {
+      "id": "1:description",
+      "source_sha256": "4cf443c4de6585b94efa92e5fe2ec0e0920530d80a0db0e67e97e319219e4176",
+      "value": "⟦TX0⟧Một giao dịch ghi lại việc một tài khoản xử lý một thông điệp hoặc một thao tác hệ thống. Thông điệp kết nối các tài khoản; việc xử lý thông điệp đến có thể tạo ra thông điệp đi và các giao dịch tiếp theo. Trace theo dõi những giao dịch liên kết này.⟦TX1⟧⟦TX2⟧Dùng trang giao dịch để xem quá trình thực thi cục bộ, thông điệp để xem việc chuyển giữa các hợp đồng, và trace để xem toàn bộ thao tác. ⟦TX3⟧Kiến thức cơ bản về ⟦TX6⟧⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "2:title",
+      "source_sha256": "7b2bd9f8e303b6e427e8f76eb9013f5ddf1e942551950872848db6883718924a",
+      "value": "Thời gian logic là gì?"
+    },
+    {
+      "id": "2:description",
+      "source_sha256": "3a8f43523e176f43d1b72bf2ace74d3ddbbe1aa89220ba3029887fd2a844a1f5",
+      "value": "⟦TX0⟧Thời gian logic (LT) xác định thứ tự giao dịch và thông điệp. Nó khác với dấu thời gian Unix được hiển thị làm ngày giao dịch. Lịch sử tài khoản dùng LT làm con trỏ phân trang; hãy giữ giá trị đó dưới dạng chuỗi số nguyên chính xác.⟦TX1⟧"
+    },
+    {
+      "id": "3:title",
+      "source_sha256": "2fdfa58b219dc6cbc96c024cc09806e62692bc9d699911370c6d6b71812c3e8b",
+      "value": "Phí đã được dùng vào đâu?"
+    },
+    {
+      "id": "3:description",
+      "source_sha256": "ed93e7e057b23adb6366c04038a84333efc3c512f6e19f0d89d1005629465964",
+      "value": "⟦TX0⟧Quá trình thực thi có thể gồm các giai đoạn lưu trữ, ghi có, tính toán, hành động và hoàn trả. Trang giao dịch hiển thị tổng phí và chi tiết các giai đoạn đã ghi nhận, bao gồm lượng gas sử dụng, chi phí chuyển tiếp và mã thoát. Một thao tác thất bại vẫn có thể phải trả phí.⟦TX1⟧⟦TX2⟧GRAM là đơn vị tiền gốc của ⟦TX8⟧ và sử dụng ⟦TX4⟧ chữ số thập phân: ⟦TX5⟧ GRAM = ⟦TX6⟧,⟦TX7⟧ nanogram. Giá trị thông điệp và phí giao dịch là hai khoản khác nhau.⟦TX3⟧"
+    },
+    {
+      "id": "4:title",
+      "source_sha256": "116a09397671ace26968fd10625f647badfd7826715a592f57e767d6c8cc6c00",
+      "value": "Thông điệp bị hoàn trả hoặc thực thi thất bại nghĩa là gì?"
+    },
+    {
+      "id": "4:description",
+      "source_sha256": "512b8be33ca4d4b6538cadc921699391c6db4246f56271e3739cf8e125de170f",
+      "value": "⟦TX0⟧Một thông điệp bị hoàn trả sẽ tạo phản hồi khi thông điệp cho phép hoàn trả không thể được xử lý theo các quy tắc áp dụng. Đây là một thông điệp riêng với giá trị và chi phí riêng. Hãy xem kết quả giao dịch, kết quả tính toán và hành động cùng với các thông điệp đi.⟦TX1⟧⟦TX2⟧Một giao dịch đã được xác nhận vẫn có thể thực thi thất bại. Một giao dịch thành công cũng không chứng minh rằng mọi giao dịch sau đó trong trace đều thành công. ⟦TX3⟧Đặc tả blockchain ⟦TX6⟧⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "5:title",
+      "source_sha256": "1db53674f0d760cb15b4e2664de7aea3d974b854a9c15787baa8f89ab1060c41",
+      "value": "Được xác nhận có đồng nghĩa với thao tác đã hoàn tất không?"
+    },
+    {
+      "id": "5:description",
+      "source_sha256": "a978ca25800ad0d6b3eda20e0ebd30a7c36c579b092c1499875632beb5459a37",
+      "value": "⟦TX0⟧Được xác nhận có nghĩa là giao dịch đã được đưa vào khối. Một thao tác liên quan đến nhiều hợp đồng có thể gồm thêm các giao dịch và thông điệp khác. Hãy kiểm tra toàn bộ trace và người nhận cuối cùng, thay vì coi giao dịch đầu tiên là toàn bộ lần chuyển.⟦TX1⟧"
+    },
+    {
+      "id": "6:title",
+      "source_sha256": "b0b5d17569eedea764c845cd3844d75d5f899ef7cd8686d62bbf743079d99b63",
+      "value": "Trang tài khoản hiển thị những gì?"
+    },
+    {
+      "id": "6:description",
+      "source_sha256": "e3e2680af06688adadb3968884779f6e97c36ffd239617143c5f1d147e770d08",
+      "value": "⟦TX0⟧Trang tài khoản hiển thị số dư GRAM, trạng thái, hoạt động gần nhất và các giao diện hợp đồng được phát hiện. Lịch sử nhóm các hành động được nhận diện; Giao dịch liệt kê các giao dịch của tài khoản. Jetton và NFT có các thẻ riêng.⟦TX1⟧⟦TX2⟧Thẻ Hợp đồng chứa trạng thái, mã và dữ liệu, các phương thức chỉ đọc cùng những bản ghi staking, multisig, đăng ký và DeFi hiện có. Mở rộng Chi tiết tài khoản để xem thêm các trường và tiền tệ bổ sung.⟦TX3⟧"
+    },
+    {
+      "id": "7:title",
+      "source_sha256": "7638ebe6945b14869fe3c12de4c2ccd4b3c38d83361c3a6feea36f68b8ea0f1e",
+      "value": "Vì sao cùng một tài khoản có thể có nhiều địa chỉ?"
+    },
+    {
+      "id": "7:description",
+      "source_sha256": "87ceb1b37f2628a046ba38643d8a5af50f30cfaefd6d4b116a6e92805ef871e4",
+      "value": "⟦TX0⟧Tài khoản ⟦TX4⟧ có thể được biểu diễn bằng workchain và ID tài khoản hệ thập lục phân ở dạng thô hoặc bằng địa chỉ thân thiện với người dùng. Cờ cho phép hoàn trả và cờ mạng có thể thay đổi cách biểu diễn địa chỉ thân thiện mà không làm thay đổi tài khoản gốc.⟦TX1⟧⟦TX2⟧Tìm kiếm chấp nhận địa chỉ ⟦TX5⟧ và tên .ton. Phân giải DNS liên kết tới tài khoản đã được phân giải; tên miền không thay thế việc kiểm tra địa chỉ tài khoản.⟦TX3⟧"
+    },
+    {
+      "id": "8:title",
+      "source_sha256": "f3cdaee5f7dda75774618234546e9a0d637ac5005ca128030b74c1a6fb2fefbc",
+      "value": "Tôi có thể đọc hợp đồng thông minh không?"
+    },
+    {
+      "id": "8:description",
+      "source_sha256": "fb1b78761b50921934b89a47894933d39b02e60a9dd3fff01bed642df80c528e",
+      "value": "⟦TX0⟧Chọn một getter trong thẻ Hợp đồng và cung cấp đối số khi cần. Thao tác đọc trả về kết quả mà không cần ký giao dịch. Đối số có thể là các chuỗi phân cách bằng dấu phẩy hoặc một mảng chuỗi ⟦TX4⟧; hãy giữ các số nguyên lớn dưới dạng chuỗi.⟦TX1⟧⟦TX2⟧Chi tiết tài khoản lưu các trường mã, dữ liệu và lưu trữ. Phần kiểm tra hiển thị các giao diện được nhận diện và thông tin trình biên dịch hiện có.⟦TX3⟧"
+    },
+    {
+      "id": "9:title",
+      "source_sha256": "83cf45025f796d7fe3f8a5f314adddc29315ef1fcb10cbecc4c09837c0dcc4a3",
+      "value": "Trang validator hiển thị những gì?"
+    },
+    {
+      "id": "9:description",
+      "source_sha256": "75f2d98e1ca0b3201c9aff1b1178bbfea550b3e012e76db55de1c2ed48d6c9cf",
+      "value": "⟦TX0⟧Trang validator hiển thị thời điểm bầu chọn, tổng mức stake và mức stake tối thiểu, cùng các tài khoản validator tham gia, mức stake và địa chỉ ADNL. Những trường này mô tả dữ liệu bầu chọn được hiển thị; một địa chỉ nắm giữ stake không tự động là bên tạo ra một khối cụ thể.⟦TX1⟧"
+    },
+    {
+      "id": "10:title",
+      "source_sha256": "3bf36daea31393fa03b181526ea74d3f091fa1f37792c725bd63dae851b26ca3",
+      "value": "Jetton hoạt động như thế nào?"
+    },
+    {
+      "id": "10:description",
+      "source_sha256": "0cff398525644a31854682cf5d0ad78d855177065e3a36cd76756a740ff720db",
+      "value": "⟦TX0⟧Một jetton có hợp đồng master và các hợp đồng ví jetton riêng cho từng người nắm giữ. Hãy xác định jetton bằng địa chỉ master, không phải tên hoặc ký hiệu. Trang jetton hiển thị nguồn cung, số chữ số thập phân, thông tin quản trị và người nắm giữ.⟦TX1⟧⟦TX2⟧Hiển thị số dư theo số chữ số thập phân của chính jetton đó. Đừng cho rằng mọi jetton đều có ⟦TX6⟧ chữ số thập phân. ⟦TX3⟧Tiêu chuẩn jetton⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "11:title",
+      "source_sha256": "bb60449703446085188710ffaaff673fd316b954e2670a9cd3b759e23aa3d328",
+      "value": "Vì sao số dư jetton hiển thị có thể khác lượng trên chuỗi?"
+    },
+    {
+      "id": "11:description",
+      "source_sha256": "e1afc5b254b6040f05a5761e020fdd5cc950d4b1a816a425f6ccd71421108f32",
+      "value": "⟦TX0⟧Một số jetton dùng hệ số nhân để hiển thị. Số dư ví hiện tại, số dư của người nắm giữ và tổng nguồn cung áp dụng tỷ lệ đó với phép làm tròn chính xác, sau đó áp dụng số chữ số thập phân của token. Mở rộng Chi tiết số lượng để xem lượng trên chuỗi, đơn vị thô và tỷ lệ.⟦TX1⟧⟦TX2⟧Các lần chuyển trong lịch sử giữ nguyên số lượng trên chuỗi đã ghi nhận; hệ số hiện tại không chứng minh hệ số tại thời điểm đó. ⟦TX3⟧Tiêu chuẩn jetton có giao diện điều chỉnh theo tỷ lệ⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "12:title",
+      "source_sha256": "a2cbc6399530a93f6f1726197df62ffce722f6e898194e4836ef3dbb67b55186",
+      "value": "Điều gì xác định một NFT?"
+    },
+    {
+      "id": "12:description",
+      "source_sha256": "d1667a03d1dacf9689dcce2f07668b4c7844fa80e6ac32038838b877c149eec8",
+      "value": "⟦TX0⟧Địa chỉ hợp đồng của NFT là định danh của NFT đó. Bộ sưu tập, chủ sở hữu và chỉ số vật phẩm là các trường riêng biệt. Việc xác minh vật phẩm thuộc bộ sưu tập chỉ kiểm tra mối quan hệ với bộ sưu tập; nó không chứng minh hình ảnh, tên hoặc người bán đáng tin cậy.⟦TX1⟧⟦TX2⟧Chi tiết vật phẩm hiển thị chỉ số chính xác khi được hợp đồng NFT xác nhận. Con số hiển thị trong tên NFT không nhất thiết trùng với chỉ số trên chuỗi.⟦TX3⟧"
+    },
+    {
+      "id": "13:title",
+      "source_sha256": "1f7903562e72360ecf41a95a9dfe993b7763341261897906e5c282737584a09c",
+      "value": "Hình ảnh và thuộc tính đến từ đâu?"
+    },
+    {
+      "id": "13:description",
+      "source_sha256": "6973d4ce74e1c2e8a041331fd93a6831c3b8c797f78c1e3635fa37bd45bbb23a",
+      "value": "⟦TX0⟧TEP-⟦TX6⟧ hỗ trợ siêu dữ liệu trên chuỗi, ngoài chuỗi và kết hợp. Trang NFT hiển thị tên, mô tả, hình ảnh và thuộc tính; toàn bộ siêu dữ liệu có thể được mở rộng để xem. Nội dung hoặc siêu dữ liệu được lưu ở nơi khác có thể thay đổi hoặc không còn khả dụng.⟦TX1⟧⟦TX2⟧Hãy chủ động mở nội dung động từ trang vật phẩm. Việc thiếu nội dung không xóa hợp đồng hay bản ghi quyền sở hữu NFT. ⟦TX3⟧Tiêu chuẩn siêu dữ liệu token⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "14:title",
+      "source_sha256": "3903f1b219fef3450eebe0b29884130dc799b2f012d78c1bf5ed9c6686bfb7e7",
+      "value": "Vì sao một NFT thuộc sở hữu của hợp đồng bán?"
+    },
+    {
+      "id": "14:description",
+      "source_sha256": "12a660786ddc435855cd217e099e280c754ad676c1b8a4af1f94b4d2aa2026e5",
+      "value": "⟦TX0⟧NFT được niêm yết có thể do hợp đồng bán của sàn nắm giữ. Danh sách NFT trong ví bao gồm quyền sở hữu gián tiếp qua hợp đồng bán được nhận diện. Trang vật phẩm phân biệt chủ sở hữu trên chuỗi, người bán, hợp đồng bán và loại tiền định giá.⟦TX1⟧⟦TX2⟧Việc niêm yết bán không phải là một lần chuyển đã hoàn tất. Dùng lịch sử chuyển để theo dõi thay đổi và trang bộ sưu tập để xem các vật phẩm.⟦TX3⟧"
+    },
+    {
+      "id": "15:title",
+      "source_sha256": "af35f6fa56761d8a9a937733e74e64951ef64d3ccbdcf05db665641efb14e646",
+      "value": "Tất cả quà Telegram có hiển thị trên chuỗi không?"
+    },
+    {
+      "id": "15:description",
+      "source_sha256": "118456ee37ffa7a6edbd0d95d4ce4cac2132157d6d4748639856afe27e58d938",
+      "value": "⟦TX0⟧Không. Một món quà phải tồn tại dưới dạng NFT ⟦TX6⟧ thì mới có địa chỉ vật phẩm và bản ghi sở hữu trên chuỗi tại đây. Quà Telegram, tên người dùng và số có thể sưu tầm có thể có NFT ⟦TX7⟧ liên quan, nhưng chỉ một hồ sơ Telegram hoặc tên người dùng thông thường không chứng minh quyền sở hữu ví.⟦TX1⟧⟦TX2⟧Một vật phẩm sưu tầm có thể hiển thị trên hồ sơ Telegram trong khi chủ sở hữu vẫn là một ví ⟦TX8⟧. Hãy kiểm tra địa chỉ vật phẩm, bộ sưu tập và chủ sở hữu hiện tại. ⟦TX3⟧Quà tặng sưu tầm Telegram⟦TX4⟧.⟦TX5⟧"
+    },
+    {
+      "id": "16:title",
+      "source_sha256": "1394da5699cda2fd542ad1e54ef94689a5db16520fb210cc4f9de1df219ab439",
+      "value": "Làm thế nào để xem tất cả NFT trong tài khoản hoặc bộ sưu tập?"
+    },
+    {
+      "id": "16:description",
+      "source_sha256": "1b5e39300c5885da29039480eb6b32ecf967545dac1b78b3aecc8e1b2b5d1709",
+      "value": "⟦TX0⟧Dùng Tải thêm bên dưới danh sách NFT để xem tiếp bộ sưu tập hoặc ví. Thẻ NFT bao gồm từng vật phẩm được trả về riêng biệt, với tên đầy đủ và liên kết đến chi tiết vật phẩm. Bộ sưu tập NFT của ví và lịch sử giao dịch của ví là hai danh sách độc lập.⟦TX1⟧"
+    },
+    {
+      "id": "17:title",
+      "source_sha256": "542357ee9cc18100b4b53a14024c9e789b07cce41c31347d7092e56a0e9805d8",
+      "value": "Các nhãn nhận diện có nghĩa là gì?"
+    },
+    {
+      "id": "17:description",
+      "source_sha256": "124faa86c200a2c8e0807f980b45720c56c96f08abc5c67c7bb083c079fffb39",
+      "value": "⟦TX0⟧Việc thuộc bộ sưu tập, phân loại độ tin cậy và phê duyệt của sàn giao dịch là những thông tin khác nhau. Tên và hình ảnh được nhận diện không phải bằng chứng sở hữu. Hãy so sánh địa chỉ hợp đồng và liên kết bộ sưu tập trước khi coi hai tài sản có tên tương tự là cùng một token.⟦TX1⟧"
+    },
+    {
+      "id": "18:title",
+      "source_sha256": "af8fe02c9778586a2665419647863c4a60da7d7a0e6fd5fa73a75bf30b647aad",
+      "value": "Định tuyến tự động hoạt động như thế nào?"
+    },
+    {
+      "id": "18:description",
+      "source_sha256": "d23407f1d2fd45efecc88f31a6d4fdc5405c8b802b3a568ce539d533e0b2b472",
+      "value": "⟦TX0⟧Dán địa chỉ, mã băm giao dịch, mã băm thông điệp, số khối hoặc tên .ton vào ô tìm kiếm. Định tuyến tự động cho phép taxi tìm chuỗi tương ứng. Chọn một trình khám phá gốc để tiếp tục tìm kiếm trên chuỗi đó; Xem Hub đưa bạn trở lại tx.taxi.⟦TX1⟧"
+    },
+    {
+      "id": "19:title",
+      "source_sha256": "8c1fc5f3f7e59141135f6a958b44a4d0ad40a98b6583438ab045bbe7de60b544",
+      "value": "Cập nhật bị chậm nghĩa là gì?"
+    },
+    {
+      "id": "19:description",
+      "source_sha256": "b66db641931c248a9133b999961dcd64856af9eb8d0e022759c7087ad2db9035",
+      "value": "⟦TX0⟧Dữ liệu khả dụng gần nhất vẫn được hiển thị khi cập nhật mới bị chậm. Thử lại mục không khả dụng để tải lại. Danh sách rỗng và danh sách không khả dụng là hai trạng thái khác nhau.⟦TX1⟧"
+    },
+    {
+      "id": "20:title",
+      "source_sha256": "6b439b75addc4a0a3186f5e262792d657b2fe4f80f1f308f44d7c3b9f5653b67",
+      "value": "tx.taxi có thể đảo ngược giao dịch không?"
+    },
+    {
+      "id": "20:description",
+      "source_sha256": "7d6b9b46b1566101d4cd42794880983b8a57b7ea608b58499369b23a068fa3d8",
+      "value": "⟦TX0⟧tx.taxi hiển thị dữ liệu chuỗi công khai. Dịch vụ không thể ký giao dịch, truy cập khóa riêng hay đảo ngược một lần chuyển. Để được hỗ trợ về ví hoặc tài khoản sàn, hãy liên hệ dịch vụ đã gửi thao tác đó.⟦TX1⟧"
+    },
+    {
+      "id": "21:title",
+      "source_sha256": "66d14061e5fe02aa4819f70d5dfef021908bbdbba3a4668434b9f1cd817fa9bc",
+      "value": "Giá trị và phân trang"
+    },
+    {
+      "id": "21:description",
+      "source_sha256": "309a3b832ad166da4cc164e7a76355d2c82cce47146817afe928c7da226e08d8",
+      "value": "⟦TX7⟧Tất cả các tuyến dưới đây dùng GET. Những số nguyên cần độ chính xác được biểu diễn bằng chuỗi thập phân; hãy phân tích chúng bằng phép toán độ chính xác tùy ý. Số dư và phí GRAM tính bằng nanogram. Số lượng jetton dùng số chữ số thập phân đã khai báo của chúng.⟦TX8⟧⟦TX9⟧Phản hồi phân trang chứa ⟦TX0⟧. Chỉ tiếp tục khi ⟦TX1⟧ là true, dùng ⟦TX2⟧, ⟦TX3⟧ hoặc ⟦TX4⟧ cho endpoint tương ứng. Giới hạn danh sách tối đa là ⟦TX13⟧; danh sách khối là ⟦TX14⟧.⟦TX10⟧⟦TX11⟧⟦TX5⟧ cho biết thời điểm quan sát và ⟦TX6⟧ đánh dấu dữ liệu được giữ lại. HTTP ⟦TX15⟧ là đầu vào không hợp lệ, ⟦TX16⟧ là không tìm thấy và ⟦TX17⟧ là tạm thời không khả dụng.⟦TX12⟧"
+    },
+    {
+      "id": "22:title",
+      "source_sha256": "ed4c012d6881025a429d6f68313bbf3a94a8228bd9a2e06d6e714f5829e6fb48",
+      "value": "Tổng quan mạng"
+    },
+    {
+      "id": "22:description",
+      "source_sha256": "c9c16113c989454eeccfe089f657d77e13a5eb22790dc7c7ac04e8e48d115bc3",
+      "value": "⟦TX4⟧Trả về workchain và shard đã chọn, các khối gần đây, lịch sử đã quan sát, thời điểm quan sát và trạng thái dữ liệu cũ. Mặc định là basechain. Dùng ⟦TX0⟧ cho masterchain hoặc ⟦TX1⟧ cho một shard basechain đang hoạt động. ⟦TX2⟧ liệt kê các shard khả dụng; ⟦TX3⟧ là khối đầu masterchain của mạng.⟦TX5⟧"
+    },
+    {
+      "id": "23:title",
+      "source_sha256": "1cd5a6687bb76e3926f8c89a9fb290cd17d893ca944899952322d3fb5c9896d3",
+      "value": "Các khối"
+    },
+    {
+      "id": "23:description",
+      "source_sha256": "c4b12bc0df1c05b0436b29c9cc226287c5c695533cc8ae9fe5807f807d6dfbe4",
+      "value": "⟦TX4⟧Trả về các khối của một workchain và shard theo thứ tự số thứ tự giảm dần. Mặc định là basechain; dùng ⟦TX0⟧ cho các khối masterchain. Tiếp tục với ⟦TX1⟧ và giữ ⟦TX2⟧ cùng ⟦TX3⟧ từ phản hồi; giá trị ranh giới không được bao gồm. Phân trang dừng tại điểm shard tách hoặc gộp.⟦TX5⟧"
+    },
+    {
+      "id": "24:title",
+      "source_sha256": "c6dd037f44891078dba62cd9494a87ab05103e0c9eb5237ae455c3becb8d04dc",
+      "value": "Chi tiết khối"
+    },
+    {
+      "id": "24:description",
+      "source_sha256": "901543dbc6309c6a096ba3216d4b72014c66c382c1288fc1aec204627c94a599",
+      "value": "⟦TX1⟧Dùng số thứ tự hoặc định danh đầy đủ ⟦TX0⟧. Số thứ tự sử dụng workchain và shard đã chọn; nếu không chọn, nó dùng workchain mặc định của host và shard gốc. Trả về mã băm, dấu thời gian, thời gian logic, tham chiếu và các trường luồng giá trị.⟦TX2⟧"
+    },
+    {
+      "id": "25:title",
+      "source_sha256": "d5cfe84594348242301a33cd5bc2135dae2e164dc1302237beaf564328486603",
+      "value": "Giao dịch trong khối"
+    },
+    {
+      "id": "25:description",
+      "source_sha256": "7a6549fae4846fefb906c36d19855169ba6985af7fb4f47fbc85cf3a4f33cacf",
+      "value": "⟦TX0⟧Trả về các giao dịch có trong khối được chỉ định.⟦TX1⟧"
+    },
+    {
+      "id": "26:title",
+      "source_sha256": "46ba1487cc18fae177885eaa96d1cd9dc4aa04e6961b899496ba5e1fcb5895bf",
+      "value": "Tham chiếu shard của masterchain"
+    },
+    {
+      "id": "26:description",
+      "source_sha256": "d1416726cc5cce27ea423f530ba0e48625fb31706f306c88f277605b7366664b",
+      "value": "⟦TX0⟧Dùng số thứ tự masterchain hoặc định danh khối masterchain. Trả về các tham chiếu shard tương ứng.⟦TX1⟧"
+    },
+    {
+      "id": "27:title",
+      "source_sha256": "efde9a0a45fb98031f89cee8deb0ed2073524fb757092ebd179a1919405e1871",
+      "value": "Giao dịch trên mạng"
+    },
+    {
+      "id": "27:description",
+      "source_sha256": "ab676ec8d13faa0d4c1bb9d93cf0dd71eac72ddec0377c8472c50a8622dd335e",
+      "value": "⟦TX4⟧Trả về các giao dịch trên các shard trong một khoảng masterchain. Tiếp tục trong khoảng đó bằng ⟦TX0⟧ và ⟦TX1⟧. Khi ⟦TX2⟧ là null, hãy tiếp tục bằng ⟦TX3⟧. Giới hạn tối đa là ⟦TX6⟧.⟦TX5⟧"
+    },
+    {
+      "id": "28:title",
+      "source_sha256": "f22d30c712f91e9e2bc9c09f234ad7e6aa286705e375a6896d2d89da75c50601",
+      "value": "Giao dịch masterchain"
+    },
+    {
+      "id": "28:description",
+      "source_sha256": "341c271de5486ef361e96e5de85ea1541093a5dafac0c715c4ff3bda9f19e449",
+      "value": "⟦TX1⟧Trả về các giao dịch từ một khối masterchain. Tiếp tục bằng ⟦TX0⟧. Đây là các giao dịch masterchain, không phải mọi giao dịch trên tất cả các shard.⟦TX2⟧"
+    },
+    {
+      "id": "29:title",
+      "source_sha256": "49df873871d6eee5740d9c7ea7d6aad1c255b7904c9920bc69de497a86d746ef",
+      "value": "Validator"
+    },
+    {
+      "id": "29:description",
+      "source_sha256": "f8f9a6629a8a1ae27cdfc96f2d2ee54947af7a93c08344bee28c5679a68187bb",
+      "value": "⟦TX0⟧Trả về thông tin bầu chọn validator, mức stake và danh sách validator.⟦TX1⟧"
+    },
+    {
+      "id": "30:title",
+      "source_sha256": "641494dc8129fb6507b1cecdf976bb7d5abd9f7f2a590a882d831c906a86fd0a",
+      "value": "Chi tiết tên miền"
+    },
+    {
+      "id": "30:description",
+      "source_sha256": "6ec2f28e5afcc347143b3bdf733e70d7197c45a976ac6af6582568aba4ccfaa8",
+      "value": "⟦TX2⟧Định danh tên miền, thời hạn hết hiệu lực và NFT liên kết. Thêm ⟦TX0⟧ để lấy bản ghi ví, trang web, lưu trữ và trình phân giải, hoặc ⟦TX1⟧ để xem lịch sử đặt giá.⟦TX3⟧"
+    },
+    {
+      "id": "31:title",
+      "source_sha256": "aada1ecb5e67952c5f6ebc84a10466ce02b55eff9ae02cb26cbf53cc64268d92",
+      "value": "Đấu giá DNS"
+    },
+    {
+      "id": "31:description",
+      "source_sha256": "1dbc8c0b3fe81099672aff2b12a8f7b15669855e801a27a50edca79bce7e7f6f",
+      "value": "⟦TX2⟧Các phiên đấu giá tên miền hiện tại. Chọn ⟦TX0⟧ hoặc ⟦TX1⟧.⟦TX3⟧"
+    },
+    {
+      "id": "32:title",
+      "source_sha256": "fccf68394ba91238757c002e304a37ce2176d2760a5af2256a1e00073320fea7",
+      "value": "Tên miền sắp hết hạn"
+    },
+    {
+      "id": "32:description",
+      "source_sha256": "d016aea128f2f7f54e2cc0e20cbade56ede4656ffb202fdd94671c37554d896c",
+      "value": "⟦TX1⟧Trả về các tên miền sắp hết hạn. Tham số tùy chọn ⟦TX0⟧ là số ngày trước khi hết hạn.⟦TX2⟧"
+    },
+    {
+      "id": "33:title",
+      "source_sha256": "1ab5b9c24252fafa75f641001e0f22e1beed1a6896ce048cca1c9140ab20df4b",
+      "value": "Pool staking"
+    },
+    {
+      "id": "33:description",
+      "source_sha256": "9d4f6f9cf8937c2161c3049863cb3c2ae5928efc69a40bfbb4014fb5892e7b89",
+      "value": "⟦TX1⟧Mức stake của pool, các nominator, chu kỳ, kiểu triển khai và lợi suất phần trăm hằng năm. Thêm ⟦TX0⟧ để xem lịch sử APY đã quan sát.⟦TX2⟧"
+    },
+    {
+      "id": "34:title",
+      "source_sha256": "dc04913c72c679adf6e557e9990a1e03b2e39d08d8ba67c2777884ef92e6740f",
+      "value": "Tiền tệ bổ sung"
+    },
+    {
+      "id": "34:description",
+      "source_sha256": "bbd70a3eba95e68f66cc1dac76c14de4705f833fb241e12f681695ac90e85233",
+      "value": "⟦TX0⟧ID tiền tệ, ký hiệu, số chữ số thập phân và hình ảnh.⟦TX1⟧"
+    },
+    {
+      "id": "35:title",
+      "source_sha256": "10c4d8205e851b6d6fbbb3ba262f8c71252a192ec7a1a295059a1fb828087b29",
+      "value": "Lịch sử tiền tệ bổ sung"
+    },
+    {
+      "id": "35:description",
+      "source_sha256": "a532a0767c850c3aba52e7ab1ca2e36367e7fd0c8b9ed39eabe2a2f528017f25",
+      "value": "⟦TX1⟧Các sự kiện tài khoản cho loại tiền được chọn. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "36:title",
+      "source_sha256": "7c8e1b5ab2dd67d54cabeb89397a09b7f472db563cfccbc076fdd97dde6269a2",
+      "value": "BOC của khối"
+    },
+    {
+      "id": "36:description",
+      "source_sha256": "5dbe70a181cb5b7d3fe504b67ca512a8a9f31a2ef869b6e2379896af7d29003d",
+      "value": "⟦TX0⟧Tải khối dưới dạng Bag of Cells nhị phân.⟦TX1⟧"
+    },
+    {
+      "id": "37:title",
+      "source_sha256": "493d4f2717d68c3998bbf3f23ce387923d974608207888ff4aeb60708182cd6b",
+      "value": "Cấu hình thô"
+    },
+    {
+      "id": "37:description",
+      "source_sha256": "3468d819eb43f68aeda63984fec863a271f3115a0379126538f80b8c2c38adb2",
+      "value": "⟦TX1⟧Cấu hình mạng ở dạng thô. Thêm ⟦TX0⟧ để yêu cầu cấu hình masterchain trong quá khứ.⟦TX2⟧"
+    },
+    {
+      "id": "38:title",
+      "source_sha256": "f472092cd712ac6a8a9bf18d82d4ca797bb375b4f73715de6233c5923cd043d7",
+      "value": "Cấu hình blockchain"
+    },
+    {
+      "id": "38:description",
+      "source_sha256": "6971d5c964755bd440c4fa41bc0b183e07577a5adc796de31f35ee10c4c02e32",
+      "value": "⟦TX1⟧Trả về các tham số cấu hình blockchain đã giải mã. Thêm ⟦TX0⟧ để xem cấu hình masterchain trong quá khứ.⟦TX2⟧"
+    },
+    {
+      "id": "39:title",
+      "source_sha256": "90c515c6bdfb2a3d1825c62278ab4553aea8eca14e5101257abdbf9ba158a054",
+      "value": "Tỷ giá GRAM"
+    },
+    {
+      "id": "39:description",
+      "source_sha256": "8b4b630493dabc674d29ae27fb2b04feb48632d2f533cfe633bcfd52dd1e565c",
+      "value": "⟦TX0⟧Trả về tỷ giá GRAM theo AUD, CAD, CHF, EUR, GBP, JPY và USD.⟦TX1⟧"
+    },
+    {
+      "id": "40:title",
+      "source_sha256": "e208c466f923b935587eb94793b4f6f92567ef35aeabaa5f55ee638807864c29",
+      "value": "Chi tiết giao dịch"
+    },
+    {
+      "id": "40:description",
+      "source_sha256": "71c01365d2c44b62a27d5a82449a6850332f74eb9a7468be5bc0ac37841da6eb",
+      "value": "⟦TX1⟧Trả về giao dịch của tài khoản, thông điệp, phí, các giai đoạn và thay đổi trạng thái, cùng trace và chi tiết sự kiện đã diễn giải nếu có. ⟦TX0⟧ xác định những mục liên quan không thể tải.⟦TX2⟧"
+    },
+    {
+      "id": "41:title",
+      "source_sha256": "f9951cb016b4d06bee83aeb8635e9fe02e40e2ac16a627f38c5f9aab9cdc6239",
+      "value": "Giao dịch theo mã băm thông điệp"
+    },
+    {
+      "id": "41:description",
+      "source_sha256": "f5c46a3e71ae7363401f3d9d137b7b5ab1132d82506fc423a08c95b929264950",
+      "value": "⟦TX0⟧Tìm giao dịch gắn với mã băm thông điệp được cung cấp.⟦TX1⟧"
+    },
+    {
+      "id": "42:title",
+      "source_sha256": "7e14c3d7dd12bbd0947aa8cb491dff154a1644a85848fc28bd1997ef9ef54a2a",
+      "value": "Dấu vết giao dịch"
+    },
+    {
+      "id": "42:description",
+      "source_sha256": "6ee02038b19682d0f74c0599718a5ae3a2010f90d1db0b5a53e927954ad6efd5",
+      "value": "⟦TX0⟧Trả về cây giao dịch liên kết cùng các trace con và chi tiết thực thi.⟦TX1⟧"
+    },
+    {
+      "id": "43:title",
+      "source_sha256": "92482268c99e1db6591166be23f47d4c925f121d9f7699fe9241e8e14407d9b2",
+      "value": "Phân giải nội dung tìm kiếm"
+    },
+    {
+      "id": "43:description",
+      "source_sha256": "d31dd0dfb4e0cc5a63cfc526b3ab074b2716d84cdf2d6bdbeb334b402ebc8008",
+      "value": "⟦TX0⟧Phân giải tài khoản ⟦TX2⟧, NFT, bộ sưu tập, jetton, giao dịch, mã băm thông điệp, định danh khối hoặc tên miền .ton. Trả về loại thực thể và định danh.⟦TX1⟧"
+    },
+    {
+      "id": "44:title",
+      "source_sha256": "17be95e1a1884ebc8904a38b6a754f0bcbe59e3563e6e811b2a3f68b36cf1c76",
+      "value": "Chi tiết tài khoản"
+    },
+    {
+      "id": "44:description",
+      "source_sha256": "84838d6063928fc95d0a16136d5e66c69e29c2070c3daffde267d313a3aa9c85",
+      "value": "⟦TX0⟧Trả về số dư, trạng thái, giao diện hợp đồng, trạng thái blockchain hiện có và tên DNS. Trạng thái có thể gồm mã, dữ liệu, thông tin lưu trữ và tiền tệ bổ sung.⟦TX1⟧"
+    },
+    {
+      "id": "45:title",
+      "source_sha256": "7ebecd1975d35e9a4d1ecf28637b71b3d31eabcd2c4fe6fdbedd290e50edc34d",
+      "value": "Giao dịch tài khoản"
+    },
+    {
+      "id": "45:description",
+      "source_sha256": "91b5f849144c4b7dcf1bae44088207257d9d72756b727fabdcd8ba2169b0bd0d",
+      "value": "⟦TX2⟧Liệt kê các giao dịch của tài khoản. Tiếp tục với ⟦TX0⟧; cũng chấp nhận ⟦TX1⟧.⟦TX3⟧"
+    },
+    {
+      "id": "46:title",
+      "source_sha256": "612868be774fd2cbcfe6a2941b27f58c81defb559303167e63025b6a03554745",
+      "value": "Chuyển khoản và sự kiện tài khoản"
+    },
+    {
+      "id": "46:description",
+      "source_sha256": "bb2b4edeec0cb009f6ef90012bea921f0a07acac13afe908fb5d845f90a51300",
+      "value": "⟦TX1⟧Trả về các hành động đã diễn giải và trạng thái của chúng. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "47:title",
+      "source_sha256": "65277a2a8168a8a1e56cfc53d082cbcfcb4c3db89a84f1e881aa2e96f8366194",
+      "value": "Số dư jetton"
+    },
+    {
+      "id": "47:description",
+      "source_sha256": "f329823cf1a226fb4ff4c137a78df37d3da0a7b9d03d531eec100365e0a13a22",
+      "value": "⟦TX0⟧Trả về số dư cùng siêu dữ liệu hợp đồng master và địa chỉ ví jetton của tài khoản.⟦TX1⟧"
+    },
+    {
+      "id": "48:title",
+      "source_sha256": "486c3ede5848be13ba213412b3363ffeb2ed556c2b4a89e3f2edbad1c7c8f0f4",
+      "value": "NFT của tài khoản"
+    },
+    {
+      "id": "48:description",
+      "source_sha256": "4ccbeaad7cbec8177f0af5c79d79b22ac865b6188b5faca628fa7e1d8cb5aaa7",
+      "value": "⟦TX3⟧Trả về các vật phẩm NFT, mặc định bao gồm quyền sở hữu gián tiếp qua hợp đồng bán được nhận diện. Lọc bằng ⟦TX0⟧, hoặc dùng ⟦TX1⟧ để chỉ lấy quyền sở hữu trực tiếp. Tiếp tục với ⟦TX2⟧.⟦TX4⟧"
+    },
+    {
+      "id": "49:title",
+      "source_sha256": "880231f0382658ba830f9dba8569f244639a71365af2ce98f5b5bb72f95fd041",
+      "value": "Thao tác NFT"
+    },
+    {
+      "id": "49:description",
+      "source_sha256": "eba76abce9ad7efbb8632fb99e3a8b128873053773a30f3f10afc53b161b1398",
+      "value": "⟦TX1⟧Trả về các thao tác NFT của tài khoản. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "50:title",
+      "source_sha256": "dcf82226c3a9c2ffd39ddeb1caad432fdb4beece0be03b9a2831cbbbe6baca10",
+      "value": "Lịch sử jetton"
+    },
+    {
+      "id": "50:description",
+      "source_sha256": "6415256a6e4b54af0e3e4a40b640d0e3b637086435dc0d3d327765ca160432fa",
+      "value": "⟦TX1⟧Trả về các sự kiện jetton của tài khoản. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "51:title",
+      "source_sha256": "e93e79a3b8bff15accdd2dc36e049cd923378e038bda6fcbf17ea2d2c3cb3c36",
+      "value": "Kiểm tra hợp đồng"
+    },
+    {
+      "id": "51:description",
+      "source_sha256": "49739050d87013b66db6f97d3704e5f49c58e24ef2cb69a8515b34c32dfa5ce2",
+      "value": "⟦TX0⟧Trả về chi tiết kiểm tra hợp đồng hiện có và các giao diện được nhận diện.⟦TX1⟧"
+    },
+    {
+      "id": "52:title",
+      "source_sha256": "1a3689dfef0580128e5f0c7238682e9485f3562edc9aed9b92fe4fecb4d5a745",
+      "value": "Đọc phương thức hợp đồng"
+    },
+    {
+      "id": "52:description",
+      "source_sha256": "4c7f3bd6b2de158e9b44ece71e4df5286727ee5a0bfa43b869c8ad1e69cdb53a",
+      "value": "⟦TX2⟧Thực thi một getter chỉ đọc. Cung cấp từng đối số bằng tham số ⟦TX0⟧ lặp lại, ví dụ ⟦TX1⟧. Các đối số vẫn là chuỗi và có thể chứa giá trị số nguyên, địa chỉ hoặc BOC được phương thức chấp nhận.⟦TX3⟧"
+    },
+    {
+      "id": "53:title",
+      "source_sha256": "d2c3c6c36c0dc26c83666d8f54ee07ab7acd6115a77663d19d7d647bd000a7a5",
+      "value": "Các pool staking"
+    },
+    {
+      "id": "53:description",
+      "source_sha256": "c247bd9c787843b9f2854f4786367c2d27372fbf2f701141007fc687525a62c8",
+      "value": "⟦TX0⟧Trả về các vị thế của tài khoản trong pool nominator.⟦TX1⟧"
+    },
+    {
+      "id": "54:title",
+      "source_sha256": "5ea0ed7ed8b49a048b7ae753d105f8fa3c2bb82f8afee746ef5590f6ae0fb65e",
+      "value": "Hợp đồng multisig"
+    },
+    {
+      "id": "54:description",
+      "source_sha256": "6999cb0b8ccc9d635016408c07bf00907c83ef0a5a7e55862b201bed1d1f1cd3",
+      "value": "⟦TX0⟧Trả về ngưỡng, người ký, người đề xuất, số thứ tự và các lệnh của hợp đồng multisig. Dùng tuyến số nhiều bên dưới để tìm các multisig liên quan đến ví của người ký.⟦TX1⟧"
+    },
+    {
+      "id": "55:title",
+      "source_sha256": "46d92008d96549217d077be703f95876e41a6c5f52bf67cf7eb238184987856e",
+      "value": "Bản ghi multisig"
+    },
+    {
+      "id": "55:description",
+      "source_sha256": "eb51d109b5d2af826ec712a5541681ec8a8548bb876018aeb843ca0e7cf2a01b",
+      "value": "⟦TX0⟧Trả về các bản ghi multisig liên quan đến tài khoản.⟦TX1⟧"
+    },
+    {
+      "id": "56:title",
+      "source_sha256": "a151f2e912fe8d5b31e07dae6315f861d39160480d78848a0cdadfb51f09d327",
+      "value": "Đăng ký"
+    },
+    {
+      "id": "56:description",
+      "source_sha256": "b3c43bbe4628bae9b5f2657bf22c2eef5f9898619df0e943819747abe29c03d8",
+      "value": "⟦TX0⟧Trả về các bản ghi đăng ký của tài khoản.⟦TX1⟧"
+    },
+    {
+      "id": "57:title",
+      "source_sha256": "c392d07e9c5f8336d3615316e431e090bba7aad5fdfaac02c6ae92f0ea64931b",
+      "value": "Tài sản DeFi"
+    },
+    {
+      "id": "57:description",
+      "source_sha256": "290381495d98bd73a69ed2a8e3b02b38390c5debb728a58bce52b7ec70d42002",
+      "value": "⟦TX0⟧Trả về các vị thế và tài sản DeFi được nhận diện của tài khoản.⟦TX1⟧"
+    },
+    {
+      "id": "58:title",
+      "source_sha256": "bfe5eac64a596f4bd7584fe21cd01158f1e7ce0584fe6db8238d0966cd4b8c17",
+      "value": "Vật phẩm NFT"
+    },
+    {
+      "id": "58:description",
+      "source_sha256": "c4a1b0525ba4e55324ba27df00e8d65a8cf505c99942a7ad7e68e2adb2f9edd1",
+      "value": "⟦TX4⟧Trả về chủ sở hữu, bộ sưu tập, siêu dữ liệu, bản xem trước nội dung, độ tin cậy và các trường bán của vật phẩm. ⟦TX0⟧ cho biết ⟦TX1⟧ đã được ⟦TX2⟧ xác nhận hay chưa; chỉ số gốc vẫn nằm trong ⟦TX3⟧.⟦TX5⟧"
+    },
+    {
+      "id": "59:title",
+      "source_sha256": "46f4a4143ee5a57a4f9adc2c41521a65ba9a51d0af18c50a6d13b3078508832d",
+      "value": "Chi tiết NFT soulbound"
+    },
+    {
+      "id": "59:description",
+      "source_sha256": "b7c4532ad21beda6e6701cf197ef9f601dd628e2c265b4a8dc2414799f9fdb77",
+      "value": "⟦TX0⟧Đối với NFT soulbound, trả về địa chỉ cơ quan có thẩm quyền và dấu thời gian thu hồi từ hợp đồng. Dấu thời gian thu hồi bằng không nghĩa là chưa bị thu hồi. Vật phẩm soulbound không thể chuyển nhượng.⟦TX1⟧"
+    },
+    {
+      "id": "60:title",
+      "source_sha256": "33026cedc1e25eac2ad801ade97631ac365ddc26956ff066832e8510d5ccbe41",
+      "value": "Lịch sử NFT"
+    },
+    {
+      "id": "60:description",
+      "source_sha256": "75aa0714eb365c46948691aa9974b883dae8f87174a0c716677d89ebd4bb01c2",
+      "value": "⟦TX1⟧Trả về các sự kiện của một NFT. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "61:title",
+      "source_sha256": "b66b47b8f812c5498760e935b5696522e02576dc99aa64b58201f77ba9a2e1e8",
+      "value": "Chi tiết bộ sưu tập"
+    },
+    {
+      "id": "61:description",
+      "source_sha256": "650e94fa1dad53b83edbd38263df0fc434088827f9e3edd4eb70f92907adad7a",
+      "value": "⟦TX2⟧Trả về chủ sở hữu, nội dung, siêu dữ liệu và bản xem trước của bộ sưu tập. Khi ⟦TX0⟧ là true, ⟦TX1⟧ đã được getter của bộ sưu tập xác nhận; giá trị này không nhất thiết là tổng số vật phẩm.⟦TX3⟧"
+    },
+    {
+      "id": "62:title",
+      "source_sha256": "c85fc6b88ff4f86cc9543cdb26498926d8263bb327d749a426a1d694dec4d33b",
+      "value": "Vật phẩm trong bộ sưu tập"
+    },
+    {
+      "id": "62:description",
+      "source_sha256": "d3364bcad8c48a83dedeb1b53fc8412dd61da94de19b58892bc134421d06dae3",
+      "value": "⟦TX1⟧Trả về các vật phẩm NFT của một bộ sưu tập. Tiếp tục với ⟦TX0⟧.⟦TX2⟧"
+    },
+    {
+      "id": "63:title",
+      "source_sha256": "abc01e0a71e31ad5a718815f0f91a3f8b1caa8c2a5fa9ecf9251a36a01e201fa",
+      "value": "Chi tiết jetton"
+    },
+    {
+      "id": "63:description",
+      "source_sha256": "cf255d0f269858cf826fa10d984c17c83983d74b5f0024eafdd659355fe9ed2f",
+      "value": "⟦TX0⟧Trả về siêu dữ liệu hợp đồng master, tổng nguồn cung, thông tin quản trị, số chữ số thập phân và số người nắm giữ.⟦TX1⟧"
+    },
+    {
+      "id": "64:title",
+      "source_sha256": "19bf9a79c836c6b6e7e64574d90fd784b98796bf5c7c6dc3fd10089e44a0cead",
+      "value": "Người nắm giữ jetton"
+    },
+    {
+      "id": "64:description",
+      "source_sha256": "193a1b107b1ab08ecdea3961de4b63f73153c9febc3830bcf3c9622a5f196a9b",
+      "value": "⟦TX2⟧Trả về danh sách người nắm giữ trong ⟦TX0⟧. Tiếp tục với ⟦TX1⟧. Giá trị số dư dùng số chữ số thập phân của jetton.⟦TX3⟧"
+    },
+    {
+      "id": "65:title",
+      "source_sha256": "1a2303ede07493acc7caaa7c737f3c52bcc9cf04372be19ed1b0af6b9f2c791e",
+      "value": "Kết nối"
+    },
+    {
+      "id": "65:description",
+      "source_sha256": "2790d45d61373653559cbcda4f8444b1850d6f762b1d743ef1e944170b6e1259",
+      "value": "⟦TX4⟧Kết nối tới cùng host tại ⟦TX0⟧ và gửi ⟦TX1⟧ để nhận snapshot hiện tại. Các khối basechain được chọn mặc định. Thêm ⟦TX2⟧ cho masterchain hoặc ⟦TX3⟧ cho một shard basechain. Dùng REST ⟦TX6⟧ để xem từng tài khoản, NFT, giao dịch và trace.⟦TX5⟧"
+    },
+    {
+      "id": "66:title",
+      "source_sha256": "6d3657e552a8eda23b6c0db9d9a4617cecfa57867f6d63cdab47c1b59078a304",
+      "value": "Snapshot hiện tại"
+    },
+    {
+      "id": "66:description",
+      "source_sha256": "a1a50f81ba263850c6c97930ce5f81201eb06fce76b4165542452c0e872c0bb7",
+      "value": "⟦TX5⟧Phản hồi bao gồm các ⟦TX0⟧ gần đây đã chuẩn hóa từ workchain và shard được chọn, cùng đối tượng ⟦TX1⟧ chứa khối đầu, lịch sử đã quan sát, thời điểm quan sát và trạng thái dữ liệu cũ. Dùng ⟦TX2⟧ để lấy đầy đủ các trường của khối đầu được chọn và ⟦TX3⟧ cho khối đầu masterchain của mạng. Gửi ⟦TX4⟧ để chuyển kết nối đang mở sang masterchain.⟦TX6⟧"
+    },
+    {
+      "id": "67:title",
+      "source_sha256": "8c1fa2faedac42da96b7a171669173ea9def5bbda016c86cec2ec6445bd22057",
+      "value": "Duy trì kết nối"
+    },
+    {
+      "id": "67:description",
+      "source_sha256": "41daff49d844721070de3f72e1e2bf31cea3a0fabeec3a0f9ba4e6618b70e6fe",
+      "value": "⟦TX1⟧Gửi ping để kiểm tra kết nối. Khi kết nối lại, gửi ⟦TX0⟧ lần nữa để nhận snapshot hiện tại.⟦TX2⟧"
+    },
+    {
+      "id": "68:title",
+      "source_sha256": "def3cada822644f6026f66ee2f9877d4a339a6fcaa3140957df55a73ddc061c8",
+      "value": "Cập nhật bị chậm"
+    },
+    {
+      "id": "68:description",
+      "source_sha256": "1ad33d153a1c9d275ba54ffdaa54dfd95da454a387976c741baea7051c9ec999",
+      "value": "⟦TX2⟧Khi ⟦TX0⟧ là true, hãy giữ lại các khối khả dụng gần nhất và đánh dấu chúng là bị chậm. ⟦TX1⟧ là dấu thời gian quan sát. Chỉ tình trạng kết nối WebSocket không đủ để xác định dữ liệu có mới hay không.⟦TX3⟧"
+    }
+  ]
+}

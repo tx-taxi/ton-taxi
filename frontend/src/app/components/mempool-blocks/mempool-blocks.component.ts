@@ -52,6 +52,12 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   get pendingTitle(): string {
     const count = this.pendingCount;
     const language = this.locale.toLowerCase();
+    if (language.startsWith('vi')) {
+      const summary = count === null ? 'Không có dữ liệu tin nhắn đang chờ' : `${new Intl.NumberFormat(this.locale).format(count)} tin nhắn bên ngoài đang chờ`;
+      const updated = this.nativePending?.observedAt ? ` · Cập nhật gần nhất ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Đang kết nối lại' : '';
+      return summary + updated + stale;
+    }
     if (language.startsWith('ko')) {
       const summary = count === null ? '대기 메시지 피드를 사용할 수 없음' : `대기 중인 외부 메시지 ${new Intl.NumberFormat(this.locale).format(count)}개`;
       const updated = this.nativePending?.observedAt ? ` · 마지막 업데이트 ${this.nativePending.observedAt}` : '';

@@ -60,6 +60,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get emptyState(): string {
     if (this.tonSamples !== null) {
       if (this.recentSamples.length) return '';
+      if (this.isVietnamese) return `Không có lịch sử ${this.tonChainLabel}`;
       if (this.isKorean) return `${this.koreanChainLabel} 기록을 사용할 수 없음`;
       if (this.isChinese) return `${this.chineseChainLabel}历史不可用`;
       if (this.isJapanese) return `${this.japaneseChainLabel}の履歴を取得できません`;
@@ -89,6 +90,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get isJapanese(): boolean { return this.locale.toLowerCase().startsWith('ja'); }
   get isChinese(): boolean { return this.locale.toLowerCase().startsWith('zh'); }
   get isKorean(): boolean { return this.locale.toLowerCase().startsWith('ko'); }
+  get isVietnamese(): boolean { return this.locale.toLowerCase().startsWith('vi'); }
   get koreanChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? '마스터체인' : '베이스체인'; }
   get chineseChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? '主链' : '基础链'; }
   get japaneseChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? 'マスターチェーン' : 'ベースチェーン'; }
@@ -98,6 +100,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get isRussian(): boolean { return this.locale.toLowerCase().startsWith('ru'); }
   get isPortuguese(): boolean { return this.locale.toLowerCase().startsWith('pt'); }
   get chartLegendLabel(): string {
+    if (this.isVietnamese) return 'Chú giải biểu đồ';
     if (this.isKorean) return '차트 범례';
     if (this.isChinese) return '图表图例';
     if (this.isJapanese) return 'グラフの凡例';
@@ -111,6 +114,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     return this.isSpanish ? 'Leyenda del gráfico' : 'Chart legend';
   }
   get chartLabel(): string {
+    if (this.isTon && this.isVietnamese) return `Lịch sử TON ${this.tonChainLabel}: ${this.historyLabel}`;
     if (this.isTon && this.isKorean) return `TON ${this.koreanChainLabel} 기록: ${this.historyLabel}`;
     if (this.isTon && this.isChinese) return `TON ${this.chineseChainLabel}历史：${this.historyLabel}`;
     if (this.isTon && this.isJapanese) return `TON ${this.japaneseChainLabel}の履歴：${this.historyLabel}`;
@@ -146,6 +150,14 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
 
     const latest = this.recentSamples[this.recentSamples.length - 1];
     if (this.isTon) {
+      if (this.isVietnamese) {
+        const start = this.formatTime(this.recentSamples[0].timestamp);
+        const end = this.formatTime(latest.timestamp);
+        const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+        const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
+        const range = this.recentSamples.length === 1 ? `Quan sát ${this.tonChainLabel} lúc ${end}.` : `Lịch sử ${this.tonChainLabel} từ ${start} đến ${end}.`;
+        return `${range} Phí thu trung bình mỗi khối gần nhất: ${fee === null ? 'không có dữ liệu' : fee + ' GRAM'}; thời gian trung bình giữa các khối: ${interval === null ? 'không có dữ liệu' : interval}.`;
+      }
       if (this.isKorean) {
         const start = this.formatTime(this.recentSamples[0].timestamp);
         const end = this.formatTime(latest.timestamp);
@@ -333,6 +345,12 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
             const history = sample.tonHistory;
             const total = this.formatAtomicGram(history?.feeTotalAtomic, null);
             const fractionalMean = !!history?.feeTotalAtomic && !!history.feeCount && BigInt(history.feeTotalAtomic) % BigInt(history.feeCount) !== 0n;
+            if (this.isVietnamese) {
+              const blocks = history?.blockCount ? `<div>Khối: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
+              const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'Không có dữ liệu';
+              const coverage = history?.feeCount !== history?.blockCount ? ` (${history.feeCount} trên ${history.blockCount})` : '';
+              return `<div class="ethereum-gas-tooltip"><div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>${blocks}<div>Phí thu trung bình mỗi khối: <strong>${fractionalMean ? '≈' : ''}${fee}</strong></div>${total === null ? '' : `<div>Tổng phí đã thu: <strong>${total} GRAM</strong>${coverage}</div>`}<div>Thời gian trung bình giữa các khối: <strong>${sample.network_utilization_percentage === null ? 'Không có dữ liệu' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div></div>`;
+            }
             if (this.isKorean) {
               const blocks = history?.blockCount ? `<div>블록: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
               const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? '데이터 없음';
@@ -477,7 +495,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
       ],
       series: [
         {
-          name: this.isTon ? (this.isKorean ? '블록당 평균 징수 수수료' : this.isChinese ? '每区块平均收取手续费' : this.isJapanese ? 'ブロック当たりの平均回収手数料' : this.isUkrainian ? 'Середня зібрана комісія за блок' : this.isDutch ? 'Gemiddelde geïnde kosten per blok' : this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
+          name: this.isTon ? (this.isVietnamese ? 'Phí thu trung bình mỗi khối' : this.isKorean ? '블록당 평균 징수 수수료' : this.isChinese ? '每区块平均收取手续费' : this.isJapanese ? 'ブロック当たりの平均回収手数料' : this.isUkrainian ? 'Середня зібрана комісія за блок' : this.isDutch ? 'Gemiddelde geïnde kosten per blok' : this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
           type: 'line',
           yAxisIndex: 0,
           data: lineData('base_fee_gwei'),
@@ -494,7 +512,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
           emphasis: { focus: 'series' },
         },
         {
-          name: this.isTon ? (this.isKorean ? '평균 블록 간격' : this.isChinese ? '平均区块间隔' : this.isJapanese ? '平均ブロック間隔' : this.isUkrainian ? 'Середній інтервал між блоками' : this.isDutch ? 'Gemiddeld blokinterval' : this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
+          name: this.isTon ? (this.isVietnamese ? 'Thời gian trung bình giữa các khối' : this.isKorean ? '평균 블록 간격' : this.isChinese ? '平均区块间隔' : this.isJapanese ? '平均ブロック間隔' : this.isUkrainian ? 'Середній інтервал між блоками' : this.isDutch ? 'Gemiddeld blokinterval' : this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
           type: 'line',
           yAxisIndex: 1,
           data: lineData('network_utilization_percentage'),
