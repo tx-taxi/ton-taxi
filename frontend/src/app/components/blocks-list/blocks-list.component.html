@@ -16,12 +16,12 @@
 </ng-container>
 
   <div *ngIf="nativeRoute && tonData.error" class="alert alert-mempool" role="alert">{{ tonData.error }}</div>
-  <div *ngIf="nativeRoute && (tonData.data?.stale || tonData.data?._meta?.stale)" class="alert alert-mempool" role="status">Reconnecting…</div>
+  <div *ngIf="nativeRoute && (tonData.data?.stale || tonData.data?._meta?.stale)" class="alert alert-mempool" role="status" i18n="@@ton.dash.reconnecting">Reconnecting…</div>
   <div style="min-height: 295px" *ngIf="!nativeRoute || !tonData.error">
     <table class="table table-borderless">
       <thead>
-        <th class="height text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}" >{{ nativeMode ? 'Block' : 'Height' }}</th>
-        <th *ngIf="nativeMode || isMempoolModule" class="pool text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}">{{ nativeMode ? 'Workchain' : 'Fee recipient' }}</th>
+        <th class="height text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}"><ng-container *ngIf="nativeMode; else heightLabel" i18n="@@ton.detail.block">Block</ng-container><ng-template #heightLabel><ng-container i18n="latest-blocks.height">Height</ng-container></ng-template></th>
+        <th *ngIf="nativeMode || isMempoolModule" class="pool text-start" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}"><ng-container *ngIf="nativeMode; else feeRecipientLabel" i18n="@@ton.block.workchain">Workchain</ng-container><ng-template #feeRecipientLabel>Fee recipient</ng-template></th>
         <th class="timestamp" i18n="latest-blocks.timestamp" *ngIf="!widget" [class.legacy]="!isMempoolModule && !nativeMode">Timestamp</th>
         <th *ngIf="!nativeMode && auditAvailable" class="health text-end" i18n="latest-blocks.health" [ngClass]="{'widget': widget, 'legacy': !isMempoolModule && !nativeMode}"
           i18n-ngbTooltip="latest-blocks.health" ngbTooltip="Health" placement="bottom" #health [disableTooltip]="!isEllipsisActive(health)">Health</th>
