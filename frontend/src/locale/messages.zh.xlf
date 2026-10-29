@@ -13129,8 +13129,8 @@
         </context-group>
       </trans-unit>
       <trans-unit id="ton.legal.privacy.audience.body" datatype="html">
-        <source>tx.taxi uses Cloudflare Web Analytics for page views and performance, and a first-party daily cookie shared across its explorers to count browsers once per UTC day. The daily audience collector stores only a daily identifier, the explorer hostname, and whether there was interaction. It does not receive search text, addresses, transaction IDs, URLs, or IP addresses. Individual daily records expire after 31 days; aggregate counts are retained for 400 days. Do Not Track and Global Privacy Control disable this first-party measurement.</source>
-        <target state="needs-review-translation">tx.taxi 使用 Cloudflare Web Analytics 测量页面浏览量和性能，并在各区块浏览器网站之间共享第一方每日 Cookie，以便每个 UTC 日只统计每个浏览器一次。每日访问量收集器只保存每日标识、区块浏览器网站的主机名和是否发生交互，不接收搜索文本、地址、交易 ID、网址或 IP 地址。单日记录在 31 天后过期，汇总计数保留 400 天。启用 Do Not Track 或 Global Privacy Control 会关闭此第一方统计。</target><context-group purpose="location">
+        <source>tx.taxi uses Cloudflare Web Analytics for page views and performance, and a first-party daily cookie shared across its explorers to count browsers once per UTC day. The daily audience collector stores only a daily identifier, the explorer hostname, and whether there was interaction. It does not store search text, addresses, transaction IDs, URLs, or IP addresses. Individual daily records expire after 31 days; aggregate counts are retained for 400 days. Do Not Track and Global Privacy Control disable this first-party measurement.</source>
+        <target state="needs-review-translation">tx.taxi 使用 Cloudflare Web Analytics 测量页面浏览量和性能，并在各区块浏览器网站之间共享第一方每日 Cookie，以便每个 UTC 日只统计每个浏览器一次。每日访问量收集器只保存每日标识、区块浏览器网站的主机名和是否发生交互，不保存搜索文本、地址、交易 ID、网址或 IP 地址。单日记录在 31 天后过期，汇总计数保留 400 天。启用 Do Not Track 或 Global Privacy Control 会关闭此第一方统计。</target><context-group purpose="location">
           <context context-type="sourcefile">src/app/components/privacy-policy/privacy-policy.component.html</context>
           <context context-type="linenumber">9</context>
         </context-group>
