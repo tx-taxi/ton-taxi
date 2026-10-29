@@ -10,6 +10,7 @@
         routerLink="/jettons"
         [class.active]="page === 'jettons'"
         [attr.aria-current]="page === 'jettons' ? 'page' : null"
+        i18n="@@ton.title.jettons"
         >Jettons</a
       >
     </li>
@@ -46,7 +47,7 @@
       <table class="table table-borderless table-striped asset-table">
         <thead>
           <tr>
-            <th>Jetton</th>
+            <th i18n="@@ton.title.jetton">Jetton</th>
             <th i18n="@@ton.e89a111b7754">On-chain supply</th>
             <th class="d-none d-md-table-cell" i18n="@@ton.33a579ffc0dc">Trust</th>
           </tr>
