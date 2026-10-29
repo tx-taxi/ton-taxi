@@ -20,7 +20,7 @@ export function polishCountNoun(count: number, kind: 'transaction' | 'message'):
 export function czechCountNoun(count: number, kind: 'transaction' | 'message' | 'byte' | 'second'): string {
   const form = new Intl.PluralRules('cs').select(count);
   if (kind === 'transaction') return form === 'other' ? 'transakcí' : 'transakce';
-  if (kind === 'byte') return form === 'one' ? 'bajt' : form === 'few' || form === 'many' ? 'bajty' : 'bajtů';
+  if (kind === 'byte') return form === 'one' ? 'bajt' : form === 'few' ? 'bajty' : form === 'many' ? 'bajtu' : 'bajtů';
   if (kind === 'second') return form === 'one' ? 'sekunda' : form === 'few' || form === 'many' ? 'sekundy' : 'sekund';
   return form === 'one' ? 'zpráva' : form === 'other' ? 'zpráv' : 'zprávy';
 }
