@@ -1,10 +1,12 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, HostListener, LOCALE_ID, OnDestroy, OnInit, inject } from '@angular/core';
 import { StateService } from '@app/services/state.service';
 import { detectWebGL } from '@app/shared/graphs.utils';
 import { TonNetworkData } from '@app/ton/ton-network-data.service';
 
 @Component({ selector: 'app-dashboard', templateUrl: './dashboard.component.html', styleUrls: ['./dashboard.component.scss'], standalone: false, changeDetection: ChangeDetectionStrategy.OnPush, providers: [TonNetworkData] })
 export class DashboardComponent implements OnInit, OnDestroy, AfterViewInit {
+  private readonly locale = inject(LOCALE_ID);
+  get secondsUnit(): string { return this.locale.toLowerCase().startsWith('ko') ? '초' : /^(ja|zh)/i.test(this.locale) ? '秒' : this.locale.toLowerCase().startsWith('uk') ? 'с' : 's'; }
   readonly pendingFeedUnavailable = $localize`:@@ton.pending.full-feed-unavailable:Pending feed unavailable`;
   gasMarketGraphHeight = 260;
   goggleResolution = 82;

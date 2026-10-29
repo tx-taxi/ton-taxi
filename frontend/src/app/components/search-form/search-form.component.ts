@@ -3,7 +3,7 @@ import { readSharedPreference } from '@app/services/shared-preferences';
 import { localizedNativeUrl, refreshLocalizedCapabilities } from '@app/services/localized-native-url';
 import { TonChainSelectionService } from '@app/ton/ton-chain-selection.service';
 import { navigateTonBlock } from '@app/ton/block-navigation';
-import { tonBlockIdentityFromUrl } from '@app/ton/chain-selection';
+import { tonBlockIdentityFromUrl, tonLocalePrefix } from '@app/ton/chain-selection';
 import { tonSelectionKey } from '@app/ton/chain-selection';
 import { HttpClient } from '@angular/common/http';
 import { NgbDropdown } from '@ng-bootstrap/ng-bootstrap';
@@ -589,7 +589,8 @@ export class SearchFormComponent implements OnInit {
         else {
           // The Angular router is mounted beneath the current locale base;
           // pasted localized URLs must not add a second language segment.
-          const path = url.pathname.replace(/^\/(?:es|en(?:-US)?)(?=\/|$)/i, '') || '/';
+          const locale = tonLocalePrefix(url.pathname);
+          const path = (locale ? url.pathname.slice(locale.length) : url.pathname) || '/';
           this.router.navigateByUrl(path + url.search + url.hash);
         }
         this.isSearching=false; return;

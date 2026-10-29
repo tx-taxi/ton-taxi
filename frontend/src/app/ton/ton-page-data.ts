@@ -7,6 +7,7 @@ import { SeoService } from '../services/seo.service';
 import { OpenGraphService } from '../services/opengraph.service';
 import { NativeBlockContext, StateService } from '../services/state.service';
 import { scaledJettonUnits } from './scaled-ui';
+import { tonDocsCopy } from '@app/shared/ton-docs-copy';
 import { publicDetails, actionTitle, actionFieldLabel } from './transaction-view';
 import { nativeContextDepth } from '../shared/native-block-context';
 import { NativeAmount } from '../shared/native-view.types';
@@ -121,6 +122,9 @@ export class TonPageData implements OnInit, OnDestroy {
         if(['nft','collection','jetton'].includes(this.page) && this.data)description=`${this.title()} ${name || this.id} on TON. ${this.data.metadata?.description || ''}`;
       }
       this.seo.setTitle(title.slice(0,200));
+    }
+    if (this.locale.toLowerCase().split('-')[0] !== 'en') {
+      description = `${this.page === 'dashboard' ? '' : title + '. '}${tonDocsCopy(this.locale).faqDescription}`;
     }
     this.seo.setDescription(description.slice(0,300));
     const path=this.page === 'dashboard' ? '/' : this.page === 'transactions' ? '/txs' : this.page === 'dns-auctions' ? '/dns' : this.page === 'not-found' ? window.location.pathname : '/' + this.page + (this.id ? '/' + encodeURIComponent(this.id) : '');

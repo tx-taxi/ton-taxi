@@ -208,9 +208,49 @@ const dutchActionFields: Record<string, string> = {
   nft: 'NFT', buyer: 'koper', seller: 'verkoper', auction: 'veiling', bid: 'bod', pool: 'pool', comment: 'opmerking', payload: 'payload',
 };
 function language(locale: string): string { return locale.toLowerCase().split('-')[0]; }
-const localizedActionNames: Record<string, Record<string, string>> = {es: spanishActionNames, fr: frenchActionNames, de: germanActionNames, pt: portugueseActionNames, it: italianActionNames, ru: russianActionNames, uk: ukrainianActionNames, nl: dutchActionNames};
-const localizedActionFields: Record<string, Record<string, string>> = {es: spanishActionFields, fr: frenchActionFields, de: germanActionFields, pt: portugueseActionFields, it: italianActionFields, ru: russianActionFields, uk: ukrainianActionFields, nl: dutchActionFields};
-const localizedRawUnits: Record<string, string> = {es: 'unidades sin procesar', fr: 'unités brutes', de: 'Roheinheiten', pt: 'unidades brutas', it: 'unità grezze', ru: 'исходные единицы', uk: 'необроблені одиниці', nl: 'ruwe eenheden'};
+const japaneseActionNames: Record<string, string> = {
+  TonTransfer: 'GRAMの送金', JettonTransfer: 'ジェットンの送金', JettonSwap: 'ジェットンの交換',
+  JettonMint: 'ジェットンの発行', JettonBurn: 'ジェットンの焼却', NftItemTransfer: 'NFTの転送',
+  NftPurchase: 'NFTの購入', ExtraCurrencyTransfer: '追加通貨の送金', SmartContractExec: 'スマートコントラクトの実行',
+  DepositStake: 'ステークの預け入れ', WithdrawStake: 'ステークの引き出し', WithdrawStakeRequest: 'ステークの引き出し申請',
+  ElectionsDepositStake: '選挙用ステークの預け入れ', ElectionsRecoverStake: '選挙後のステークの回収',
+  Subscription: 'サブスクリプション', UnSubscription: 'サブスクリプションの解除', AuctionBid: 'オークションへの入札', GasRelay: 'ガスの中継',
+};
+const japaneseActionFields: Record<string, string> = {
+  amount: '数量', ton_attached: '添付額', gram_attached: '添付額', sender: '送信者', recipient: '受信者',
+  source: '送信元', destination: '送信先', account: 'アカウント', wallet: 'ウォレット', address: 'アドレス', contract: 'コントラクト',
+  fee: '手数料', refund: '返金', cost: '費用', value: '値', price: '価格', currency: '通貨', jetton: 'ジェットン',
+  nft: 'NFT', buyer: '購入者', seller: '販売者', auction: 'オークション', bid: '入札', pool: 'プール', comment: 'コメント', payload: 'ペイロード',
+};
+const chineseActionNames: Record<string, string> = {
+  TonTransfer: 'GRAM 转账', JettonTransfer: 'Jetton 转账', JettonSwap: 'Jetton 兑换',
+  JettonMint: '铸造 Jetton', JettonBurn: '销毁 Jetton', NftItemTransfer: 'NFT 转移', NftPurchase: '购买 NFT',
+  ExtraCurrencyTransfer: '额外货币转账', SmartContractExec: '执行智能合约', DepositStake: '存入质押', WithdrawStake: '提取质押',
+  WithdrawStakeRequest: '质押提取请求', ElectionsDepositStake: '存入选举质押', ElectionsRecoverStake: '收回选举质押',
+  Subscription: '订阅', UnSubscription: '取消订阅', AuctionBid: '拍卖出价', GasRelay: 'Gas 中继',
+};
+const chineseActionFields: Record<string, string> = {
+  amount: '金额', ton_attached: '附带金额', gram_attached: '附带金额', sender: '发送者', recipient: '接收者',
+  source: '来源', destination: '目标', account: '账户', wallet: '钱包', address: '地址', contract: '合约',
+  fee: '手续费', refund: '退款', cost: '费用', value: '数值', price: '价格', currency: '货币', jetton: 'Jetton',
+  nft: 'NFT', buyer: '买方', seller: '卖方', auction: '拍卖', bid: '出价', pool: '池', comment: '备注', payload: '载荷',
+};
+const koreanActionNames: Record<string, string> = {
+  TonTransfer: 'GRAM 전송', JettonTransfer: '제톤 전송', JettonSwap: '제톤 교환', JettonMint: '제톤 발행', JettonBurn: '제톤 소각',
+  NftItemTransfer: 'NFT 전송', NftPurchase: 'NFT 구매', ExtraCurrencyTransfer: '추가 통화 전송', SmartContractExec: '스마트 컨트랙트 실행',
+  DepositStake: '스테이크 예치', WithdrawStake: '스테이크 인출', WithdrawStakeRequest: '스테이크 인출 요청',
+  ElectionsDepositStake: '선거 스테이크 예치', ElectionsRecoverStake: '선거 스테이크 회수',
+  Subscription: '구독', UnSubscription: '구독 취소', AuctionBid: '경매 입찰', GasRelay: '가스 중계',
+};
+const koreanActionFields: Record<string, string> = {
+  amount: '금액', ton_attached: '첨부 금액', gram_attached: '첨부 금액', sender: '발신자', recipient: '수신자',
+  source: '출처', destination: '대상', account: '계정', wallet: '지갑', address: '주소', contract: '컨트랙트',
+  fee: '수수료', refund: '환불', cost: '비용', value: '값', price: '가격', currency: '통화', jetton: '제톤',
+  nft: 'NFT', buyer: '구매자', seller: '판매자', auction: '경매', bid: '입찰', pool: '풀', comment: '메모', payload: '페이로드',
+};
+const localizedActionNames: Record<string, Record<string, string>> = {es: spanishActionNames, fr: frenchActionNames, de: germanActionNames, pt: portugueseActionNames, it: italianActionNames, ru: russianActionNames, uk: ukrainianActionNames, nl: dutchActionNames, ja: japaneseActionNames, zh: chineseActionNames, ko: koreanActionNames};
+const localizedActionFields: Record<string, Record<string, string>> = {es: spanishActionFields, fr: frenchActionFields, de: germanActionFields, pt: portugueseActionFields, it: italianActionFields, ru: russianActionFields, uk: ukrainianActionFields, nl: dutchActionFields, ja: japaneseActionFields, zh: chineseActionFields, ko: koreanActionFields};
+const localizedRawUnits: Record<string, string> = {es: 'unidades sin procesar', fr: 'unités brutes', de: 'Roheinheiten', pt: 'unidades brutas', it: 'unità grezze', ru: 'исходные единицы', uk: 'необроблені одиниці', nl: 'ruwe eenheden', ja: '未加工の単位', zh: '原始单位', ko: '원시 단위'};
 function actionNames(locale: string): Record<string, string> | undefined { return localizedActionNames[language(locale)]; }
 function actionFields(locale: string): Record<string, string> | undefined { return localizedActionFields[language(locale)]; }
 export function actionFieldLabel(key: string, locale = 'en', fallback?: string): string {

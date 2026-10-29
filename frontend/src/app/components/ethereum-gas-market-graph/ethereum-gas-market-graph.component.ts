@@ -60,7 +60,10 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get emptyState(): string {
     if (this.tonSamples !== null) {
       if (this.recentSamples.length) return '';
-      if (this.isUkrainian) return `Історія ${this.tonChainLabel} недоступна`;
+      if (this.isKorean) return `${this.koreanChainLabel} 기록을 사용할 수 없음`;
+      if (this.isChinese) return `${this.chineseChainLabel}历史不可用`;
+      if (this.isJapanese) return `${this.japaneseChainLabel}の履歴を取得できません`;
+      if (this.isUkrainian) return `Історія ${this.ukrainianChainLabel} недоступна`;
       if (this.isDutch) return `Geen ${this.tonChainLabel}-geschiedenis beschikbaar`;
       if (this.isItalian) return `Nessuno storico della ${this.tonChainLabel.toLowerCase()} disponibile`;
       if (this.isRussian) return `История ${this.tonChainLabel} недоступна`;
@@ -83,11 +86,21 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get isFrench(): boolean { return this.locale.toLowerCase().startsWith('fr'); }
   get isGerman(): boolean { return this.locale.toLowerCase().startsWith('de'); }
   get isUkrainian(): boolean { return this.locale.toLowerCase().startsWith('uk'); }
+  get isJapanese(): boolean { return this.locale.toLowerCase().startsWith('ja'); }
+  get isChinese(): boolean { return this.locale.toLowerCase().startsWith('zh'); }
+  get isKorean(): boolean { return this.locale.toLowerCase().startsWith('ko'); }
+  get koreanChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? '마스터체인' : '베이스체인'; }
+  get chineseChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? '主链' : '基础链'; }
+  get japaneseChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? 'マスターチェーン' : 'ベースチェーン'; }
+  get ukrainianChainLabel(): string { return this.tonChainLabel === 'Masterchain' ? 'мастерчейну' : 'бейсчейну'; }
   get isDutch(): boolean { return this.locale.toLowerCase().startsWith('nl'); }
   get isItalian(): boolean { return this.locale.toLowerCase().startsWith('it'); }
   get isRussian(): boolean { return this.locale.toLowerCase().startsWith('ru'); }
   get isPortuguese(): boolean { return this.locale.toLowerCase().startsWith('pt'); }
   get chartLegendLabel(): string {
+    if (this.isKorean) return '차트 범례';
+    if (this.isChinese) return '图表图例';
+    if (this.isJapanese) return 'グラフの凡例';
     if (this.isUkrainian) return 'Умовні позначення графіка';
     if (this.isDutch) return 'Grafieklegenda';
     if (this.isItalian) return 'Legenda del grafico';
@@ -98,7 +111,10 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     return this.isSpanish ? 'Leyenda del gráfico' : 'Chart legend';
   }
   get chartLabel(): string {
-    if (this.isTon && this.isUkrainian) return `Історія TON ${this.tonChainLabel}: ${this.historyLabel.toLowerCase()}`;
+    if (this.isTon && this.isKorean) return `TON ${this.koreanChainLabel} 기록: ${this.historyLabel}`;
+    if (this.isTon && this.isChinese) return `TON ${this.chineseChainLabel}历史：${this.historyLabel}`;
+    if (this.isTon && this.isJapanese) return `TON ${this.japaneseChainLabel}の履歴：${this.historyLabel}`;
+    if (this.isTon && this.isUkrainian) return `Історія ${this.ukrainianChainLabel} TON: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isDutch) return `TON ${this.tonChainLabel}-geschiedenis: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isItalian) return `Storico TON della ${this.tonChainLabel.toLowerCase()}: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isRussian) return `История TON ${this.tonChainLabel}: ${this.historyLabel.toLowerCase()}`;
@@ -130,13 +146,37 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
 
     const latest = this.recentSamples[this.recentSamples.length - 1];
     if (this.isTon) {
+      if (this.isKorean) {
+        const start = this.formatTime(this.recentSamples[0].timestamp);
+        const end = this.formatTime(latest.timestamp);
+        const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+        const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
+        const range = this.recentSamples.length === 1 ? `${end}의 ${this.koreanChainLabel} 관측.` : `${start}부터 ${end}까지의 ${this.koreanChainLabel} 기록.`;
+        return `${range} 최근 관측된 블록당 평균 징수 수수료: ${fee === null ? '데이터 없음' : fee + ' GRAM'}; 평균 블록 간격: ${interval === null ? '데이터 없음' : interval}.`;
+      }
+      if (this.isChinese) {
+        const start = this.formatTime(this.recentSamples[0].timestamp);
+        const end = this.formatTime(latest.timestamp);
+        const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+        const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
+        const range = this.recentSamples.length === 1 ? `${end} 的${this.chineseChainLabel}观测。` : `${start} 至 ${end} 的${this.chineseChainLabel}历史。`;
+        return `${range} 最近观测到的每区块平均收取手续费：${fee === null ? '无数据' : fee + ' GRAM'}；平均区块间隔：${interval === null ? '无数据' : interval}。`;
+      }
+      if (this.isJapanese) {
+        const start = this.formatTime(this.recentSamples[0].timestamp);
+        const end = this.formatTime(latest.timestamp);
+        const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+        const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
+        const range = this.recentSamples.length === 1 ? `${end}の${this.japaneseChainLabel}の観測。` : `${start}から${end}までの${this.japaneseChainLabel}の履歴。`;
+        return `${range} 直近のブロック当たりの平均回収手数料：${fee === null ? 'データなし' : fee + ' GRAM'}。平均ブロック間隔：${interval === null ? 'データなし' : interval}。`;
+      }
       if (this.isUkrainian || this.isDutch) {
         const start = this.formatTime(this.recentSamples[0].timestamp);
         const end = this.formatTime(latest.timestamp);
         const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
         const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
         if (this.isUkrainian) {
-          const range = this.recentSamples.length === 1 ? `Спостереження ${this.tonChainLabel} о ${end}.` : `Історія ${this.tonChainLabel} з ${start} до ${end}.`;
+          const range = this.recentSamples.length === 1 ? `Спостереження ${this.ukrainianChainLabel} о ${end}.` : `Історія ${this.ukrainianChainLabel} з ${start} до ${end}.`;
           return `${range} Остання середня зібрана комісія за блок: ${fee === null ? 'немає даних' : fee + ' GRAM'}; середній інтервал між блоками: ${interval === null ? 'немає даних' : interval}.`;
         }
         const range = this.recentSamples.length === 1 ? `${this.tonChainLabel}-waarneming om ${end}.` : `${this.tonChainLabel}-geschiedenis van ${start} tot ${end}.`;
@@ -293,6 +333,24 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
             const history = sample.tonHistory;
             const total = this.formatAtomicGram(history?.feeTotalAtomic, null);
             const fractionalMean = !!history?.feeTotalAtomic && !!history.feeCount && BigInt(history.feeTotalAtomic) % BigInt(history.feeCount) !== 0n;
+            if (this.isKorean) {
+              const blocks = history?.blockCount ? `<div>블록: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
+              const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? '데이터 없음';
+              const coverage = history?.feeCount !== history?.blockCount ? ` (${history.blockCount}개 중 ${history.feeCount}개)` : '';
+              return `<div class="ethereum-gas-tooltip"><div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>${blocks}<div>블록당 평균 징수 수수료: <strong>${fractionalMean ? '≈' : ''}${fee}</strong></div>${total === null ? '' : `<div>징수된 총 수수료: <strong>${total} GRAM</strong>${coverage}</div>`}<div>평균 블록 간격: <strong>${sample.network_utilization_percentage === null ? '데이터 없음' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div></div>`;
+            }
+            if (this.isChinese) {
+              const blocks = history?.blockCount ? `<div>区块：<strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
+              const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? '无数据';
+              const coverage = history?.feeCount !== history?.blockCount ? `（${history.blockCount} 个中的 ${history.feeCount} 个）` : '';
+              return `<div class="ethereum-gas-tooltip"><div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>${blocks}<div>每区块平均收取手续费：<strong>${fractionalMean ? '≈' : ''}${fee}</strong></div>${total === null ? '' : `<div>已收取手续费总额：<strong>${total} GRAM</strong>${coverage}</div>`}<div>平均区块间隔：<strong>${sample.network_utilization_percentage === null ? '无数据' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div></div>`;
+            }
+            if (this.isJapanese) {
+              const blocks = history?.blockCount ? `<div>ブロック：<strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
+              const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'データなし';
+              const coverage = history?.feeCount !== history?.blockCount ? ` (${history.blockCount}件中${history.feeCount}件)` : '';
+              return `<div class="ethereum-gas-tooltip"><div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>${blocks}<div>ブロック当たりの平均回収手数料：<strong>${fractionalMean ? '≈' : ''}${fee}</strong></div>${total === null ? '' : `<div>回収手数料の合計：<strong>${total} GRAM</strong>${coverage}</div>`}<div>平均ブロック間隔：<strong>${sample.network_utilization_percentage === null ? 'データなし' : this.formatSeconds(sample.network_utilization_percentage)}</strong></div></div>`;
+            }
             if (this.isUkrainian || this.isDutch) {
               const uk = this.isUkrainian;
               const blocks = history?.blockCount ? `<div>${uk ? 'Блоки' : 'Blokken'}: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
@@ -419,7 +477,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
       ],
       series: [
         {
-          name: this.isTon ? (this.isUkrainian ? 'Середня зібрана комісія за блок' : this.isDutch ? 'Gemiddelde geïnde kosten per blok' : this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
+          name: this.isTon ? (this.isKorean ? '블록당 평균 징수 수수료' : this.isChinese ? '每区块平均收取手续费' : this.isJapanese ? 'ブロック当たりの平均回収手数料' : this.isUkrainian ? 'Середня зібрана комісія за блок' : this.isDutch ? 'Gemiddelde geïnde kosten per blok' : this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
           type: 'line',
           yAxisIndex: 0,
           data: lineData('base_fee_gwei'),
@@ -436,7 +494,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
           emphasis: { focus: 'series' },
         },
         {
-          name: this.isTon ? (this.isUkrainian ? 'Середній інтервал між блоками' : this.isDutch ? 'Gemiddeld blokinterval' : this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
+          name: this.isTon ? (this.isKorean ? '평균 블록 간격' : this.isChinese ? '平均区块间隔' : this.isJapanese ? '平均ブロック間隔' : this.isUkrainian ? 'Середній інтервал між блоками' : this.isDutch ? 'Gemiddeld blokinterval' : this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
           type: 'line',
           yAxisIndex: 1,
           data: lineData('network_utilization_percentage'),
@@ -494,7 +552,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   }
 
   private formatSeconds(value: number): string {
-    return `${formatNumber(value, this.locale, value < 10 ? '1.0-1' : '1.0-0')} s`;
+    return `${formatNumber(value, this.locale, value < 10 ? '1.0-1' : '1.0-0')} ${this.isKorean ? '초' : this.isJapanese || this.isChinese ? '秒' : this.isUkrainian ? 'с' : 's'}`;
   }
 
   private formatAtomicGram(atomic: string | undefined, fallback: number | null): string | null {

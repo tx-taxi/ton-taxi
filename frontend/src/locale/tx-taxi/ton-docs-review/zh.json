@@ -1,0 +1,694 @@
+{
+  "reviewed_fields": [
+    {
+      "id": "0:title",
+      "source_sha256": "ab36d83c2517624cacfa293dee6f37ad9c260f6bf78e92c625e9ec201b5e778a",
+      "value": "主链和分片区块是什么意思？"
+    },
+    {
+      "id": "0:description",
+      "source_sha256": "011246f26f59317219112c9c1c14cf7a2db8fa2e3f47872325845754306f522e",
+      "value": "<p>主链保存全局配置，并引用分片链的状态。大多数用户账户位于基础链，基础链可以划分为多个分片。区块由工作链、分片和序列号共同标识；单独的序列号并不是全网区块高度。</p><p>顶部区块条显示基础链区块。打开搜索菜单，在“已选择”下选择 Masterchain 即可查看主链区块。如果有多个活跃分片，请选择一个分片。打开区块可查看交易；主链区块还会链接到其引用的分片。</p>"
+    },
+    {
+      "id": "1:title",
+      "source_sha256": "f7c6e34cc61c906042f47c7f81d460edaeb5be1e45a0e07265ccaf9c226d2515",
+      "value": "交易、消息和追踪之间有什么关系？"
+    },
+    {
+      "id": "1:description",
+      "source_sha256": "4cf443c4de6585b94efa92e5fe2ec0e0920530d80a0db0e67e97e319219e4176",
+      "value": "<p>一笔交易记录一个账户处理消息或系统操作的过程。消息连接不同账户；处理传入消息可能产生传出消息和后续交易。追踪会串联这些相关交易。</p><p>交易页面用于查看单次执行，消息用于查看合约之间的转移，追踪用于查看更广泛的操作。<a href=\"https://docs.ton.org/start-here\" target=\"_blank\" rel=\"noopener noreferrer\">TON基础知识</a>。</p>"
+    },
+    {
+      "id": "2:title",
+      "source_sha256": "7b2bd9f8e303b6e427e8f76eb9013f5ddf1e942551950872848db6883718924a",
+      "value": "什么是逻辑时间？"
+    },
+    {
+      "id": "2:description",
+      "source_sha256": "3a8f43523e176f43d1b72bf2ace74d3ddbbe1aa89220ba3029887fd2a844a1f5",
+      "value": "<p>逻辑时间（LT）用于排列交易和消息的顺序，它不同于交易日期显示的 Unix 时间戳。账户历史使用 LT 作为分页游标；请将其保留为精确的整数字符串。</p>"
+    },
+    {
+      "id": "3:title",
+      "source_sha256": "2fdfa58b219dc6cbc96c024cc09806e62692bc9d699911370c6d6b71812c3e8b",
+      "value": "手续费花在哪里了？"
+    },
+    {
+      "id": "3:description",
+      "source_sha256": "ed93e7e057b23adb6366c04038a84333efc3c512f6e19f0d89d1005629465964",
+      "value": "<p>执行可能包括存储、信用、计算、动作和弹回阶段。交易页面显示总手续费和记录的阶段详情，包括 gas 使用量、转发费用和退出代码。失败的操作也可能支付手续费。</p><p>GRAM 是TON的原生货币，使用9位小数：1 GRAM = 1,000,000,000纳克。消息金额和交易手续费是不同的金额。</p>"
+    },
+    {
+      "id": "4:title",
+      "source_sha256": "116a09397671ace26968fd10625f647badfd7826715a592f57e767d6c8cc6c00",
+      "value": "弹回或失败是什么意思？"
+    },
+    {
+      "id": "4:description",
+      "source_sha256": "512b8be33ca4d4b6538cadc921699391c6db4246f56271e3739cf8e125de170f",
+      "value": "<p>当可弹回消息无法按照适用规则处理时，弹回消息会返回一个响应。它是一条单独的消息，有自己的金额和费用。应结合交易结果、计算和动作结果以及传出消息一起检查。</p><p>已确认交易的执行仍可能失败。一笔交易成功也不能证明追踪中之后的所有交易都成功。<a href=\"https://docs.ton.org/resources/pdfs/tblkch.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">TON区块链规范</a>。</p>"
+    },
+    {
+      "id": "5:title",
+      "source_sha256": "1db53674f0d760cb15b4e2664de7aea3d974b854a9c15787baa8f89ab1060c41",
+      "value": "确认是否等于操作完成？"
+    },
+    {
+      "id": "5:description",
+      "source_sha256": "a978ca25800ad0d6b3eda20e0ebd30a7c36c579b092c1499875632beb5459a37",
+      "value": "<p>确认表示交易已被包含在区块中。涉及多个合约的操作可能包含更多交易和消息。请检查完整追踪和最终收款方，不要把第一笔交易视为整个转移。</p>"
+    },
+    {
+      "id": "6:title",
+      "source_sha256": "b0b5d17569eedea764c845cd3844d75d5f899ef7cd8686d62bbf743079d99b63",
+      "value": "账户页面显示什么？"
+    },
+    {
+      "id": "6:description",
+      "source_sha256": "e3e2680af06688adadb3968884779f6e97c36ffd239617143c5f1d147e770d08",
+      "value": "<p>账户页面显示 GRAM 余额、状态、最近活动和检测到的合约接口。“历史”按已识别的动作分组；“交易”列出账户交易。Jetton 和 NFT 分别有独立标签。</p><p>“合约”标签包含状态、代码和数据、只读方法，以及可用的质押、多签、订阅和 DeFi 记录。展开“账户详情”可查看其他字段和额外货币。</p>"
+    },
+    {
+      "id": "7:title",
+      "source_sha256": "7638ebe6945b14869fe3c12de4c2ccd4b3c38d83361c3a6feea36f68b8ea0f1e",
+      "value": "为什么同一个账户可能有不同地址？"
+    },
+    {
+      "id": "7:description",
+      "source_sha256": "87ceb1b37f2628a046ba38643d8a5af50f30cfaefd6d4b116a6e92805ef871e4",
+      "value": "<p>TON账户可以表示为原始工作链与十六进制账户 ID，也可以表示为用户友好地址。弹回属性和网络标志可能改变用户友好表示形式，但不会改变底层账户。</p><p>搜索支持TON地址和 .ton 名称。DNS 解析会链接到解析后的账户；域名不能替代对账户地址的核对。</p>"
+    },
+    {
+      "id": "8:title",
+      "source_sha256": "f3cdaee5f7dda75774618234546e9a0d637ac5005ca128030b74c1a6fb2fefbc",
+      "value": "可以读取智能合约吗？"
+    },
+    {
+      "id": "8:description",
+      "source_sha256": "fb1b78761b50921934b89a47894933d39b02e60a9dd3fff01bed642df80c528e",
+      "value": "<p>在“合约”标签中选择列出的 getter，并在需要时提供参数。读取会返回结果，无需签署交易。参数可以是逗号分隔的字符串或字符串组成的JSON数组；大整数应保留为字符串。</p><p>账户详情保留代码、数据和存储字段。合约检查显示已识别接口和可用的编译器信息。</p>"
+    },
+    {
+      "id": "9:title",
+      "source_sha256": "83cf45025f796d7fe3f8a5f314adddc29315ef1fcb10cbecc4c09837c0dcc4a3",
+      "value": "验证者页面显示什么？"
+    },
+    {
+      "id": "9:description",
+      "source_sha256": "75f2d98e1ca0b3201c9aff1b1178bbfea550b3e012e76db55de1c2ed48d6c9cf",
+      "value": "<p>验证者页面显示选举时间、总质押额和最低质押额，以及参与验证者的账户、质押额和 ADNL 地址。这些字段描述所显示的选举数据；持有质押的地址不一定是某个特定区块的生产者。</p>"
+    },
+    {
+      "id": "10:title",
+      "source_sha256": "3bf36daea31393fa03b181526ea74d3f091fa1f37792c725bd63dae851b26ca3",
+      "value": "Jetton 如何运作？"
+    },
+    {
+      "id": "10:description",
+      "source_sha256": "0cff398525644a31854682cf5d0ad78d855177065e3a36cd76756a740ff720db",
+      "value": "<p>Jetton 有一个主合约，以及为持有者分别设置的 Jetton 钱包合约。应通过主合约地址识别，而不是通过名称或符号。Jetton 页面显示供应量、小数位数、管理信息和持有者。</p><p>显示余额时应使用该 Jetton 自身的小数位数，不要假设每种 Jetton 都有9位小数。<a href=\"https://docs.ton.org/contracts/standard/tokens/jettons/overview\" target=\"_blank\" rel=\"noopener noreferrer\">Jetton 标准</a>。</p>"
+    },
+    {
+      "id": "11:title",
+      "source_sha256": "bb60449703446085188710ffaaff673fd316b954e2670a9cd3b759e23aa3d328",
+      "value": "为什么 Jetton 显示余额可能与链上金额不同？"
+    },
+    {
+      "id": "11:description",
+      "source_sha256": "e1afc5b254b6040f05a5761e020fdd5cc950d4b1a816a425f6ccd71421108f32",
+      "value": "<p>某些 Jetton 使用显示倍率。当前钱包余额、持有者余额和总供应量会先以精确舍入应用该比例，再应用代币的小数位数。展开“金额详情”可查看链上金额、原始单位和比例。</p><p>历史转移保留当时记录的链上数量；当前倍率不能证明当时使用的倍率。<a href=\"https://github.com/ton-blockchain/TEPs/blob/master/text/0526-scaled-ui-jettons.md\" target=\"_blank\" rel=\"noopener noreferrer\">缩放 UI Jetton 标准</a>。</p>"
+    },
+    {
+      "id": "12:title",
+      "source_sha256": "a2cbc6399530a93f6f1726197df62ffce722f6e898194e4836ef3dbb67b55186",
+      "value": "什么可以标识 NFT？"
+    },
+    {
+      "id": "12:description",
+      "source_sha256": "d1667a03d1dacf9689dcce2f07668b4c7844fa80e6ac32038838b877c149eec8",
+      "value": "<p>NFT 项目的合约地址就是其标识。所属系列、所有者和项目索引是不同字段。系列成员验证检查项目与系列的关系；它不能证明图片、名称或卖家可信。</p><p>当 NFT 合约确认索引时，项目详情显示精确索引。NFT 名称中显示的编号不一定等于其链上索引。</p>"
+    },
+    {
+      "id": "13:title",
+      "source_sha256": "1f7903562e72360ecf41a95a9dfe993b7763341261897906e5c282737584a09c",
+      "value": "图片和属性来自哪里？"
+    },
+    {
+      "id": "13:description",
+      "source_sha256": "6973d4ce74e1c2e8a041331fd93a6831c3b8c797f78c1e3635fa37bd45bbb23a",
+      "value": "<p>TEP-64支持链上、链下以及组合元数据。NFT 页面显示名称、描述、图片和属性，也可以展开完整元数据。托管在其他位置的媒体或元数据可能发生变化或不可用。</p><p>请从项目页面主动打开动画。媒体缺失不会删除 NFT 合约或所有权记录。<a href=\"https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md\" target=\"_blank\" rel=\"noopener noreferrer\">代币元数据标准</a>。</p>"
+    },
+    {
+      "id": "14:title",
+      "source_sha256": "3903f1b219fef3450eebe0b29884130dc799b2f012d78c1bf5ed9c6686bfb7e7",
+      "value": "为什么 NFT 由销售合约持有？"
+    },
+    {
+      "id": "14:description",
+      "source_sha256": "12a660786ddc435855cd217e099e280c754ad676c1b8a4af1f94b4d2aa2026e5",
+      "value": "<p>上架的 NFT 可能由市场的销售合约持有。钱包 NFT 列表会包含已识别的间接销售所有权。项目页面分别显示链上所有者、卖家、销售合约和价格货币。</p><p>上架销售不等于转移已完成。请使用转移历史跟踪变化，并通过系列页面浏览其项目。</p>"
+    },
+    {
+      "id": "15:title",
+      "source_sha256": "af35f6fa56761d8a9a937733e74e64951ef64d3ccbdcf05db665641efb14e646",
+      "value": "所有 Telegram 礼物都能在链上看到吗？"
+    },
+    {
+      "id": "15:description",
+      "source_sha256": "118456ee37ffa7a6edbd0d95d4ce4cac2132157d6d4748639856afe27e58d938",
+      "value": "<p>不是。礼物必须作为TON NFT 存在，才能在这里具有链上项目地址和所有权记录。Telegram 礼物、收藏型用户名和号码可能有关联的TON NFT，但仅凭 Telegram 个人资料或普通用户名不能证明钱包所有权。</p><p>收藏品可能显示在 Telegram 个人资料中，但其所有者仍是TON钱包。请核对项目地址、所属系列和当前所有者。<a href=\"https://core.telegram.org/api/gifts\" target=\"_blank\" rel=\"noopener noreferrer\">Telegram 收藏型礼物</a>。</p>"
+    },
+    {
+      "id": "16:title",
+      "source_sha256": "1394da5699cda2fd542ad1e54ef94689a5db16520fb210cc4f9de1df219ab439",
+      "value": "如何查看账户或系列中的全部 NFT？"
+    },
+    {
+      "id": "16:description",
+      "source_sha256": "1b5e39300c5885da29039480eb6b32ecf967545dac1b78b3aecc8e1b2b5d1709",
+      "value": "<p>使用 NFT 列表下方的“加载更多”，继续浏览系列或钱包。NFT 标签会分别显示每个返回的项目，包括完整名称及其详情链接。钱包的 NFT 收藏和交易历史是互相独立的列表。</p>"
+    },
+    {
+      "id": "17:title",
+      "source_sha256": "542357ee9cc18100b4b53a14024c9e789b07cce41c31347d7092e56a0e9805d8",
+      "value": "识别标签是什么意思？"
+    },
+    {
+      "id": "17:description",
+      "source_sha256": "124faa86c200a2c8e0807f980b45720c56c96f08abc5c67c7bb083c079fffb39",
+      "value": "<p>系列成员关系、信任分类和市场认可属于不同事实。已识别的名称和图片不是所有权证明。在将名称相似的资产视为同一种代币之前，请比较合约地址和系列链接。</p>"
+    },
+    {
+      "id": "18:title",
+      "source_sha256": "af8fe02c9778586a2665419647863c4a60da7d7a0e6fd5fa73a75bf30b647aad",
+      "value": "自动路由如何工作？"
+    },
+    {
+      "id": "18:description",
+      "source_sha256": "d23407f1d2fd45efecc88f31a6d4fdc5405c8b802b3a568ce539d533e0b2b472",
+      "value": "<p>将地址、交易哈希、消息哈希、区块编号或 .ton 名称粘贴到搜索框。自动路由会帮助查找所属链。选择原生浏览器后可继续使用该链的搜索；选择“查看中心”可返回 tx.taxi。</p>"
+    },
+    {
+      "id": "19:title",
+      "source_sha256": "8c1fc5f3f7e59141135f6a958b44a4d0ad40a98b6583438ab045bbe7de60b544",
+      "value": "“更新延迟”是什么意思？"
+    },
+    {
+      "id": "19:description",
+      "source_sha256": "b66db641931c248a9133b999961dcd64856af9eb8d0e022759c7087ad2db9035",
+      "value": "<p>新更新延迟时，页面会继续显示上次可用的数据。对不可用的部分选择重试可重新加载。空列表与不可用列表是不同状态。</p>"
+    },
+    {
+      "id": "20:title",
+      "source_sha256": "6b439b75addc4a0a3186f5e262792d657b2fe4f80f1f308f44d7c3b9f5653b67",
+      "value": "tx.taxi 可以撤销交易吗？"
+    },
+    {
+      "id": "20:description",
+      "source_sha256": "7d6b9b46b1566101d4cd42794880983b8a57b7ea608b58499369b23a068fa3d8",
+      "value": "<p>tx.taxi 显示公开链上数据。它无法签署交易、访问私钥或撤销转移。有关钱包或交易所账户的支持，请联系提交该操作的服务。</p>"
+    },
+    {
+      "id": "21:title",
+      "source_sha256": "66d14061e5fe02aa4819f70d5dfef021908bbdbba3a4668434b9f1cd817fa9bc",
+      "value": "数值与分页"
+    },
+    {
+      "id": "21:description",
+      "source_sha256": "309a3b832ad166da4cc164e7a76355d2c82cce47146817afe928c7da226e08d8",
+      "value": "<p>以下所有路由均使用 GET。精度敏感的整数以十进制字符串表示；请使用任意精度运算解析。GRAM 余额和手续费以纳克为单位。Jetton 金额使用其声明的小数位数。</p><p>分页响应包含<code>_paging</code>。仅在<code>hasMore</code>为 true 时继续，针对相应端点使用<code>nextOffset</code>、<code>nextBeforeLt</code>或<code>nextBefore</code>。列表上限为100；区块列表上限为16。</p><p><code>_meta.observedAt</code>标识观察时间，<code>_meta.stale</code>标记保留的数据。HTTP 400表示输入无效，404表示未找到，503表示暂时不可用。</p>"
+    },
+    {
+      "id": "22:title",
+      "source_sha256": "ed4c012d6881025a429d6f68313bbf3a94a8228bd9a2e06d6e714f5829e6fb48",
+      "value": "网络概览"
+    },
+    {
+      "id": "22:description",
+      "source_sha256": "c9c16113c989454eeccfe089f657d77e13a5eb22790dc7c7ac04e8e48d115bc3",
+      "value": "<p>返回选定的工作链和分片、最近区块、观察历史、观察时间和数据延迟状态。默认使用基础链。主链使用<code>workchain=-1</code>，活跃的基础链分片使用<code>workchain=0&amp;shard=...</code>。<code>activeShards</code>列出可用分片；<code>masterchainHead</code>是网络主链的最新区块。</p>"
+    },
+    {
+      "id": "23:title",
+      "source_sha256": "1cd5a6687bb76e3926f8c89a9fb290cd17d893ca944899952322d3fb5c9896d3",
+      "value": "区块"
+    },
+    {
+      "id": "23:description",
+      "source_sha256": "c4b12bc0df1c05b0436b29c9cc226287c5c695533cc8ae9fe5807f807d6dfbe4",
+      "value": "<p>按序列号降序返回一个工作链和分片中的区块。默认使用基础链；主链区块使用<code>workchain=-1</code>。使用<code>before=_paging.nextBefore</code>继续，并保留响应中的<code>workchain</code>和<code>shard</code>；边界不包含在结果中。分页在分片拆分或合并处停止。</p>"
+    },
+    {
+      "id": "24:title",
+      "source_sha256": "c6dd037f44891078dba62cd9494a87ab05103e0c9eb5237ae455c3becb8d04dc",
+      "value": "区块详情"
+    },
+    {
+      "id": "24:description",
+      "source_sha256": "901543dbc6309c6a096ba3216d4b72014c66c382c1288fc1aec204627c94a599",
+      "value": "<p>使用序列号或完整的<code>(workchain,shard,seqno)</code>标识符。序列号使用选定的工作链和分片；未选择时使用主机默认工作链和根分片。返回哈希、时间戳、逻辑时间、引用和值流字段。</p>"
+    },
+    {
+      "id": "25:title",
+      "source_sha256": "d5cfe84594348242301a33cd5bc2135dae2e164dc1302237beaf564328486603",
+      "value": "区块交易"
+    },
+    {
+      "id": "25:description",
+      "source_sha256": "7a6549fae4846fefb906c36d19855169ba6985af7fb4f47fbc85cf3a4f33cacf",
+      "value": "<p>返回指定区块中包含的交易。</p>"
+    },
+    {
+      "id": "26:title",
+      "source_sha256": "46ba1487cc18fae177885eaa96d1cd9dc4aa04e6961b899496ba5e1fcb5895bf",
+      "value": "主链分片引用"
+    },
+    {
+      "id": "26:description",
+      "source_sha256": "d1416726cc5cce27ea423f530ba0e48625fb31706f306c88f277605b7366664b",
+      "value": "<p>使用主链序列号或主链区块标识符，返回相应的分片引用。</p>"
+    },
+    {
+      "id": "27:title",
+      "source_sha256": "efde9a0a45fb98031f89cee8deb0ed2073524fb757092ebd179a1919405e1871",
+      "value": "网络交易"
+    },
+    {
+      "id": "27:description",
+      "source_sha256": "ab676ec8d13faa0d4c1bb9d93cf0dd71eac72ddec0377c8472c50a8622dd335e",
+      "value": "<p>返回一个主链区间中跨分片的交易。在该区间内使用<code>master_seqno=_paging.masterSeqno</code>和<code>offset=_paging.nextOffset</code>继续。当<code>nextOffset</code>为 null 时，改用<code>before=_paging.nextBefore</code>继续。上限为50。</p>"
+    },
+    {
+      "id": "28:title",
+      "source_sha256": "f22d30c712f91e9e2bc9c09f234ad7e6aa286705e375a6896d2d89da75c50601",
+      "value": "主链交易"
+    },
+    {
+      "id": "28:description",
+      "source_sha256": "341c271de5486ef361e96e5de85ea1541093a5dafac0c715c4ff3bda9f19e449",
+      "value": "<p>返回一个主链区块中的交易。使用<code>before=_paging.nextBefore</code>继续。这些是主链交易，不是所有分片的全部交易。</p>"
+    },
+    {
+      "id": "29:title",
+      "source_sha256": "49df873871d6eee5740d9c7ea7d6aad1c255b7904c9920bc69de497a86d746ef",
+      "value": "验证者"
+    },
+    {
+      "id": "29:description",
+      "source_sha256": "f8f9a6629a8a1ae27cdfc96f2d2ee54947af7a93c08344bee28c5679a68187bb",
+      "value": "<p>返回验证者选举信息、质押金额和验证者条目。</p>"
+    },
+    {
+      "id": "30:title",
+      "source_sha256": "641494dc8129fb6507b1cecdf976bb7d5abd9f7f2a590a882d831c906a86fd0a",
+      "value": "域名详情"
+    },
+    {
+      "id": "30:description",
+      "source_sha256": "6ec2f28e5afcc347143b3bdf733e70d7197c45a976ac6af6582568aba4ccfaa8",
+      "value": "<p>返回域名标识、到期时间和关联 NFT。附加<code>/resolve</code>可获取钱包、网站、存储和解析器记录；附加<code>/bids</code>可获取竞价历史。</p>"
+    },
+    {
+      "id": "31:title",
+      "source_sha256": "aada1ecb5e67952c5f6ebc84a10466ce02b55eff9ae02cb26cbf53cc64268d92",
+      "value": "DNS 拍卖"
+    },
+    {
+      "id": "31:description",
+      "source_sha256": "1dbc8c0b3fe81099672aff2b12a8f7b15669855e801a27a50edca79bce7e7f6f",
+      "value": "<p>当前域名拍卖。选择<code>ton</code>或<code>t.me</code>。</p>"
+    },
+    {
+      "id": "32:title",
+      "source_sha256": "fccf68394ba91238757c002e304a37ce2176d2760a5af2256a1e00073320fea7",
+      "value": "即将到期的域名"
+    },
+    {
+      "id": "32:description",
+      "source_sha256": "d016aea128f2f7f54e2cc0e20cbade56ede4656ffb202fdd94671c37554d896c",
+      "value": "<p>返回即将到期的域名。可选参数<code>period</code>表示到期前的天数。</p>"
+    },
+    {
+      "id": "33:title",
+      "source_sha256": "1ab5b9c24252fafa75f641001e0f22e1beed1a6896ce048cca1c9140ab20df4b",
+      "value": "质押池"
+    },
+    {
+      "id": "33:description",
+      "source_sha256": "9d4f6f9cf8937c2161c3049863cb3c2ae5928efc69a40bfbb4014fb5892e7b89",
+      "value": "<p>返回池质押、提名者、周期、实现方式和年化收益率。附加<code>/history</code>可获取观察到的 APY 历史。</p>"
+    },
+    {
+      "id": "34:title",
+      "source_sha256": "dc04913c72c679adf6e557e9990a1e03b2e39d08d8ba67c2777884ef92e6740f",
+      "value": "额外货币"
+    },
+    {
+      "id": "34:description",
+      "source_sha256": "bbd70a3eba95e68f66cc1dac76c14de4705f833fb241e12f681695ac90e85233",
+      "value": "<p>返回货币 ID、符号、小数位数和图片。</p>"
+    },
+    {
+      "id": "35:title",
+      "source_sha256": "10c4d8205e851b6d6fbbb3ba262f8c71252a192ec7a1a295059a1fb828087b29",
+      "value": "额外货币历史"
+    },
+    {
+      "id": "35:description",
+      "source_sha256": "a532a0767c850c3aba52e7ab1ca2e36367e7fd0c8b9ed39eabe2a2f528017f25",
+      "value": "<p>返回账户中选定货币的事件。使用<code>before_lt</code>继续。</p>"
+    },
+    {
+      "id": "36:title",
+      "source_sha256": "7c8e1b5ab2dd67d54cabeb89397a09b7f472db563cfccbc076fdd97dde6269a2",
+      "value": "区块 BOC"
+    },
+    {
+      "id": "36:description",
+      "source_sha256": "5dbe70a181cb5b7d3fe504b67ca512a8a9f31a2ef869b6e2379896af7d29003d",
+      "value": "<p>将区块下载为二进制 Bag of Cells。</p>"
+    },
+    {
+      "id": "37:title",
+      "source_sha256": "493d4f2717d68c3998bbf3f23ce387923d974608207888ff4aeb60708182cd6b",
+      "value": "原始配置"
+    },
+    {
+      "id": "37:description",
+      "source_sha256": "3468d819eb43f68aeda63984fec863a271f3115a0379126538f80b8c2c38adb2",
+      "value": "<p>返回原始网络配置。添加<code>master_seqno</code>可请求历史主链配置。</p>"
+    },
+    {
+      "id": "38:title",
+      "source_sha256": "f472092cd712ac6a8a9bf18d82d4ca797bb375b4f73715de6233c5923cd043d7",
+      "value": "区块链配置"
+    },
+    {
+      "id": "38:description",
+      "source_sha256": "6971d5c964755bd440c4fa41bc0b183e07577a5adc796de31f35ee10c4c02e32",
+      "value": "<p>返回解码后的区块链配置参数。添加<code>master_seqno</code>可获取历史主链配置。</p>"
+    },
+    {
+      "id": "39:title",
+      "source_sha256": "90c515c6bdfb2a3d1825c62278ab4553aea8eca14e5101257abdbf9ba158a054",
+      "value": "GRAM 汇率"
+    },
+    {
+      "id": "39:description",
+      "source_sha256": "8b4b630493dabc674d29ae27fb2b04feb48632d2f533cfe633bcfd52dd1e565c",
+      "value": "<p>返回 GRAM 兑 AUD、CAD、CHF、EUR、GBP、JPY 和 USD 的汇率。</p>"
+    },
+    {
+      "id": "40:title",
+      "source_sha256": "e208c466f923b935587eb94793b4f6f92567ef35aeabaa5f55ee638807864c29",
+      "value": "交易详情"
+    },
+    {
+      "id": "40:description",
+      "source_sha256": "71c01365d2c44b62a27d5a82449a6850332f74eb9a7468be5bc0ac37841da6eb",
+      "value": "<p>返回账户交易、消息、手续费、阶段和状态变化，以及可用的追踪和已解读事件详情。<code>relatedUnavailable</code>标识无法加载的相关部分。</p>"
+    },
+    {
+      "id": "41:title",
+      "source_sha256": "f9951cb016b4d06bee83aeb8635e9fe02e40e2ac16a627f38c5f9aab9cdc6239",
+      "value": "通过消息哈希查找交易"
+    },
+    {
+      "id": "41:description",
+      "source_sha256": "f5c46a3e71ae7363401f3d9d137b7b5ab1132d82506fc423a08c95b929264950",
+      "value": "<p>查找与所提供消息哈希关联的交易。</p>"
+    },
+    {
+      "id": "42:title",
+      "source_sha256": "7e14c3d7dd12bbd0947aa8cb491dff154a1644a85848fc28bd1997ef9ef54a2a",
+      "value": "追踪"
+    },
+    {
+      "id": "42:description",
+      "source_sha256": "6ee02038b19682d0f74c0599718a5ae3a2010f90d1db0b5a53e927954ad6efd5",
+      "value": "<p>返回相关交易树，包括子追踪和执行详情。</p>"
+    },
+    {
+      "id": "43:title",
+      "source_sha256": "92482268c99e1db6591166be23f47d4c925f121d9f7699fe9241e8e14407d9b2",
+      "value": "解析搜索输入"
+    },
+    {
+      "id": "43:description",
+      "source_sha256": "d31dd0dfb4e0cc5a63cfc526b3ab074b2716d84cdf2d6bdbeb334b402ebc8008",
+      "value": "<p>解析TON账户、NFT、系列、Jetton、交易、消息哈希、区块标识符或 .ton 域名，返回实体类型和标识符。</p>"
+    },
+    {
+      "id": "44:title",
+      "source_sha256": "17be95e1a1884ebc8904a38b6a754f0bcbe59e3563e6e811b2a3f68b36cf1c76",
+      "value": "账户详情"
+    },
+    {
+      "id": "44:description",
+      "source_sha256": "84838d6063928fc95d0a16136d5e66c69e29c2070c3daffde267d313a3aa9c85",
+      "value": "<p>返回余额、状态、合约接口、可用的区块链状态和 DNS 名称。状态可能包含代码、数据、存储信息和额外货币。</p>"
+    },
+    {
+      "id": "45:title",
+      "source_sha256": "7ebecd1975d35e9a4d1ecf28637b71b3d31eabcd2c4fe6fdbedd290e50edc34d",
+      "value": "账户交易"
+    },
+    {
+      "id": "45:description",
+      "source_sha256": "91b5f849144c4b7dcf1bae44088207257d9d72756b727fabdcd8ba2169b0bd0d",
+      "value": "<p>列出账户交易。使用<code>before_lt=_paging.nextBeforeLt</code>继续；也接受<code>after_lt</code>。</p>"
+    },
+    {
+      "id": "46:title",
+      "source_sha256": "612868be774fd2cbcfe6a2941b27f58c81defb559303167e63025b6a03554745",
+      "value": "账户转移和事件"
+    },
+    {
+      "id": "46:description",
+      "source_sha256": "bb2b4edeec0cb009f6ef90012bea921f0a07acac13afe908fb5d845f90a51300",
+      "value": "<p>返回已解读的动作及其状态。使用<code>before_lt</code>继续。</p>"
+    },
+    {
+      "id": "47:title",
+      "source_sha256": "65277a2a8168a8a1e56cfc53d082cbcfcb4c3db89a84f1e881aa2e96f8366194",
+      "value": "Jetton 余额"
+    },
+    {
+      "id": "47:description",
+      "source_sha256": "f329823cf1a226fb4ff4c137a78df37d3da0a7b9d03d531eec100365e0a13a22",
+      "value": "<p>返回余额、主合约元数据和账户的 Jetton 钱包地址。</p>"
+    },
+    {
+      "id": "48:title",
+      "source_sha256": "486c3ede5848be13ba213412b3363ffeb2ed556c2b4a89e3f2edbad1c7c8f0f4",
+      "value": "账户 NFT"
+    },
+    {
+      "id": "48:description",
+      "source_sha256": "4ccbeaad7cbec8177f0af5c79d79b22ac865b6188b5faca628fa7e1d8cb5aaa7",
+      "value": "<p>返回 NFT 项目，默认包含已识别的间接销售所有权。使用<code>collection</code>筛选，或使用<code>indirect_ownership=false</code>仅显示直接所有权。使用<code>offset=_paging.nextOffset</code>继续。</p>"
+    },
+    {
+      "id": "49:title",
+      "source_sha256": "880231f0382658ba830f9dba8569f244639a71365af2ce98f5b5bb72f95fd041",
+      "value": "NFT 操作"
+    },
+    {
+      "id": "49:description",
+      "source_sha256": "eba76abce9ad7efbb8632fb99e3a8b128873053773a30f3f10afc53b161b1398",
+      "value": "<p>返回账户的 NFT 操作。使用<code>before_lt</code>继续。</p>"
+    },
+    {
+      "id": "50:title",
+      "source_sha256": "dcf82226c3a9c2ffd39ddeb1caad432fdb4beece0be03b9a2831cbbbe6baca10",
+      "value": "Jetton 历史"
+    },
+    {
+      "id": "50:description",
+      "source_sha256": "6415256a6e4b54af0e3e4a40b640d0e3b637086435dc0d3d327765ca160432fa",
+      "value": "<p>返回账户的 Jetton 事件。使用<code>before_lt</code>继续。</p>"
+    },
+    {
+      "id": "51:title",
+      "source_sha256": "e93e79a3b8bff15accdd2dc36e049cd923378e038bda6fcbf17ea2d2c3cb3c36",
+      "value": "合约检查"
+    },
+    {
+      "id": "51:description",
+      "source_sha256": "49739050d87013b66db6f97d3704e5f49c58e24ef2cb69a8515b34c32dfa5ce2",
+      "value": "<p>返回可用的合约检查详情和已识别接口。</p>"
+    },
+    {
+      "id": "52:title",
+      "source_sha256": "1a3689dfef0580128e5f0c7238682e9485f3562edc9aed9b92fe4fecb4d5a745",
+      "value": "读取合约方法"
+    },
+    {
+      "id": "52:description",
+      "source_sha256": "4c7f3bd6b2de158e9b44ece71e4df5286727ee5a0bfa43b869c8ad1e69cdb53a",
+      "value": "<p>执行只读 getter。将每个参数作为重复的<code>args</code>参数提供，例如<code>?args=123&args=456</code>。参数保持为字符串，可以包含该方法接受的整数、地址或 BOC 值。</p>"
+    },
+    {
+      "id": "53:title",
+      "source_sha256": "d2c3c6c36c0dc26c83666d8f54ee07ab7acd6115a77663d19d7d647bd000a7a5",
+      "value": "质押池"
+    },
+    {
+      "id": "53:description",
+      "source_sha256": "c247bd9c787843b9f2854f4786367c2d27372fbf2f701141007fc687525a62c8",
+      "value": "<p>返回账户的提名者池头寸。</p>"
+    },
+    {
+      "id": "54:title",
+      "source_sha256": "5ea0ed7ed8b49a048b7ae753d105f8fa3c2bb82f8afee746ef5590f6ae0fb65e",
+      "value": "多签合约"
+    },
+    {
+      "id": "54:description",
+      "source_sha256": "6999cb0b8ccc9d635016408c07bf00907c83ef0a5a7e55862b201bed1d1f1cd3",
+      "value": "<p>返回多签合约的阈值、签名者、提议者、序列号和订单。使用下方复数形式的路由查找与签名者钱包关联的多签。</p>"
+    },
+    {
+      "id": "55:title",
+      "source_sha256": "46d92008d96549217d077be703f95876e41a6c5f52bf67cf7eb238184987856e",
+      "value": "多签记录"
+    },
+    {
+      "id": "55:description",
+      "source_sha256": "eb51d109b5d2af826ec712a5541681ec8a8548bb876018aeb843ca0e7cf2a01b",
+      "value": "<p>返回与账户关联的多签记录。</p>"
+    },
+    {
+      "id": "56:title",
+      "source_sha256": "a151f2e912fe8d5b31e07dae6315f861d39160480d78848a0cdadfb51f09d327",
+      "value": "订阅"
+    },
+    {
+      "id": "56:description",
+      "source_sha256": "b3c43bbe4628bae9b5f2657bf22c2eef5f9898619df0e943819747abe29c03d8",
+      "value": "<p>返回账户的订阅记录。</p>"
+    },
+    {
+      "id": "57:title",
+      "source_sha256": "c392d07e9c5f8336d3615316e431e090bba7aad5fdfaac02c6ae92f0ea64931b",
+      "value": "DeFi 资产"
+    },
+    {
+      "id": "57:description",
+      "source_sha256": "290381495d98bd73a69ed2a8e3b02b38390c5debb728a58bce52b7ec70d42002",
+      "value": "<p>返回账户中已识别的 DeFi 头寸和资产。</p>"
+    },
+    {
+      "id": "58:title",
+      "source_sha256": "bfe5eac64a596f4bd7584fe21cd01158f1e7ce0584fe6db8238d0966cd4b8c17",
+      "value": "NFT 项目"
+    },
+    {
+      "id": "58:description",
+      "source_sha256": "c4a1b0525ba4e55324ba27df00e8d65a8cf505c99942a7ad7e68e2adb2f9edd1",
+      "value": "<p>返回项目的所有者、系列、元数据、媒体预览、信任和销售字段。<code>indexVerified</code>表示<code>index</code>是否由<code>get_nft_data</code>确认；原始索引保留在<code>indexed_index</code>中。</p>"
+    },
+    {
+      "id": "59:title",
+      "source_sha256": "46f4a4143ee5a57a4f9adc2c41521a65ba9a51d0af18c50a6d13b3078508832d",
+      "value": "灵魂绑定 NFT 详情"
+    },
+    {
+      "id": "59:description",
+      "source_sha256": "b7c4532ad21beda6e6701cf197ef9f601dd628e2c265b4a8dc2414799f9fdb77",
+      "value": "<p>对于灵魂绑定 NFT，返回其合约中的权限地址和撤销时间戳。撤销时间戳为零表示未撤销。灵魂绑定项目不可转移。</p>"
+    },
+    {
+      "id": "60:title",
+      "source_sha256": "33026cedc1e25eac2ad801ade97631ac365ddc26956ff066832e8510d5ccbe41",
+      "value": "NFT 历史"
+    },
+    {
+      "id": "60:description",
+      "source_sha256": "75aa0714eb365c46948691aa9974b883dae8f87174a0c716677d89ebd4bb01c2",
+      "value": "<p>返回单个 NFT 的事件。使用<code>before_lt</code>继续。</p>"
+    },
+    {
+      "id": "61:title",
+      "source_sha256": "b66b47b8f812c5498760e935b5696522e02576dc99aa64b58201f77ba9a2e1e8",
+      "value": "系列详情"
+    },
+    {
+      "id": "61:description",
+      "source_sha256": "650e94fa1dad53b83edbd38263df0fc434088827f9e3edd4eb70f92907adad7a",
+      "value": "<p>返回系列所有者、内容、元数据和预览。当<code>indexVerified</code>为 true 时，<code>next_item_index</code>已由系列 getter 确认；它不一定是项目总数。</p>"
+    },
+    {
+      "id": "62:title",
+      "source_sha256": "c85fc6b88ff4f86cc9543cdb26498926d8263bb327d749a426a1d694dec4d33b",
+      "value": "系列项目"
+    },
+    {
+      "id": "62:description",
+      "source_sha256": "d3364bcad8c48a83dedeb1b53fc8412dd61da94de19b58892bc134421d06dae3",
+      "value": "<p>返回系列中的 NFT 项目。使用<code>offset=_paging.nextOffset</code>继续。</p>"
+    },
+    {
+      "id": "63:title",
+      "source_sha256": "abc01e0a71e31ad5a718815f0f91a3f8b1caa8c2a5fa9ecf9251a36a01e201fa",
+      "value": "Jetton 详情"
+    },
+    {
+      "id": "63:description",
+      "source_sha256": "cf255d0f269858cf826fa10d984c17c83983d74b5f0024eafdd659355fe9ed2f",
+      "value": "<p>返回主合约元数据、总供应量、管理信息、小数位数和持有者数量。</p>"
+    },
+    {
+      "id": "64:title",
+      "source_sha256": "19bf9a79c836c6b6e7e64574d90fd784b98796bf5c7c6dc3fd10089e44a0cead",
+      "value": "Jetton 持有者"
+    },
+    {
+      "id": "64:description",
+      "source_sha256": "193a1b107b1ab08ecdea3961de4b63f73153c9febc3830bcf3c9622a5f196a9b",
+      "value": "<p>在<code>addresses</code>下返回持有者条目。使用<code>offset=_paging.nextOffset</code>继续。余额使用该 Jetton 的小数位数。</p>"
+    },
+    {
+      "id": "65:title",
+      "source_sha256": "1a2303ede07493acc7caaa7c737f3c52bcc9cf04372be19ed1b0af6b9f2c791e",
+      "value": "连接"
+    },
+    {
+      "id": "65:description",
+      "source_sha256": "2790d45d61373653559cbcda4f8444b1850d6f762b1d743ef1e944170b6e1259",
+      "value": "<p>连接同一主机的<code>/api/v1/ws</code>，并发送<code>init</code>获取当前快照。默认选择基础链区块。主链添加<code>?workchain=-1</code>，基础链分片添加<code>?workchain=0&amp;shard=...</code>。单个账户、NFT、交易和追踪请使用 REST API。</p>"
+    },
+    {
+      "id": "66:title",
+      "source_sha256": "6d3657e552a8eda23b6c0db9d9a4617cecfa57867f6d63cdab47c1b59078a304",
+      "value": "当前快照"
+    },
+    {
+      "id": "66:description",
+      "source_sha256": "a1a50f81ba263850c6c97930ce5f81201eb06fce76b4165542452c0e872c0bb7",
+      "value": "<p>响应包含选定工作链和分片的最近标准化<code>blocks</code>，以及含有最新区块、观察历史、观察时间和延迟状态的<code>ton</code>对象。<code>ton.head</code>提供所选区块的完整字段，<code>ton.masterchainHead</code>提供网络主链最新区块。发送<code>{\"action\":\"select\",\"workchain\":-1}</code>可将已打开的连接切换到主链。</p>"
+    },
+    {
+      "id": "67:title",
+      "source_sha256": "8c1fa2faedac42da96b7a171669173ea9def5bbda016c86cec2ec6445bd22057",
+      "value": "保持连接"
+    },
+    {
+      "id": "67:description",
+      "source_sha256": "41daff49d844721070de3f72e1e2bf31cea3a0fabeec3a0f9ba4e6618b70e6fe",
+      "value": "<p>发送 ping 检查连接。重新连接时再次发送<code>init</code>以获取当前快照。</p>"
+    },
+    {
+      "id": "68:title",
+      "source_sha256": "def3cada822644f6026f66ee2f9877d4a339a6fcaa3140957df55a73ddc061c8",
+      "value": "更新延迟"
+    },
+    {
+      "id": "68:description",
+      "source_sha256": "1ad33d153a1c9d275ba54ffdaa54dfd95da454a387976c741baea7051c9ec999",
+      "value": "<p>当<code>ton.stale</code>为 true 时，保留上次可用的区块并标记为延迟。<code>ton.observedAt</code>是观察时间戳。仅凭 WebSocket 连接正常不能证明数据是最新的。</p>"
+    }
+  ]
+}

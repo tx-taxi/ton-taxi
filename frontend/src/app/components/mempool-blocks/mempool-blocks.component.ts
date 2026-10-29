@@ -52,6 +52,24 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   get pendingTitle(): string {
     const count = this.pendingCount;
     const language = this.locale.toLowerCase();
+    if (language.startsWith('ko')) {
+      const summary = count === null ? '대기 메시지 피드를 사용할 수 없음' : `대기 중인 외부 메시지 ${new Intl.NumberFormat(this.locale).format(count)}개`;
+      const updated = this.nativePending?.observedAt ? ` · 마지막 업데이트 ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · 다시 연결 중' : '';
+      return summary + updated + stale;
+    }
+    if (language.startsWith('zh')) {
+      const summary = count === null ? '待处理消息数据流不可用' : `${new Intl.NumberFormat(this.locale).format(count)} 条待处理的外部消息`;
+      const updated = this.nativePending?.observedAt ? ` · 最近更新 ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · 正在重新连接' : '';
+      return summary + updated + stale;
+    }
+    if (language.startsWith('ja')) {
+      const summary = count === null ? '保留中のメッセージフィードを利用できません' : `保留中の外部メッセージ ${new Intl.NumberFormat(this.locale).format(count)}件`;
+      const updated = this.nativePending?.observedAt ? ` · 最終更新 ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · 再接続中' : '';
+      return summary + updated + stale;
+    }
     if (language.startsWith('uk')) {
       const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
       const category = count === null ? 'other' : new Intl.PluralRules('uk').select(count);
