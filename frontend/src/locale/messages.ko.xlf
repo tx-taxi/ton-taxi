@@ -16466,6 +16466,8 @@
           <context context-type="linenumber">276</context>
         </context-group>
       </trans-unit>
-      </body>
+            <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>일치하는 결과가 없습니다.</target></trans-unit>
+      <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>검색을 사용할 수 없습니다. 다시 시도해 주세요.</target></trans-unit>
+    </body>
   </file>
 </xliff>

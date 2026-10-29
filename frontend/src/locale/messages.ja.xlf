@@ -16466,6 +16466,8 @@
           <context context-type="linenumber">128</context>
         </context-group>
       </trans-unit>
-      </body>
+            <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>一致する結果が見つかりません。</target></trans-unit>
+      <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>検索を利用できません。もう一度お試しください。</target></trans-unit>
+    </body>
   </file>
 </xliff>

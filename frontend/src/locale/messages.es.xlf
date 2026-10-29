@@ -12114,6 +12114,8 @@
           <trans-unit id="ton.pending.page-description" datatype="html"><source>Inspect pending TON external messages, destinations, message hashes, and observation times.</source><target>Consulta los mensajes externos TON pendientes, sus destinos, hashes y horarios de observación.</target></trans-unit>
           <trans-unit id="ton.preferences.language" datatype="html"><source>Language</source><target>Idioma</target></trans-unit>
       <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Moneda</target></trans-unit>
+          <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>No se encontraron resultados.</target></trans-unit>
+      <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>La búsqueda no está disponible. Inténtalo de nuevo.</target></trans-unit>
     </body>
   </file>
 </xliff>

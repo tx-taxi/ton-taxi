@@ -12113,6 +12113,8 @@
           <trans-unit id="ton.pending.page-description" datatype="html"><source>Inspect pending TON external messages, destinations, message hashes, and observation times.</source><target>Просматривайте ожидающие внешние сообщения TON, адреса назначения, хеши и время наблюдения.</target></trans-unit>
           <trans-unit id="ton.preferences.language" datatype="html"><source>Language</source><target>Язык</target></trans-unit>
       <trans-unit id="ton.preferences.currency" datatype="html"><source>Currency</source><target>Валюта</target></trans-unit>
+          <trans-unit id="ton.search.no-match" datatype="html"><source>No match found.</source><target>Совпадений не найдено.</target></trans-unit>
+      <trans-unit id="ton.search.unavailable" datatype="html"><source>Search unavailable. Try again.</source><target>Поиск недоступен. Попробуйте ещё раз.</target></trans-unit>
     </body>
   </file>
 </xliff>

@@ -533,7 +533,7 @@ export class SearchFormComponent implements OnInit {
       next: result => {
         if (revision !== this.selectionChanges$.value) return;
         if (this.searchForm.value.searchText.trim() !== searchText || scope !== tonSelectionKey(this.tonSelection.current)) { this.isSearching=false; return; }
-        if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError('No match found.'); return; }
+        if (!['tx','block','address','nft','collection','jetton','message','trace'].includes(result.type)) { this.showSearchError($localize`:@@ton.search.no-match:No match found.`); return; }
         if (result.type === 'block') navigateTonBlock(this.router, result.id);
         else this.router.navigate(['/',result.type,result.id]);
         this.isSearching = false;
@@ -543,7 +543,7 @@ export class SearchFormComponent implements OnInit {
       error: error => {
         if (revision !== this.selectionChanges$.value || this.currentSearchText() !== searchText) return;
         if (allowAutomaticFallback && [400,404].includes(error.status)) { this.searchAutomatic(searchText); return; }
-        this.showSearchError(error.status === 404 ? 'No match found.' : 'Search unavailable. Try again.');
+        this.showSearchError(error.status === 404 ? $localize`:@@ton.search.no-match:No match found.` : $localize`:@@ton.search.unavailable:Search unavailable. Try again.`);
       }
     });
   }
