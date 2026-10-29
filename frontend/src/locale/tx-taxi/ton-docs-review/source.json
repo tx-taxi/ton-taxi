@@ -1,0 +1,416 @@
+[
+  {
+    "section": "tonGuideData",
+    "fragment": "masterchain-and-shards",
+    "title": "What do masterchain and shard blocks mean?",
+    "description": "<p>The masterchain holds global configuration and references shardchain states. Most user accounts live in the basechain, which can be divided into shards. A block is identified by its workchain, shard and sequence number together; a sequence number alone is not a network-wide block height.</p><p>The top strip shows basechain blocks. Open the search menu and choose Masterchain under SELECTED to view masterchain blocks. Choose a shard when several are active. Open a block to inspect its transactions; masterchain blocks also link their referenced shards.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "transactions-and-messages",
+    "title": "How are transactions, messages and traces related?",
+    "description": "<p>A transaction records one account processing a message or a system operation. Messages connect accounts; processing an incoming message may create outgoing messages and further transactions. A trace follows those linked transactions.</p><p>Use the transaction page for local execution, messages for transfers between contracts, and the trace for the wider operation. <a href=\"https://docs.ton.org/start-here\" target=\"_blank\" rel=\"noopener noreferrer\">TON fundamentals</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "logical-time",
+    "title": "What is logical time?",
+    "description": "<p>Logical time (LT) orders transactions and messages. It is separate from the Unix timestamp shown as the transaction date. Account history uses LT as its pagination cursor; preserve it as an exact integer string.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "fees-and-phases",
+    "title": "Where did the fee go?",
+    "description": "<p>Execution can include storage, credit, compute, action and bounce phases. The transaction page shows total fees and the recorded phase details, including gas use, forwarding costs and exit codes. A failed operation can still pay fees.</p><p>GRAM is TON’s native currency and uses 9 decimal places: 1 GRAM = 1,000,000,000 nanograms. A message value and the transaction fee describe different amounts.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "bounce-and-failure",
+    "title": "What does bounced or failed mean?",
+    "description": "<p>A bounced message returns a response when a bounceable message cannot be processed under the applicable rules. It is a separate message with its own value and costs. Check the transaction result, compute and action results, and outgoing messages together.</p><p>A confirmed transaction can have failed execution. One successful transaction also does not establish that every later transaction in its trace succeeded. <a href=\"https://docs.ton.org/resources/pdfs/tblkch.pdf\" target=\"_blank\" rel=\"noopener noreferrer\">TON blockchain specification</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "confirmation",
+    "title": "Is confirmation the same as a complete operation?",
+    "description": "<p>Confirmation means the transaction is included in its block. A multi-contract operation can involve additional transactions and messages. Inspect the full trace and final recipient rather than treating the first transaction as the whole transfer.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "wallets-and-state",
+    "title": "What does an account page show?",
+    "description": "<p>Accounts show their GRAM balance, state, last activity and detected contract interfaces. History groups recognized actions; Transactions lists account transactions. Jettons and NFTs have separate tabs.</p><p>The Contract tab contains state, code and data, read-only methods, and available staking, multisig, subscription and DeFi records. Expand Account details for additional fields and extra currencies.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "addresses-and-dns",
+    "title": "Why can the same account have different addresses?",
+    "description": "<p>TON accounts can be written as a raw workchain and hexadecimal account ID or a user-friendly address. Bounceability and network flags can change the user-friendly representation without changing the underlying account.</p><p>Search accepts TON addresses and .ton names. DNS resolution links to the resolved account; a domain name is not a substitute for checking the account address.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "contract-methods",
+    "title": "Can I read a smart contract?",
+    "description": "<p>Select a listed getter in the Contract tab and supply its arguments when needed. Reads return a result without signing a transaction. Arguments may be comma-separated strings or a JSON array of strings; preserve large integers as strings.</p><p>Account details preserve code, data and storage fields. Inspection shows recognized interfaces and available compiler information.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "validators",
+    "title": "What does the validators page show?",
+    "description": "<p>The validators page shows the election timestamps, total and minimum stake, and participating validator accounts, stakes and ADNL addresses. These fields describe the displayed election data; an address holding stake is not automatically the producer of a particular block.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "jettons",
+    "title": "How do jettons work?",
+    "description": "<p>A jetton has a master contract and individual jetton-wallet contracts for holders. Identify it by the master address, not its name or symbol. The jetton page shows supply, decimals, administration and holders.</p><p>Display balances using the jetton’s own decimals. Do not assume every jetton has 9 decimals. <a href=\"https://docs.ton.org/contracts/standard/tokens/jettons/overview\" target=\"_blank\" rel=\"noopener noreferrer\">Jetton standard</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "scaled-jettons",
+    "title": "Why can a jetton’s displayed balance differ from its on-chain amount?",
+    "description": "<p>Some jettons use a display multiplier. Current wallet balances, holder balances and total supply apply that ratio with exact rounding, then the token’s decimals. Expand Amount details to see the on-chain amount, raw units and ratio.</p><p>Historical transfers retain their recorded on-chain quantity; a current multiplier is not evidence of the multiplier at that time. <a href=\"https://github.com/ton-blockchain/TEPs/blob/master/text/0526-scaled-ui-jettons.md\" target=\"_blank\" rel=\"noopener noreferrer\">Scaled UI jetton standard</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "nft-identity",
+    "title": "What identifies an NFT?",
+    "description": "<p>The NFT item’s contract address is its identity. Its collection, owner and item index are separate fields. Collection membership verification checks the item’s relationship to a collection; it does not establish that its image, name or seller is trustworthy.</p><p>Item details show the exact index when confirmed by the NFT contract. A display number in an NFT’s name need not equal its on-chain index.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "nft-metadata",
+    "title": "Where do images and attributes come from?",
+    "description": "<p>TEP-64 supports on-chain, off-chain and combined metadata. The NFT page displays names, descriptions, images and attributes, with the full metadata available to expand. Media or metadata hosted elsewhere can change or become unavailable.</p><p>Open animations explicitly from the item page. Missing media does not erase the NFT’s contract or ownership record. <a href=\"https://github.com/ton-blockchain/TEPs/blob/master/text/0064-token-data-standard.md\" target=\"_blank\" rel=\"noopener noreferrer\">Token metadata standard</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "nft-sales",
+    "title": "Why is an NFT owned by a sale contract?",
+    "description": "<p>A listed NFT may be held by a marketplace sale contract. Wallet NFT lists include recognized indirect sale ownership. The item page separates the on-chain owner, seller, sale contract and price currency.</p><p>A sale listing is not a completed transfer. Use transfer history to follow changes, and the collection page to browse its items.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "telegram-collectibles",
+    "title": "Are all Telegram gifts visible on-chain?",
+    "description": "<p>No. A gift must exist as a TON NFT to have an on-chain item address and ownership record here. Telegram gifts, collectible usernames and numbers can have associated TON NFTs, but a Telegram profile or ordinary username alone does not prove wallet ownership.</p><p>A collectible may be displayed on a Telegram profile while its owner remains a TON wallet. Check its item address, collection and current owner. <a href=\"https://core.telegram.org/api/gifts\" target=\"_blank\" rel=\"noopener noreferrer\">Telegram collectible gifts</a>.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "nft-pagination",
+    "title": "How do I see all the NFTs in an account or collection?",
+    "description": "<p>Use Load more below the NFT list to continue through the collection or wallet. The NFTs tab includes each returned item separately, with its full name and link to item details. A wallet’s NFT collection and its transaction history are independent lists.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "trust-and-identity",
+    "title": "What do recognition labels mean?",
+    "description": "<p>Collection membership, trust classification and marketplace approvals are distinct facts. Recognized names and images are not ownership proofs. Compare contract addresses and collection links before treating two similarly named assets as the same token.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "automatic-routing",
+    "title": "How does automatic routing work?",
+    "description": "<p>Paste an address, transaction hash, message hash, block number or .ton name into search. Automatic Routing lets the taxi find its chain. Choosing a native explorer keeps that chain’s search available; View Hub returns to tx.taxi.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "updates",
+    "title": "What does Updates delayed mean?",
+    "description": "<p>The last available data remains visible while fresh updates are delayed. Retry an unavailable section to load it again. An empty list and an unavailable list are different states.</p>"
+  },
+  {
+    "section": "tonGuideData",
+    "fragment": "wallet-support",
+    "title": "Can tx.taxi reverse a transaction?",
+    "description": "<p>tx.taxi displays public chain data. It cannot sign transactions, access private keys or reverse a transfer. For wallet or exchange account support, contact the service that submitted the operation.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "api-values",
+    "title": "Values and pagination",
+    "description": "<p>All routes below use GET. Precision-sensitive integers are decimal strings; parse them with arbitrary-precision arithmetic. GRAM balances and fees are nanograms. Jetton amounts use their declared decimals.</p><p>Paginated responses include <code>_paging</code>. Continue only while <code>hasMore</code> is true, using <code>nextOffset</code>, <code>nextBeforeLt</code> or <code>nextBefore</code> for the matching endpoint. List limits are capped at 100; block lists at 16.</p><p><code>_meta.observedAt</code> identifies the observation time and <code>_meta.stale</code> marks retained data. HTTP 400 means invalid input, 404 means not found, and 503 means temporarily unavailable.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-dashboard",
+    "title": "Network overview",
+    "description": "<p>Returns the selected workchain and shard, recent blocks, observed history, observation time and stale state. The default is the basechain. Use <code>workchain=-1</code> for the masterchain, or <code>workchain=0&amp;shard=...</code> for an active basechain shard. <code>activeShards</code> lists available shards; <code>masterchainHead</code> is the network masterchain head.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-blocks",
+    "title": "Blocks",
+    "description": "<p>Returns blocks from one workchain and shard in descending sequence order. The default is the basechain; use <code>workchain=-1</code> for masterchain blocks. Continue with <code>before=_paging.nextBefore</code> and retain <code>workchain</code> and <code>shard</code> from the response; the boundary is exclusive. Pagination stops at a shard split or merge.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-block",
+    "title": "Block details",
+    "description": "<p>Use a sequence number or the full <code>(workchain,shard,seqno)</code> identifier. A sequence number uses the selected workchain and shard; without a selection, it uses the host’s default workchain and root shard. Returns hashes, timestamps, logical times, references and value-flow fields.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-block-transactions",
+    "title": "Block transactions",
+    "description": "<p>Returns the transactions included in the specified block.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-block-shards",
+    "title": "Masterchain shard references",
+    "description": "<p>Use a masterchain sequence number or masterchain block identifier. Returns the corresponding shard references.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-network-transactions",
+    "title": "Network transactions",
+    "description": "<p>Returns transactions across the shards in one masterchain interval. Continue within that interval using <code>master_seqno=_paging.masterSeqno</code> and <code>offset=_paging.nextOffset</code>. When <code>nextOffset</code> is null, continue with <code>before=_paging.nextBefore</code> instead. Limits are capped at 50.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-transactions",
+    "title": "Masterchain transactions",
+    "description": "<p>Returns transactions from one masterchain block. Continue with <code>before=_paging.nextBefore</code>. These are masterchain transactions, not all transactions across every shard.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-validators",
+    "title": "Validators",
+    "description": "<p>Returns validator election information, stake amounts and validator entries.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-dns",
+    "title": "Domain details",
+    "description": "<p>Domain identity, expiry and linked NFT. Append <code>/resolve</code> for wallet, site, storage and resolver records, or <code>/bids</code> for bid history.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-auctions",
+    "title": "DNS auctions",
+    "description": "<p>Current domain auctions. Select <code>ton</code> or <code>t.me</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-dns-expiring",
+    "title": "Expiring domains",
+    "description": "<p>Returns domains approaching expiry. The optional <code>period</code> is the number of days before expiry.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-staking-pool",
+    "title": "Staking pool",
+    "description": "<p>Pool stake, nominators, cycle, implementation and annual percentage yield. Append <code>/history</code> for observed APY history.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-extra-currency",
+    "title": "Extra currency",
+    "description": "<p>Currency ID, symbol, decimals and image.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-extra-currency-history",
+    "title": "Extra currency history",
+    "description": "<p>Account events for the selected currency. Continue with <code>before_lt</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-block-boc",
+    "title": "Block BOC",
+    "description": "<p>Downloads the block as a binary Bag of Cells.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-config-raw",
+    "title": "Raw configuration",
+    "description": "<p>Raw network configuration. Add <code>master_seqno</code> to request a historical masterchain configuration.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-config",
+    "title": "Blockchain configuration",
+    "description": "<p>Returns decoded blockchain configuration parameters. Add <code>master_seqno</code> for a historical masterchain configuration.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-rates",
+    "title": "GRAM exchange rates",
+    "description": "<p>Returns GRAM rates in AUD, CAD, CHF, EUR, GBP, JPY and USD.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-transaction",
+    "title": "Transaction details",
+    "description": "<p>Returns the account transaction, messages, fees, phases and state changes, plus available trace and interpreted event details. <code>relatedUnavailable</code> identifies related sections that could not be loaded.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-message",
+    "title": "Transaction by message hash",
+    "description": "<p>Finds the transaction associated with the supplied message hash.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-trace",
+    "title": "Trace",
+    "description": "<p>Returns the linked transaction tree with child traces and execution details.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "resolve",
+    "title": "Resolve search input",
+    "description": "<p>Resolves a TON account, NFT, collection, jetton, transaction, message hash, block identifier or .ton domain. Returns the entity type and identifier.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account",
+    "title": "Account details",
+    "description": "<p>Returns balance, status, contract interfaces, available blockchain state and DNS names. State can include code, data, storage information and extra currencies.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-transactions",
+    "title": "Account transactions",
+    "description": "<p>Lists account transactions. Continue with <code>before_lt=_paging.nextBeforeLt</code>; <code>after_lt</code> is also accepted.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-events",
+    "title": "Account transfers and events",
+    "description": "<p>Returns interpreted actions and their statuses. Continue with <code>before_lt</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-jettons",
+    "title": "Jetton balances",
+    "description": "<p>Returns balances with master-contract metadata and the account’s jetton-wallet addresses.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-nfts",
+    "title": "Account NFTs",
+    "description": "<p>Returns NFT items, including recognized indirect sale ownership by default. Filter with <code>collection</code>, or use <code>indirect_ownership=false</code> for direct ownership only. Continue with <code>offset=_paging.nextOffset</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-nft-history",
+    "title": "NFT operations",
+    "description": "<p>Returns the account’s NFT operations. Continue with <code>before_lt</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-account-jetton-history",
+    "title": "Jetton history",
+    "description": "<p>Returns jetton events for the account. Continue with <code>before_lt</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-inspect",
+    "title": "Contract inspection",
+    "description": "<p>Returns available contract inspection details and recognized interfaces.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-method",
+    "title": "Read a contract method",
+    "description": "<p>Executes a read-only getter. Supply each argument as a repeated <code>args</code> parameter, for example <code>?args=123&args=456</code>. Arguments remain strings and may contain integer, address or BOC values accepted by the method.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-staking",
+    "title": "Staking pools",
+    "description": "<p>Returns the account’s nominator-pool positions.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-multisig",
+    "title": "Multisig contract",
+    "description": "<p>Returns the multisig contract’s threshold, signers, proposers, sequence number and orders. Use the plural route below to find multisigs associated with a signer’s wallet.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-multisigs",
+    "title": "Multisig records",
+    "description": "<p>Returns multisig records associated with the account.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-subscriptions",
+    "title": "Subscriptions",
+    "description": "<p>Returns the account’s subscription records.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-defi",
+    "title": "DeFi assets",
+    "description": "<p>Returns recognized DeFi positions and assets for the account.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-nft",
+    "title": "NFT item",
+    "description": "<p>Returns the item’s owner, collection, metadata, media previews, trust and sale fields. <code>indexVerified</code> indicates whether <code>index</code> was confirmed by <code>get_nft_data</code>; the original index remains in <code>indexed_index</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-sbt",
+    "title": "Soulbound NFT details",
+    "description": "<p>For a soulbound NFT, returns the authority address and revocation timestamp from its contract. A zero revocation timestamp means not revoked. Soulbound items are non-transferable.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-nft-history",
+    "title": "NFT history",
+    "description": "<p>Returns events for an individual NFT. Continue with <code>before_lt</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-collection",
+    "title": "Collection details",
+    "description": "<p>Returns the collection’s owner, content, metadata and previews. When <code>indexVerified</code> is true, <code>next_item_index</code> is confirmed by the collection getter; it is not necessarily a total item count.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-collection-items",
+    "title": "Collection items",
+    "description": "<p>Returns NFT items from a collection. Continue with <code>offset=_paging.nextOffset</code>.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-jetton",
+    "title": "Jetton details",
+    "description": "<p>Returns master-contract metadata, total supply, administration, decimals and holder count.</p>"
+  },
+  {
+    "section": "tonRestData",
+    "fragment": "get-jetton-holders",
+    "title": "Jetton holders",
+    "description": "<p>Returns holder entries under <code>addresses</code>. Continue with <code>offset=_paging.nextOffset</code>. Balance values use the jetton’s decimals.</p>"
+  },
+  {
+    "section": "tonWebsocketData",
+    "fragment": "websocket-connect",
+    "title": "Connect",
+    "description": "<p>Connect to the same host at <code>/api/v1/ws</code> and send <code>init</code> for the current snapshot. Basechain blocks are selected by default. Add <code>?workchain=-1</code> for the masterchain, or <code>?workchain=0&amp;shard=...</code> for a basechain shard. Use the REST API for individual accounts, NFTs, transactions and traces.</p>"
+  },
+  {
+    "section": "tonWebsocketData",
+    "fragment": "websocket-init",
+    "title": "Current snapshot",
+    "description": "<p>The response includes recent normalized <code>blocks</code> from the selected workchain and shard, plus a <code>ton</code> object with the head, observed history, observation time and stale state. Use <code>ton.head</code> for complete selected-block fields and <code>ton.masterchainHead</code> for the network masterchain head. Send <code>{\"action\":\"select\",\"workchain\":-1}</code> to switch an open connection to the masterchain.</p>"
+  },
+  {
+    "section": "tonWebsocketData",
+    "fragment": "websocket-ping",
+    "title": "Keep the connection active",
+    "description": "<p>Send a ping to check the connection. On reconnect, send <code>init</code> again to obtain the current snapshot.</p>"
+  },
+  {
+    "section": "tonWebsocketData",
+    "fragment": "websocket-stale",
+    "title": "Delayed updates",
+    "description": "<p>When <code>ton.stale</code> is true, retain the last available blocks and mark them as delayed. <code>ton.observedAt</code> is the observation timestamp. WebSocket connection health alone does not establish data freshness.</p>"
+  }
+]

@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, AfterViewChecked, ChangeDetectionStrategy } from '@angular/core';
-import { russianCountNoun } from '@app/shared/russian-count';
+import { russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -20,6 +20,7 @@ import { detectWebGL } from '@app/shared/graphs.utils';
 })
 export class MempoolBlockComponent implements OnInit, OnDestroy, AfterViewChecked {
   readonly russianCountNoun = russianCountNoun;
+  readonly ukrainianCountNoun = ukrainianCountNoun;
   pending$: Observable<TonPendingSnapshot> = this.stateService.tonPending$;
   selectedHash$ = this.route.fragment;
   readonly pendingFeedUnavailable = $localize`:@@ton.pending.full-feed-unavailable:Pending feed unavailable`;

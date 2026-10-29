@@ -179,10 +179,38 @@ const russianActionFields: Record<string, string> = {
   price: 'цена', currency: 'валюта', jetton: 'джеттон', nft: 'NFT', buyer: 'покупатель', seller: 'продавец',
   auction: 'аукцион', bid: 'ставка', pool: 'пул', comment: 'комментарий', payload: 'полезная нагрузка',
 };
+const ukrainianActionNames: Record<string, string> = {
+  TonTransfer: 'Переказ GRAM', JettonTransfer: 'Переказ джетонів', JettonSwap: 'Обмін джетонів',
+  JettonMint: 'Випуск джетонів', JettonBurn: 'Спалювання джетонів', NftItemTransfer: 'Переказ NFT',
+  NftPurchase: 'Купівля NFT', ExtraCurrencyTransfer: 'Переказ додаткової валюти', SmartContractExec: 'Виконання смартконтракту',
+  DepositStake: 'Внесення стейку', WithdrawStake: 'Виведення стейку', WithdrawStakeRequest: 'Запит на виведення стейку',
+  ElectionsDepositStake: 'Внесення стейку для виборів', ElectionsRecoverStake: 'Повернення стейку після виборів',
+  Subscription: 'Підписка', UnSubscription: 'Скасування підписки', AuctionBid: 'Ставка на аукціоні', GasRelay: 'Передача газу',
+};
+const ukrainianActionFields: Record<string, string> = {
+  amount: 'сума', ton_attached: 'додана сума', gram_attached: 'додана сума', sender: 'відправник', recipient: 'одержувач',
+  source: 'джерело', destination: 'призначення', account: 'акаунт', wallet: 'гаманець', address: 'адреса', contract: 'контракт',
+  fee: 'комісія', refund: 'повернення', cost: 'вартість', value: 'значення', price: 'ціна', currency: 'валюта', jetton: 'джетон',
+  nft: 'NFT', buyer: 'покупець', seller: 'продавець', auction: 'аукціон', bid: 'ставка', pool: 'пул', comment: 'коментар', payload: 'корисне навантаження',
+};
+const dutchActionNames: Record<string, string> = {
+  TonTransfer: 'GRAM-overdracht', JettonTransfer: 'Jettonoverdracht', JettonSwap: 'Jettonruil',
+  JettonMint: 'Jettonuitgifte', JettonBurn: 'Jettonvernietiging', NftItemTransfer: 'NFT-overdracht',
+  NftPurchase: 'NFT-aankoop', ExtraCurrencyTransfer: 'Overdracht van aanvullende valuta', SmartContractExec: 'Uitvoering van smart contract',
+  DepositStake: 'Stake storten', WithdrawStake: 'Stake opnemen', WithdrawStakeRequest: 'Aanvraag voor opname van stake',
+  ElectionsDepositStake: 'Stake storten voor verkiezingen', ElectionsRecoverStake: 'Stake terughalen na verkiezingen',
+  Subscription: 'Abonnement', UnSubscription: 'Abonnement opzeggen', AuctionBid: 'Veilingbod', GasRelay: 'Gasdoorvoer',
+};
+const dutchActionFields: Record<string, string> = {
+  amount: 'bedrag', ton_attached: 'meegestuurd bedrag', gram_attached: 'meegestuurd bedrag', sender: 'afzender', recipient: 'ontvanger',
+  source: 'bron', destination: 'bestemming', account: 'account', wallet: 'wallet', address: 'adres', contract: 'contract',
+  fee: 'kosten', refund: 'terugbetaling', cost: 'kosten', value: 'waarde', price: 'prijs', currency: 'valuta', jetton: 'jetton',
+  nft: 'NFT', buyer: 'koper', seller: 'verkoper', auction: 'veiling', bid: 'bod', pool: 'pool', comment: 'opmerking', payload: 'payload',
+};
 function language(locale: string): string { return locale.toLowerCase().split('-')[0]; }
-const localizedActionNames: Record<string, Record<string, string>> = {es: spanishActionNames, fr: frenchActionNames, de: germanActionNames, pt: portugueseActionNames, it: italianActionNames, ru: russianActionNames};
-const localizedActionFields: Record<string, Record<string, string>> = {es: spanishActionFields, fr: frenchActionFields, de: germanActionFields, pt: portugueseActionFields, it: italianActionFields, ru: russianActionFields};
-const localizedRawUnits: Record<string, string> = {es: 'unidades sin procesar', fr: 'unités brutes', de: 'Roheinheiten', pt: 'unidades brutas', it: 'unità grezze', ru: 'исходные единицы'};
+const localizedActionNames: Record<string, Record<string, string>> = {es: spanishActionNames, fr: frenchActionNames, de: germanActionNames, pt: portugueseActionNames, it: italianActionNames, ru: russianActionNames, uk: ukrainianActionNames, nl: dutchActionNames};
+const localizedActionFields: Record<string, Record<string, string>> = {es: spanishActionFields, fr: frenchActionFields, de: germanActionFields, pt: portugueseActionFields, it: italianActionFields, ru: russianActionFields, uk: ukrainianActionFields, nl: dutchActionFields};
+const localizedRawUnits: Record<string, string> = {es: 'unidades sin procesar', fr: 'unités brutes', de: 'Roheinheiten', pt: 'unidades brutas', it: 'unità grezze', ru: 'исходные единицы', uk: 'необроблені одиниці', nl: 'ruwe eenheden'};
 function actionNames(locale: string): Record<string, string> | undefined { return localizedActionNames[language(locale)]; }
 function actionFields(locale: string): Record<string, string> | undefined { return localizedActionFields[language(locale)]; }
 export function actionFieldLabel(key: string, locale = 'en', fallback?: string): string {

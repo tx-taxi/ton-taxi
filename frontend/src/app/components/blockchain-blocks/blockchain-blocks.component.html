@@ -53,7 +53,7 @@
               class="block-size" i18n="@@ton.a11y.block-count">{{ block.tx_count | number }} transactions</div>
             </ng-template>
             <div [attr.data-cy]="'bitcoin-block-' + i + '-transactions'" class="transaction-count">
-              <ng-container *ngIf="locale.toLowerCase().startsWith('ru'); else otherTransactionCounts">{{ block.tx_count | number }} {{ russianCountNoun(block.tx_count, 'transaction') }}</ng-container>
+              <ng-container *ngIf="(locale.toLowerCase().startsWith('ru') || locale.toLowerCase().startsWith('uk')); else otherTransactionCounts">{{ block.tx_count | number }} {{ locale.toLowerCase().startsWith('uk') ? ukrainianCountNoun(block.tx_count, 'transaction') : russianCountNoun(block.tx_count, 'transaction') }}</ng-container>
               <ng-template #otherTransactionCounts><ng-container
                 *ngTemplateOutlet="block.tx_count === 1 ? transactionsSingular : transactionsPlural; context: {$implicit: block.tx_count | number}"></ng-container>
               <ng-template #transactionsSingular let-i i18n="shared.transaction-count.singular">{{ i }} transaction</ng-template>

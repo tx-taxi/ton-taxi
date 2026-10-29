@@ -77,6 +77,28 @@ const copies = {
     websocketMeta: 'Справочник WebSocket API TON для блоков бейсчейна и мастерчейна в реальном времени.',
     aboutLabel: 'О tx.taxi', documentation: 'документация', explorer: 'обозреватель', open: 'Открыть', explore: 'Изучить', introAction: 'Открыть tx.taxi',
   },
+  uk: {
+    faqEyebrow: 'Основна мережа TON', faqTitle: 'Розберіться з даними оглядача', faqDescription: 'Досліджуйте транзакції, повідомлення, гаманці, джетони та NFT у TON.',
+    restEyebrow: 'Довідник розробника', restDescription: 'Переглядайте блоки, транзакції, акаунти й активи.', baseUrl: 'Базовий URL', endpoint: 'Кінцева точка',
+    websocketEyebrow: 'Дані в реальному часі', websocketDescription: 'Стежте за блоками бейсчейну або мастерчейну в реальному часі.',
+    supportTitle: 'ton.tx.taxi показує загальнодоступні дані мережі.', supportText: 'Він не може відновити кошти, скасувати транзакції чи отримати доступ до гаманців.',
+    description: 'Опис', clientMessage: 'Повідомлення клієнта', serverResponse: 'Відповідь сервера', navigation: 'Розділи документації',
+    preferences: 'Налаштування відображення', guideTab: 'Посібник TON', faqMeta: 'Досліджуйте транзакції, повідомлення, гаманці, джетони, NFT і валідаторів TON.',
+    restMeta: 'Довідник REST API TON: блоки, транзакції, повідомлення, акаунти, джетони та NFT.',
+    websocketMeta: 'Довідник WebSocket API TON для блоків бейсчейну та мастерчейну в реальному часі.',
+    aboutLabel: 'Про tx.taxi', documentation: 'документація', explorer: 'оглядач', open: 'Відкрити', explore: 'Дослідити', introAction: 'Відкрити tx.taxi',
+  },
+  nl: {
+    faqEyebrow: 'TON-mainnet', faqTitle: 'Begrijp wat de explorer toont', faqDescription: 'Bekijk TON-transacties, berichten, wallets, jettons en NFT’s.',
+    restEyebrow: 'Ontwikkelaarsreferentie', restDescription: 'Bekijk blokken, transacties, accounts en activa.', baseUrl: 'Basis-URL', endpoint: 'Eindpunt',
+    websocketEyebrow: 'Live gegevens', websocketDescription: 'Volg live blokken van de basechain of masterchain.',
+    supportTitle: 'ton.tx.taxi toont openbare netwerkgegevens.', supportText: 'Het kan geen tegoeden herstellen, transacties terugdraaien of toegang krijgen tot wallets.',
+    description: 'Beschrijving', clientMessage: 'Clientbericht', serverResponse: 'Serverantwoord', navigation: 'Documentatiesecties',
+    preferences: 'Weergavevoorkeuren', guideTab: 'TON-handleiding', faqMeta: 'Bekijk TON-transacties, berichten, wallets, jettons, NFT’s en validators.',
+    restMeta: 'TON REST API-referentie voor blokken, transacties, berichten, accounts, jettons en NFT’s.',
+    websocketMeta: 'TON WebSocket API-referentie voor live blokken van de basechain en masterchain.',
+    aboutLabel: 'Over tx.taxi', documentation: 'documentatie', explorer: 'explorer', open: 'Openen', explore: 'Verkennen', introAction: 'tx.taxi openen',
+  },
 };
 
 export function tonDocsCopy(locale: string): typeof copies.en {

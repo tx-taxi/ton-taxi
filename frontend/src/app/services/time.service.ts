@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { dates } from '@app/shared/i18n/dates';
 
@@ -26,8 +26,10 @@ const precisionThresholds = {
   providedIn: 'root'
 })
 export class TimeService {
+  private ukrainianRelative?: Intl.RelativeTimeFormat;
+  private ukrainianUnits = new Map<string, Intl.NumberFormat>();
 
-  constructor(private datePipe: DatePipe) {}
+  constructor(private datePipe: DatePipe, @Inject(LOCALE_ID) private locale: string) {}
 
   calculate(
     time: number,
@@ -121,6 +123,26 @@ export class TimeService {
   }
 
   private formatTime(kind, unit, number): string {
+    // Ukrainian has three cardinal forms and an accusative form for time;
+    // selecting English singular/plural strings produces incorrect durations.
+    if (this.locale.toLowerCase().split('-')[0] === 'uk') {
+      const relative = this.ukrainianRelative ||= new Intl.RelativeTimeFormat('uk', { numeric: 'always' });
+      const futureParts = relative.formatToParts(number, unit);
+      const future = futureParts.map((part) => part.value).join('');
+      let marked = false;
+      const approximate = futureParts.map((part) => {
+        if (part.type !== 'integer' || marked) return part.value;
+        marked = true;
+        return `~${part.value}`;
+      }).join('');
+      if (kind === 'since') return relative.format(-number, unit);
+      if (kind === 'until') return approximate;
+      if (kind === 'within') return `не пізніше ніж ${approximate}`;
+      if (kind === 'span') return future.charAt(0).toUpperCase() + future.slice(1);
+      if (kind === 'before') return future.replace(/^через /, 'за ') + ' до';
+      if (!this.ukrainianUnits.has(unit)) this.ukrainianUnits.set(unit, new Intl.NumberFormat('uk', { style: 'unit', unit, unitDisplay: 'long' }));
+      return this.ukrainianUnits.get(unit).format(number);
+    }
     const dateStrings = dates(number);
     switch (kind) {
       case 'since':

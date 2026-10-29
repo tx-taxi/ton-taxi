@@ -5,11 +5,11 @@
         <div ngbDropdown #chainMenu="ngbDropdown" [autoClose]="false" class="search-chain-selector" placement="bottom-start">
           <button ngbDropdownToggle type="button" class="search-chain-trigger" [attr.aria-label]="chooseChainLabel + ': ' + (activeTarget$ | async)?.name" [attr.title]="(activeTarget$ | async)?.name">
             <ng-container *ngIf="activeTarget$ | async as activeTarget; else defaultChainIcon">
-              <img [src]="activeTarget.iconUrl" [alt]="activeTarget.iconAlt">
+              <img [src]="activeTarget.iconUrl" alt="">
               <span *ngIf="activeTarget.destinationId && !activeTarget.destinationDefault" class="search-chain-target-label">{{ activeTarget.name }}</span>
             </ng-container>
             <ng-template #defaultChainIcon>
-              <img [src]="defaultChainIconUrl" [alt]="defaultChainIconAlt">
+              <img [src]="defaultChainIconUrl" alt="">
             </ng-template>
           </button>
           <div ngbDropdownMenu class="search-chain-menu" aria-label="Choose search chain" i18n-aria-label="@@ton.search.choose">

@@ -60,6 +60,8 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get emptyState(): string {
     if (this.tonSamples !== null) {
       if (this.recentSamples.length) return '';
+      if (this.isUkrainian) return `Історія ${this.tonChainLabel} недоступна`;
+      if (this.isDutch) return `Geen ${this.tonChainLabel}-geschiedenis beschikbaar`;
       if (this.isItalian) return `Nessuno storico della ${this.tonChainLabel.toLowerCase()} disponibile`;
       if (this.isRussian) return `История ${this.tonChainLabel} недоступна`;
       if (this.isFrench) return `Aucun historique de la ${this.tonChainLabel.toLowerCase()} disponible`;
@@ -80,10 +82,14 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
   get isSpanish(): boolean { return this.locale.toLowerCase().startsWith('es'); }
   get isFrench(): boolean { return this.locale.toLowerCase().startsWith('fr'); }
   get isGerman(): boolean { return this.locale.toLowerCase().startsWith('de'); }
+  get isUkrainian(): boolean { return this.locale.toLowerCase().startsWith('uk'); }
+  get isDutch(): boolean { return this.locale.toLowerCase().startsWith('nl'); }
   get isItalian(): boolean { return this.locale.toLowerCase().startsWith('it'); }
   get isRussian(): boolean { return this.locale.toLowerCase().startsWith('ru'); }
   get isPortuguese(): boolean { return this.locale.toLowerCase().startsWith('pt'); }
   get chartLegendLabel(): string {
+    if (this.isUkrainian) return 'Умовні позначення графіка';
+    if (this.isDutch) return 'Grafieklegenda';
     if (this.isItalian) return 'Legenda del grafico';
     if (this.isRussian) return 'Условные обозначения графика';
     if (this.isFrench) return 'Légende du graphique';
@@ -92,6 +98,8 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     return this.isSpanish ? 'Leyenda del gráfico' : 'Chart legend';
   }
   get chartLabel(): string {
+    if (this.isTon && this.isUkrainian) return `Історія TON ${this.tonChainLabel}: ${this.historyLabel.toLowerCase()}`;
+    if (this.isTon && this.isDutch) return `TON ${this.tonChainLabel}-geschiedenis: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isItalian) return `Storico TON della ${this.tonChainLabel.toLowerCase()}: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isRussian) return `История TON ${this.tonChainLabel}: ${this.historyLabel.toLowerCase()}`;
     if (this.isTon && this.isFrench) return `Historique TON de la ${this.tonChainLabel.toLowerCase()} : ${this.historyLabel.toLowerCase()}`;
@@ -122,6 +130,18 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
 
     const latest = this.recentSamples[this.recentSamples.length - 1];
     if (this.isTon) {
+      if (this.isUkrainian || this.isDutch) {
+        const start = this.formatTime(this.recentSamples[0].timestamp);
+        const end = this.formatTime(latest.timestamp);
+        const fee = this.formatAtomicGram(latest.tonFeeAtomic, latest.base_fee_gwei);
+        const interval = latest.network_utilization_percentage === null ? null : this.formatSeconds(latest.network_utilization_percentage);
+        if (this.isUkrainian) {
+          const range = this.recentSamples.length === 1 ? `Спостереження ${this.tonChainLabel} о ${end}.` : `Історія ${this.tonChainLabel} з ${start} до ${end}.`;
+          return `${range} Остання середня зібрана комісія за блок: ${fee === null ? 'немає даних' : fee + ' GRAM'}; середній інтервал між блоками: ${interval === null ? 'немає даних' : interval}.`;
+        }
+        const range = this.recentSamples.length === 1 ? `${this.tonChainLabel}-waarneming om ${end}.` : `${this.tonChainLabel}-geschiedenis van ${start} tot ${end}.`;
+        return `${range} Laatst waargenomen gemiddelde geïnde kosten per blok: ${fee === null ? 'niet waargenomen' : fee + ' GRAM'}; gemiddeld blokinterval: ${interval === null ? 'niet waargenomen' : interval}.`;
+      }
       if (this.isItalian) {
         const start = this.formatTime(this.recentSamples[0].timestamp);
         const end = this.formatTime(latest.timestamp);
@@ -273,6 +293,14 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
             const history = sample.tonHistory;
             const total = this.formatAtomicGram(history?.feeTotalAtomic, null);
             const fractionalMean = !!history?.feeTotalAtomic && !!history.feeCount && BigInt(history.feeTotalAtomic) % BigInt(history.feeCount) !== 0n;
+            if (this.isUkrainian || this.isDutch) {
+              const uk = this.isUkrainian;
+              const blocks = history?.blockCount ? `<div>${uk ? 'Блоки' : 'Blokken'}: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
+              const missing = uk ? 'Немає даних' : 'Niet waargenomen';
+              const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? missing;
+              const coverage = history?.feeCount !== history?.blockCount ? ` (${history.feeCount} ${uk ? 'із' : 'van'} ${history.blockCount})` : '';
+              return `<div class="ethereum-gas-tooltip"><div><strong>${formatDate(timestamp, 'mediumTime', this.locale, this.timezone)}</strong></div>${blocks}<div>${uk ? 'Середня зібрана комісія за блок' : 'Gemiddelde geïnde kosten per blok'}: <strong>${fractionalMean ? '≈' : ''}${fee}</strong></div>${total === null ? '' : `<div>${uk ? 'Усього зібрано комісій' : 'Totaal geïnde kosten'}: <strong>${total} GRAM</strong>${coverage}</div>`}<div>${uk ? 'Середній інтервал між блоками' : 'Gemiddeld blokinterval'}: <strong>${sample.network_utilization_percentage === null ? missing : this.formatSeconds(sample.network_utilization_percentage)}</strong></div></div>`;
+            }
             if (this.isItalian) {
               const blocks = history?.blockCount ? `<div>Blocchi: <strong>${history.blockCount}${history.firstSeqno === history.lastSeqno ? ` (#${history.firstSeqno})` : ` (#${history.firstSeqno}–${history.lastSeqno})`}</strong></div>` : '';
               const fee = this.formatAtomicGram(sample.tonFeeAtomic, sample.base_fee_gwei)?.concat(' GRAM') ?? 'Non rilevato';
@@ -391,7 +419,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
       ],
       series: [
         {
-          name: this.isTon ? (this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
+          name: this.isTon ? (this.isUkrainian ? 'Середня зібрана комісія за блок' : this.isDutch ? 'Gemiddelde geïnde kosten per blok' : this.isItalian ? 'Commissioni medie per blocco' : this.isRussian ? 'Средняя комиссия на блок' : this.isFrench ? 'Frais moyens perçus par bloc' : this.isGerman ? 'Durchschnittliche Gebühren pro Block' : this.isPortuguese ? 'Taxas médias arrecadadas por bloco' : this.isSpanish ? 'Comisiones medias recaudadas por bloque' : 'Mean collected fees / block') : 'Base fee',
           type: 'line',
           yAxisIndex: 0,
           data: lineData('base_fee_gwei'),
@@ -408,7 +436,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
           emphasis: { focus: 'series' },
         },
         {
-          name: this.isTon ? (this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
+          name: this.isTon ? (this.isUkrainian ? 'Середній інтервал між блоками' : this.isDutch ? 'Gemiddeld blokinterval' : this.isItalian ? 'Intervallo medio tra i blocchi' : this.isRussian ? 'Средний интервал между блоками' : this.isFrench ? 'Intervalle moyen entre les blocs' : this.isGerman ? 'Durchschnittlicher Blockabstand' : this.isPortuguese ? 'Intervalo médio entre blocos' : this.isSpanish ? 'Intervalo medio entre bloques' : 'Mean block interval') : 'Network utilization',
           type: 'line',
           yAxisIndex: 1,
           data: lineData('network_utilization_percentage'),
@@ -474,7 +502,7 @@ export class EthereumGasMarketGraphComponent implements OnChanges, OnInit, OnDes
     const padded = atomic.padStart(10, '0');
     const whole = padded.slice(0, -9);
     const fraction = padded.slice(-9).replace(/0+$/, '');
-    return fraction ? `${whole}${this.isSpanish || this.isFrench || this.isGerman || this.isPortuguese || this.isItalian || this.isRussian ? ',' : '.'}${fraction}` : whole;
+    return fraction ? `${whole}${this.isSpanish || this.isFrench || this.isGerman || this.isPortuguese || this.isItalian || this.isRussian || this.isUkrainian || this.isDutch ? ',' : '.'}${fraction}` : whole;
   }
 
   private formatCompact(value: number): string {

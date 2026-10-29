@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ViewChildren, QueryList, ChangeDetectorRef, Input } from '@angular/core';
-import { russianCountNoun } from '@app/shared/russian-count';
+import { russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { Location } from '@angular/common';
 import { ActivatedRoute, ParamMap, Params, Router } from '@angular/router';
 import { ElectrsApiService } from '@app/services/electrs-api.service';
@@ -49,6 +49,7 @@ interface ComparisonStats {
 })
 export class BlockComponent implements OnInit, OnDestroy {
   readonly russianCountNoun = russianCountNoun;
+  readonly ukrainianCountNoun = ukrainianCountNoun;
   /** Supplied TON block detail. It bypasses the EVM block/mempool controller. */
   @Input() tonBlock: any | null = null;
   @Input() tonTransactions: any[] = [];

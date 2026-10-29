@@ -1,5 +1,5 @@
 import { TonPendingSnapshot } from '@app/shared/ton-pending.types';
-import { russianCountNoun } from '@app/shared/russian-count';
+import { russianCountNoun, ukrainianCountNoun } from '@app/shared/russian-count';
 import { navigateTonBlock } from '@app/ton/block-navigation';
 import { blockValueDetails } from '@app/shared/block-format';
 import { Component, Inject, LOCALE_ID, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, HostListener, Input, OnChanges, SimpleChanges, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
@@ -32,7 +32,9 @@ import { ThemeService } from '@app/services/theme.service';
 })
 export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   readonly russianCountNoun = russianCountNoun;
-  get isRussian(): boolean { return this.locale.toLowerCase().startsWith('ru'); }
+  readonly ukrainianCountNoun = ukrainianCountNoun;
+  get isSlavic(): boolean { return /^(ru|uk)/i.test(this.locale); }
+  get isUkrainian(): boolean { return this.locale.toLowerCase().startsWith('uk'); }
   blockValueDetails = blockValueDetails;
   nativePendingMode = false;
   nativePending: TonPendingSnapshot;
@@ -50,6 +52,22 @@ export class MempoolBlocksComponent implements OnInit, OnChanges, OnDestroy {
   get pendingTitle(): string {
     const count = this.pendingCount;
     const language = this.locale.toLowerCase();
+    if (language.startsWith('uk')) {
+      const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
+      const category = count === null ? 'other' : new Intl.PluralRules('uk').select(count);
+      const adjective = category === 'one' ? 'зовнішнє' : category === 'few' ? 'зовнішні' : 'зовнішніх';
+      const summary = amount === null ? 'Стрічка повідомлень, що очікують, недоступна' : `${amount} ${adjective} ${ukrainianCountNoun(count, 'message')} ${category === 'one' ? 'очікує' : 'очікують'}`;
+      const updated = this.nativePending?.observedAt ? ` · Останнє оновлення ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Повторне підключення' : '';
+      return summary + updated + stale;
+    }
+    if (language.startsWith('nl')) {
+      const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
+      const summary = amount === null ? 'Berichtenfeed in afwachting niet beschikbaar' : `${amount} ${count === 1 ? 'extern bericht' : 'externe berichten'} in afwachting`;
+      const updated = this.nativePending?.observedAt ? ` · Laatst bijgewerkt ${this.nativePending.observedAt}` : '';
+      const stale = this.nativePending?.state === 'stale' ? ' · Opnieuw verbinden' : '';
+      return summary + updated + stale;
+    }
     if (language.startsWith('ru')) {
       const amount = count === null ? null : new Intl.NumberFormat(this.locale).format(count);
       const category = count === null ? 'other' : new Intl.PluralRules('ru').select(count);
