@@ -70,5 +70,8 @@ test('atomic unit names follow the actual count without losing large integer pre
       assert.ok(nativeAmount.displayNativeAmount(amount, 'btc', 'USD', null, locale).title.endsWith(names[index]));
     }
   }
-  assert.match(nativeAmount.displayNativeAmount({ atomic: '2', decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true }, 'sats', 'USD', null, 'cs').unit, /^nanogramy$/);
+  assert.equal(nativeAmount.displayNativeAmount({ atomic: '2', decimals: 9, symbol: 'GRAM', atomicSymbol: 'nanograms', native: true }, 'sats', 'USD', null, 'cs').unit, 'nanogramy');
+  assert.equal(nativeAmount.displayNativeAmount({ atomic: '21', decimals: 0, symbol: 'T', atomicSymbol: 'raw units', native: true }, 'sats', 'USD', null, 'ru').unit, 'исходная единица');
+  assert.equal(nativeAmount.displayNativeAmount({ atomic: '21', decimals: 0, symbol: 'T', atomicSymbol: 'ng/tx', native: true }, 'sats', 'USD', null, 'pl').unit, 'ng/tx');
+  assert.equal(nativeAmount.displayNativeAmount({ atomic: '2', decimals: 0, symbol: 'T', native: true }, 'sats', 'USD', null, 'en').unit, 'atomic units');
 });
