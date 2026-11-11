@@ -130,6 +130,9 @@ class BlockIndex {
     this.requestTimeoutMs = Math.min(15000, Math.max(1, Number(requestTimeoutMs) || 12000));
     this.maxBytes = Math.min(2 * 1024 * 1024, Math.max(1, Number(maxBytes) || 1024 * 1024));
     this.pending = new Map();
+    this.fallback = null;
+    this.fallbackUntil = 0;
+    this.activeProvider = this.url.origin;
     this.queue = Promise.resolve();
     this.abort = new AbortController();
     this.nextRequestAt = 0;
@@ -140,7 +143,7 @@ class BlockIndex {
     this.stopped = false;
   }
 
-  list({ afterBlock, limit = 32, workchain = "-1", shard = MASTER_SHARD, target } = {}) {
+  list({ afterBlock, limit = 32, workchain = "-1", shard = MASTER_SHARD, target, headTarget, reconcile } = {}) {
     workchain = String(workchain);
     if (!["-1", "0"].includes(workchain) || !/^[a-f0-9]{16}$/.test(shard) || workchain === "-1" && shard !== MASTER_SHARD) return Promise.reject(new BlockIndexError("Invalid indexed block scope", 400));
     if (this.stopped) return Promise.reject(new BlockIndexError("Block index stopped"));
@@ -169,7 +172,22 @@ class BlockIndex {
     if (this.pending.size >= 16) return Promise.reject(new BlockIndexError("Block index busy"));
     const deadline = Date.now() + this.deadlineMs;
     const task = this.queue.then(async () => {
-      const result = await this.request(url, deadline);
+      const options={afterBlock,limit,workchain,shard,target,headTarget,reconcile};
+      const lite=async()=>{
+        this.fallback ||= new (require('./live-lite-index.cjs').LiveLiteIndex)();
+        const result=await this.fallback.list(options);
+        this.activeProvider=result.provider;this.lastSuccess=result.at;this.lastGap=result.gap;
+        return result;
+      };
+      if(Date.now()<this.fallbackUntil)return lite();
+      let result;
+      try{result=await this.request(url,deadline);}catch(error){
+        if(this.stopped)throw error;
+        this.lastFailure={at:Date.now(),message:error.message,status:error.status};
+        this.fallbackUntil=Date.now()+60000;
+        return lite();
+      }
+      this.activeProvider=this.url.origin;
       const selected = selectConsecutive(result.data.blocks, afterBlock, limit, {workchain, shard, target});
       this.lastGap = selected.gap;
       this.lastSuccess = result.at;
@@ -259,8 +277,8 @@ class BlockIndex {
 
   health() {
     return {
-      provider: this.url.origin,
-      transport: "indexed-batches",
+      provider: this.activeProvider,
+      transport: this.activeProvider === this.url.origin ? "indexed-batches" : "verified-lite-batches",
       requests: this.requests,
       pending: this.pending.size,
       lastSuccess: this.lastSuccess,
@@ -273,6 +291,7 @@ class BlockIndex {
 
   stop() {
     this.stopped = true;
+    this.fallback?.stop();
     this.abort.abort();
   }
 }

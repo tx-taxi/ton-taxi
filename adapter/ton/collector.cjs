@@ -204,7 +204,7 @@ class Collector {
         // Re-read the cursor itself after reconnect, so a same-height canonical
         // replacement is not hidden by a height-only deduplication rule.
         const afterBlock = recentRecovery ? undefined : this.reconcile ? this.blocks[1] : head;
-        const result = await this.index.list({afterBlock, limit: recentRecovery ? RECOVERY_WINDOW : head ? 64 : 16});
+        const result = await this.index.list({afterBlock, limit: recentRecovery ? RECOVERY_WINDOW : head ? 64 : 16, headTarget: this.target, reconcile: this.reconcile});
         if (this.stopped) break;
         if (result.gap && !result.blocks?.length) throw new Error("Missing masterchain header");
         if (result.lineageBoundary) recentRecovery = true;
@@ -224,7 +224,7 @@ class Collector {
           this.onUpdate(this.snapshot());
           break;
         }
-        const complete = this.ordered(await this.economics.hydrate(incoming));
+        const complete = this.ordered(result.verifiedEconomics ? incoming : await this.economics.hydrate(incoming));
         if (complete.length !== incoming.length || complete.some((b,i) => b.root_hash !== incoming[i].root_hash || b.seqno !== incoming[i].seqno)) throw new Error("Incomplete masterchain economics");
         if (this.stopped) break;
         await this.commit(complete, reconcileGeneration, recentRecovery, result.lineageBoundary === true || this.historyGapReason === "shard-lineage-changed");
