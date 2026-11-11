@@ -203,7 +203,7 @@ class BlockIndex {
       const timer = setTimeout(() => controller.abort(), Math.min(remaining, this.requestTimeoutMs));
       try {
         this.requests++;
-        const response = await this.fetchImpl(url, {
+        const response = await require("./index-transport.cjs").indexFetch(this.fetchImpl, url, {
           headers: this.headers,
           signal: controller.signal,
           redirect: "error",

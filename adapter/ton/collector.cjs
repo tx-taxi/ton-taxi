@@ -257,7 +257,9 @@ class Collector {
       history: this.history,
       historyGaps: this.historyGaps,
       observedAt: this.observedAt,
-      stale: this.reconcile || this.streamState !== "live" || !!this.lastError || !this.observedAt || this.now() - Date.parse(this.observedAt) > 45000 || this.now() - Number(this.blocks[0]?.gen_utime || 0) * 1000 > 45000 || this.target - Number(this.blocks[0]?.seqno || 0) > 32,
+      // A transient retry is diagnostic, not an outage while the verified
+      // stream window remains recent and within the existing lag bounds.
+      stale: this.reconcile || this.streamState !== "live" || !this.observedAt || this.now() - Date.parse(this.observedAt) > 45000 || this.now() - Number(this.blocks[0]?.gen_utime || 0) * 1000 > 45000 || this.target - Number(this.blocks[0]?.seqno || 0) > 32,
     };
   }
   snapshot(selection) {

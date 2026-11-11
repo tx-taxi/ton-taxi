@@ -112,3 +112,14 @@ test('anchored recovery progresses when newer same-second headers occupy the ind
   assert.equal(d.historyGaps.at(-1).reason,'retention-window-exceeded');
  }finally{await h.stop();}
 });
+
+test('a brief index retry keeps recent verified blocks usable, but age, lag and disconnected streams stay stale',async()=>{
+ const h=await harness([ROOT]);try{
+  h.master.lastError='Block index HTTP 429';
+  assert.equal(h.master.dashboard().stale,false);
+  assert.equal(h.master.health().error,'Block index HTTP 429');
+  h.master.now=()=>now+46000;assert.equal(h.master.dashboard().stale,true);
+  h.master.now=()=>now;h.master.target=1033;assert.equal(h.master.dashboard().stale,true);
+  h.master.target=1000;h.master.streamState='disconnected';assert.equal(h.master.dashboard().stale,true);
+ }finally{await h.stop();}
+});

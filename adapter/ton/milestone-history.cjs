@@ -37,7 +37,7 @@ class MilestoneHistory {
       url.search = new URLSearchParams({ workchain: String(workchain), seqno: String(height), limit: '20' });
       for (let attempt = 0; attempt < 2; attempt++) {
         await delay(Math.max(0, this.nextIndexAt - Date.now()));
-        const response = await this.fetcher(url, { signal: AbortSignal.timeout(12000), redirect: 'error' });
+        const response = await require("./index-transport.cjs").indexFetch(this.fetcher,url, { headers: process.env.TONCENTER_API_KEY ? {"X-API-Key":process.env.TONCENTER_API_KEY} : {}, signal: AbortSignal.timeout(12000), redirect: 'error' });
         this.nextIndexAt = Date.now() + (response.status === 429 ? 2000 : 1100);
         if (response.status === 429 && attempt === 0) continue;
         if (!response.ok) throw new ProviderError('Milestone index unavailable');
