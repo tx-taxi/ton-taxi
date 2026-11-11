@@ -184,7 +184,7 @@ class BlockIndex {
       try{result=await this.request(url,deadline);}catch(error){
         if(this.stopped)throw error;
         this.lastFailure={at:Date.now(),message:error.message,status:error.status};
-        this.fallbackUntil=Date.now()+60000;
+        this.fallbackUntil=Date.now()+300000;
         return lite();
       }
       this.activeProvider=this.url.origin;

@@ -126,7 +126,7 @@ class Connection {
 
 class ContextHeaders {
   constructor({fetchImpl=fetch,onBlock}={}) {
-    this.fetch=fetchImpl;this.onBlock=onBlock;this.cache=new Map();this.pending=new Map();
+    this.fetch=fetchImpl;this.onBlock=onBlock;this.cache=new Map();this.pending=new Map();this.identities=new Map();
     this.headerJobs=new Map();this.queue=[];this.workers=new Set();this.connections=new Set();
     this.servers=null;this.configPending=null;this.stopped=false;this.sequence=0;
   }
@@ -223,10 +223,17 @@ class ContextHeaders {
     let lastError;
     for(let attempt=0;attempt<2&&Date.now()<deadline&&!this.stopped;attempt++){
       try {
-        const lookup=await worker.connection.query(Functions.liteServer_lookupBlock,{kind:"liteServer.lookupBlock",mode:1,id:requested,lt:null,utime:null},deadline);
+        const known=this.identities.get(id);
+        const lookup=known?{id:known}:await worker.connection.query(Functions.liteServer_lookupBlock,{kind:"liteServer.lookupBlock",mode:1,id:requested,lt:null,utime:null},deadline);
         if(lookup.id.workchain!==requested.workchain||lookup.id.shard!==requested.shard||lookup.id.seqno!==requested.seqno)throw new Error("Lookup tuple mismatch");
         const response=await worker.connection.query(Functions.liteServer_getBlock,{kind:"liteServer.getBlock",id:lookup.id},deadline);
         const header=decodeHeader(response.data,lookup.id);header._meta={observedAt:new Date().toISOString(),stale:false,provider:"verified-public-lite"};
+        // Parent identities are authenticated by the BOC just verified above.
+        // Reuse them when traversing backwards instead of repeating lookupBlock.
+        for(const parent of header._prev_blocks||[]){
+          this.identities.set(idOf(parent),{kind:"tonNode.blockIdExt",workchain:parent.workchain_id,shard:BigInt.asIntN(64,BigInt("0x"+parent.shard)).toString(),seqno:parent.seqno,rootHash:Buffer.from(parent.root_hash,"hex"),fileHash:Buffer.from(parent.file_hash,"hex")});
+        }
+        while(this.identities.size>512)this.identities.delete(this.identities.keys().next().value);
         this.onBlock?.(response.data,lookup.id,header);return header;
       }catch(error){
         lastError=error;const target=this.cache.get(targetId)?.header;

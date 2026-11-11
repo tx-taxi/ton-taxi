@@ -12,9 +12,10 @@ class LiveLiteIndex {
   const last=Math.min(end,start+limit-1);
   if(start>last)return {blocks:[],gap:null,hasMore:false};
   const ids=Array.from({length:last-start+1},(_,i)=>`(${workchain},${shard},${start+i})`);
-  if(reconcile)for(const id of ids)this.source.cache.delete(id);
+  if(reconcile)for(const id of ids){this.source.cache.delete(id);this.source.identities.delete(id);}
   const deadline=Date.now()+25000,rows=new Map();
-  const batches=await Promise.all(Array.from({length:Math.ceil(ids.length/15)},(_,i)=>this.source.getMany(ids.slice(i*15,i*15+15),deadline)));
+  const newestFirst=[...ids].reverse();
+  const batches=await Promise.all(Array.from({length:Math.ceil(ids.length/15)},(_,i)=>this.source.getMany(newestFirst.slice(i*15,i*15+15),deadline,{targetId:ids.at(-1)})));
   for(const batch of batches)for(const [id,header] of batch)rows.set(id,header);
   const blocks=[];
   for(const id of ids){const header=rows.get(id);if(!header)break;
