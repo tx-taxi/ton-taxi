@@ -266,7 +266,7 @@ class BlockIndex {
       } catch (error) {
         if (this.stopped) throw new BlockIndexError("Block index stopped");
         const retryable = !(error instanceof BlockIndexError) || error.retryable;
-        if (!retryable || attempt === 2) throw error;
+        if (!retryable || attempt === 2 || this.fallback || error.status === 429) throw error;
         this.nextRequestAt = Math.max(this.nextRequestAt, Date.now() + 1000 * 2 ** attempt);
       } finally {
         clearTimeout(timer);
