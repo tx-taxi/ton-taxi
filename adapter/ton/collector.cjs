@@ -204,7 +204,7 @@ class Collector {
         // Re-read the cursor itself after reconnect, so a same-height canonical
         // replacement is not hidden by a height-only deduplication rule.
         const afterBlock = recentRecovery ? undefined : this.reconcile ? this.blocks[1] : head;
-        const result = await this.index.list({afterBlock, limit: recentRecovery ? RECOVERY_WINDOW : head ? 32 : 16});
+        const result = await this.index.list({afterBlock, limit: recentRecovery ? RECOVERY_WINDOW : head ? 64 : 16});
         if (this.stopped) break;
         if (result.gap && !result.blocks?.length) throw new Error("Missing masterchain header");
         if (result.lineageBoundary) recentRecovery = true;
